@@ -1,4 +1,9 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Carbon_Vault.Data;
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<Carbon_VaultContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Carbon_VaultContext") ?? throw new InvalidOperationException("Connection string 'Carbon_VaultContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

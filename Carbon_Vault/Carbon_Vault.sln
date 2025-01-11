@@ -5,6 +5,10 @@ VisualStudioVersion = 17.12.35527.113 d17.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carbon_Vault", "Carbon_Vault\Carbon_Vault.csproj", "{C64DAB50-08FC-40C1-B82F-B8AEA65CCBD3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carbon_Vault_Angular.Server", "Carbon_Vault_Angular\Carbon_Vault_Angular.Server\Carbon_Vault_Angular.Server.csproj", "{75E876F5-6184-43F1-B0FA-60CE989933C4}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "carbon_vault_angular.client", "Carbon_Vault_Angular\carbon_vault_angular.client\carbon_vault_angular.client.esproj", "{9C289A16-383C-4BBA-AA66-072F1EA9E0A8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,16 @@ Global
 		{C64DAB50-08FC-40C1-B82F-B8AEA65CCBD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C64DAB50-08FC-40C1-B82F-B8AEA65CCBD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C64DAB50-08FC-40C1-B82F-B8AEA65CCBD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75E876F5-6184-43F1-B0FA-60CE989933C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75E876F5-6184-43F1-B0FA-60CE989933C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75E876F5-6184-43F1-B0FA-60CE989933C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75E876F5-6184-43F1-B0FA-60CE989933C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C289A16-383C-4BBA-AA66-072F1EA9E0A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C289A16-383C-4BBA-AA66-072F1EA9E0A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C289A16-383C-4BBA-AA66-072F1EA9E0A8}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{9C289A16-383C-4BBA-AA66-072F1EA9E0A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C289A16-383C-4BBA-AA66-072F1EA9E0A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C289A16-383C-4BBA-AA66-072F1EA9E0A8}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
