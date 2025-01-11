@@ -1,6 +1,0 @@
-@Carbon_Vault.Server_HostAddress = http://localhost:5172
-
-GET {{Carbon_Vault.Server_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
