@@ -6,6 +6,7 @@ Marketplace de crétidos de carbono
 
 1. [Autores](#autores)
 2. [Plataformas](#plataformas)
+3. [Instruções p/ Desenvolvimento](#instruções-p-desenvolvimento)
 
 ## Autores
 
@@ -16,6 +17,27 @@ Marketplace de crétidos de carbono
 
 ## Plataformas
 
-- [Jira Product Discovery](https://rodrigosantos.atlassian.net/jira/polaris/projects/CVPD/ideas/view/5586550)
-- [Jira Software](https://rodrigosantos.atlassian.net/jira/software/projects/CV/boards/11/backlog)
-- [Confluence](https://rodrigosantos.atlassian.net/wiki/spaces/CV/overview?homepageId=6717692)
+- [Jira Product Discovery](https://rdamaso.atlassian.net/jira/polaris/projects/CVPD/ideas/view/5904945)
+- [Jira Software](https://rdamaso.atlassian.net/jira/software/c/projects/CV/boards/3)
+- [Confluence](https://rdamaso.atlassian.net/jira/polaris/projects/CVPD/ideas/view/5904945)
+
+## Instruções p/ Desenvolvimento
+
+### Instalação
+
+1. Visual Studio: Instalar os módulos:
+    - ASP.NET e desenvolvimento Web
+    - Desenvolvimento para desktop com .NET
+2. Node.js: versão 22.12.0
+3. Angular: Executar no CMD o comando `npm install -g @angular/cli`
+
+### Base de dados
+
+1. Aceder ao terminal no menu `Tools > NuGet Package Manager > Package Manager Console`
+2. Na primeira criação, executar o comando `add-migration initial`
+3. Executar o comando `update-database`. Este comando deve ser executado sempre que se atualize os models
+
+### Iniciar o programa
+
+1. Iniciar o projeto Carbon_Vault no IDE
+2. Abrir Carbon_Vault.client no CMD e executar o comando `ng serve`
