@@ -1,24 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Carbon_Vault.Data;
 using Carbon_Vault.Models;
-using System.Net.Mail;
-using System.Net;
+using Carbon_Vault.Services;
 
 namespace Carbon_Vault.Controllers
 {
     public class AccountsController : Controller
     {
         private readonly Carbon_VaultContext _context;
+        private readonly IEmailService _emailService;
 
-        public AccountsController(Carbon_VaultContext context)
+        public AccountsController(Carbon_VaultContext context, IEmailService emailService)
         {
             _context = context;
+            _emailService = emailService;
         }
 
         // GET: Accounts
@@ -164,14 +160,7 @@ namespace Carbon_Vault.Controllers
 
             await Edit(id, account);
 
-            var smtpClient = new SmtpClient("smtp.mailersend.net")
-            {
-                Port = 587,
-                Credentials = new NetworkCredential("MS_033jrn@trial-pq3enl6o59rl2vwr.mlsender.net", "eqZ5IugRxM7j92aE"),
-                EnableSsl = true,
-            };
-
-            smtpClient.Send("MS_033jrn@trial-pq3enl6o59rl2vwr.mlsender.net", account.Email, "Carbon Vault - Recuperar palavra-passe", "A sua palavra-passe foi recuperada");
+            _emailService.SendEmail(email, "Carbon Vault - Recuperar palavra-passe", "A sua palavra-passe foi recuperada");
         }
 
         private bool AccountExists(int id)
