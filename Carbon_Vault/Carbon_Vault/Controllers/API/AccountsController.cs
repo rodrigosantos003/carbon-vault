@@ -98,7 +98,7 @@ namespace Carbon_Vault.Controllers.API
             // Generate secure token
             var token = GenerateConfirmationToken(account.Id);
             var confirmationLinkBack = $"{Request.Scheme}://{Request.Host}/api/Accounts/Confirm?token={token}";
-            var confirmationLink = $"{_frontendBaseUrl}/confirm-account?token={token}";
+            var confirmationLink = $"{_frontendBaseUrl}confirm-account?token={token}";
 
 
             // Send confirmation link via email
