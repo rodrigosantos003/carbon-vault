@@ -1,0 +1,7 @@
+<div class="confirmation-container">
+    <h1>{{ confirmationStatus }}</h1>
+    <button *ngIf="confirmationStatus !== 'Processing...'" (click)="router.navigate(['/home'])">
+      Go to Home
+    </button>
+</div>
+  

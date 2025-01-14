@@ -21,12 +21,15 @@ namespace Carbon_Vault.Controllers.API
         private readonly Carbon_VaultContext _context;
         private readonly string _secretKey;
         private readonly IEmailService _emailService;
+        private readonly string _frontendBaseUrl;
 
-        public AccountsController(Carbon_VaultContext context, IConfiguration configuration , IEmailService emailService)
+
+        public AccountsController(Carbon_VaultContext context, IConfiguration configuration, IEmailService emailService)
         {
             _context = context;
             _secretKey = configuration["AppSettings:TokenSecretKey"];
             _emailService = emailService;
+            _frontendBaseUrl = configuration["AppSettings:FrontendBaseUrl"];
         }
 
         // GET: api/Accounts
@@ -94,7 +97,9 @@ namespace Carbon_Vault.Controllers.API
 
             // Generate secure token
             var token = GenerateConfirmationToken(account.Id);
-            var confirmationLink = $"{Request.Scheme}://{Request.Host}/api/Accounts/Confirm?token={token}";
+            var confirmationLinkBack = $"{Request.Scheme}://{Request.Host}/api/Accounts/Confirm?token={token}";
+            var confirmationLink = $"{_frontendBaseUrl}/confirm-account?token={token}";
+
 
             // Send confirmation link via email
             _emailService.SendEmail(account.Email, "Carbon Vault - Confirm your account", $"Please confirm your account by clicking the following link: {confirmationLink}");
@@ -167,16 +172,30 @@ namespace Carbon_Vault.Controllers.API
 
         private string GenerateConfirmationToken(int userId)
         {
-            var secretKey = _secretKey; 
+            var secretKey = _secretKey;
             var payload = $"{userId}:{DateTime.UtcNow}";
 
             using (var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(secretKey)))
             {
                 var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(payload));
-                var token = $"{Convert.ToBase64String(hash)}:{Convert.ToBase64String(Encoding.UTF8.GetBytes(payload))}";
+
+                // Generate the Base64Url hash (without special characters like +, /, and =)
+                var base64Hash = Convert.ToBase64String(hash)
+                                     .Replace("+", "-")   
+                                     .Replace("/", "_")  
+                                     .TrimEnd('=');
+
+                // Base64Url encode the payload (also without special characters)
+                var base64Payload = Convert.ToBase64String(Encoding.UTF8.GetBytes(payload))
+                                     .Replace("+", "-")
+                                     .Replace("/", "_")
+                                     .TrimEnd('=');
+
+                var token = $"{base64Hash}:{base64Payload}";
                 return token;
             }
         }
+
         private int? ValidateConfirmationToken(string token)
         {
             var secretKey = _secretKey;
@@ -193,18 +212,17 @@ namespace Carbon_Vault.Controllers.API
 
             try
             {
-                var payloadBytes = Convert.FromBase64String(payloadPart);
+                // Decode the payload and hash using Base64Url
+                var payloadBytes = Convert.FromBase64String(payloadPart.Replace("-", "+").Replace("_", "/"));
                 var payload = Encoding.UTF8.GetString(payloadBytes);
-
-                Console.WriteLine($"Decoded payload: {payload}");
 
                 using (var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(secretKey)))
                 {
                     var computedHash = hmac.ComputeHash(payloadBytes);
-                    var computedHashString = Convert.ToBase64String(computedHash);
-
-                    Console.WriteLine($"Expected hash: {computedHashString}");
-                    Console.WriteLine($"Provided hash: {hashPart}");
+                    var computedHashString = Convert.ToBase64String(computedHash)
+                                                .Replace("+", "-")
+                                                .Replace("/", "_")
+                                                .TrimEnd('=');
 
                     if (computedHashString != hashPart)
                     {
@@ -236,6 +254,7 @@ namespace Carbon_Vault.Controllers.API
                 return null;
             }
         }
+
 
 
         [HttpGet("Confirm")]
