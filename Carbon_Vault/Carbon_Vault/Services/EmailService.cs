@@ -5,9 +5,21 @@ namespace Carbon_Vault.Services
 {
     public class EmailService : IEmailService
     {
-        private const string _SMTP_CLIENT = "smtp.mailersend.net";
-        private const string _SMTP_USERNAME = "MS_033jrn@trial-pq3enl6o59rl2vwr.mlsender.net";
-        private const string _SMTP_PASSWORD = "eqZ5IugRxM7j92aE";
+        private readonly string _SMTP_CLIENT;
+        private readonly string _SMTP_USERNAME;
+        private readonly string _SMTP_PASSWORD;
+
+        public EmailService(IConfiguration configuration)
+        {
+            _SMTP_CLIENT = configuration["SmtpSettings:SmtpClient"];
+            _SMTP_USERNAME = configuration["SmtpSettings:SmtpUsername"];
+            _SMTP_PASSWORD = configuration["SmtpSettings:SmtpPassword"];
+
+            if (string.IsNullOrEmpty(_SMTP_PASSWORD))
+            {
+                throw new InvalidOperationException("SMTP password is not set in appsettings.json.");
+            }
+        }
 
         public void SendEmail(string receiver, string subject, string message)
         {
@@ -18,7 +30,7 @@ namespace Carbon_Vault.Services
                 EnableSsl = true,
             };
 
-            smtpClient.Send("MS_033jrn@trial-pq3enl6o59rl2vwr.mlsender.net", receiver, subject, message);
+            smtpClient.Send("carbonvault.team@gmail.com", receiver, subject, message);
         }
     }
 }
