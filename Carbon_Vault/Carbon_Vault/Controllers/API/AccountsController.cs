@@ -27,7 +27,6 @@ namespace Carbon_Vault.Controllers.API
             _context = context;
             _secretKey = configuration["AppSettings:TokenSecretKey"];
             _emailService = emailService;
-
         }
 
         // GET: api/Accounts
