@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Carbon_Vault.Data;
 using Carbon_Vault.Models;
+using System.Text;
+using System.Security.Cryptography;
+using Carbon_Vault.Services;
 
 namespace Carbon_Vault.Controllers.API
 {
@@ -15,10 +18,15 @@ namespace Carbon_Vault.Controllers.API
     public class AccountsController : ControllerBase
     {
         private readonly Carbon_VaultContext _context;
+        private readonly string _secretKey;
+        private readonly IEmailService _emailService;
 
-        public AccountsController(Carbon_VaultContext context)
+        public AccountsController(Carbon_VaultContext context, IConfiguration configuration , IEmailService emailService)
         {
             _context = context;
+            _secretKey = configuration["AppSettings:TokenSecretKey"];
+            _emailService = emailService;
+
         }
 
         // GET: api/Accounts
@@ -78,8 +86,17 @@ namespace Carbon_Vault.Controllers.API
         [HttpPost]
         public async Task<ActionResult<Account>> PostAccount(Account account)
         {
+            account.State = AccountState.Pending;
+
             _context.Account.Add(account);
             await _context.SaveChangesAsync();
+
+            // Generate secure token
+            var token = GenerateConfirmationToken(account.Id);
+            var confirmationLink = $"{Request.Scheme}://{Request.Host}/api/Accounts/Confirm?token={token}";
+
+            // Send confirmation link via email
+            _emailService.SendEmail(account.Email, "Confirm your account", $"Please confirm your account by clicking the following link: {confirmationLink}");
 
             return CreatedAtAction("GetAccount", new { id = account.Id }, account);
         }
@@ -123,6 +140,107 @@ namespace Carbon_Vault.Controllers.API
                 userId = account.Id
             });
         }
+
+        private string GenerateConfirmationToken(int userId)
+        {
+            var secretKey = _secretKey; 
+            var payload = $"{userId}:{DateTime.UtcNow}";
+
+            using (var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(secretKey)))
+            {
+                var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(payload));
+                var token = $"{Convert.ToBase64String(hash)}:{Convert.ToBase64String(Encoding.UTF8.GetBytes(payload))}";
+                return token;
+            }
+        }
+        private int? ValidateConfirmationToken(string token)
+        {
+            var secretKey = _secretKey; // Same key as in token generation
+            var parts = token.Split(':');
+
+            if (parts.Length != 2)
+            {
+                Console.WriteLine("Token format is invalid.");
+                return null;
+            }
+
+            var hashPart = parts[0];
+            var payloadPart = parts[1];
+
+            try
+            {
+                var payloadBytes = Convert.FromBase64String(payloadPart);
+                var payload = Encoding.UTF8.GetString(payloadBytes);
+
+                Console.WriteLine($"Decoded payload: {payload}");
+
+                using (var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(secretKey)))
+                {
+                    var computedHash = hmac.ComputeHash(payloadBytes);
+                    var computedHashString = Convert.ToBase64String(computedHash);
+
+                    Console.WriteLine($"Expected hash: {computedHashString}");
+                    Console.WriteLine($"Provided hash: {hashPart}");
+
+                    if (computedHashString != hashPart)
+                    {
+                        Console.WriteLine("Hash validation failed.");
+                        return null;
+                    }
+                }
+
+                var payloadParts = payload.Split(':', 2); // Split into two parts only: userId and the rest
+                if (payloadParts.Length != 2)
+                {
+                    Console.WriteLine("Payload format is invalid.");
+                    return null;
+                }
+
+                if (int.TryParse(payloadParts[0], out var userId))
+                {
+                    return userId;
+                }
+                else
+                {
+                    Console.WriteLine("User ID parsing failed.");
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error validating token: {ex.Message}");
+                return null;
+            }
+        }
+
+        [HttpGet("Confirm")]
+        public async Task<IActionResult> ConfirmAccount([FromQuery] string token)
+        {
+            if (string.IsNullOrEmpty(token))
+            {
+                return BadRequest(new { message = "Token is required." });
+            }
+
+            var userId = ValidateConfirmationToken(token);
+            if (userId == null)
+            {
+                return BadRequest(new { message = "Invalid confirmation token." });
+            }
+
+            var account = await _context.Account.FindAsync(userId);
+
+            if (account == null)
+            {
+                return NotFound(new { message = "Account not found." });
+            }
+
+            account.State = AccountState.Active;
+            _context.Entry(account).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Account confirmed successfully." });
+        }
+
 
 
 

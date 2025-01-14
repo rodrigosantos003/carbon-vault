@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Carbon_Vault.Migrations
 {
     [DbContext(typeof(Carbon_VaultContext))]
-    [Migration("20250111173816_initial")]
+    [Migration("20250114090818_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -38,11 +38,15 @@ namespace Carbon_Vault.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("State")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
