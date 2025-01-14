@@ -147,22 +147,6 @@ namespace Carbon_Vault.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async void SendRecoveryEmail(int id, string email)
-        {
-            var account = await _context.Account.FindAsync(id);
-
-            if(account == null)
-            {
-                return;
-            }
-
-            account.Password = "abc1234.";
-
-            await Edit(id, account);
-
-            _emailService.SendEmail(email, "Carbon Vault - Recuperar palavra-passe", "A sua palavra-passe foi recuperada");
-        }
-
         private bool AccountExists(int id)
         {
             return _context.Account.Any(e => e.Id == id);

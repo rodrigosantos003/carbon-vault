@@ -41,3 +41,7 @@ Marketplace de crétidos de carbono
 
 1. Iniciar o projeto Carbon_Vault no IDE
 2. Abrir Carbon_Vault.client no CMD e executar o comando `ng serve`
+
+## Endpoints API
+
+[Coleção Postman](./CV.postman_collection.json)

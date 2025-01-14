@@ -1,0 +1,167 @@
+{
+	"info": {
+		"_postman_id": "534daaf0-0dff-4c47-b498-be4ed2f5628b",
+		"name": "CV",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21920065"
+	},
+	"item": [
+		{
+			"name": "get_accounts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/Accounts",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"Accounts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create_account",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Acc",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Name\": \"Rodrigo\",\r\n    \"Email\": \"teste@gmail.com\",\r\n    \"Password\": \"abc1234.\",\r\n    \"AccountState\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/Accounts",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"Accounts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "forgot_password",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/Accounts/2/ForgotPassword",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"Accounts",
+						"2",
+						"ForgotPassword"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "reset_password",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"newPassword\": \"NovaSenhaForte123!\",\r\n    \"passwordConfirmation\": \"NovaSenhaForte123!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/Accounts/ResetPassword?token=t/uJYrqQji3Dd5SCOiYoglsztPy60mD1bTONpleYv9I=:MjoxNC8wMS8yMDI1IDEzOjI4OjAx",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"Accounts",
+						"ResetPassword"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "t/uJYrqQji3Dd5SCOiYoglsztPy60mD1bTONpleYv9I=:MjoxNC8wMS8yMDI1IDEzOjI4OjAx"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Email\": \"rodrigo.s.santos003@gmail.com\",\r\n    \"Password\": \"NovaSenhaForte123!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/Accounts/Login",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"Accounts",
+						"Login"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "URL",
+			"value": "https://localhost:7117/api",
+			"type": "string"
+		}
+	]
+}

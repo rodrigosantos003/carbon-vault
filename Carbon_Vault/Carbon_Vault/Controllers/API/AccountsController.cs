@@ -10,6 +10,7 @@ using Carbon_Vault.Models;
 using System.Text;
 using System.Security.Cryptography;
 using Carbon_Vault.Services;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Carbon_Vault.Controllers.API
 {
@@ -97,7 +98,7 @@ namespace Carbon_Vault.Controllers.API
             var confirmationLink = $"{Request.Scheme}://{Request.Host}/api/Accounts/Confirm?token={token}";
 
             // Send confirmation link via email
-            _emailService.SendEmail(account.Email, "Confirm your account", $"Please confirm your account by clicking the following link: {confirmationLink}");
+            _emailService.SendEmail(account.Email, "Carbon Vault - Confirm your account", $"Please confirm your account by clicking the following link: {confirmationLink}");
 
             return CreatedAtAction("GetAccount", new { id = account.Id }, account);
         }
@@ -140,6 +141,29 @@ namespace Carbon_Vault.Controllers.API
                 message = "Login successful.",
                 userId = account.Id
             });
+        }
+
+        // PUT: api/Account/:id/ForgotPassword
+        [HttpPut("{id}/ForgotPassword")]
+        public async Task<IActionResult> ForgotPassword(int id)
+        {
+            var account = await _context.Account.FindAsync(id);
+
+            if (account == null)
+                return NotFound(new { message = "Account not found." });
+
+            account.State = AccountState.Pending;
+            _context.Entry(account).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            // Generate secure token
+            var token = GenerateConfirmationToken(account.Id);
+            var confirmationLink = $"{Request.Scheme}://{Request.Host}/api/Accounts/ResetPassword?token={token}";
+
+            // Send confirmation link via email
+            _emailService.SendEmail(account.Email, "Carbon Vault - Password recovery", $"Please recover your account by clicking the following link: {confirmationLink}");
+
+            return Ok(new { message = "Password recovery link sent successfully" });
         }
 
         private string GenerateConfirmationToken(int userId)
@@ -214,6 +238,7 @@ namespace Carbon_Vault.Controllers.API
             }
         }
 
+
         [HttpGet("Confirm")]
         public async Task<IActionResult> ConfirmAccount([FromQuery] string token)
         {
@@ -242,8 +267,40 @@ namespace Carbon_Vault.Controllers.API
             return Ok(new { message = "Account confirmed successfully." });
         }
 
+        // POST: api/Accounts/ResetPassword
+        [HttpPost("ResetPassword")]
+        public async Task<IActionResult> ResetAccountPassword([FromQuery] string token, [FromBody] ResetPasswordModel model)
+        {
+            if (string.IsNullOrEmpty(token))
+            {
+                return BadRequest(new { message = "Token is required." });
+            }
 
+            var userId = ValidateConfirmationToken(token);
+            if (userId == null)
+            {
+                return BadRequest(new { message = "Invalid confirmation token." });
+            }
 
+            var account = await _context.Account.FindAsync(userId);
+
+            if (account == null)
+            {
+                return NotFound(new { message = "Account not found." });
+            }
+
+            if (string.IsNullOrEmpty(model.NewPassword) || string.IsNullOrEmpty(model.PasswordConfirmation))
+            {
+                return BadRequest(new { message = "Password and password confirmation are required." });
+            }
+
+            account.Password = AuthHelper.HashPassword(model.NewPassword);
+            account.State = AccountState.Active;
+            _context.Entry(account).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Password reset successfully." });
+        }
 
         private bool AccountExists(int id)
         {
