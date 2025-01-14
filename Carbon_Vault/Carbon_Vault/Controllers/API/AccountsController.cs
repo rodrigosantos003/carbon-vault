@@ -87,6 +87,7 @@ namespace Carbon_Vault.Controllers.API
         public async Task<ActionResult<Account>> PostAccount(Account account)
         {
             account.State = AccountState.Pending;
+            account.Password = AuthHelper.HashPassword(account.Password);
 
             _context.Account.Add(account);
             await _context.SaveChangesAsync();
@@ -155,7 +156,7 @@ namespace Carbon_Vault.Controllers.API
         }
         private int? ValidateConfirmationToken(string token)
         {
-            var secretKey = _secretKey; // Same key as in token generation
+            var secretKey = _secretKey;
             var parts = token.Split(':');
 
             if (parts.Length != 2)
@@ -189,7 +190,7 @@ namespace Carbon_Vault.Controllers.API
                     }
                 }
 
-                var payloadParts = payload.Split(':', 2); // Split into two parts only: userId and the rest
+                var payloadParts = payload.Split(':', 2);
                 if (payloadParts.Length != 2)
                 {
                     Console.WriteLine("Payload format is invalid.");
