@@ -44,7 +44,7 @@ export class RegisterComponent {
   }
 
   async validateNif(nif: string): Promise<boolean> {
-    const apiUrl = `https://www.nif.pt/?json=1&q=${nif}&key=${this.apiKey}`;
+    const apiUrl = `https://localhost:7117/api/Accounts/ValidateNIF?nif=${nif}`;
     try {
       const response: any = await this.http.get(apiUrl).subscribe(
         (data) => {

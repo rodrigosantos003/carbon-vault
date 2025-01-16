@@ -334,7 +334,7 @@ namespace Carbon_Vault.Controllers.API
             }
 
            
-            var apiKey = "e867f83dedbf7bac7e8e0bb616afc6ca"; 
+            var apiKey = Environment.GetEnvironmentVariable("NIF_KEY"); 
             var apiUrl = $"https://www.nif.pt/?json=1&q={nif}&key={apiKey}";
 
             using (var httpClient = new HttpClient())
