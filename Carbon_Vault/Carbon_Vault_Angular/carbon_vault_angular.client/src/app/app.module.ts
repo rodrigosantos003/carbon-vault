@@ -11,6 +11,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth.interceptor';
 import { JwtHelperService, JwtModule } from '@auth0/angular-jwt';  // Import JwtHelperService
+import { RecoverPasswordComponent } from './recover-password/recover-password.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,9 @@ import { JwtHelperService, JwtModule } from '@auth0/angular-jwt';  // Import Jwt
     LoginComponent,
     RegisterComponent,
     HomeComponent,
-    DashboardComponent
+    DashboardComponent,
+    RecoverPasswordComponent,
+    ForgotPasswordComponent
   ],
   imports: [
     BrowserModule,
