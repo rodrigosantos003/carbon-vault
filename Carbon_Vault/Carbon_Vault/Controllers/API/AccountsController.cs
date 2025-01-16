@@ -169,7 +169,7 @@ namespace Carbon_Vault.Controllers.API
 
             // Generate secure token
             var token = GenerateConfirmationToken(account.Id);
-            var confirmationLink = $"{Request.Scheme}://{Request.Host}/api/Accounts/ResetPassword?token={token}";
+            var confirmationLink = $"{_frontendBaseUrl}recover-password?token={token}";
 
             // Send confirmation link via email
             _emailService.SendEmail(account.Email, "Carbon Vault - Password recovery", $"Please recover your account by clicking the following link: {confirmationLink}");

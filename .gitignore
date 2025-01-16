@@ -1,6 +1,9 @@
 # Ignore environment variables
 .env
 
+# Ignore migrations
+Migrations/
+
 # User-specific files
 *.rsuser
 *.suo
