@@ -1,0 +1,49 @@
+<body>
+
+  <div class="register-container">
+    <div class="register-box">
+      <h1>Registo</h1>
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <label for="username">
+          <i class="fa fa-user"></i> Username
+        </label>
+        <input id="username" type="text" placeholder="Escolha um userName" formControlName="username" required />
+
+        <label for="password">
+          <i class="fa fa-lock"></i> Password
+        </label>
+        <input id="password" type="password" placeholder="Escolha uma Password" formControlName="password" required />
+
+        <label for="email">
+          <i class="fa fa-envelope"></i> E-mail
+        </label>
+        <input id="email" type="email" placeholder="Indique o seu e-mail" formControlName="email" required />
+
+        <label for="nif">
+          <i class="fa fa-id-card"></i> Número de Identificação Fiscal
+        </label>
+        <input id="nif" type="number" placeholder="Indique o número de identificação fiscal" formControlName="nif" required/>
+
+        <button type="submit" class="register-button">Registar-me!</button>
+      </form>
+      <p class="login-link">
+        Já tem conta? <a href="login">Login</a>
+      </p>
+    </div>
+    <div class="info-box">
+      <div class="logo-title">
+        <div class="logo">
+          <img src="/images/CV_Logo.png" alt="Carbon Vault Logo" />
+        </div>
+        <h2>Carbon Vault</h2>
+      </div>
+      <div class="highlight">ABC</div>
+      <p>A plataforma de comércio de Créditos de carbono mais completa do país!</p>
+      <div class="plant-icon">
+        <img src="/images/PlantIcon.png" alt="Planta" />
+      </div>
+    </div>
+  </div>
+
+
+</body>

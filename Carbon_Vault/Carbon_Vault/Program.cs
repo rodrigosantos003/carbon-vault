@@ -20,6 +20,9 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod();
     });
 });
+
+DotNetEnv.Env.Load();
+
 var app = builder.Build();
 app.UseCors("AllowSpecificOrigins");
 // Configure the HTTP request pipeline.

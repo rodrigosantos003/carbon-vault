@@ -11,9 +11,9 @@ namespace Carbon_Vault.Services
 
         public EmailService(IConfiguration configuration)
         {
-            _SMTP_CLIENT = configuration["SmtpSettings:SmtpClient"];
-            _SMTP_USERNAME = configuration["SmtpSettings:SmtpUsername"];
-            _SMTP_PASSWORD = configuration["SmtpSettings:SmtpPassword"];
+            _SMTP_CLIENT = Environment.GetEnvironmentVariable("SMTP_CLIENT");
+            _SMTP_USERNAME = Environment.GetEnvironmentVariable("SMTP_USERNAME");
+            _SMTP_PASSWORD = Environment.GetEnvironmentVariable("SMTP_PASSWORD");
 
             if (string.IsNullOrEmpty(_SMTP_PASSWORD))
             {
