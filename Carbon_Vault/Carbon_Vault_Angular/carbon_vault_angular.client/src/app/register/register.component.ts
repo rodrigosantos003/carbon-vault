@@ -30,6 +30,12 @@ export class RegisterComponent {
       const formData = this.registerForm.value;
       console.log('Dados do formulário:', formData);
 
+      // Validação da password
+      if (!this.validatePassword(formData.password)) {
+        console.log('Senha inválida! A senha deve atender a todos os critérios.');
+        return;
+      }
+
       // Validação do NIF
       this.validateNif(formData.nif).then(isValid => {
         if (isValid) {
@@ -42,6 +48,22 @@ export class RegisterComponent {
       console.log('Formulário inválido!');
     }
   }
+
+  validatePassword(password: string): boolean {
+    const minLength = 8;
+    const hasUpperCase = /[A-Z]/.test(password); // Verifica se contém pelo menos uma letra maiúscula
+    const hasLowerCase = /[a-z]/.test(password); // Verifica se contém pelo menos uma letra minúscula
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password); // Verifica se contém pelo menos um caractere especial
+
+    // Valida todos os critérios
+    return (
+      password.length >= minLength &&
+      hasUpperCase &&
+      hasLowerCase &&
+      hasSpecialChar
+    );
+  }
+
 
   async validateNif(nif: string): Promise<boolean> {
     const apiUrl = `https://localhost:7117/api/Accounts/ValidateNIF?nif=${nif}`;
