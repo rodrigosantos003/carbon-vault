@@ -8,6 +8,9 @@ import { RegisterComponent } from './register/register.component';
 import { HomeComponent } from './home/home.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './auth.interceptor';
+import { JwtHelperService, JwtModule } from '@auth0/angular-jwt';  // Import JwtHelperService
 
 @NgModule({
   declarations: [
@@ -22,9 +25,14 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     HttpClientModule,
     AppRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: () => localStorage.getItem('token')
+      }
+    })
   ],
-  providers: [],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },JwtHelperService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -31,18 +31,18 @@ export class ConfirmAccountComponent implements OnInit {
         .get(`https://localhost:7117/api/Accounts/Confirm?token=${token}`)
         .subscribe({
           next: () => {
-            this.confirmationStatus = 'Account confirmed successfully.';
+            this.confirmationStatus = 'Conta confirmada com sucesso!';
             // Redirect after a short delay
-            setTimeout(() => this.router.navigate(['/home']), 3000);
+            // setTimeout(() => this.router.navigate(['/login']), 30000);
           },
           error: () => {
-            this.confirmationStatus = 'Failed to confirm the account. The token might be invalid or expired.';
+            this.confirmationStatus = 'Falha ao confirmar a conta,por favor contacte o nosso suporte';
           }
         });
     } else {
       this.confirmationStatus = 'No token provided in the URL.';
     }
-    this.titleService.setTitle('About Page - My Angular App'); // Set the title here
+    this.titleService.setTitle('Carbon Vault | Confirmar conta'); // Set the title here
 
   }
 

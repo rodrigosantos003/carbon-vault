@@ -1,7 +1,12 @@
-<div class="confirmation-container">
-    <h1>{{ confirmationStatus }}</h1>
-    <button *ngIf="confirmationStatus !== 'Processing...'" (click)="router.navigate(['/home'])">
-      Go to Home
-    </button>
-</div>
+<body class="login-body">
+
+  <div class="login-container">
+    <div class="confirmation-container">
+        <img src="/images/CV_Logo.png" alt="Carbon Vault Logo">
+        <h1>{{ confirmationStatus }}</h1>
+        <button class="login-button" *ngIf="confirmationStatus !== 'Em processamento...'" (click)="router.navigate(['/home'])">
+          Realizar Login
+        </button>
+    </div>
+  </div> 
   

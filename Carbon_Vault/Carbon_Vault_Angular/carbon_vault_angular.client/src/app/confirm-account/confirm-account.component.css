@@ -1,19 +1,154 @@
 .confirmation-container {
-    text-align: center;
-    margin-top: 50px;
+  border-radius: 25px;
+  padding: 15px;
+  text-align: center;
+  /* margin-top: 50px; */
+  background-color: #fff;
+
   }
-  
-  button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: #4caf50;
-    color: white;
+/* Geral */
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--main-color) !important;
+
+  margin: 0px !important;
+}
+
+/* Container principal */
+.login-container {
+  display: flex
+  ;
+      justify-content: space-around;
+      align-items: center;
+      height: 100vh;
+}
+
+/* Caixa de login */
+.login-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #fff;
+  color: var(--main-color);
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  width: 40%;
+  height: 50%;
+  text-align: center;
+}
+img{
+  width: 100px;
+}
+.logo-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+  .login-box h1 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+  }
+
+  .login-box label {
+    display: block;
+    font-size: 20px;
+    margin-top: 10px;
+    text-align: left;
+  }
+
+  .login-box input {
+    width: 95%;
+    padding: 10px;
+    margin-top: 5px;
     border: none;
-    cursor: pointer;
-    border-radius: 5px;
+    border-bottom: 2px solid black;
   }
-  
-  button:hover {
+
+.forgot-password {
+  display: block;
+  margin: 30px 0;
+  font-size: 0.9rem;
+  color: var(--main-color);
+  opacity: 80%;
+  text-align: right;
+  text-decoration: none;
+}
+
+  .forgot-password:hover {
+    text-decoration: underline;
+  }
+
+.login-button {
+  width: 170px;
+  padding: 10px;
+  background-color: var(--main-color);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 22px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+  .login-button:hover {
     background-color: #45a049;
   }
-  
+
+.signup {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  font-size: 17px;
+  color: black;
+}
+
+  .signup a {
+    color: var(--main-color);
+    text-decoration: none;
+  }
+
+    .signup a:hover {
+      text-decoration: underline;
+    }
+
+/* Caixa de informações */
+.info-box {
+  width: 40%;
+  text-align: center;
+}
+
+  .info-box h2 {
+    font-size: 40px;
+    margin-bottom: 20px;
+  }
+
+  .info-box p {
+    font-size: 20px;
+    line-height: 1.5;
+  }
+
+  .highlight {
+      position: relative;
+      z-index: 9;
+      top: 48px;
+      left: 185px;
+      width: 340px;
+      background-color: #eee;
+      opacity: 60%;
+      color: #eee;
+  }
+
+.logo img,
+.plant-icon img {
+  width: 150px;
+  margin-bottom: 20px;
+}
+
+
+
+h1{
+  max-width: 690px;
+}

@@ -21,11 +21,12 @@
     "@angular/platform-browser": "^19.0.0",
     "@angular/platform-browser-dynamic": "^19.0.0",
     "@angular/router": "^19.0.0",
+    "@auth0/angular-jwt": "^5.2.0",
+    "jest-editor-support": "*",
+    "run-script-os": "*",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
-    "zone.js": "~0.15.0",
-    "jest-editor-support": "*",
-    "run-script-os": "*"
+    "zone.js": "~0.15.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^19.0.7",
