@@ -8,6 +8,14 @@ namespace Carbon_Vault.Models
         Active = 1,
         Inactive = 2,
     }
+    public enum AccountType
+    {
+        User = 0,
+        Admin = 1,
+        Evaluator = 2,
+        Support = 3,
+
+    }
     public class Account
     {
 
@@ -21,10 +29,20 @@ namespace Carbon_Vault.Models
         [Required]
         [EmailAddress]
         public string Email { get; set; }
-        public string Password { get; set; }
+
         [Required]
         [DataType(DataType.Password)]
+        public string Password { get; set; }
+
+        [Required]
+        [StringLength(9)]
+        public string Nif { get; set; }
+
+
+
         public AccountState State { get; set; } = AccountState.Inactive;
+        public AccountType Role { get; set; } = AccountType.User;
+
 
 
     }
