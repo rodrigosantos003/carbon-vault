@@ -324,5 +324,41 @@ namespace Carbon_Vault.Controllers.API
         {
             return _context.Account.Any(e => e.Id == id);
         }
+
+        [HttpGet("ValidateNIF")]
+        public async Task<IActionResult> ValidateNIF([FromQuery] string nif)
+        {
+            if (string.IsNullOrEmpty(nif))
+            {
+                return BadRequest(new { message = "NIF is required." });
+            }
+
+           
+            var apiKey = "e867f83dedbf7bac7e8e0bb616afc6ca"; 
+            var apiUrl = $"https://www.nif.pt/?json=1&q={nif}&key={apiKey}";
+
+            using (var httpClient = new HttpClient())
+            {
+                try
+                {
+                 
+                    var response = await httpClient.GetAsync(apiUrl);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return StatusCode((int)response.StatusCode, new { message = "Error communicating with the NIF API." });
+                    }
+
+                   
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    return Ok(responseContent); 
+                }
+                catch (Exception ex)
+                {
+                    
+                    return StatusCode(500, new { message = "An error occurred while validating the NIF.", error = ex.Message });
+                }
+            }
+        }
     }
 }
