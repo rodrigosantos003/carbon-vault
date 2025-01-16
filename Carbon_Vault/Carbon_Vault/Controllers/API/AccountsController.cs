@@ -140,10 +140,17 @@ namespace Carbon_Vault.Controllers.API
                 return Unauthorized(new { message = "Invalid email or password." });
             }
 
+            if (account.State != AccountState.Active)
+            {
+                return Unauthorized(new { message = "Account is not active." });
+            }
+
+            var token = AuthHelper.GerarToken(account.Id);
+
             return Ok(new
             {
                 message = "Login successful.",
-                userId = account.Id
+                token
             });
         }
 
