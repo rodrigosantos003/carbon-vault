@@ -147,11 +147,11 @@ namespace Carbon_Vault.Controllers.API
             });
         }
 
-        // PUT: api/Account/:id/ForgotPassword
-        [HttpPut("{id}/ForgotPassword")]
-        public async Task<IActionResult> ForgotPassword(int id)
+        // GET: api/Account/ForgotPassword?email=:
+        [HttpGet("ForgotPassword")]
+        public async Task<IActionResult> ForgotPassword([FromQuery] string email)
         {
-            var account = await _context.Account.FindAsync(id);
+            var account = await _context.Account.FirstOrDefaultAsync(a => a.Email == email);
 
             if (account == null)
                 return NotFound(new { message = "Account not found." });
