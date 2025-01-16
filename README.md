@@ -45,7 +45,7 @@ Marketplace de crétidos de carbono
 
 ### Ligação front e back
 1. No front , navegar até `Carbon_Vault\Carbon_Vault_Angular\carbon_vault_angular.client\src\proxy.conf.js` e substituir o valor do Localhost pelo valor fornecido pelo PC
-2. No Back , navegar até `Carbon_Vault\Carbon_Vault\appsettings.json` e substituir o `valor de FrontendBaseUrl` para o valor do Localhost pelo valor fornecido pelo PC
+2. No Back , navegar até `Carbon_Vault\Carbon_Vault\appsettings.json` e substituir o valor de `FrontendBaseUrl` para o valor do Localhost pelo valor fornecido pelo PC
 
 ## Endpoints API
 
