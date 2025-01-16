@@ -11,7 +11,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ForgotPasswordComponent {
   forgotPasswordForm: FormGroup;
-  isEmailSent: boolean | null = null; // Estado da validação do NIF
+  isEmailSent: boolean | null = null; // Estado da envio do email
   emailErrorMessage: string | null = null;
 
   constructor(private fb: FormBuilder, private http: HttpClient) {
@@ -62,5 +62,4 @@ export class ForgotPasswordComponent {
       return false;
     }
   }
-
 }
