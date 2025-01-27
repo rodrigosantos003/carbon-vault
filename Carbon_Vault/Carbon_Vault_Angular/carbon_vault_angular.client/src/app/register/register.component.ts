@@ -18,7 +18,7 @@ export class RegisterComponent {
   constructor(private fb: FormBuilder, private http: HttpClient) {
     // Inicialização do FormGroup com controlos e validações
     this.registerForm = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(3)]],
+      name: ['', [Validators.required, Validators.minLength(3)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       email: ['', [Validators.required/*, Validators.email*/]],
       nif: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]]
@@ -33,19 +33,34 @@ export class RegisterComponent {
       // Validação da password
       if (!this.validatePassword(formData.password)) {
         console.log('Senha inválida! A senha deve atender a todos os critérios.');
+        alert("Senha inválida! A senha deve atender a todos os critérios.");
         return;
       }
 
       // Validação do NIF
-      this.validateNif(formData.nif).then(isValid => {
-        if (isValid) {
-          console.log('NIF válido! Prosseguindo com o registo...');
-        } else {
-          console.log('NIF inválido!');
+      //this.validateNif(formData.nif).then(isValid => {
+      //  if (isValid) {
+      //    console.log('NIF válido! Prosseguindo com o registo...');
+      //  } else {
+      //    console.log('NIF inválido!');
+      //    alert("NIF inválido!");
+      //  }
+      //});
+
+      this.http.post("https://localhost:7117/api/Accounts", formData).subscribe(
+        (response: any) => {
+          console.log('Login successful!', response);
+          alert("Registo bem sucedido!");
+          window.location.href = "/login";
+        },
+        (error) => {
+          console.error('Login failed!', error);
+          alert("Registo Inválido!");
         }
-      });
+      )
     } else {
       console.log('Formulário inválido!');
+      alert("Dados em falta");
     }
   }
 

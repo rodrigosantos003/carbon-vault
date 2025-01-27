@@ -33,7 +33,7 @@ export class ConfirmAccountComponent implements OnInit {
           next: () => {
             this.confirmationStatus = 'Conta confirmada com sucesso!';
             // Redirect after a short delay
-            // setTimeout(() => this.router.navigate(['/login']), 30000);
+            setTimeout(() => this.router.navigate(['/login']), 3000);
           },
           error: () => {
             this.confirmationStatus = 'Falha ao confirmar a conta,por favor contacte o nosso suporte';
