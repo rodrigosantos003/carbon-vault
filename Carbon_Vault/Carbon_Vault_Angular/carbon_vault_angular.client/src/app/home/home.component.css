@@ -29,8 +29,7 @@ body {
 .navbar-title {
   font-size: 22px;
   font-weight: bold;
-  color: #4caf50; /* Cor do texto */
-  font-family: Arial, sans-serif;
+  color: #4caf50;
 }
 
 .navbar-button {

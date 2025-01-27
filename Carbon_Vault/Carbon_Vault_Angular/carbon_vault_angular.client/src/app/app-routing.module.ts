@@ -7,6 +7,7 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { RecoverPasswordComponent } from './recover-password/recover-password.component';
 import { HomeComponent } from './home/home.component';
+import { UserEmissionsComponent } from './user-emissions/user-emissions.component';
 
 const routes: Routes = [
   { path: 'confirm-account', component: ConfirmAccountComponent },
@@ -15,7 +16,8 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'dashboard', component: DashboardComponent },
-  { path: 'recover-password', component: RecoverPasswordComponent }
+  { path: 'recover-password', component: RecoverPasswordComponent },
+  { path: 'user-emissions', component: UserEmissionsComponent }
 ];
 
 @NgModule({

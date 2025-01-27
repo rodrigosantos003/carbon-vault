@@ -1,0 +1,249 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  color: black;
+  margin: 0px !important;
+  display: flex;
+  height: 100vh;
+}
+
+
+/***** SIDE BAR - HEADER ******/
+
+nav {
+  width: 250px;
+  background-color: var(--main-faded);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  width: 40px; /* Tamanho do ícone */
+  height: 40px;
+  margin-right: 8px;
+}
+
+.navbar-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--main-color);
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+
+.user-profile {
+  text-align: center; 
+  margin: 20px 0;
+}
+
+.user-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: var(--main-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.user-initial {
+  color: white;
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.user-name {
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--main-color);
+}
+
+
+/***** SIDE BAR - MENU ******/
+
+.menu-title {
+  text-align: left;
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--text-color);
+  margin: 20px 0 10px 0;
+  padding-left: 20px; 
+}
+
+.menu {
+  list-style: none;
+}
+
+  .menu li {
+    margin-bottom: 15px;
+  }
+
+    .menu li a {
+      text-decoration: none;
+      color: var(--text-color);
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+      .menu li a:hover {
+        text-decoration: underline;
+      }
+
+  .menu li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+.menu-icon {
+  width: 22px; /* Tamanho do ícone */
+  height: 22px;
+}
+
+.menu-icon2 {
+  width: 18px !important; /* Tamanho do ícone */
+  height: 18px !important;
+}
+
+.active {
+  position: fixed;
+  left: 50px;
+  width: 220px;
+  height: 35px;
+  border-radius: 5px;
+  background-color: var(--main-color);
+  opacity: 40%;
+}
+
+.logout {
+  color: #e53935 !important;
+  font-weight: bold;
+}
+
+
+/***** EMISSIONS FORM ******/
+
+main {
+  flex: 1;
+  padding: 40px;
+}
+
+.content {
+  max-width: 700px;
+  margin: 0 auto;
+  background: white;
+  padding: 20px;
+}
+
+  .content h1 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #333;
+    padding-bottom: 10px;
+  }
+
+.form-group {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+}
+
+  .form-group label {
+    width: 300px;
+    font-size: 16px;
+  }
+
+  .form-group input {
+    width: 150px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+
+  .form-group span {
+    margin-left: 10px;
+    font-size: 14px;
+  }
+
+.total {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: left;
+  margin-top: 20px;
+}
+
+#form-total {
+  font-weight: bold;
+}
+
+  #form-total input {
+    border: none;
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+.save-button {
+  display: block;
+  width: 100%;
+  background: var(--main-color);
+  color: white;
+  padding: 12px;
+  text-align: center;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+  .save-button:hover {
+    background: #236927;
+  }
+
+
+/***** NOTIFICATIONS ******/
+
+.notifications {
+  position: absolute;
+  top: 20px;
+  right: 40px;
+}
+
+  .notifications .icon {
+    position: relative;
+    cursor: pointer;
+  }
+
+    .notifications .icon span {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: #e53935;
+      color: white;
+      font-size: 12px;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+.noti-icon {
+  width: 35px; /* Tamanho do ícone */
+  height: 35px;
+}

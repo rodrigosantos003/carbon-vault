@@ -4,6 +4,9 @@
   --main-color: #4EA741;
   --secondary-color: #ffffff;
   --text-color: #333333;
+  --main-faded: #EFF6EE;
+  --active: #C5E8C0;
+  --text-color: #273240;
 }
 
 body {

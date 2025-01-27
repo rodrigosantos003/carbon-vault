@@ -13,6 +13,7 @@ import { AuthInterceptor } from './auth.interceptor';
 import { JwtHelperService, JwtModule } from '@auth0/angular-jwt';  // Import JwtHelperService
 import { RecoverPasswordComponent } from './recover-password/recover-password.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { UserEmissionsComponent } from './user-emissions/user-emissions.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
     HomeComponent,
     DashboardComponent,
     RecoverPasswordComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    UserEmissionsComponent
   ],
   imports: [
     BrowserModule,
