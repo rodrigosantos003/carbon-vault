@@ -1,0 +1,39 @@
+<header class="marketplace-header">
+  <div class="logo">
+    <img src="/images/CV_Logo.png" alt="Carbon Vault Logo">
+    <span>Carbon Vault</span>
+  </div>
+  <nav class="nav">
+    <a href="/projetos">Projetos</a>
+    <a href="/carrinho"> <img src="/images/cart.svg"/> Carrinho </a>
+    <button class="profile-btn">G</button>
+    <button #loginBtn class="logout-btn">Terminar sessão</button>
+  </nav>
+</header>
+
+<main class="marketplace-main">
+  <div class="controls">
+    <button class="filter-btn" #filterBtn (click)="changeFiltersWindowState()"> <img src="/images/select arrows.svg" /> <span #filterValue> Ordenar Por </span>  <img src="/images/arrow down.svg" /></button>
+    <div *ngIf="isFiltersWindowVisible" class="filter-options">
+      <ul>
+        <li (click)="changeFilterOption($event)" data-value="Alfabetica Asc"> Alfabetica Asc </li>
+        <hr />
+        <li (click)="changeFilterOption($event)" data-value="Alfabetica Desc"> Alfabetica Desc </li>
+        <hr />
+        <li (click)="changeFilterOption($event)" data-value="Preço Asc"> Preço Asc </li>
+        <hr />
+        <li (click)="changeFilterOption($event)" data-value="Preço Desc"> Preço Desc </li>
+      </ul>
+    </div>
+    <img class="search-icon" src="/images/search.svg" /> <input type="text" class="search" placeholder="Pesquisa">
+  </div>
+
+  <div class="grid">
+    <app-projectCard *ngFor="let projeto of projetos"
+                      [title]="projeto.title"
+                      [imageUrl]="projeto.imageUrl"
+                      [price]="projeto.price"
+                      [quantity]="projeto.quantity">
+    </app-projectCard>
+  </div>
+</main>

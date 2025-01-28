@@ -1,0 +1,11 @@
+<div class="card">
+  <img [src]="imageUrl" alt="{{ title }}">
+  <div class="card-title">
+    <p>{{ title }}</p>
+  </div>
+  <div class="card-footer">
+    <input type="number" min="1" [(ngModel)]="quantity" [value]="quantity">
+    <span>{{ price }}€</span>
+    <button class="buy-btn">COMPRAR</button>
+  </div>
+</div>

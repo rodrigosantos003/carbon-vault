@@ -14,6 +14,8 @@ import { JwtHelperService, JwtModule } from '@auth0/angular-jwt';  // Import Jwt
 import { RecoverPasswordComponent } from './recover-password/recover-password.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { UserEmissionsComponent } from './user-emissions/user-emissions.component';
+import { MarketplaceComponent } from './marketplace/marketplace.component';
+import { ProjectCardComponent } from './projectCard/projectCard.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { UserEmissionsComponent } from './user-emissions/user-emissions.componen
     DashboardComponent,
     RecoverPasswordComponent,
     ForgotPasswordComponent,
-    UserEmissionsComponent
+    UserEmissionsComponent,
+    MarketplaceComponent,
+    ProjectCardComponent
   ],
   imports: [
     BrowserModule,
