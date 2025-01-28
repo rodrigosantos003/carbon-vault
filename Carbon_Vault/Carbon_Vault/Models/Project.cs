@@ -2,12 +2,23 @@
 {
     public enum ProjectType
     {
-        Reforestation,         // Projetos de reflorestamento
-        RenewableEnergy,       // Energia renovável (solar, eólica, hídrica)
-        WasteManagement,       // Gerenciamento de resíduos (biogás, reciclagem)
-        EnergyEfficiency,      // Eficiência energética (retrofitting de edifícios)
-        Agriculture,           // Agricultura sustentável (redução de emissões)
-        OceanConservation,     // Conservação dos oceanos (Agregação de carbono marinho)
+        Poverty,        // No Poverty
+        Hunger,         // Zero Hunger
+        Health,         // Good health and well-being
+        Education,      // Quality Education
+        Gender,         // Gender Equality
+        Water,          // Clean Water and sanitation
+        Energy,         // Affordable and clean energy
+        Work,           // Decent work and economic growth
+        Industry,       // Industry, Innovation and Infrastructure
+        Inequalities,   // Reduced inequalities
+        Cities,         // Sustainable cities and communities
+        Consumption,    // Resposible consumption and production
+        ClimateAction,  // Climate action
+        WaterLife,      // Life below water
+        LandLife,       // Life on land
+        Peace,          // Peace, justice and strong institutions
+        Partnership,    // Partnership for the goals
     }
     public enum ProjectStatus
     {
@@ -15,7 +26,6 @@
       OnReview,
       Denied
     }
-
 
     public class Project
     {

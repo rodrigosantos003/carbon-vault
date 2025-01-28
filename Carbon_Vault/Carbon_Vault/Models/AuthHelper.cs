@@ -62,7 +62,46 @@
             return tokenHandler.WriteToken(token);
         }
 
+        public static bool IsTokenValid(string token, int userID)
+        {
+            var claimsPrincipal = ValidateToken(token);
 
+            if (claimsPrincipal != null)
+            {
+                var claimerID = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (claimerID == userID.ToString()) return true;
+            }
+
+            return false;
+        }
+
+        private static ClaimsPrincipal ValidateToken(string token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes("SuaChaveSecretaMuitoSeguraComPeloMenos32Caracteres");
+
+            try
+            {
+                var validationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ClockSkew = TimeSpan.Zero
+                };
+
+                return tokenHandler.ValidateToken(token, validationParameters, out _);
+            }
+            catch (SecurityTokenException)
+            {
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error validating token: ", ex);
+            }
+        }
     }
 
 }

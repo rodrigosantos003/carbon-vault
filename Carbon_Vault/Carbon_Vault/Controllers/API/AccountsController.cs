@@ -23,7 +23,6 @@ namespace Carbon_Vault.Controllers.API
         private readonly IEmailService _emailService;
         private readonly string _frontendBaseUrl;
 
-
         public AccountsController(Carbon_VaultContext context, IConfiguration configuration, IEmailService emailService)
         {
             _context = context;
@@ -34,8 +33,13 @@ namespace Carbon_Vault.Controllers.API
 
         // GET: api/Accounts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Account>>> GetAccount()
+        public async Task<ActionResult<IEnumerable<Account>>> GetAccounts(string jwt, int userID)
         {
+            if (AuthHelper.IsTokenValid(jwt, userID))
+            {
+                return Unauthorized();
+            }
+
             return await _context.Account.ToListAsync();
         }
 
@@ -56,8 +60,13 @@ namespace Carbon_Vault.Controllers.API
         // PUT: api/Accounts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAccount(int id, Account account)
+        public async Task<IActionResult> PutAccount(int id, Account account, string jwt)
         {
+            if (AuthHelper.IsTokenValid(jwt, id))
+            {
+                return Unauthorized();
+            }
+
             if (id != account.Id)
             {
                 return BadRequest();
@@ -109,8 +118,13 @@ namespace Carbon_Vault.Controllers.API
 
         // DELETE: api/Accounts/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAccount(int id)
+        public async Task<IActionResult> DeleteAccount(int id, string jwt)
         {
+            if (AuthHelper.IsTokenValid(jwt, id))
+            {
+                return Unauthorized();
+            }
+
             var account = await _context.Account.FindAsync(id);
             if (account == null)
             {
