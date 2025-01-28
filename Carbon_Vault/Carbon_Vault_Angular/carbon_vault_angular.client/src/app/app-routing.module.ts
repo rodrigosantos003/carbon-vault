@@ -9,6 +9,7 @@ import { RecoverPasswordComponent } from './recover-password/recover-password.co
 import { HomeComponent } from './home/home.component';
 import { UserEmissionsComponent } from './user-emissions/user-emissions.component';
 import { MarketplaceComponent } from './marketplace/marketplace.component';
+import { UserMenuComponent } from './user-menu/user-menu.component';
 
 const routes: Routes = [
   { path: 'confirm-account', component: ConfirmAccountComponent },
@@ -19,7 +20,8 @@ const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
   { path: 'recover-password', component: RecoverPasswordComponent },
   { path: 'user-emissions', component: UserEmissionsComponent },
-  { path: 'marketplace', component: MarketplaceComponent }
+  { path: 'marketplace', component: MarketplaceComponent },
+  { path: 'user-menu', component: UserMenuComponent }
 ];
 
 @NgModule({

@@ -16,6 +16,7 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { UserEmissionsComponent } from './user-emissions/user-emissions.component';
 import { MarketplaceComponent } from './marketplace/marketplace.component';
 import { ProjectCardComponent } from './projectCard/projectCard.component';
+import { UserMenuComponent } from './user-menu/user-menu.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { ProjectCardComponent } from './projectCard/projectCard.component';
     ForgotPasswordComponent,
     UserEmissionsComponent,
     MarketplaceComponent,
-    ProjectCardComponent
+    ProjectCardComponent,
+    UserMenuComponent
   ],
   imports: [
     BrowserModule,
