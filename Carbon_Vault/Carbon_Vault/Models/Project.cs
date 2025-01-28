@@ -43,6 +43,7 @@
         public ProjectStatus Status { get; set; }
         public string Benefits { get; set; }
         public Uri ProjectUrl { get; set; }
+        public string ImageUrl { get; set; }
 
         // Relacionamento com CarbonCredit
         public ICollection<CarbonCredit> CarbonCredits { get; set; } = new List<CarbonCredit>();

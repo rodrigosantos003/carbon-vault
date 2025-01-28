@@ -1,5 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth-service.service';
@@ -14,41 +13,39 @@ import { AuthService } from '../auth-service.service';
 })
 
 
-export class MarketplaceComponent {
+export class MarketplaceComponent implements OnInit{
   @ViewChild('filterBtn', { static: true }) filterBtn!: ElementRef<HTMLButtonElement>;
   @ViewChild('loginBtn', { static: true }) loginBtn!: ElementRef<HTMLButtonElement>;
   @ViewChild('filterValue', { static: true }) filterValue!: ElementRef<HTMLSpanElement>;
 
-  projetos: any[] = [
-    {
-      title: 'Produto Exemplo',
-      description: 'Este é um produto de exemplo com descrição curta.',
-      imageUrl: '/images/marketplace card example.png',  // Coloca o caminho da imagem
-      price: '20.00',
-      quantity: 1
-    },
-    {
-      title: 'Outro Produto Exemplo',
-      description: 'Descrição de outro produto de exemplo.',
-      imageUrl: '/images/marketplace card example.png',
-      price: '35.00',
-      quantity: 2
-    }
-  ];
+  allProjects: any[] = [];
+
+  projectsToShow: any[] = [];
 
   isFiltersWindowVisible: boolean = false;
+  isUserLoggedIn: boolean = false;
 
   constructor(
-    private fb: FormBuilder,
     private http: HttpClient,
     private router: Router,
     private authService: AuthService // Inject AuthService
   ) {
-
   }
 
   ngOnInit(): void {
-    if (this.authService.isAuthenticated()) {
+    this.changeLoginBtnText();
+    this.http.get('http://localhost:5037/api/projects').subscribe((data: any) => {
+      this.allProjects = data;
+      this.projectsToShow = this.allProjects;
+    }, error => {
+      console.error("Erro na requisição:", error);  // Verifique se há algum erro
+    });
+  }
+
+  changeLoginBtnText(): void {
+    this.isUserLoggedIn = this.authService.isAuthenticated();
+    if (this.isUserLoggedIn) {
+
       this.loginBtn.nativeElement.innerHTML = "Terminar Sessão";
       this.loginBtn.nativeElement.onclick = () => {
         this.authService.logout();
@@ -77,20 +74,27 @@ export class MarketplaceComponent {
 
     switch (value) {
       case 'Preço Asc':
-        this.projetos.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+        this.projectsToShow.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
         break;
 
       case 'Preço Desc':
-        this.projetos.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+        this.projectsToShow.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
         break;
 
       case 'Alfabetica Asc':
-        this.projetos.sort((a, b) => a.title.localeCompare(b.title));
+        this.projectsToShow.sort((a, b) => a.title.localeCompare(b.title));
         break;
 
       case 'Alfabetica Desc':
-        this.projetos.sort((a, b) => b.title.localeCompare(a.title));
+        this.projectsToShow.sort((a, b) => b.title.localeCompare(a.title));
         break;
     }
+  }
+
+  changeSearchValue(event: any): void {
+    const searchValue = event.target.value.toLowerCase();
+    this.projectsToShow = this.allProjects.filter((project) => {
+      return project.name.toLowerCase().includes(searchValue);
+    });
   }
 }

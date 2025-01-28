@@ -8,9 +8,8 @@ import { Component, Input } from '@angular/core';
   styleUrl: './projectCard.component.css'
 })
 export class ProjectCardComponent {
-  @Input() title: string = '';         // Título do projeto
-  @Input() description: string = '';   // Descrição do projeto
+  @Input() name: string = '';         // Título do projeto
   @Input() imageUrl: string = '';      // URL da imagem do projeto
-  @Input() price: string = '';         // Preço do projeto
+  @Input() pricePerCredit: string = '';         // Preço do projeto
   @Input() quantity: number = 1;       // Quantidade inicial
 }

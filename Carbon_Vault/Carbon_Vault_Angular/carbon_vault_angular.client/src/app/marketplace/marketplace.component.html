@@ -4,9 +4,9 @@
     <span>Carbon Vault</span>
   </div>
   <nav class="nav">
-    <a href="/projetos">Projetos</a>
-    <a href="/carrinho"> <img src="/images/cart.svg"/> Carrinho </a>
-    <button class="profile-btn">G</button>
+    <a *ngIf="isUserLoggedIn" href="/projetos">Projetos</a>
+    <a *ngIf="isUserLoggedIn" href="/carrinho"> <img src="/images/cart.svg"/> Carrinho </a>
+    <button *ngIf="isUserLoggedIn" class="profile-btn">G</button>
     <button #loginBtn class="logout-btn">Terminar sessão</button>
   </nav>
 </header>
@@ -25,15 +25,15 @@
         <li (click)="changeFilterOption($event)" data-value="Preço Desc"> Preço Desc </li>
       </ul>
     </div>
-    <img class="search-icon" src="/images/search.svg" /> <input type="text" class="search" placeholder="Pesquisa">
+    <img class="search-icon" src="/images/search.svg" /> <input type="text" (input)="changeSearchValue($event)" class="search" placeholder="Pesquisa">
   </div>
 
   <div class="grid">
-    <app-projectCard *ngFor="let projeto of projetos"
-                      [title]="projeto.title"
-                      [imageUrl]="projeto.imageUrl"
-                      [price]="projeto.price"
-                      [quantity]="projeto.quantity">
+    <app-projectCard *ngFor="let project of projectsToShow"
+                      [name]="project.name"
+                      [imageUrl]="project.imageUrl"
+                      [pricePerCredit]="project.pricePerCredit"
+                      [quantity]="project.quantity">
     </app-projectCard>
   </div>
 </main>
