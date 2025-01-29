@@ -28,7 +28,8 @@ namespace Carbon_Vault.Data
                 .HasOne(cc => cc.Project)                     
                 .WithMany(p => p.CarbonCredits)               
                 .HasForeignKey(cc => cc.ProjectId)           
-                .OnDelete(DeleteBehavior.Cascade);           
+                .OnDelete(DeleteBehavior.Cascade);
         }
+        public DbSet<Carbon_Vault.Models.UserEmissions> UserEmissions { get; set; }
     }
 }

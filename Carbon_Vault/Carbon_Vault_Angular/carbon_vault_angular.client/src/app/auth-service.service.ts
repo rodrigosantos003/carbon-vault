@@ -15,6 +15,17 @@ export class AuthService {
 
   // Log out by removing the token
   logout(): void {
-    localStorage.removeItem('auth_token');
+    localStorage.removeItem('token');
+  }
+
+  // Get the user's ID
+  getUserId(): string {
+    const token = localStorage.getItem('token');
+    if (token === null) {
+      return '';
+    }
+    const decodedToken = this.jwtHelper.decodeToken(token);
+
+    return decodedToken['nameid'];
   }
 }

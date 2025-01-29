@@ -34,11 +34,11 @@ export class MarketplaceComponent implements OnInit{
 
   ngOnInit(): void {
     this.changeLoginBtnText();
-    this.http.get('http://localhost:5037/api/projects').subscribe((data: any) => {
+    this.http.get('http://localhost:7117/api/projects').subscribe((data: any) => {
       this.allProjects = data;
       this.projectsToShow = this.allProjects;
     }, error => {
-      console.error("Erro na requisição:", error);  // Verifique se há algum erro
+      console.error("Erro na requisição:", error);
     });
   }
 

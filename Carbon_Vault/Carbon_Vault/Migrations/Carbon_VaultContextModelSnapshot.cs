@@ -171,6 +171,31 @@ namespace Carbon_Vault.Migrations
                     b.ToTable("Projects");
                 });
 
+            modelBuilder.Entity("Carbon_Vault.Models.UserEmissions", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("diesel")
+                        .HasColumnType("float");
+
+                    b.Property<double>("electricity")
+                        .HasColumnType("float");
+
+                    b.Property<double>("petrol")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserEmissions");
+                });
+
             modelBuilder.Entity("Carbon_Vault.Models.CarbonCredit", b =>
                 {
                     b.HasOne("Carbon_Vault.Models.Project", "Project")
