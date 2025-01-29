@@ -125,7 +125,7 @@ nav {
   border-radius: 5px;
   background-color: var(--main-color);
   opacity: 40%;
-  display: none; /**/
+  /*display: none;*/
 }
 
 .logout {

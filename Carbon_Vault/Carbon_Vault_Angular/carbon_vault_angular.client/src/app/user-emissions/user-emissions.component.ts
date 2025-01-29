@@ -36,6 +36,10 @@ export class UserEmissionsComponent {
     const petrolEquivalent = formData.petrol * 0.00231;
     const dieselEquivalent = formData.diesel * 0.00268;
 
-    return electricityEquivalent + petrolEquivalent + dieselEquivalent;
+    const sumTotal = electricityEquivalent + petrolEquivalent + dieselEquivalent; 
+
+    const total = Math.round(sumTotal * 100) / 100;
+
+    return total;
   }
 }
