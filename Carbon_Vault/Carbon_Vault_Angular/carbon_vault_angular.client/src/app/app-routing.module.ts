@@ -10,6 +10,7 @@ import { HomeComponent } from './home/home.component';
 import { UserEmissionsComponent } from './user-emissions/user-emissions.component';
 import { MarketplaceComponent } from './marketplace/marketplace.component';
 import { UserMenuComponent } from './user-menu/user-menu.component';
+import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 
 const routes: Routes = [
   { path: 'confirm-account', component: ConfirmAccountComponent },
@@ -21,7 +22,8 @@ const routes: Routes = [
   { path: 'recover-password', component: RecoverPasswordComponent },
   { path: 'user-emissions', component: UserEmissionsComponent },
   { path: 'marketplace', component: MarketplaceComponent },
-  { path: 'user-menu', component: UserMenuComponent }
+  { path: 'user-menu', component: UserMenuComponent },
+  { path: 'admin-dashboard', component: AdminDashboardComponent }
 ];
 
 @NgModule({

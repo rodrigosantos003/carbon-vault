@@ -17,6 +17,7 @@ import { UserEmissionsComponent } from './user-emissions/user-emissions.componen
 import { MarketplaceComponent } from './marketplace/marketplace.component';
 import { ProjectCardComponent } from './projectCard/projectCard.component';
 import { UserMenuComponent } from './user-menu/user-menu.component';
+import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { UserMenuComponent } from './user-menu/user-menu.component';
     UserEmissionsComponent,
     MarketplaceComponent,
     ProjectCardComponent,
-    UserMenuComponent
+    UserMenuComponent,
+    AdminDashboardComponent
   ],
   imports: [
     BrowserModule,
