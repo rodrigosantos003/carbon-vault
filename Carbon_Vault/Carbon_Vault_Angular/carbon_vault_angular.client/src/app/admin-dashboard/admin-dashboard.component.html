@@ -99,18 +99,21 @@
     </div>
 
     <div class="charts">
-      <div class="chart-box">
-        <h2>Compras</h2>
+      <div class="chart-box line">
+        <!--<h2>Compras</h2>
         <span class="big-number">1500</span>
         <span class="small-text">⬇ 2.1% semana anterior</span>
         <img src="images/OrderStatsIcon.png" class="chart" />
+        <button class="export-btn">Exportar</button>-->
+        <canvas id="MyLineChart">{{ lineChart }}</canvas>
         <button class="export-btn">Exportar</button>
       </div>
 
       <div class="chart-box">
-        <h2>Período de Atividade</h2>
+        <!--<h2>Período de Atividade</h2>
         <span class="small-text">De 1-6 Dez, 2025</span>
-        <img src="images/OrderTimeIcon.png" class="chart" />
+        <img src="images/OrderTimeIcon.png" class="chart" />-->
+        <canvas id="MyCircularChart">{{ circularChart }}</canvas>
         <button class="export-btn">Exportar</button>
       </div>
     </div>

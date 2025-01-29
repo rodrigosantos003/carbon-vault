@@ -203,6 +203,7 @@ nav {
 /* Gráficos */
 .charts {
   display: flex;
+  align-items: center;
   margin-top: 30px;
   gap: 20px;
 }
@@ -212,6 +213,10 @@ nav {
   padding: 20px;
   background: white;
   border-radius: 8px;
+}
+
+.line {
+    width: 600px;
 }
 
   .chart {
