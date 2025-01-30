@@ -6,6 +6,8 @@ body {
   height: 100vh;
 }
 
+/* Sidebar */
+
 nav {
   width: 250px;
   background-color: var(--main-faded);
@@ -123,44 +125,10 @@ nav {
   border-radius: 5px;
   background-color: var(--main-color);
   opacity: 40%;
-  display: none; /**/
+  /*display: none;*/
 }
 
 .logout {
   color: #e53935 !important;
   font-weight: bold;
-}
-
-
-/***** NOTIFICATIONS ******/
-
-.notifications {
-  position: absolute;
-  top: 20px;
-  right: 40px;
-}
-
-  .notifications .icon {
-    position: relative;
-    cursor: pointer;
-  }
-
-    .notifications .icon span {
-      position: absolute;
-      top: -5px;
-      right: -5px;
-      background: #e53935;
-      color: white;
-      font-size: 12px;
-      border-radius: 50%;
-      width: 20px;
-      height: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-.noti-icon {
-  width: 35px; /* Tamanho do ícone */
-  height: 35px;
 }
