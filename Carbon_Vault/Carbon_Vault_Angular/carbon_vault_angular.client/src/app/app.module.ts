@@ -19,6 +19,7 @@ import { ProjectCardComponent } from './projectCard/projectCard.component';
 import { UserMenuComponent } from './user-menu/user-menu.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { AdminMenuComponent } from './admin-menu/admin-menu.component';
+import { AlertsComponent } from './alerts/alerts.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { AdminMenuComponent } from './admin-menu/admin-menu.component';
     ProjectCardComponent,
     UserMenuComponent,
     AdminDashboardComponent,
-    AdminMenuComponent
+    AdminMenuComponent,
+    AlertsComponent
   ],
   imports: [
     BrowserModule,

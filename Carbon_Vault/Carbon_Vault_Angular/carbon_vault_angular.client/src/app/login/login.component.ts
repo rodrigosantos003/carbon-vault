@@ -27,12 +27,25 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.closePopup();
     console.log(this.authService.isAuthenticated())
     // Check if user is already authenticated
     if (this.authService.isAuthenticated()) {
      
       this.router.navigate(['/dashboard']);
     }
+  }
+
+  closePopup() {
+    document.querySelectorAll('.close-icon').forEach(closeIcon => {
+      closeIcon.addEventListener('click', () => {
+        const popup = closeIcon.closest('.popup');
+
+        if (popup instanceof HTMLElement) {
+          popup.style.display = 'none';
+        }
+      });
+    });
   }
 
   setToken(token: string) {
