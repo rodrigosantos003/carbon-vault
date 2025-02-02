@@ -39,8 +39,26 @@ export class LoginComponent implements OnInit {
     localStorage.setItem('token', token);
   }
 
+  enableLoading() {
+    const loadingButton = document.getElementById('loading');
+
+    if (loadingButton) {
+      loadingButton.style.display = 'inline-flex';
+    }
+  }
+
+  disableLoading() {
+    const loadingButton = document.getElementById('loading');
+
+    if (loadingButton) {
+      loadingButton.style.display = 'none';
+    }
+  }
+
   onSubmit() {
     if (this.loginForm.valid) {
+      this.enableLoading();
+
       const formData = this.loginForm.value;
 
       console.log('Form Data:', formData);
@@ -48,12 +66,14 @@ export class LoginComponent implements OnInit {
       this.http.post('https://localhost:7117/api/Accounts/login', formData).subscribe(
         (response: any) => {
           console.log('Login successful!', response);
+          this.disableLoading();
           alert("Login bem sucedido!");
           this.setToken(response.token);  // Save the token in localStorage
           this.router.navigate(['/dashboard']);  // Redirect to dashboard
         },
         (error) => {
           console.error('Login failed!', error);
+          this.disableLoading();
           alert("Credenciais inválidas!");
         }
       );
