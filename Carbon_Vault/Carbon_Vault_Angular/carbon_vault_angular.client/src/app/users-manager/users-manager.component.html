@@ -1,0 +1,77 @@
+<body>
+  <app-admin-menu></app-admin-menu>
+
+  <div class="main-content">
+    <h1>Gestão de Utilizadores</h1>
+    <div class="stats">
+      <div class="card blue">
+        <p>Número Total de Utilizadores</p>
+        <div>
+          <img src="images/menu/UserIconB.png" />
+          <h2>50</h2>
+        </div>
+        <p>15% Desde o último mês</p>
+      </div>
+      <div class="card green">
+        <p>Número Total de Utilizadores confirmados</p>
+        <div>
+          <img src="images/menu/UserIconB.png" />
+          <h2>{{ accounts.length }}</h2>
+        </div>
+        <p>15% Nas últimas 24 horas</p>
+      </div>
+    </div>
+    <div class="user-table">
+      <div class="table-header">
+        <h2>Utilizadores</h2>
+        <button class="add-btn">+ Adicionar</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Tipo</th>
+            <th>Criação da conta</th>
+            <th>Detalhes</th>
+            <th>Eliminar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let account of accounts">
+            <td>{{ account.id }}</td>
+            <td>{{ account.name }}</td>
+            <td>{{ account.email }}</td>
+            <td>{{ account.role }}</td>
+            <td>09/01/2025 00:00</td>
+            <td><button class="view-btn">Ver mais</button></td>
+            <td><button class="delete-btn">Eliminar</button></td>
+            <!--<td>
+    <button class="view-btn" (click)="viewAccount(account)">Ver mais</button>
+    <button class="delete-btn" (click)="deleteAccount(account.id)">Eliminar</button>
+  </td>-->
+          </tr>
+          <tr>
+            <td>n</td>
+            <td>Rúben Dâmaso</td>
+            <td>mycompany&#64;gmail.com</td>
+            <td>tipo</td>
+            <td>09/01/2025 00:00</td>
+            <td><button class="view-btn">Ver mais</button></td>
+            <td><button class="delete-btn">Eliminar</button></td>
+          </tr>
+          <tr>
+            <td>x</td>
+            <td>Demo User</td>
+            <td>mycompany&#64;gmail.com</td>
+            <td>tipo</td>
+            <td>09/01/2025 00:00</td>
+            <td><button class="view-btn">Ver mais</button></td>
+            <td><button class="delete-btn">Eliminar</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>

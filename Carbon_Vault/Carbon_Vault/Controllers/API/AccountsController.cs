@@ -43,6 +43,45 @@ namespace Carbon_Vault.Controllers.API
             return await _context.Account.ToListAsync();
         }
 
+        // GET: api/Accounts/users
+        [HttpGet("users")]
+        public async Task<ActionResult<IEnumerable<Account>>> GetUserAccounts()
+        {
+            var accounts = await _context.Account
+                                 .Select(a => new
+                                 {
+                                     a.Id,
+                                     a.Name,
+                                     a.Email,
+                                     Role = a.Role.ToString() // Converte o enum para string
+                                 })
+                                 .ToListAsync();
+
+            if (!accounts.Any())
+            {
+                return NotFound("Nenhuma conta de usuário encontrada.");
+            }
+
+            return Ok(accounts);
+        }
+
+        // GET: api/Accounts/admins
+        [HttpGet("admins")]
+        public async Task<ActionResult<IEnumerable<Account>>> GetAdminAccounts()
+        {
+            var accounts = await _context.Account
+                                         .Where(a => a.Role == AccountType.Admin)
+                                         .ToListAsync();
+
+            if (!accounts.Any())
+            {
+                return NotFound("Nenhuma conta de administrador encontrada.");
+            }
+
+            return accounts;
+        }
+
+
         // GET: api/Accounts/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Account>> GetAccount(int id)

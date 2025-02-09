@@ -44,6 +44,11 @@ builder.Services.AddAuthentication(x =>
 });
 
 DotNetEnv.Env.Load();
+//Console.WriteLine("##### START #######");
+//Console.WriteLine($"SMTP_CLIENT: {Environment.GetEnvironmentVariable("SMTP_CLIENT")}");
+//Console.WriteLine($"SMTP_USERNAME: {Environment.GetEnvironmentVariable("SMTP_USERNAME")}");
+//Console.WriteLine($"SMTP_PASSWORD: {Environment.GetEnvironmentVariable("SMTP_PASSWORD")}");
+//Console.WriteLine("####### END #######");
 
 var app = builder.Build();
 app.UseCors("AllowSpecificOrigins");

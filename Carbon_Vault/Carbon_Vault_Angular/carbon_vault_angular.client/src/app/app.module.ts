@@ -20,6 +20,7 @@ import { UserMenuComponent } from './user-menu/user-menu.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { AdminMenuComponent } from './admin-menu/admin-menu.component';
 import { AlertsComponent } from './alerts/alerts.component';
+import { UsersManagerComponent } from './users-manager/users-manager.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { AlertsComponent } from './alerts/alerts.component';
     UserMenuComponent,
     AdminDashboardComponent,
     AdminMenuComponent,
-    AlertsComponent
+    AlertsComponent,
+    UsersManagerComponent
   ],
   imports: [
     BrowserModule,

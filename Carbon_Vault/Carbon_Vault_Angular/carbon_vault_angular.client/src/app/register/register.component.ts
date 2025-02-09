@@ -27,6 +27,8 @@ export class RegisterComponent {
 
   onSubmit() {
     if (this.registerForm.valid) {
+      this.enableLoading();
+
       const formData = this.registerForm.value;
       console.log('Dados do formulário:', formData);
 
@@ -49,11 +51,13 @@ export class RegisterComponent {
 
       this.http.post("https://localhost:7117/api/Accounts", formData).subscribe(
         (response: any) => {
+          this.disableLoading();
           console.log('Login successful!', response);
           alert("Registo bem sucedido!");
           window.location.href = "/login";
         },
         (error) => {
+          this.disableLoading();
           console.error('Login failed!', error);
           alert("Registo Inválido!");
         }
@@ -112,6 +116,35 @@ export class RegisterComponent {
       this.isNifValid = false;
       this.nifErrorMessage = 'Erro ao validar o NIF. Tente novamente mais tarde.';
       return false;
+    }
+  }
+
+
+  closePopup() {
+    document.querySelectorAll('.close-icon').forEach(closeIcon => {
+      closeIcon.addEventListener('click', () => {
+        const popup = closeIcon.closest('.popup');
+
+        if (popup instanceof HTMLElement) {
+          popup.style.display = 'none';
+        }
+      });
+    });
+  }
+
+  enableLoading() {
+    const loadingButton = document.getElementById('loading');
+
+    if (loadingButton) {
+      loadingButton.style.display = 'inline-flex';
+    }
+  }
+
+  disableLoading() {
+    const loadingButton = document.getElementById('loading');
+
+    if (loadingButton) {
+      loadingButton.style.display = 'none';
     }
   }
 }
