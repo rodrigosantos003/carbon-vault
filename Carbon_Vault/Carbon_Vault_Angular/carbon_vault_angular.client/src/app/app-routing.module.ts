@@ -11,6 +11,7 @@ import { UserEmissionsComponent } from './user-emissions/user-emissions.componen
 import { MarketplaceComponent } from './marketplace/marketplace.component';
 import { UserMenuComponent } from './user-menu/user-menu.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
+import { ProjectDetailsComponent } from './project-details/project-details.component';
 
 const routes: Routes = [
   { path: 'confirm-account', component: ConfirmAccountComponent },
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: 'recover-password', component: RecoverPasswordComponent },
   { path: 'user-emissions', component: UserEmissionsComponent },
   { path: 'marketplace', component: MarketplaceComponent },
+  { path: 'marketplace/project/:id', component: ProjectDetailsComponent },
   { path: 'user-menu', component: UserMenuComponent },
   { path: 'admin-dashboard', component: AdminDashboardComponent }
 ];

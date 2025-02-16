@@ -12,4 +12,5 @@ export class ProjectCardComponent {
   @Input() imageUrl: string = '';      // URL da imagem do projeto
   @Input() pricePerCredit: string = '';         // Preço do projeto
   @Input() quantity: number = 1;       // Quantidade inicial
+  @Input() projectID: number = 1;       // Quantidade inicial
 }

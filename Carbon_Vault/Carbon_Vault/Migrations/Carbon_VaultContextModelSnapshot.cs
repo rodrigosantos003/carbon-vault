@@ -163,12 +163,78 @@ namespace Carbon_Vault.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.HasKey("Id");
+
+                    b.ToTable("Projects");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Benefits = "Access to clean water, improved health conditions.",
+                            CarbonCreditsGenerated = 1000.0,
+                            Certification = "ISO 14001",
+                            Description = "Providing clean water access to rural communities.",
+                            Developer = "Green Solutions",
+                            EndDate = new DateTime(2026, 2, 9, 17, 55, 14, 543, DateTimeKind.Local).AddTicks(9840),
+                            ImageUrl = "https://example.com/image1.jpg",
+                            Location = "Africa",
+                            Name = "Water Access Initiative",
+                            PricePerCredit = 12.50m,
+                            ProjectUrl = "https://example.com/project1",
+                            StartDate = new DateTime(2024, 11, 9, 17, 55, 14, 543, DateTimeKind.Local).AddTicks(9787),
+                            Status = 0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Benefits = "Sustainable energy solutions, reduced carbon emissions.",
+                            CarbonCreditsGenerated = 2000.0,
+                            Certification = "LEED Gold",
+                            Description = "Solar energy projects to provide electricity to underserved areas.",
+                            Developer = "Renewable Power Inc.",
+                            EndDate = new DateTime(2027, 2, 9, 17, 55, 14, 543, DateTimeKind.Local).AddTicks(9929),
+                            ImageUrl = "https://example.com/image2.jpg",
+                            Location = "South America",
+                            Name = "Solar Energy for All",
+                            PricePerCredit = 15.75m,
+                            ProjectUrl = "https://example.com/project2",
+                            StartDate = new DateTime(2025, 1, 9, 17, 55, 14, 543, DateTimeKind.Local).AddTicks(9927),
+                            Status = 0
+                        });
+                });
+
+            modelBuilder.Entity("Carbon_Vault.Models.ProjectType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Projects");
+                    b.ToTable("ProjectTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Type = 0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Type = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Type = 2
+                        });
                 });
 
             modelBuilder.Entity("Carbon_Vault.Models.UserEmissions", b =>
@@ -196,6 +262,21 @@ namespace Carbon_Vault.Migrations
                     b.ToTable("UserEmissions");
                 });
 
+            modelBuilder.Entity("ProjectProjectType", b =>
+                {
+                    b.Property<int>("ProjectsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TypesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProjectsId", "TypesId");
+
+                    b.HasIndex("TypesId");
+
+                    b.ToTable("ProjectProjectType");
+                });
+
             modelBuilder.Entity("Carbon_Vault.Models.CarbonCredit", b =>
                 {
                     b.HasOne("Carbon_Vault.Models.Project", "Project")
@@ -205,6 +286,21 @@ namespace Carbon_Vault.Migrations
                         .IsRequired();
 
                     b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("ProjectProjectType", b =>
+                {
+                    b.HasOne("Carbon_Vault.Models.Project", null)
+                        .WithMany()
+                        .HasForeignKey("ProjectsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Carbon_Vault.Models.ProjectType", null)
+                        .WithMany()
+                        .HasForeignKey("TypesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Carbon_Vault.Models.Project", b =>

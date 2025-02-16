@@ -25,14 +25,17 @@ namespace Carbon_Vault.Controllers.API
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Project>>> GetProjects()
         {
-            return await _context.Projects.ToListAsync();
+            return await _context.Projects.Include(p => p.Types) // Ensure project types are loaded
+        .ToListAsync();
         }
 
         // GET: api/Projects/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Project>> GetProject(int id)
         {
-            var project = await _context.Projects.FindAsync(id);
+            var project = await _context.Projects
+        .Include(p => p.Types) // Ensure project types are loaded
+        .FirstOrDefaultAsync(p => p.Id == id);
 
             if (project == null)
             {
@@ -45,18 +48,13 @@ namespace Carbon_Vault.Controllers.API
         // PUT: api/Projects/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProject(int id, Project project, string jwt, int userID)
+        public async Task<IActionResult> PutProject(int id, Project project)
         {
-            if (AuthHelper.IsTokenValid(jwt, userID))
-            {
-                return Unauthorized();
-            }
-
-
             if (id != project.Id)
             {
                 return BadRequest();
             }
+
             _context.Entry(project).State = EntityState.Modified;
 
             try
@@ -81,13 +79,8 @@ namespace Carbon_Vault.Controllers.API
         // POST: api/Projects
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Project>> PostProject(Project project, string jwt, int userID)
+        public async Task<ActionResult<Project>> PostProject(Project project)
         {
-            if (AuthHelper.IsTokenValid(jwt, userID))
-            {
-                return Unauthorized();
-            }
-
             _context.Projects.Add(project);
             await _context.SaveChangesAsync();
 
@@ -96,13 +89,8 @@ namespace Carbon_Vault.Controllers.API
 
         // DELETE: api/Projects/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProject(int id, string jwt, int userID)
+        public async Task<IActionResult> DeleteProject(int id)
         {
-            if (AuthHelper.IsTokenValid(jwt, userID))
-            {
-                return Unauthorized();
-            }
-
             var project = await _context.Projects.FindAsync(id);
             if (project == null)
             {

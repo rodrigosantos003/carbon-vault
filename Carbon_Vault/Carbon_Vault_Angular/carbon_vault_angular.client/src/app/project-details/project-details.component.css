@@ -1,0 +1,273 @@
+/* Header */
+
+.marketplace-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 2rem;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .marketplace-header .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .marketplace-header .logo img {
+    padding-inline-start: 1.5rem;
+    width: 50px;
+  }
+  
+  .marketplace-header .logo span {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 32px;
+    user-select: none;
+    color: #4EA741;
+  }
+  
+  .marketplace-header .nav {
+    display: flex;
+    align-items: center;
+    gap: 5rem;
+  }
+  
+  .marketplace-header .nav a {
+    display: flex;
+    gap: 0.2rem;
+    text-decoration: none;
+    color: #000000;
+    align-items: center;
+    font-weight: bold;
+    justify-content: center;
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+  }
+  
+  .profile-btn {
+    font-family: 'Poppins';
+    display: block;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    background-color: var(--main-color);
+    border: 0px;
+    color: #fff;
+    font-size: 1.6rem;
+    padding: 0;
+    line-height: 40px;
+    font-weight: bold;
+    text-align: center;
+    justify-items: center;
+  }
+  
+  
+  .logout-btn {
+    background-color: var(--main-color);
+    border: none;
+    color: #fff;
+    padding: 0.7rem 1.6rem;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .marketplace-main {
+    width: 70%;
+    margin: 0 auto;
+  }
+  
+  .controls {
+    display: flex;
+    justify-content: flex-start;
+    margin-block: 2.5rem;
+    gap: 15.1rem;
+  }
+  
+  .filter-btn {
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    gap: 0.8rem;
+    background-color: var(--main-color);
+    width: 250px;
+    color: #fff;
+    margin-inline-start: 23px;
+    border: 1px solid #ddd;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    font-size: 1rem;
+  }
+  
+    .filter-btn img {
+      width: 20px;
+      height: 20px;
+    }
+  
+    .filter-btn :nth-child(4) {
+      position: absolute;
+      margin-inline-start: auto;
+      width: 15px;
+      height: 15px;
+    }
+  
+    .filter-btn span {
+      width: 300px;
+      color: #fff;
+      font-size: 1rem;
+    }
+  
+  .filter-options {
+    display: block;
+    border-radius: 15px;
+    position: absolute;
+    background-color: #fff;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    border: solid 3px #ddd;
+    width: 250px;
+    margin-top: 40px;
+    margin-left: 20px;
+    padding: 1rem 0;
+  }
+  
+    .filter-options ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+  
+    .filter-options ul hr{
+      padding: 0;
+      margin: 0;
+    }
+  
+    .filter-options ul li {
+      font-size: 1rem;
+      cursor: pointer;
+      padding: 0.5rem 1rem;
+    }
+  
+    .filter-options ul li:hover {
+      background-color: #4EA741;
+    }
+  
+  .search {
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    gap: 0.8rem;
+    background-color: var(--main-color);
+    width: 250px;
+    color: #fff;
+    border: 1px solid #ddd;
+    padding: 0.5rem 2.2rem 0.5rem 1rem;
+    border-radius: 10px;
+    font-size: 1rem;
+    padding-left: 30px;
+  }
+  
+  .search-icon {
+    position: absolute;
+    left: 820px;
+    top: 170px;
+  }
+  
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-items: center;
+    gap: 3rem;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+
+
+/* Details */
+
+
+
+  .project-details {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+    font-family: Poppins;
+  }
+  
+  h1 {
+    font-size: 24px;
+    margin-bottom: 15px;
+  }
+  
+  .project-image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+  }
+  
+  .project-description {
+    font-size: 16px;
+    margin-top: 15px;
+    line-height: 1.5;
+  }
+  
+  .benefits {
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 2px solid #ccc;
+  }
+  
+  .benefits h2 {
+    font-size: 18px;
+  }
+  
+  .price-section {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+  }
+  
+  .price-section p {
+    margin: 5px 0;
+  }
+  
+  .cart-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  input[type="number"] {
+    width: 50px;
+    padding: 5px;
+    font-size: 16px;
+  }
+  
+  .add-to-cart {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .add-to-cart:hover {
+    background-color: #45a049;
+  }
+  
+  .typesIcon{
+    width: 100px;
+  }
+
+  .type-images{
+    display: flex
+    ;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: center;
+        gap: 10px;
+  }

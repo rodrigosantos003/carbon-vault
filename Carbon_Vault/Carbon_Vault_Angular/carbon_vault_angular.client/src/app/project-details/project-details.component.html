@@ -1,0 +1,48 @@
+<header class="marketplace-header">
+    <div class="logo">
+      <img src="/images/CV_Logo.png" alt="Carbon Vault Logo">
+      <span>Carbon Vault</span>
+    </div>
+    <nav class="nav">
+      <a *ngIf="isUserLoggedIn" href="/projetos">Projetos</a>
+      <a *ngIf="isUserLoggedIn" href="/carrinho"> <img src="/images/cart.svg"/> Carrinho </a>
+      <button *ngIf="isUserLoggedIn" class="profile-btn">G</button>
+      <button #loginBtn class="logout-btn">Terminar sessão</button>
+    </nav>
+  </header>
+  <main>
+    <div class="project-details">
+        <h1>{{ projectData.name }}</h1>
+      
+        <img class="project-image" [src]="projectData.imageUrl" alt="{{ projectData.name }}">
+      
+        <p class="project-description">
+          {{ projectData.description }}
+        </p>
+        <div class="benefits">
+          <div class="type-images">
+            <img class="typesIcon" *ngFor="let type of projectData.types" [src]="'/icons/Goal' + (type.type + 1) + '.png'" [alt]="'Goal ' + (type.type + 1)">
+          </div>
+        </div>
+        <div class="benefits">
+          <h2>Benefícios e Impactos do Projeto</h2>
+          <p>{{ projectData.benefits }}</p>
+        </div>
+      
+        <div class="benefits">
+           
+        </div>
+        <div class="price-section">
+          <p><strong>{{ projectData.pricePerCredit }}€ / Tonelada</strong></p>
+          <p>{{ projectData.stock }} Créditos de Carbono em stock</p>
+      
+          <div class="cart-controls">
+            <label for="quantity">Quantidade</label>
+            <input id="quantity" type="number" min="1" [(ngModel)]="quantity" [value]="quantity">
+      
+            <button class="add-to-cart">Adicionar ao Carrinho</button>
+          </div>
+        </div>
+      </div>
+      
+  </main>

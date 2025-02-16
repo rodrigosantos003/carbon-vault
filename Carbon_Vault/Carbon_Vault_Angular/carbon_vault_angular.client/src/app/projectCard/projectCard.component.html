@@ -6,6 +6,6 @@
   <div class="card-footer">
     <input type="number" min="1" [(ngModel)]="quantity" [value]="quantity">
     <span>{{ pricePerCredit }}€</span>
-    <button class="buy-btn">COMPRAR</button>
+    <button class="buy-btn" [routerLink]="['./project', projectID]">COMPRAR</button>
   </div>
 </div>

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<Carbon_VaultContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Carbon_VaultContext") ?? throw new InvalidOperationException("Connection string 'Carbon_VaultContext' not found.")));
@@ -46,6 +47,9 @@ builder.Services.AddAuthentication(x =>
 DotNetEnv.Env.Load();
 
 var app = builder.Build();
+
+
+
 app.UseCors("AllowSpecificOrigins");
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
