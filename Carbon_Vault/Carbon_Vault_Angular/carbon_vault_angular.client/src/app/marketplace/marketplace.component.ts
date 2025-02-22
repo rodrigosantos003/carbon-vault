@@ -34,7 +34,7 @@ export class MarketplaceComponent implements OnInit{
 
   ngOnInit(): void {
     this.changeLoginBtnText();
-    this.http.get('http://localhost:7117/api/projects').subscribe((data: any) => {
+    this.http.get('https://localhost:7117/api/projects').subscribe((data: any) => {
       this.allProjects = data;
       this.projectsToShow = this.allProjects;
     }, error => {
