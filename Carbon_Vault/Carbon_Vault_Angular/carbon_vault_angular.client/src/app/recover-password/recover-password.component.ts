@@ -12,8 +12,6 @@ import { HttpClient } from '@angular/common/http';
 })
 export class RecoverPasswordComponent {
   recoverPasswordForm: FormGroup;
-  isPasswordReset: boolean | null = null; // Estado de recuperação de password
-  passwordErrorMessage: string | null = null;
 
   constructor(private fb: FormBuilder, private http: HttpClient, private route: ActivatedRoute, public router: Router) {
     // Inicialização do FormGroup com controlos e validações
@@ -26,42 +24,47 @@ export class RecoverPasswordComponent {
   onSubmit() {
     if (this.recoverPasswordForm.valid) {
       const formData = this.recoverPasswordForm.value;
-      console.log('Dados do formulário:', formData);
 
-      // Envio do email de recuperação
-      this.resetPassowrd(formData.password, formData.passwordConfirmation).then(isValid => {
-        if (isValid) {
-          alert("Palavra-passe recuperada com sucesso!");
-          document.location.href = "/login";
-        } else {
-          alert("Formato inválido!");
-        }
-      });
-    } else {
-      alert("Formato inválido!");
+      if (!this.isPasswordValid(formData.password) || formData.password !== formData.passwordConfirmation) {
+        alert("Password inválida!");
+        return;
+      }
+
+      this.resetPassword(formData.password, formData.passwordConfirmation);
     }
   }
 
-  async resetPassowrd(password: string, passwordConfirmation: string): Promise<boolean> {
+  // Aramzenar nova palavra-passe
+  resetPassword(password: string, passwordConfirmation: string) {
     const token = this.route.snapshot.queryParamMap.get('token');
     const apiUrl = `https://localhost:7117/api/Accounts/ResetPassword?token=${token}`;
 
-    try {
-      const response: any = await this.http.post(apiUrl, { "newPassword": password, "passwordConfirmation": passwordConfirmation }).toPromise();
-
-      if (response?.message) {
-        this.isPasswordReset = true;
-        this.passwordErrorMessage = null;
-        return true;
-      } else {
-        this.isPasswordReset = false;
-        this.passwordErrorMessage = 'Password inválida';
-        return false;
+    this.http.post(apiUrl, { "newPassword": password, "passwordConfirmation": passwordConfirmation }).subscribe({
+      next: (response) => {
+        if (response.hasOwnProperty("message")) {
+          alert("Palavra-passe recuperada com sucesso!");
+          location.href = "/login";
+        }
+        else alert("Password inválida");
+      },
+      error: (error) => {
+        alert("Erro ao alterar a password. Tente novamente mais tarde");
       }
-    } catch (error) {
-      this.isPasswordReset = false;
-      this.passwordErrorMessage = 'Erro ao alterar password. Tente novamente mais tarde.';
-      return false;
-    }
+    });
+  }
+
+  isPasswordValid(password: string): boolean {
+    const minLength = 8;
+    const hasUpperCase = /[A-Z]/.test(password); // Verifica se contém pelo menos uma letra maiúscula
+    const hasLowerCase = /[a-z]/.test(password); // Verifica se contém pelo menos uma letra minúscula
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password); // Verifica se contém pelo menos um caractere especial
+
+    // Valida todos os critérios
+    return (
+      password.length >= minLength &&
+      hasUpperCase &&
+      hasLowerCase &&
+      hasSpecialChar
+    );
   }
 }

@@ -214,7 +214,7 @@ namespace Carbon_Vault.Controllers.API
             var account = await _context.Account.FirstOrDefaultAsync(a => a.Email == email);
 
             if (account == null)
-                return NotFound(new { message = "Account not found." });
+                return NotFound(new { error = "Account not found." });
 
             account.State = AccountState.Pending;
             _context.Entry(account).State = EntityState.Modified;

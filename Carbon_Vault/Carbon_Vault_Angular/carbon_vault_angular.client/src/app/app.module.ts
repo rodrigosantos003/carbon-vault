@@ -38,7 +38,7 @@ import { UsersManagerComponent } from './users-manager/users-manager.component';
     UserMenuComponent,
     AdminDashboardComponent,
     AdminMenuComponent,
-    ProjectDetailsComponent
+    ProjectDetailsComponent,
     AlertsComponent,
     UsersManagerComponent
   ],
@@ -54,7 +54,7 @@ import { UsersManagerComponent } from './users-manager/users-manager.component';
       }
     })
   ],
-  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },JwtHelperService],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }, JwtHelperService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
