@@ -1,0 +1,212 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  color: black;
+  margin: 0px !important;
+  display: flex;
+  height: 100vh;
+}
+
+
+.main-content {
+  flex-grow: 1;
+  padding: 20px 90px 20px 90px;
+}
+
+.stats {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.card {
+  padding: 20px;
+  border-radius: 10px;
+  color: black;
+  width: 250px;
+  font-size: 18px;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.card p {
+    margin: 0;
+}
+
+.card div {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.card img {
+    width: 40px;
+    height: 40px;
+}
+
+.blue {
+  background: #6fa3ef;
+}
+
+.green {
+  background: var(--main-color);
+}
+
+.user-table {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+thead {
+    background: var(--main-faded);
+}
+
+.view-btn {
+  background: var(--main-color);
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.delete-btn {
+  background: #E74C3C;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.add-btn {
+  background: var(--main-color);
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  cursor: pointer;
+}
+
+
+/* Confirm Delte Popup */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  /*pointer-events: none;*/
+  display: none;
+  z-index: 999;
+}
+
+.delete {
+  width: 600px;
+  height: fit-content;
+  background: rgb(255, 255, 255);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 30px;
+  position: relative;
+  box-shadow: 20px 20px 30px rgba(0, 0, 0, 0.15);
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -60%);
+  z-index: 1000;
+  display: none;
+}
+
+.delete-content {
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.delete-content img {
+    width: 60px;
+    height: 60px;
+}
+
+.delete-heading {
+  font-size: 20px;
+  font-weight: 700;
+  color: rgb(27, 27, 27);
+}
+
+.delete-description {
+  font-weight: 300;
+  color: rgb(102, 102, 102);
+}
+
+.delete-button-wrapper {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.delete-button {
+  width: 50%;
+  height: 35px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.primary {
+  background-color: rgb(255, 114, 109);
+  color: white;
+}
+
+  .primary:hover {
+    background-color: rgb(255, 73, 66);
+  }
+
+.secondary {
+  background-color: #ddd;
+}
+
+  .secondary:hover {
+    background-color: rgb(197, 197, 197);
+  }
+
+.exit-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background-color: transparent;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+}
+
+  .exit-button:hover svg {
+    fill: black;
+  }
+
+  .exit-button svg {
+    fill: rgb(175, 175, 175);
+  }

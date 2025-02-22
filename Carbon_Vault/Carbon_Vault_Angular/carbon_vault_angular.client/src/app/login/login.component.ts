@@ -27,6 +27,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.closePopup();
     console.log(this.authService.isAuthenticated())
     // Check if user is already authenticated
     if (this.authService.isAuthenticated()) {
@@ -35,12 +36,42 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  closePopup() {
+    document.querySelectorAll('.close-icon').forEach(closeIcon => {
+      closeIcon.addEventListener('click', () => {
+        const popup = closeIcon.closest('.popup');
+
+        if (popup instanceof HTMLElement) {
+          popup.style.display = 'none';
+        }
+      });
+    });
+  }
+
   setToken(token: string) {
     localStorage.setItem('token', token);
   }
 
+  enableLoading() {
+    const loadingButton = document.getElementById('loading');
+
+    if (loadingButton) {
+      loadingButton.style.display = 'inline-flex';
+    }
+  }
+
+  disableLoading() {
+    const loadingButton = document.getElementById('loading');
+
+    if (loadingButton) {
+      loadingButton.style.display = 'none';
+    }
+  }
+
   onSubmit() {
     if (this.loginForm.valid) {
+      this.enableLoading();
+
       const formData = this.loginForm.value;
 
       console.log('Form Data:', formData);
@@ -48,12 +79,14 @@ export class LoginComponent implements OnInit {
       this.http.post('https://localhost:7117/api/Accounts/login', formData).subscribe(
         (response: any) => {
           console.log('Login successful!', response);
+          this.disableLoading();
           alert("Login bem sucedido!");
           this.setToken(response.token);  // Save the token in localStorage
           this.router.navigate(['/dashboard']);  // Redirect to dashboard
         },
         (error) => {
           console.error('Login failed!', error);
+          this.disableLoading();
           alert("Credenciais inválidas!");
         }
       );

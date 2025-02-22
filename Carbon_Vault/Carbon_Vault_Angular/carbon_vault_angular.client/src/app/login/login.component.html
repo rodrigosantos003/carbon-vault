@@ -5,10 +5,10 @@
       <h1>Bem-vindo!</h1>
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <label for="email">E-mail</label>
-        <input id="email" type="email" placeholder="Introduza o seu e-mail" formControlName="email" required/>
+        <input id="email" type="email" placeholder="Introduza o seu e-mail" formControlName="email" required />
 
         <label for="password">Password</label>
-        <input id="password" type="password" placeholder="Introduza a password" formControlName="password" required/>
+        <input id="password" type="password" placeholder="Introduza a password" formControlName="password" required />
 
         <a class="forgot-password" href="/forgot-password">Esqueceu a sua palavra-passe?</a>
 
@@ -25,13 +25,13 @@
         </div>
         <h2>Carbon Vault</h2>
       </div>
-      <div class="highlight">ABC</div>
-      <p>A plataforma de comércio de Créditos de carbono mais completa do país!</p>
+      <p>A plataforma de <span>comércio de Créditos de carbono</span> mais completa do país!</p>
       <div class="plant-icon">
-        <img src="/images/PlantIcon.png" alt="Planta"/>
+        <img src="/images/PlantIcon.png" alt="Planta" />
       </div>
     </div>
   </div>
 
+  <app-alerts></app-alerts>
 
 </body>

@@ -120,19 +120,13 @@ body {
     line-height: 1.5;
   }
 
-  .highlight {
-      position: relative;
-      z-index: 9;
-      top: 48px;
-      left: 185px;
-      width: 340px;
-      background-color: #eee;
-      opacity: 60%;
-      color: #eee;
-  }
+.info-box span {
+  background-color: rgba(238, 238, 238, 0.4);
+}
 
 .logo img,
 .plant-icon img {
   width: 150px;
   margin-bottom: 20px;
 }
+

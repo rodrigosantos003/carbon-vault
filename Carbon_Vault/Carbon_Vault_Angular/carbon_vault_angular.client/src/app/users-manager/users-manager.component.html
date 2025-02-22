@@ -1,0 +1,97 @@
+<body>
+  <app-admin-menu></app-admin-menu>
+
+  <!-- Confirm Delet Popup -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="delete" id="delete">
+      <div class="delete-content">
+        <p class="delete-heading">Deseja mesmo eliminar este utilizador?</p>
+        <img src="images/DeleteBin.png" />
+        <p class="delete-description">Esta ação irá eliminar permanentemente o utilizador e toda a informação associada.</p>
+      </div>
+      <div class="delete-button-wrapper">
+        <button class="delete-button secondary" (click)="closePopup()">Cancelar</button>
+        <button class="delete-button primary">Eliminar</button>
+      </div>
+      <button class="exit-button" (click)="closePopup()">
+        <svg height="20px" viewBox="0 0 384 512">
+          <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <h1>Gestão de Utilizadores</h1>
+    <div class="stats">
+      <div class="card blue">
+        <p>Número Total de Utilizadores</p>
+        <div>
+          <img src="images/menu/UserIconB.png" />
+          <h2>50</h2>
+        </div>
+        <p>15% Desde o último mês</p>
+      </div>
+      <div class="card green">
+        <p>Número Total de Utilizadores confirmados</p>
+        <div>
+          <img src="images/menu/UserIconB.png" />
+          <h2>{{ accounts.length }}</h2>
+        </div>
+        <p>15% Nas últimas 24 horas</p>
+      </div>
+    </div>
+    <div class="user-table">
+      <div class="table-header">
+        <h2>Utilizadores</h2>
+        <button class="add-btn">+ Adicionar</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Tipo</th>
+            <th>Criação da conta</th>
+            <th>Detalhes</th>
+            <th>Eliminar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let account of accounts">
+            <td>{{ account.id }}</td>
+            <td>{{ account.name }}</td>
+            <td>{{ account.email }}</td>
+            <td>{{ account.role }}</td>
+            <td>09/01/2025 00:00</td>
+            <td><button class="view-btn" (click)="viewAccount(account)">Ver mais</button></td>
+            <td><button class="delete-btn" (click)="openPopup()">Eliminar</button></td>
+            <!--<td>
+              <button class="view-btn" (click)="viewAccount(account)">Ver mais</button>
+              <button class="delete-btn" (click)="deleteAccount(account.id)">Eliminar</button>
+            </td>-->
+          </tr>
+          <tr>
+            <td>n</td>
+            <td>Rúben Dâmaso</td>
+            <td>mycompany&#64;gmail.com</td>
+            <td>tipo</td>
+            <td>09/01/2025 00:00</td>
+            <td><button class="view-btn">Ver mais</button></td>
+            <td><button class="delete-btn" (click)="openPopup()">Eliminar</button></td>
+          </tr>
+          <tr>
+            <td>x</td>
+            <td>Demo User</td>
+            <td>mycompany&#64;gmail.com</td>
+            <td>tipo</td>
+            <td>09/01/2025 00:00</td>
+            <td><button class="view-btn">Ver mais</button></td>
+            <td><button class="delete-btn">Eliminar</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
