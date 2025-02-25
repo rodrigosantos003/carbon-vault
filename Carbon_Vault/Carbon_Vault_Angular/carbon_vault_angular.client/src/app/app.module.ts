@@ -38,7 +38,7 @@ import { UsersManagerComponent } from './users-manager/users-manager.component';
     UserMenuComponent,
     AdminDashboardComponent,
     AdminMenuComponent,
-    ProjectDetailsComponent
+    ProjectDetailsComponent,
     AlertsComponent,
     UsersManagerComponent
   ],

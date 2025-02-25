@@ -11,7 +11,7 @@
       </div>
       <div class="delete-button-wrapper">
         <button class="delete-button secondary" (click)="closePopup()">Cancelar</button>
-        <button class="delete-button primary">Eliminar</button>
+        <button class="delete-button primary" (click)="deleteAccount()">Eliminar</button>
       </div>
       <button class="exit-button" (click)="closePopup()">
         <svg height="20px" viewBox="0 0 384 512">
@@ -66,29 +66,7 @@
             <td>{{ account.role }}</td>
             <td>09/01/2025 00:00</td>
             <td><button class="view-btn" (click)="viewAccount(account)">Ver mais</button></td>
-            <td><button class="delete-btn" (click)="openPopup()">Eliminar</button></td>
-            <!--<td>
-              <button class="view-btn" (click)="viewAccount(account)">Ver mais</button>
-              <button class="delete-btn" (click)="deleteAccount(account.id)">Eliminar</button>
-            </td>-->
-          </tr>
-          <tr>
-            <td>n</td>
-            <td>Rúben Dâmaso</td>
-            <td>mycompany&#64;gmail.com</td>
-            <td>tipo</td>
-            <td>09/01/2025 00:00</td>
-            <td><button class="view-btn">Ver mais</button></td>
-            <td><button class="delete-btn" (click)="openPopup()">Eliminar</button></td>
-          </tr>
-          <tr>
-            <td>x</td>
-            <td>Demo User</td>
-            <td>mycompany&#64;gmail.com</td>
-            <td>tipo</td>
-            <td>09/01/2025 00:00</td>
-            <td><button class="view-btn">Ver mais</button></td>
-            <td><button class="delete-btn">Eliminar</button></td>
+            <td><button class="delete-btn" (click)="openPopup(account.id)">Eliminar</button></td>
           </tr>
         </tbody>
       </table>
