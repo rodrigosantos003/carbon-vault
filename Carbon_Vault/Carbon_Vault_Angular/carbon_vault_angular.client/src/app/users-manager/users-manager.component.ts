@@ -11,7 +11,9 @@ import { ConfirmAccountComponent } from '../confirm-account/confirm-account.comp
 })
 export class UsersManagerComponent {
   accounts: any[] = [];
-  private uuserAccountsURL = 'https://localhost:7117/api/Accounts/users';
+  private userAccountsURL = 'https://localhost:7117/api/Accounts/users';
+  private selectedAccountId: number | null = null;
+  private apiURL = 'https://localhost:7117/api/Accounts';
 
   constructor(private http: HttpClient) { }
 
@@ -20,7 +22,8 @@ export class UsersManagerComponent {
     console.log(this.accounts);
   }
 
-  openPopup() {
+  openPopup(account_id: number) {
+    this.selectedAccountId = account_id;
     const overlay = document.getElementById('modalOverlay');
     const delPopup = document.getElementById('delete');
 
@@ -31,6 +34,7 @@ export class UsersManagerComponent {
   }
 
   closePopup() {
+    this.selectedAccountId = null;
     const overlay = document.getElementById('modalOverlay');
     const delPopup = document.getElementById('delete');
 
@@ -45,7 +49,7 @@ export class UsersManagerComponent {
   }
 
   getAccounts(): void {
-    this.http.get<any[]>(this.uuserAccountsURL).subscribe({
+    this.http.get<any[]>(this.userAccountsURL).subscribe({
       next: (data) => {
         this.accounts = data; // Armazena os dados da API no array
       },
@@ -53,5 +57,21 @@ export class UsersManagerComponent {
         console.error('Erro ao encontrar as contas:', error);
       }
     });
+  }
+
+  deleteAccount() {
+    if (this.selectedAccountId !== null) {
+      const deleteURL = `${this.apiURL}/${this.selectedAccountId}`;
+      console.log("ID da conta a eliminar: " + this.selectedAccountId);
+
+      this.http.delete(deleteURL).subscribe(() => {
+        this.accounts = this.accounts.filter(acc => acc.id !== this.selectedAccountId);
+        this.closePopup();
+      }, error => {
+        console.error("Erro ao eliminar conta:", error);
+      });
+    } else {
+      console.log("ID é null");
+    }
   }
 }

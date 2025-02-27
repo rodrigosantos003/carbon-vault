@@ -4,23 +4,22 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Carbon_Vault.Models;
+using System.Reflection.Emit;
 
 namespace Carbon_Vault.Data
 {
     public class Carbon_VaultContext : DbContext
     {
+        public DbSet<Account> Account { get; set; } = default!;
+        public DbSet<Project> Projects { get; set; }
+        public DbSet<CarbonCredit> CarbonCredits { get; set; }
+        public DbSet<ProjectType> ProjectTypes { get; set; }
+        public DbSet<UserEmissions> UserEmissions { get; set; }
+
         public Carbon_VaultContext (DbContextOptions<Carbon_VaultContext> options)
             : base(options)
         {
         }
-
-
-        public DbSet<Carbon_Vault.Models.Account> Account { get; set; } = default!;
-        public DbSet<Carbon_Vault.Models.Project> Projects { get; set; }
-        public DbSet<Carbon_Vault.Models.CarbonCredit> CarbonCredits { get; set; }
-        public DbSet<Carbon_Vault.Models.ProjectType> ProjectTypes { get; set; }
-
-        public DbSet<Carbon_Vault.Models.UserEmissions> UserEmissions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -33,11 +32,71 @@ namespace Carbon_Vault.Data
                 .HasForeignKey(cc => cc.ProjectId)           
                 .OnDelete(DeleteBehavior.Cascade);
 
+            populateAccounts(modelBuilder);
 
+            populateProjectTypes(modelBuilder);
 
-            
+            populateProjects(modelBuilder);
+        }
+        
+        private void populateAccounts(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Account>().HasData(
+                new Account
+                {
+                    Id = 1,
+                    Name = "André Castanho",
+                    Email = "admin@carbonvault.com",
+                    Password = "Andre@123",
+                    Nif = "123456789",
+                    State = AccountState.Active,
+                    Role = AccountType.Admin
+                },
+                new Account
+                {
+                    Id = 2,
+                    Name = "John Doe",
+                    Email = "user2@carbonvault.com",
+                    Password = "HashedPassword@123",
+                    Nif = "987654321",
+                    State = AccountState.Active,
+                    Role = AccountType.User
+                },
+                new Account
+                {
+                    Id = 3,
+                    Name = "John Smith",
+                    Email = "user3@carbonvault.com",
+                    Password = "HashedPassword@123",
+                    Nif = "333333333",
+                    State = AccountState.Active,
+                    Role = AccountType.Support
+                },
+                new Account
+                {
+                    Id = 4,
+                    Name = "My User",
+                    Email = "user4@carbonvault.com",
+                    Password = "HashedPassword@123",
+                    Nif = "444444444",
+                    State = AccountState.Active,
+                    Role = AccountType.User
+                },
+                new Account
+                {
+                    Id = 5,
+                    Name = "Jane Doe",
+                    Email = "user5@carbonvault.com",
+                    Password = "HashedPassword@123",
+                    Nif = "555555555",
+                    State = AccountState.Active,
+                    Role = AccountType.User
+                }
+            );
+        }
 
-
+        private void populateProjectTypes(ModelBuilder modelBuilder)
+        {
             modelBuilder.Entity<ProjectType>().HasData(
                new ProjectType
                {
@@ -55,6 +114,10 @@ namespace Carbon_Vault.Data
                    Type = ProjectTypeEnum.Health
                }
            );
+        }
+
+        private void populateProjects(ModelBuilder modelBuilder)
+        {
             modelBuilder.Entity<Project>().HasData(
                new Project
                {
@@ -68,7 +131,7 @@ namespace Carbon_Vault.Data
                    Developer = "Green Solutions",
                    Certification = "ISO 14001",
                    PricePerCredit = 12.50M,
-                   
+
                    Status = ProjectStatus.Confirmed,
                    Benefits = "Access to clean water, improved health conditions.",
                    ProjectUrl = new Uri("https://example.com/project1"),
@@ -92,11 +155,6 @@ namespace Carbon_Vault.Data
                    ImageUrl = "https://example.com/image2.jpg"
                }
            );
-        
-
-
         }
-        
-
     }
 }
