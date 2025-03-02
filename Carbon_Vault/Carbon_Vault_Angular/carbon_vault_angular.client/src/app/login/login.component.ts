@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth-service.service';
+import { AlertsService } from '../alerts.service';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,8 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private http: HttpClient,
     private router: Router,
-    private authService: AuthService // Inject AuthService
+    private authService: AuthService, // Inject AuthService
+    private alerts: AlertsService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -27,7 +29,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.closePopup();
+    this.alerts.closePopup();
     console.log(this.authService.isAuthenticated())
     // Check if user is already authenticated
     if (this.authService.isAuthenticated()) {
@@ -36,41 +38,13 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  closePopup() {
-    document.querySelectorAll('.close-icon').forEach(closeIcon => {
-      closeIcon.addEventListener('click', () => {
-        const popup = closeIcon.closest('.popup');
-
-        if (popup instanceof HTMLElement) {
-          popup.style.display = 'none';
-        }
-      });
-    });
-  }
-
   setToken(token: string) {
     localStorage.setItem('token', token);
   }
 
-  enableLoading() {
-    const loadingButton = document.getElementById('loading');
-
-    if (loadingButton) {
-      loadingButton.style.display = 'inline-flex';
-    }
-  }
-
-  disableLoading() {
-    const loadingButton = document.getElementById('loading');
-
-    if (loadingButton) {
-      loadingButton.style.display = 'none';
-    }
-  }
-
   onSubmit() {
     if (this.loginForm.valid) {
-      this.enableLoading();
+      this.alerts.enableLoading("A verificar as credenciais...");
 
       const formData = this.loginForm.value;
 
@@ -79,14 +53,14 @@ export class LoginComponent implements OnInit {
       this.http.post('https://localhost:7117/api/Accounts/login', formData).subscribe(
         (response: any) => {
           console.log('Login successful!', response);
-          this.disableLoading();
+          this.alerts.disableLoading();
           alert("Login bem sucedido!");
           this.setToken(response.token);  // Save the token in localStorage
           this.router.navigate(['/dashboard']);  // Redirect to dashboard
         },
         (error) => {
           console.error('Login failed!', error);
-          this.disableLoading();
+          this.alerts.disableLoading();
           alert("Credenciais inválidas!");
         }
       );
