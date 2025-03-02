@@ -13,21 +13,21 @@ import { UserMenuComponent } from './user-menu/user-menu.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { ProjectDetailsComponent } from './project-details/project-details.component';
 import { UsersManagerComponent } from './users-manager/users-manager.component';
-
+import { AuthGuard } from './auth.guard';
 const routes: Routes = [
   { path: 'confirm-account', component: ConfirmAccountComponent },
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
-  { path: 'dashboard', component: DashboardComponent },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'recover-password', component: RecoverPasswordComponent },
-  { path: 'user-emissions', component: UserEmissionsComponent },
+  { path: 'user-emissions', component: UserEmissionsComponent,canActivate: [AuthGuard] },
   { path: 'marketplace', component: MarketplaceComponent },
   { path: 'marketplace/project/:id', component: ProjectDetailsComponent },
   { path: 'user-menu', component: UserMenuComponent },
   { path: 'admin-dashboard', component: AdminDashboardComponent },
-  { path: 'users-manager', component: UsersManagerComponent },
+  { path: 'users-manager', component: UsersManagerComponent,canActivate: [AuthGuard] },
 ];
 
 @NgModule({

@@ -24,6 +24,7 @@
     "@auth0/angular-jwt": "^5.2.0",
     "chart.js": "^4.4.7",
     "jest-editor-support": "*",
+    "lucide-angular": "^0.477.0",
     "run-script-os": "*",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

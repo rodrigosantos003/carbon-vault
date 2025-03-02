@@ -33,7 +33,7 @@ export class MarketplaceComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.changeLoginBtnText();
+
     this.http.get('https://localhost:7117/api/projects').subscribe((data: any) => {
       this.allProjects = data;
       this.projectsToShow = this.allProjects;
@@ -42,23 +42,23 @@ export class MarketplaceComponent implements OnInit{
     });
   }
 
-  changeLoginBtnText(): void {
-    this.isUserLoggedIn = this.authService.isAuthenticated();
-    if (this.isUserLoggedIn) {
+  // changeLoginBtnText(): void {
+  //   this.isUserLoggedIn = this.authService.isAuthenticated();
+  //   if (this.isUserLoggedIn) {
 
-      this.loginBtn.nativeElement.innerHTML = "Terminar Sessão";
-      this.loginBtn.nativeElement.onclick = () => {
-        this.authService.logout();
-        this.router.navigate(['/']);
-      }
-    }
-    else {
-      this.loginBtn.nativeElement.innerHTML = "Entrar";
-      this.loginBtn.nativeElement.onclick = () => {
-        this.router.navigate(['/login']);
-      }
-    }
-  }
+  //     this.loginBtn.nativeElement.innerHTML = "Terminar Sessão";
+  //     this.loginBtn.nativeElement.onclick = () => {
+  //       this.authService.logout();
+  //       this.router.navigate(['/']);
+  //     }
+  //   }
+  //   else {
+  //     this.loginBtn.nativeElement.innerHTML = "Entrar";
+  //     this.loginBtn.nativeElement.onclick = () => {
+  //       this.router.navigate(['/login']);
+  //     }
+  //   }
+  // }
 
   changeFiltersWindowState(): void {
     this.isFiltersWindowVisible = !this.isFiltersWindowVisible;

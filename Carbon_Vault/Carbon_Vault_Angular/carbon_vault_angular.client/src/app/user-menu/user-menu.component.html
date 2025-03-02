@@ -1,4 +1,4 @@
-<body>
+<!-- <body>
   <nav>
     <div>
       <div class="title">
@@ -56,4 +56,34 @@
       </ul>
     </div>
   </nav>
-</body>
+</body> -->
+
+<nav>
+  <div>
+    <div class="title">
+      <img src="images/CV_Logo.png" class="logo" />
+      <span class="navbar-title">Carbon Vault</span>
+    </div>
+
+    <div class="user-profile">
+      <div class="user-circle">
+        <span class="user-initial">{{ userInitial }}</span>
+      </div>
+      <span class="user-name">{{ userName }}</span>
+    </div>
+
+    <h2 class="menu-title">MENU</h2>
+
+    <ul class="menu">
+      <li *ngFor="let item of (userRole === 1 ? adminMenu : userMenu)">
+
+        <img [src]="item.icon" class="menu-icon" />
+        <a [href]="item.route">{{ item.label }}</a>
+      </li>
+      <li>
+        <img src="images/menu/LogoutIcon.png" class="menu-icon2" />
+        <a href="#" class="logout">Terminar Sessão</a>
+      </li>
+    </ul>
+  </div>
+</nav>

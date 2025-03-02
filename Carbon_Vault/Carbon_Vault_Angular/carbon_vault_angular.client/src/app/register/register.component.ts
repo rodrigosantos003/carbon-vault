@@ -11,6 +11,14 @@ import { HttpClient } from '@angular/common/http';
 })
 export class RegisterComponent {
   registerForm: FormGroup;
+  showTooltip = false;
+
+  passwordLength = false;
+  passwordUpperCase = false;
+  passwordLowerCase = false;
+  passwordSpecialChar = false;
+
+
   apiKey: string = 'e867f83dedbf7bac7e8e0bb616afc6ca'; // Chave da API
   isNifValid: boolean | null = null; // Estado da validação do NIF
   nifErrorMessage: string | null = null;
@@ -26,7 +34,7 @@ export class RegisterComponent {
   }
 
   onSubmit() {
-    if (this.registerForm.valid) {
+    if (true) {
       this.enableLoading();
 
       const formData = this.registerForm.value;
@@ -83,6 +91,14 @@ export class RegisterComponent {
     );
   }
 
+   updatePasswordStrength() {
+    const password = this.registerForm.get('password')?.value || '';
+
+    this.passwordLength = password.length >= 8;
+    this.passwordUpperCase = /[A-Z]/.test(password);
+    this.passwordLowerCase = /[a-z]/.test(password);
+    this.passwordSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+  }
 
   async validateNif(nif: string): Promise<boolean> {
     const apiUrl = `https://localhost:7117/api/Accounts/ValidateNIF?nif=${nif}`;
