@@ -420,5 +420,32 @@ namespace Carbon_Vault.Controllers.API
                 }
             }
         }
+
+        [HttpGet("UserStatistics")]
+        public async Task<IActionResult> GetUserStatistics()
+        {
+            // Total number of users
+            int totalUsers = await _context.Account.CountAsync();
+
+            
+            DateTime firstDayLastMonth = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month - 1, 1);
+            DateTime lastDayLastMonth = firstDayLastMonth.AddMonths(1).AddDays(-1);
+
+            
+            int previousMonthUsers = await _context.Account
+                .Where(a => a.CreatedAt >= firstDayLastMonth && a.CreatedAt <= lastDayLastMonth)
+                .CountAsync();
+
+            // Calculate percentage increase
+            double growthPercentage = previousMonthUsers > 0
+                ? ((double)(totalUsers - previousMonthUsers) / previousMonthUsers) * 100
+                : 100; 
+
+            return Ok(new
+            {
+                TotalUsers = totalUsers,
+                GrowthPercentage = growthPercentage
+            });
+        }
     }
 }

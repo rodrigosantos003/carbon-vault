@@ -57,7 +57,8 @@ namespace Carbon_Vault.Data
                     Password = "Andre@123",
                     Nif = "123456789",
                     State = AccountState.Active,
-                    Role = AccountType.Admin
+                    Role = AccountType.Admin,
+                    CreatedAt = DateTime.UtcNow,
                 },
                 new Account
                 {
@@ -67,7 +68,8 @@ namespace Carbon_Vault.Data
                     Password = "HashedPassword@123",
                     Nif = "987654321",
                     State = AccountState.Active,
-                    Role = AccountType.User
+                    Role = AccountType.User,
+                    CreatedAt = DateTime.UtcNow
                 },
                 new Account
                 {
@@ -77,7 +79,8 @@ namespace Carbon_Vault.Data
                     Password = "HashedPassword@123",
                     Nif = "333333333",
                     State = AccountState.Active,
-                    Role = AccountType.Support
+                    Role = AccountType.Support,
+                    CreatedAt = DateTime.UtcNow
                 },
                 new Account
                 {
@@ -87,7 +90,8 @@ namespace Carbon_Vault.Data
                     Password = "HashedPassword@123",
                     Nif = "444444444",
                     State = AccountState.Active,
-                    Role = AccountType.User
+                    Role = AccountType.User,
+                    CreatedAt = DateTime.UtcNow
                 },
                 new Account
                 {
@@ -97,7 +101,8 @@ namespace Carbon_Vault.Data
                     Password = "HashedPassword@123",
                     Nif = "555555555",
                     State = AccountState.Active,
-                    Role = AccountType.User
+                    Role = AccountType.User,
+                    CreatedAt = DateTime.UtcNow
                 }
             );
         }

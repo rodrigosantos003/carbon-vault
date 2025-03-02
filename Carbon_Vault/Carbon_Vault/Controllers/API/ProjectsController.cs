@@ -25,7 +25,9 @@ namespace Carbon_Vault.Controllers.API
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Project>>> GetProjects()
         {
-            return await _context.Projects.Include(p => p.Types) // Ensure project types are loaded
+            return await _context.Projects
+                .Include(p => p.Types)// Ensure project types are loaded
+                .Include(p => p.CarbonCredits)   // Ensure carbon credits are loaded
         .ToListAsync();
         }
 
@@ -35,6 +37,7 @@ namespace Carbon_Vault.Controllers.API
         {
             var project = await _context.Projects
         .Include(p => p.Types) // Ensure project types are loaded
+        .Include(p => p.CarbonCredits) // Ensure carbon credits are loaded
         .FirstOrDefaultAsync(p => p.Id == id);
 
             if (project == null)

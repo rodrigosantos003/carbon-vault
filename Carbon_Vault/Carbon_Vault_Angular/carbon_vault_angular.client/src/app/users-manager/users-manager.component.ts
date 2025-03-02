@@ -15,11 +15,16 @@ export class UsersManagerComponent {
   private userAccountsURL = 'https://localhost:7117/api/Accounts/users';
   private selectedAccountId: number | null = null;
   private apiURL = 'https://localhost:7117/api/Accounts';
+  private growthPercentageMonthlyURL = 'https://localhost:7117/api/Accounts/UserStatistics';
+  growthData: any = {};
+
+
 
   constructor(private http: HttpClient, private alerts: AlertsService ) { }
 
   ngOnInit(): void {
     this.getAccounts();
+    this.getGrowthPercentage();
     console.log(this.accounts);
   }
 
@@ -59,6 +64,17 @@ export class UsersManagerComponent {
       error: (error) => {
         console.error('Erro ao encontrar as contas:', error);
         this.alerts.disableLoading();
+      }
+    });
+  }
+
+  getGrowthPercentage(): void {
+    this.http.get<any[]>(this.growthPercentageMonthlyURL).subscribe({
+      next: (data) => {
+        this.growthData = data; 
+      },
+      error: (error) => {
+        console.error('Erro ao encontrar as subidas:', error);
       }
     });
   }

@@ -22,6 +22,7 @@ import { AdminMenuComponent } from './admin-menu/admin-menu.component';
 import { ProjectDetailsComponent } from './project-details/project-details.component';
 import { AlertsComponent } from './alerts/alerts.component';
 import { UsersManagerComponent } from './users-manager/users-manager.component';
+import { MarketPlaceNavigationComponent } from './market-place-navigation/market-place-navigation.component';
 import { UserPaymentComponent } from './user-payment/user-payment.component';
 
 @NgModule({
@@ -42,6 +43,7 @@ import { UserPaymentComponent } from './user-payment/user-payment.component';
     ProjectDetailsComponent,
     AlertsComponent,
     UsersManagerComponent,
+    MarketPlaceNavigationComponent,
     UserPaymentComponent
   ],
   imports: [
