@@ -21,6 +21,13 @@ namespace Carbon_Vault.Data
         {
         }
 
+        public DbSet<Carbon_Vault.Models.Account> Account { get; set; }
+        public DbSet<Carbon_Vault.Models.Project> Projects { get; set; }
+        public DbSet<Carbon_Vault.Models.CarbonCredit> CarbonCredits { get; set; }
+        public DbSet<Carbon_Vault.Models.ProjectType> ProjectTypes { get; set; }
+
+        public DbSet<Carbon_Vault.Models.UserEmissions> UserEmissions { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

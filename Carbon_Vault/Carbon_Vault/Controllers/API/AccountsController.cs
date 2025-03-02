@@ -214,7 +214,7 @@ namespace Carbon_Vault.Controllers.API
             var account = await _context.Account.FirstOrDefaultAsync(a => a.Email == email);
 
             if (account == null)
-                return NotFound(new { error = "Account not found." });
+                return NotFound("Account not found.");
 
             account.State = AccountState.Pending;
             _context.Entry(account).State = EntityState.Modified;
@@ -227,7 +227,7 @@ namespace Carbon_Vault.Controllers.API
             // Send confirmation link via email
             _emailService.SendEmail(account.Email, "Carbon Vault - Recuperar Palavra-Passe", $"Por favor recupere a sua palavra-passe clicando neste link: {confirmationLink}");
 
-            return Ok(new { message = "Password recovery link sent successfully" });
+            return Ok("Password recovery link sent successfully");
         }
 
         private string GenerateConfirmationToken(int userId)

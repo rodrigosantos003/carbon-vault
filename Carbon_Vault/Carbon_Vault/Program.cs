@@ -5,6 +5,8 @@ using Carbon_Vault.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Stripe;
+using Carbon_Vault.Controllers;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,13 +15,12 @@ builder.Services.AddDbContext<Carbon_VaultContext>(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigins", policy =>
     {
-        policy.WithOrigins("http://localhost:59115")
+        policy.WithOrigins("http://localhost:59115", "https://localhost:7117/")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -45,14 +46,8 @@ builder.Services.AddAuthentication(x =>
 });
 
 DotNetEnv.Env.Load();
-//Console.WriteLine("##### START #######");
-//Console.WriteLine($"SMTP_CLIENT: {Environment.GetEnvironmentVariable("SMTP_CLIENT")}");
-//Console.WriteLine($"SMTP_USERNAME: {Environment.GetEnvironmentVariable("SMTP_USERNAME")}");
-//Console.WriteLine($"SMTP_PASSWORD: {Environment.GetEnvironmentVariable("SMTP_PASSWORD")}");
-//Console.WriteLine("####### END #######");
 
 var app = builder.Build();
-
 
 
 app.UseCors("AllowSpecificOrigins");
@@ -68,6 +63,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+StripeConfiguration.ApiKey = builder.Configuration.GetSection("StripeSettings:SecretKey").Get<string>();
 
 app.UseAuthorization();
 

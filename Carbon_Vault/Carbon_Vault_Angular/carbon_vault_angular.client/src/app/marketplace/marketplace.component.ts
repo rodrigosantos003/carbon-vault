@@ -74,19 +74,19 @@ export class MarketplaceComponent implements OnInit{
 
     switch (value) {
       case 'Preço Asc':
-        this.projectsToShow.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+        this.projectsToShow.sort((a, b) => parseFloat(a.pricePerCredit) - parseFloat(b.pricePerCredit));
         break;
 
       case 'Preço Desc':
-        this.projectsToShow.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+        this.projectsToShow.sort((a, b) => parseFloat(b.pricePerCredit) - parseFloat(a.pricePerCredit));
         break;
 
       case 'Alfabetica Asc':
-        this.projectsToShow.sort((a, b) => a.title.localeCompare(b.title));
+        this.projectsToShow.sort((a, b) => a.name.localeCompare(b.name));
         break;
 
       case 'Alfabetica Desc':
-        this.projectsToShow.sort((a, b) => b.title.localeCompare(a.title));
+        this.projectsToShow.sort((a, b) => b.name.localeCompare(a.name));
         break;
     }
   }

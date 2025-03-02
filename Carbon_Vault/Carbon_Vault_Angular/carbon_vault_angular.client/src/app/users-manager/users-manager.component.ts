@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ConfirmAccountComponent } from '../confirm-account/confirm-account.component';
+/*import { ConfirmAccountComponent } from '../confirm-account/confirm-account.component';*/
+import { AlertsService } from '../alerts.service';
 
 @Component({
   selector: 'app-users-manager',
@@ -19,7 +20,7 @@ export class UsersManagerComponent {
 
 
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private alerts: AlertsService ) { }
 
   ngOnInit(): void {
     this.getAccounts();
@@ -54,12 +55,15 @@ export class UsersManagerComponent {
   }
 
   getAccounts(): void {
+    this.alerts.enableLoading("A carregar utilizadores..");
     this.http.get<any[]>(this.userAccountsURL).subscribe({
       next: (data) => {
         this.accounts = data; // Armazena os dados da API no array
+        this.alerts.disableLoading();
       },
       error: (error) => {
         console.error('Erro ao encontrar as contas:', error);
+        this.alerts.disableLoading();
       }
     });
   }

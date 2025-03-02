@@ -23,6 +23,7 @@ import { ProjectDetailsComponent } from './project-details/project-details.compo
 import { AlertsComponent } from './alerts/alerts.component';
 import { UsersManagerComponent } from './users-manager/users-manager.component';
 import { MarketPlaceNavigationComponent } from './market-place-navigation/market-place-navigation.component';
+import { UserPaymentComponent } from './user-payment/user-payment.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { MarketPlaceNavigationComponent } from './market-place-navigation/market
     ProjectDetailsComponent,
     AlertsComponent,
     UsersManagerComponent,
-    MarketPlaceNavigationComponent
+    MarketPlaceNavigationComponent,
+    UserPaymentComponent
   ],
   imports: [
     BrowserModule,
