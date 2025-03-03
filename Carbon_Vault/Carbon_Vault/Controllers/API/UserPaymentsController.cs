@@ -76,7 +76,7 @@ namespace Carbon_Vault.Controllers.API
         }
 
         [HttpGet("invoice/{sessionId}")]
-        public IActionResult GetInvoice(string sessionId)
+        public IActionResult SendInvoice(string sessionId)
         {
             var sessionService = new SessionService();
             var session = sessionService.Get(sessionId);
@@ -86,9 +86,12 @@ namespace Carbon_Vault.Controllers.API
                 var invoiceService = new InvoiceService();
                 var invoice = invoiceService.Get(session.InvoiceId);
 
-                _emailService.SendEmailWithAttachment(invoice.CustomerEmail, "Carbon Vault - Invoice: " + invoice.Id, "Here's your invoice", invoice.InvoicePdf);
+                _emailService.SendEmail(invoice.CustomerEmail,
+                    $"Carbon Vault - Fatura {invoice.Id}",
+                    $"Junto enviamos a fatura {invoice.Id}, referente ao apgamento efetuado no dia {invoice.DueDate}.", 
+                    invoice.InvoicePdf);
 
-                return Ok(new { invoiceUrl = invoice.InvoicePdf, invoiceEmail = invoice.CustomerEmail });
+                return Ok("Fatura enviada com sucesso.");
             }
 
             return NotFound("Fatura não encontrada.");
@@ -100,10 +103,5 @@ namespace Carbon_Vault.Controllers.API
     {
         public decimal Amount { get; set; }
         public string Currency { get; set; }
-
-        public override string ToString()
-        {
-            return Amount + " " + Currency;
-        }
     }
 }

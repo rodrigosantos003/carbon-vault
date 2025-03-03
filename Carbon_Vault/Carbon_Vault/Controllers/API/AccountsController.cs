@@ -150,7 +150,10 @@ namespace Carbon_Vault.Controllers.API
 
 
             // Send confirmation link via email
-            _emailService.SendEmail(account.Email, "Carbon Vault - Confirmar conta", $"Por favor confirme a sua conta clicando neste link: {confirmationLink}");
+            await _emailService.SendEmail(account.Email, 
+                "Carbon Vault - Confirmar conta", 
+                $"Por favor confirme a sua conta clicando neste link: {confirmationLink}",
+                null);
 
             return CreatedAtAction("GetAccount", new { id = account.Id }, account);
         }
@@ -225,7 +228,10 @@ namespace Carbon_Vault.Controllers.API
             var confirmationLink = $"{_frontendBaseUrl}recover-password?token={token}";
 
             // Send confirmation link via email
-            _emailService.SendEmail(account.Email, "Carbon Vault - Recuperar Palavra-Passe", $"Por favor recupere a sua palavra-passe clicando neste link: {confirmationLink}");
+            await _emailService.SendEmail(account.Email, 
+                "Carbon Vault - Recuperar Palavra-Passe", 
+                $"Por favor recupere a sua palavra-passe clicando neste link: {confirmationLink}",
+                null);
 
             return Ok("Password recovery link sent successfully");
         }
