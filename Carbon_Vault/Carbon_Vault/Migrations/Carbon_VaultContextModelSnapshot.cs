@@ -65,7 +65,7 @@ namespace Carbon_Vault.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 3, 2, 15, 32, 30, 53, DateTimeKind.Utc).AddTicks(4448),
+                            CreatedAt = new DateTime(2025, 3, 3, 8, 44, 3, 87, DateTimeKind.Utc).AddTicks(2944),
                             Email = "admin@carbonvault.com",
                             Name = "André Castanho",
                             Nif = "123456789",
@@ -76,7 +76,7 @@ namespace Carbon_Vault.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 3, 2, 15, 32, 30, 53, DateTimeKind.Utc).AddTicks(4452),
+                            CreatedAt = new DateTime(2025, 3, 3, 8, 44, 3, 87, DateTimeKind.Utc).AddTicks(2948),
                             Email = "user2@carbonvault.com",
                             Name = "John Doe",
                             Nif = "987654321",
@@ -87,7 +87,7 @@ namespace Carbon_Vault.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 3, 2, 15, 32, 30, 53, DateTimeKind.Utc).AddTicks(4453),
+                            CreatedAt = new DateTime(2025, 3, 3, 8, 44, 3, 87, DateTimeKind.Utc).AddTicks(2949),
                             Email = "user3@carbonvault.com",
                             Name = "John Smith",
                             Nif = "333333333",
@@ -98,7 +98,7 @@ namespace Carbon_Vault.Migrations
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2025, 3, 2, 15, 32, 30, 53, DateTimeKind.Utc).AddTicks(4455),
+                            CreatedAt = new DateTime(2025, 3, 3, 8, 44, 3, 87, DateTimeKind.Utc).AddTicks(2951),
                             Email = "user4@carbonvault.com",
                             Name = "My User",
                             Nif = "444444444",
@@ -109,7 +109,7 @@ namespace Carbon_Vault.Migrations
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2025, 3, 2, 15, 32, 30, 53, DateTimeKind.Utc).AddTicks(4457),
+                            CreatedAt = new DateTime(2025, 3, 3, 8, 44, 3, 87, DateTimeKind.Utc).AddTicks(2953),
                             Email = "user5@carbonvault.com",
                             Name = "Jane Doe",
                             Nif = "555555555",
@@ -233,13 +233,13 @@ namespace Carbon_Vault.Migrations
                             Certification = "ISO 14001",
                             Description = "Providing clean water access to rural communities.",
                             Developer = "Green Solutions",
-                            EndDate = new DateTime(2026, 3, 2, 15, 32, 30, 53, DateTimeKind.Local).AddTicks(4634),
+                            EndDate = new DateTime(2026, 3, 3, 8, 44, 3, 87, DateTimeKind.Local).AddTicks(3163),
                             ImageUrl = "https://example.com/image1.jpg",
                             Location = "Africa",
                             Name = "Water Access Initiative",
                             PricePerCredit = 12.50m,
                             ProjectUrl = "https://example.com/project1",
-                            StartDate = new DateTime(2024, 12, 2, 15, 32, 30, 53, DateTimeKind.Local).AddTicks(4587),
+                            StartDate = new DateTime(2024, 12, 3, 8, 44, 3, 87, DateTimeKind.Local).AddTicks(3097),
                             Status = 0
                         },
                         new
@@ -250,13 +250,13 @@ namespace Carbon_Vault.Migrations
                             Certification = "LEED Gold",
                             Description = "Solar energy projects to provide electricity to underserved areas.",
                             Developer = "Renewable Power Inc.",
-                            EndDate = new DateTime(2027, 3, 2, 15, 32, 30, 53, DateTimeKind.Local).AddTicks(4718),
+                            EndDate = new DateTime(2027, 3, 3, 8, 44, 3, 87, DateTimeKind.Local).AddTicks(3284),
                             ImageUrl = "https://example.com/image2.jpg",
                             Location = "South America",
                             Name = "Solar Energy for All",
                             PricePerCredit = 15.75m,
                             ProjectUrl = "https://example.com/project2",
-                            StartDate = new DateTime(2025, 2, 2, 15, 32, 30, 53, DateTimeKind.Local).AddTicks(4716),
+                            StartDate = new DateTime(2025, 2, 3, 8, 44, 3, 87, DateTimeKind.Local).AddTicks(3282),
                             Status = 0
                         });
                 });
