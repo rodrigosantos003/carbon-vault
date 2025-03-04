@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { AlertsService } from '../alerts.service';
 
 @Component({
   selector: 'app-register',
@@ -23,7 +24,7 @@ export class RegisterComponent {
   isNifValid: boolean | null = null; // Estado da validação do NIF
   nifErrorMessage: string | null = null;
 
-  constructor(private fb: FormBuilder, private http: HttpClient) {
+  constructor(private fb: FormBuilder, private http: HttpClient, private alerts: AlertsService) {
     // Inicialização do FormGroup com controlos e validações
     this.registerForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
@@ -35,7 +36,7 @@ export class RegisterComponent {
 
   onSubmit() {
     if (true) {
-      this.enableLoading();
+      this.alerts.enableLoading("A verificar os dados submetidos..");
 
       const formData = this.registerForm.value;
       console.log('Dados do formulário:', formData);
@@ -59,13 +60,13 @@ export class RegisterComponent {
 
       this.http.post("https://localhost:7117/api/Accounts", formData).subscribe(
         (response: any) => {
-          this.disableLoading();
+          this.alerts.disableLoading();
           console.log('Login successful!', response);
           alert("Registo bem sucedido!");
           window.location.href = "/login";
         },
         (error) => {
-          this.disableLoading();
+          this.alerts.disableLoading();
           console.error('Login failed!', error);
           alert("Registo Inválido!");
         }
@@ -132,35 +133,6 @@ export class RegisterComponent {
       this.isNifValid = false;
       this.nifErrorMessage = 'Erro ao validar o NIF. Tente novamente mais tarde.';
       return false;
-    }
-  }
-
-
-  closePopup() {
-    document.querySelectorAll('.close-icon').forEach(closeIcon => {
-      closeIcon.addEventListener('click', () => {
-        const popup = closeIcon.closest('.popup');
-
-        if (popup instanceof HTMLElement) {
-          popup.style.display = 'none';
-        }
-      });
-    });
-  }
-
-  enableLoading() {
-    const loadingButton = document.getElementById('loading');
-
-    if (loadingButton) {
-      loadingButton.style.display = 'inline-flex';
-    }
-  }
-
-  disableLoading() {
-    const loadingButton = document.getElementById('loading');
-
-    if (loadingButton) {
-      loadingButton.style.display = 'none';
     }
   }
 }

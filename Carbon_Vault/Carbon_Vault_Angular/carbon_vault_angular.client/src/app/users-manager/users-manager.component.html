@@ -64,7 +64,7 @@
             <td>{{ account.name }}</td>
             <td>{{ account.email }}</td>
             <td>{{ account.role }}</td>
-            <td>09/01/2025 00:00</td>
+            <td>{{ account.createdAt | date:'dd/MM/yyyy HH:mm:ss' }}</td>
             <td><button class="view-btn" (click)="viewAccount(account)">Ver mais</button></td>
             <td><button class="delete-btn" (click)="openPopup(account.id)">Eliminar</button></td>
           </tr>

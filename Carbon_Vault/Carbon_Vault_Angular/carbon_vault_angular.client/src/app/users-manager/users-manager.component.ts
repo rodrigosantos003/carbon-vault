@@ -11,14 +11,12 @@ import { AlertsService } from '../alerts.service';
   styleUrl: './users-manager.component.css'
 })
 export class UsersManagerComponent {
-  accounts: any[] = [];
+  accounts: Account[] = [];
   private userAccountsURL = 'https://localhost:7117/api/Accounts/users';
   private selectedAccountId: number | null = null;
   private apiURL = 'https://localhost:7117/api/Accounts';
   private growthPercentageMonthlyURL = 'https://localhost:7117/api/Accounts/UserStatistics';
   growthData: any = {};
-
-
 
   constructor(private http: HttpClient, private alerts: AlertsService ) { }
 
@@ -58,6 +56,7 @@ export class UsersManagerComponent {
     this.alerts.enableLoading("A carregar utilizadores..");
     this.http.get<any[]>(this.userAccountsURL).subscribe({
       next: (data) => {
+        console.log(data);
         this.accounts = data; // Armazena os dados da API no array
         this.alerts.disableLoading();
       },
@@ -94,4 +93,11 @@ export class UsersManagerComponent {
       console.log("ID é null");
     }
   }
+}
+interface Account {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+  createdAt: string;
 }

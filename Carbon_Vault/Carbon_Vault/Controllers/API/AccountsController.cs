@@ -53,7 +53,8 @@ namespace Carbon_Vault.Controllers.API
                                      a.Id,
                                      a.Name,
                                      a.Email,
-                                     Role = a.Role.ToString() // Converte o enum para string
+                                     Role = a.Role.ToString(), // Converte o enum para string
+                                     CreatedAt = a.CreatedAt.ToString(),
                                  })
                                  .ToListAsync();
 
@@ -446,6 +447,11 @@ namespace Carbon_Vault.Controllers.API
                 TotalUsers = totalUsers,
                 GrowthPercentage = growthPercentage
             });
+        }
+
+        public async Task<ActionResult<IEnumerable<Account>>> GetAccountsTest()
+        {
+            return await _context.Account.ToListAsync();
         }
     }
 }
