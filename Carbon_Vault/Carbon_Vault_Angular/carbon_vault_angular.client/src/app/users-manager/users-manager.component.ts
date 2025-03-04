@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 /*import { ConfirmAccountComponent } from '../confirm-account/confirm-account.component';*/
 import { AlertsService } from '../alerts.service';
+import { AuthService } from '../auth-service.service';  // Importa o AuthService
 
 @Component({
   selector: 'app-users-manager',
@@ -18,7 +19,7 @@ export class UsersManagerComponent {
   private growthPercentageMonthlyURL = 'https://localhost:7117/api/Accounts/UserStatistics';
   growthData: any = {};
 
-  constructor(private http: HttpClient, private alerts: AlertsService ) { }
+  constructor(private http: HttpClient, private alerts: AlertsService, private authService: AuthService ) { }
 
   ngOnInit(): void {
     this.getAccounts();
@@ -83,16 +84,33 @@ export class UsersManagerComponent {
       const deleteURL = `${this.apiURL}/${this.selectedAccountId}`;
       console.log("ID da conta a eliminar: " + this.selectedAccountId);
 
-      this.http.delete(deleteURL).subscribe(() => {
-        this.accounts = this.accounts.filter(acc => acc.id !== this.selectedAccountId);
-        this.closePopup();
-      }, error => {
-        console.error("Erro ao eliminar conta:", error);
-      });
+      const jwtToken = localStorage.getItem('token');
+
+      const userIdFromToken = this.authService.getUserId();
+
+      // Verifique se o ID da conta a ser excluída é o mesmo que o ID do usuário logado
+      if (userIdFromToken == this.selectedAccountId.toString()) {
+        alert("Você não pode excluir a sua conta.");
+        return;
+      }
+
+      if (jwtToken) {
+        this.http.delete(deleteURL, {
+          headers: { 'Authorization': `Bearer ${jwtToken}` }
+        }).subscribe(() => {
+          this.accounts = this.accounts.filter(acc => acc.id !== this.selectedAccountId);
+          this.closePopup();
+        }, error => {
+          console.error("Erro ao eliminar conta:", error);
+        });
+      } else {
+        console.error("JWT não encontrado");
+      }
     } else {
       console.log("ID é null");
     }
   }
+
 }
 interface Account {
   id: number;
