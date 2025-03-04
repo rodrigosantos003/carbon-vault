@@ -41,13 +41,19 @@ namespace Carbon_Vault.Data
         
         private void populateAccounts(ModelBuilder modelBuilder)
         {
+            string admin_hashed = AuthHelper.HashPassword("Admin@123");
+            string user1_hashed = AuthHelper.HashPassword("User@111");
+            string user2_hashed = AuthHelper.HashPassword("User@222");
+            string user3_hashed = AuthHelper.HashPassword("User@333");
+            string support_hashed = AuthHelper.HashPassword("Support@123");
+
             modelBuilder.Entity<Account>().HasData(
                 new Account
                 {
                     Id = 1,
                     Name = "André Castanho",
                     Email = "admin@carbonvault.com",
-                    Password = "Andre@123",
+                    Password = admin_hashed,
                     Nif = "123456789",
                     State = AccountState.Active,
                     Role = AccountType.Admin,
@@ -57,8 +63,8 @@ namespace Carbon_Vault.Data
                 {
                     Id = 2,
                     Name = "John Doe",
-                    Email = "user2@carbonvault.com",
-                    Password = "HashedPassword@123",
+                    Email = "user1@carbonvault.com",
+                    Password = user1_hashed,
                     Nif = "987654321",
                     State = AccountState.Active,
                     Role = AccountType.User,
@@ -68,8 +74,8 @@ namespace Carbon_Vault.Data
                 {
                     Id = 3,
                     Name = "John Smith",
-                    Email = "user3@carbonvault.com",
-                    Password = "HashedPassword@123",
+                    Email = "support@carbonvault.com",
+                    Password = support_hashed,
                     Nif = "333333333",
                     State = AccountState.Active,
                     Role = AccountType.Support,
@@ -79,8 +85,8 @@ namespace Carbon_Vault.Data
                 {
                     Id = 4,
                     Name = "My User",
-                    Email = "user4@carbonvault.com",
-                    Password = "HashedPassword@123",
+                    Email = "user2@carbonvault.com",
+                    Password = user2_hashed,
                     Nif = "444444444",
                     State = AccountState.Active,
                     Role = AccountType.User,
@@ -90,8 +96,8 @@ namespace Carbon_Vault.Data
                 {
                     Id = 5,
                     Name = "Jane Doe",
-                    Email = "user5@carbonvault.com",
-                    Password = "HashedPassword@123",
+                    Email = "user3@carbonvault.com",
+                    Password = user3_hashed,
                     Nif = "555555555",
                     State = AccountState.Active,
                     Role = AccountType.User,
