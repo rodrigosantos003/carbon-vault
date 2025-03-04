@@ -5,7 +5,7 @@
     </div>
     <nav class="nav">
       <a *ngIf="isUserLoggedIn" href="/dashboard">Projetos</a>
-      <a *ngIf="isUserLoggedIn" href="/carrinho"> <img src="/images/cart.svg"/> Carrinho </a>
+      <a *ngIf="isUserLoggedIn" href="/cart"> <img src="/images/cart.svg"/> Carrinho </a>
       <button *ngIf="isUserLoggedIn" class="profile-btn">{{ userInitial }}</button>
       <button #loginBtn class="logout-btn">Terminar sessão</button>
     </nav>

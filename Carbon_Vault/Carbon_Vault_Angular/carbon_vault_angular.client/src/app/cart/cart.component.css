@@ -1,0 +1,70 @@
+.cart-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-inline: 18%;
+}
+
+.cart-title{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 48px;
+    line-height: 11px;
+    text-align: center;
+    margin-top: 100px;
+}
+
+.cart-back{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 11px;
+    text-align: center;
+    text-decoration-line: underline;
+    margin-top: 50px;
+}
+
+.cart-back > a{
+    color: #4EA741;
+}
+
+.cart-table{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 11px;
+    color: #000000;
+    margin-inline: auto;
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 50px;
+    user-select: none;
+}
+ 
+  .cart-table th, 
+  .cart-table td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd; /* Linha horizontal entre cada linha */
+  }
+  
+  .cart-table tbody tr:last-child td {
+    border-bottom: none; /* Remove a borda da última linha para um visual mais limpo */
+  }
+  
+  .cart-button{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .cart-remove{
+    text-decoration-line: underline;
+    color: #E35656;
+  }

@@ -3,7 +3,6 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: 'app-projectCard',
   standalone: false,
-  
   templateUrl: './projectCard.component.html',
   styleUrl: './projectCard.component.css'
 })

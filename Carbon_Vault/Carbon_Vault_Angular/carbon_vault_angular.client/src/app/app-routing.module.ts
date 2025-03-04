@@ -14,6 +14,7 @@ import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.compo
 import { ProjectDetailsComponent } from './project-details/project-details.component';
 import { UsersManagerComponent } from './users-manager/users-manager.component';
 import { UserPaymentComponent } from './user-payment/user-payment.component';
+import { CartComponent } from './cart/cart.component';
 import { AuthGuard } from './auth.guard';
 const routes: Routes = [
   { path: 'confirm-account', component: ConfirmAccountComponent },
@@ -30,6 +31,7 @@ const routes: Routes = [
   { path: 'admin-dashboard', component: AdminDashboardComponent },
   { path: 'users-manager', component: UsersManagerComponent,canActivate: [AuthGuard] },
   { path: 'user-payment', component: UserPaymentComponent },
+  { path: 'cart', component: CartComponent },
 ];
 
 @NgModule({

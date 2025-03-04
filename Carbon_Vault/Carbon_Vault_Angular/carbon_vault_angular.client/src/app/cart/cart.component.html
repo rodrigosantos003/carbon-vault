@@ -1,0 +1,36 @@
+<app-market-place-navigation></app-market-place-navigation>
+<main class="cart-container">
+  
+<h1 class="cart-title"> O meu Carrinho </h1>
+
+<div class="cart-back"> <a href="/marketplace"> Continuar as Compras </a> </div>
+
+<table style="width:100%; border-collapse: collapse;" class="cart-table">
+  <thead>
+    <tr>
+      <th style="text-align:left;">Produto</th>
+      <th style="text-align:left;">Preço</th>
+      <th style="text-align:left;">Quantidade</th>
+      <th style="text-align:left;">Total</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr *ngFor="let item of cartItems">
+        <td style="text-align:left;">
+        <div style="display: flex; align-items: center;">
+          <img [src]="item.image" alt="product image" style="width: 50px; height: 50px; margin-right: 10px; display: inline-block;">
+          <div style="display: flex; flex-direction: column; justify-content: center; gap: 12px"> {{item.name}} <span class="cart-button cart-remove" (click)="removeItem(item)">Remover</span> </div>
+        </div>
+          </td>
+        <td style="text-align:left;">{{item.price}}€</td>
+        <td style="text-align:left;">
+          <span class="cart-button" (click)="decrementQuantity(item)">-</span>
+          {{item.quantity}}
+          <span class="cart-button" (click)="incrementQuantity(item)">+</span>
+        </td>
+        <td style="text-align:left;">{{item.price * item.quantity}}€</td>
+      </tr>
+  </tbody>  
+</table>
+
+</main>
