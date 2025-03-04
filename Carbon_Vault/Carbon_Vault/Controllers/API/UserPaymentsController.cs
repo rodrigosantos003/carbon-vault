@@ -54,7 +54,7 @@ namespace Carbon_Vault.Controllers.API
             Console.WriteLine("Session URL: " + session.Url);
 
             //return Redirect(session.Url);
-            return Ok(new { message = "Dados recebidos com sucesso" });
+            return Ok("Pagamento realizado com sucesso.");
         }
 
         private SessionLineItemOptions AddItem(PaymentInfo payment, string product_name, string product_description, int quantity)
