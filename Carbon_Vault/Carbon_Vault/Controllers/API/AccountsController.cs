@@ -156,10 +156,16 @@ namespace Carbon_Vault.Controllers.API
             return CreatedAtAction("GetAccount", new { id = account.Id }, account);
         }
 
-        // DELETE: api/Accounts/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAccount(int id, string jwt)
+        public async Task<IActionResult> DeleteAccount(int id, [FromHeader] string Authorization)
         {
+            if (string.IsNullOrEmpty(Authorization) || !Authorization.StartsWith("Bearer "))
+            {
+                return Unauthorized();
+            }
+
+            var jwt = Authorization.Substring("Bearer ".Length).Trim();
+
             if (AuthHelper.IsTokenValid(jwt, id))
             {
                 return Unauthorized();
@@ -176,6 +182,7 @@ namespace Carbon_Vault.Controllers.API
 
             return NoContent();
         }
+
 
         // POST: api/Accounts/Login
         [HttpPost("Login")]
