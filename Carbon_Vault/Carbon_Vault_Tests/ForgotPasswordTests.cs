@@ -66,7 +66,7 @@ namespace Carbon_Vault_Tests
             _mockEmailService.Verify(e => e.SendEmail(
                 email,
                 "Carbon Vault - Recuperar Palavra-Passe",
-                It.Is<string>(body => body.Contains("recover-password"))), Times.Once);
+                It.Is<string>(body => body.Contains("recover-password")), null), Times.Once);
 
             var okResult = Assert.IsType<OkObjectResult>(result);
             Assert.Equal("Password recovery link sent successfully", okResult.Value as string);

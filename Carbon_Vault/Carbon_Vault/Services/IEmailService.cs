@@ -2,6 +2,7 @@
 {
     public interface IEmailService
     {
-        void SendEmail(string receiver, string subject, string message);
+        Task SendEmail(string receiver, string subject, string message, string? attachmentURL);
     }
+
 }
