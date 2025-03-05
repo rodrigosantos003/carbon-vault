@@ -15,6 +15,8 @@ import { ProjectDetailsComponent } from './project-details/project-details.compo
 import { UsersManagerComponent } from './users-manager/users-manager.component';
 import { UserPaymentComponent } from './user-payment/user-payment.component';
 import { AuthGuard } from './auth.guard';
+import { UserPurchasesComponent } from './user-purchases/user-purchases.component';
+import { UserSalesComponent } from './user-sales/user-sales.component';
 const routes: Routes = [
   { path: 'confirm-account', component: ConfirmAccountComponent },
   { path: '', component: HomeComponent },
@@ -23,13 +25,15 @@ const routes: Routes = [
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'recover-password', component: RecoverPasswordComponent },
-  { path: 'user-emissions', component: UserEmissionsComponent,canActivate: [AuthGuard] },
+  { path: 'user-emissions', component: UserEmissionsComponent, canActivate: [AuthGuard] },
   { path: 'marketplace', component: MarketplaceComponent },
   { path: 'marketplace/project/:id', component: ProjectDetailsComponent },
   { path: 'user-menu', component: UserMenuComponent },
   { path: 'admin-dashboard', component: AdminDashboardComponent },
-  { path: 'users-manager', component: UsersManagerComponent,canActivate: [AuthGuard] },
+  { path: 'users-manager', component: UsersManagerComponent, canActivate: [AuthGuard] },
   { path: 'user-payment', component: UserPaymentComponent },
+  { path: 'purchases', component: UserPurchasesComponent },
+  { path: 'sales', component: UserSalesComponent }
 ];
 
 @NgModule({

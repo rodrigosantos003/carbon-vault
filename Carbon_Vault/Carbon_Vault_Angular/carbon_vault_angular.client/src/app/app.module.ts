@@ -24,6 +24,8 @@ import { AlertsComponent } from './alerts/alerts.component';
 import { UsersManagerComponent } from './users-manager/users-manager.component';
 import { MarketPlaceNavigationComponent } from './market-place-navigation/market-place-navigation.component';
 import { UserPaymentComponent } from './user-payment/user-payment.component';
+import { UserPurchasesComponent } from './user-purchases/user-purchases.component';
+import { UserSalesComponent } from './user-sales/user-sales.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +46,9 @@ import { UserPaymentComponent } from './user-payment/user-payment.component';
     AlertsComponent,
     UsersManagerComponent,
     MarketPlaceNavigationComponent,
-    UserPaymentComponent
+    UserPaymentComponent,
+    UserPurchasesComponent,
+    UserSalesComponent
   ],
   imports: [
     BrowserModule,

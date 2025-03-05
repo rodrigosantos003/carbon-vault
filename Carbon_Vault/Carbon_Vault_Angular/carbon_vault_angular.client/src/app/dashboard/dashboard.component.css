@@ -6,143 +6,15 @@ body {
   height: 100vh;
 }
 
-/* Sidebar */
-
-nav {
-  width: 250px;
-  background-color: var(--main-faded);
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.navbar-logo {
-  display: flex;
-  align-items: center;
-}
-
-.logo {
-  width: 40px; /* Tamanho do ícone */
-  height: 40px;
-  margin-right: 8px;
-}
-
-.navbar-title {
-  font-size: 18px;
-  font-weight: bold;
-  color: var(--main-color);
-}
-
-.title {
-  display: flex;
-  align-items: center;
-  margin-bottom: 30px;
-}
-
-
-.user-profile {
-  text-align: center;
-  margin: 20px 0;
-}
-
-.user-circle {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background-color: var(--main-color);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto;
-}
-
-.user-initial {
-  color: white;
-  font-size: 32px;
-  font-weight: bold;
-}
-
-.user-name {
-  margin-top: 10px;
-  font-size: 16px;
-  font-weight: bold;
-  color: var(--main-color);
-}
-
-
-/***** SIDE BAR - MENU ******/
-
-.menu-title {
-  text-align: left;
-  font-size: 18px;
-  font-weight: bold;
-  color: var(--text-color);
-  margin: 20px 0 10px 0;
-  padding-left: 20px;
-}
-
-.menu {
-  list-style: none;
-}
-
-  .menu li {
-    margin-bottom: 15px;
-  }
-
-    .menu li a {
-      text-decoration: none;
-      color: var(--text-color);
-      font-size: 16px;
-      font-weight: 600;
-    }
-
-      .menu li a:hover {
-        text-decoration: underline;
-      }
-
-  .menu li {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-.menu-icon {
-  width: 22px; /* Tamanho do ícone */
-  height: 22px;
-}
-
-.menu-icon2 {
-  width: 18px !important; /* Tamanho do ícone */
-  height: 18px !important;
-}
-
-.active {
-  position: fixed;
-  left: 50px;
-  width: 220px;
-  height: 35px;
-  border-radius: 5px;
-  background-color: var(--main-color);
-  opacity: 40%;
-  /*display: none;*/
-}
-
-.logout {
-  color: #e53935 !important;
-  font-weight: bold;
-}
-
-
 /* Main Content */
 .main-content {
   flex: 1;
   padding: 20px 150px 0 150px;
 }
 
-  .main-content h1 {
-    margin-bottom: 20px;
-  }
+.main-content h1 {
+  margin-bottom: 20px;
+}
 
 .dashboard-cards {
   display: flex;
@@ -159,43 +31,39 @@ nav {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
-  .card.green {
-    background-color: var(--main-color);
-  }
+.card.green {
+  background-color: var(--main-color);
+}
 
-    .card div {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 50px;
-    }
+.card div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
+}
 
-    .card.green h2 {
-        margin-bottom: 0 !important;
-    }
+.card.green h2 {
+  margin-bottom: 0 !important;
+}
 
-  .card p {
-    font-size: 28px;
-    font-weight: bold;
-  }
+.card p {
+  font-size: 28px;
+  font-weight: bold;
+}
 
-  .card.yellow {
-    background-color: #EEBF32;
-  }
+.card.yellow {
+  background-color: #EEBF32;
+}
 
-  .card.blue {
-    background-color: #66B1EC;
-  }
+.card.blue {
+  background-color: #66B1EC;
+}
 
-  .card.blue p {
-    
-  }
-
-  .table-container {
-    display: flex;
-    gap: 100px;
-    padding-top: 50px;
-  }
+.table-container {
+  display: flex;
+  gap: 100px;
+  padding-top: 50px;
+}
 
 .table {
   flex: 1;
@@ -206,24 +74,25 @@ nav {
   /*box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);*/
 }
 
-  .table thead {
-    background-color: #D3E2D0;
-  }
+.table thead {
+  background-color: #D3E2D0;
+}
 
-  .table h2 {
-    margin-bottom: 20px;
-  }
+.table h2 {
+  margin-bottom: 20px;
+}
 
 table {
   width: 100%;
   border-collapse: collapse;
 }
 
-  table th, table td {
-    text-align: left;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-  }
+table th,
+table td {
+  text-align: left;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
 
 .details-button {
   padding: 5px 10px;
@@ -234,9 +103,9 @@ table {
   cursor: pointer;
 }
 
-  .details-button:hover {
-    background-color: #45a049;
-  }
+.details-button:hover {
+  background-color: #45a049;
+}
 
 /* Responsive */
 @media (max-width: 1200px) {
