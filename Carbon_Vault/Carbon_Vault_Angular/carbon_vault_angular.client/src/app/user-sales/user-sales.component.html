@@ -9,23 +9,14 @@
                     <tr>
                         <th>Projeto</th>
                         <th>Data</th>
-                        <th>Estado do Pagamento</th>
-                        <th>Estado da Transação</th>
+                        <th>Estado</th>
                         <th>Detalhes</th>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Plantação de Árvores na Califórnia</td>
-                        <td>9/10/2025 18:36:23</td>
-                        <td>Pago</td>
-                        <td>Concluído</td>
-                        <td><button class="details-button">Ver detalhes</button></td>
-                    </tr>
-                    <tr>
-                        <td>Água Potável no Gana</td>
-                        <td>9/10/2025 18:36:23</td>
-                        <td>Pago</td>
-                        <td>Concluído</td>
+                    <tr *ngFor="let purchase of sales">
+                        <td>{{purchase.project}}</td>
+                        <td>{{purchase.date}}</td>
+                        <td>{{purchase.state}}</td>
                         <td><button class="details-button">Ver detalhes</button></td>
                     </tr>
                 </tbody>
