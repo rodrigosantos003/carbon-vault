@@ -25,6 +25,8 @@ import { UsersManagerComponent } from './users-manager/users-manager.component';
 import { MarketPlaceNavigationComponent } from './market-place-navigation/market-place-navigation.component';
 import { UserPaymentComponent } from './user-payment/user-payment.component';
 import { CartComponent } from './cart/cart.component';
+import { UserPurchasesComponent } from './user-purchases/user-purchases.component';
+import { UserSalesComponent } from './user-sales/user-sales.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +48,9 @@ import { CartComponent } from './cart/cart.component';
     UsersManagerComponent,
     MarketPlaceNavigationComponent,
     UserPaymentComponent,
-    CartComponent
+    CartComponent,
+    UserPurchasesComponent,
+    UserSalesComponent
   ],
   imports: [
     BrowserModule,

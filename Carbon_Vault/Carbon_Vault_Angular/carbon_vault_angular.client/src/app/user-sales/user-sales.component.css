@@ -1,0 +1,60 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    color: black;
+    margin: 0px !important;
+    display: flex;
+    height: 100vh;
+}
+
+.content {
+    flex: 1;
+    padding: 40px;
+}
+
+.content h1 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #333;
+    padding-bottom: 10px;
+}
+
+.table {
+    flex: 1;
+    background: #EEE;
+    border-radius: 10px;
+    padding: 20px;
+    height: 450px;
+}
+
+.table thead {
+    background-color: #D3E2D0;
+}
+
+.table h2 {
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table th,
+table td {
+    text-align: left;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.details-button {
+    padding: 5px 10px;
+    background-color: var(--main-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.details-button:hover {
+    background-color: #45a049;
+}

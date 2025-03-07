@@ -5,16 +5,20 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Carbon_Vault.Models;
 using System.Reflection.Emit;
+using Mono.TextTemplating;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using Stripe;
 
 namespace Carbon_Vault.Data
 {
     public class Carbon_VaultContext : DbContext
     {
-        public DbSet<Account> Account { get; set; } = default!;
+        public DbSet<Models.Account> Account { get; set; } = default!;
         public DbSet<Project> Projects { get; set; }
         public DbSet<CarbonCredit> CarbonCredits { get; set; }
         public DbSet<ProjectType> ProjectTypes { get; set; }
         public DbSet<UserEmissions> UserEmissions { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
 
         public Carbon_VaultContext (DbContextOptions<Carbon_VaultContext> options)
             : base(options)
@@ -37,6 +41,8 @@ namespace Carbon_Vault.Data
             populateProjectTypes(modelBuilder);
 
             populateProjects(modelBuilder);
+
+            populateTransactions(modelBuilder);
         }
         
         private void populateAccounts(ModelBuilder modelBuilder)
@@ -47,8 +53,8 @@ namespace Carbon_Vault.Data
             string user3_hashed = AuthHelper.HashPassword("User@333");
             string support_hashed = AuthHelper.HashPassword("Support@123");
 
-            modelBuilder.Entity<Account>().HasData(
-                new Account
+            modelBuilder.Entity<Models.Account>().HasData(
+                new Models.Account
                 {
                     Id = 1,
                     Name = "André Castanho",
@@ -56,10 +62,10 @@ namespace Carbon_Vault.Data
                     Password = admin_hashed,
                     Nif = "123456789",
                     State = AccountState.Active,
-                    Role = AccountType.Admin,
+                    Role = Models.AccountType.Admin,
                     CreatedAt = DateTime.UtcNow,
                 },
-                new Account
+                new Models.Account
                 {
                     Id = 2,
                     Name = "John Doe",
@@ -67,10 +73,10 @@ namespace Carbon_Vault.Data
                     Password = user1_hashed,
                     Nif = "987654321",
                     State = AccountState.Active,
-                    Role = AccountType.User,
+                    Role = Models.AccountType.User,
                     CreatedAt = DateTime.UtcNow
                 },
-                new Account
+                new Models.Account
                 {
                     Id = 3,
                     Name = "John Smith",
@@ -78,10 +84,10 @@ namespace Carbon_Vault.Data
                     Password = support_hashed,
                     Nif = "333333333",
                     State = AccountState.Active,
-                    Role = AccountType.Support,
+                    Role = Models.AccountType.Support,
                     CreatedAt = DateTime.UtcNow
                 },
-                new Account
+                new Models.Account
                 {
                     Id = 4,
                     Name = "My User",
@@ -89,10 +95,10 @@ namespace Carbon_Vault.Data
                     Password = user2_hashed,
                     Nif = "444444444",
                     State = AccountState.Active,
-                    Role = AccountType.User,
+                    Role = Models.AccountType.User,
                     CreatedAt = DateTime.UtcNow
                 },
-                new Account
+                new Models.Account
                 {
                     Id = 5,
                     Name = "Jane Doe",
@@ -100,7 +106,7 @@ namespace Carbon_Vault.Data
                     Password = user3_hashed,
                     Nif = "555555555",
                     State = AccountState.Active,
-                    Role = AccountType.User,
+                    Role = Models.AccountType.User,
                     CreatedAt = DateTime.UtcNow
                 }
             );
@@ -166,6 +172,36 @@ namespace Carbon_Vault.Data
                    ImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSS2nF0iroOXheUgLiCRjKPFEyxqBqbjMMiBZxtPvybNA14VsZrFMg2wgudNFFSgdW9S5Q&usqp=CAU"
                }
            );
+        }
+
+        private void populateTransactions(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Transaction>().HasData(
+                new Transaction
+                {
+                    Id = 1,
+                    Type = TransactionType.Purchase,
+                    UserId = 2,
+                    ProjectId = 1,
+                    Quantity = 1,
+                    Date = "2025-03-05",
+                    State = TransactionState.Approved,
+                    PaymentMethod = "card",
+                    CheckoutSession = "cs_123456789"
+                },
+                new Transaction
+                {
+                    Id = 2,
+                    Type = TransactionType.Sale,
+                    UserId = 2,
+                    ProjectId = 2,
+                    Quantity = 1,
+                    Date = "2025-03-05",
+                    State = TransactionState.Approved,
+                    PaymentMethod = "card",
+                    CheckoutSession = "cs_987456321"
+                }
+            );
         }
     }
 }

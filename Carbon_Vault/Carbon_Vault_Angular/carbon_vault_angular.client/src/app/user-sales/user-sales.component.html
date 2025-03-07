@@ -1,0 +1,27 @@
+<body>
+    <app-user-menu></app-user-menu>
+    <main class="content">
+        <h1>As minhas vendas</h1>
+
+        <div class="table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Projeto</th>
+                        <th>Data</th>
+                        <th>Estado</th>
+                        <th>Detalhes</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let purchase of sales">
+                        <td>{{purchase.project}}</td>
+                        <td>{{purchase.date}}</td>
+                        <td>{{purchase.state}}</td>
+                        <td><button class="details-button">Ver detalhes</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+</body>
