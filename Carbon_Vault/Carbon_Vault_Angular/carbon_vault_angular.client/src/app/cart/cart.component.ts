@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CartService } from '../cart.service';
 
 @Component({
   selector: 'app-cart',
@@ -6,52 +7,49 @@ import { Component } from '@angular/core';
   styleUrls: ['./cart.component.css'],
   standalone: false
 })
-export class CartComponent {
-  constructor() { }
+export class CartComponent implements OnInit {
+  cartItems: any[] = [];
+  total: number = 0;
 
-  incrementQuantity(item: any) {
-    item.quantity++;
+  constructor(private cartService: CartService) {}
+
+  ngOnInit() {
+    this.updateCart();
   }
 
-  decrementQuantity(item: any) {
-    if (item.quantity > 1) {
-      item.quantity--;
-    }
-    else {
-      this.removeItem(item);
-    }
+  addItem(item: any) {
+    this.cartService.addItem(item);
+    this.updateCart();
   }
 
-  removeItem(item: any) {
-    if(!confirm('Pretende eliminar o item?'))
-      return;
-
-      this.cartItems = this.cartItems.filter(i => i.id !== item.id);
-      const index = this.cartItems.indexOf(item);
-      this.cartItems.splice(index, 1);
+  incrementQuantity(itemId: number) {
+    this.cartService.incrementQuantity(itemId);
+    this.updateCart();
   }
 
-  cartItems = [
-    {
-      id: 1,
-      image: 'https://picsum.photos/200',
-      name: 'Item 1',
-      price: 100,
-      quantity: 2,
-    },
-    {
-      id: 2,
-      image: 'https://picsum.photos/200',
-      name: 'Item 2',
-      price: 200,
-      quantity: 3
-    },
-    {
-      id: 3,
-      image: 'https://picsum.photos/200',
-      name: 'Item 3',
-      price: 300,
-      quantity: 1
-    }
-  ];
+  decrementQuantity(itemId: number) {
+    this.cartService.decrementQuantity(itemId);
+    this.updateCart();
+  }
+
+  removeItem(itemId: number) {
+    if (!confirm('Pretende eliminar o item?')) return;
+    this.cartService.removeItem(itemId);
+    this.updateCart();
+  }
+
+  updateCart(){
+    this.cartItems = this.cartService.getCart();
+    this.total = this.cartService.getTotal();
+  }
+
+  clearCart() {
+    this.cartService.clearCart();
+    this.updateCart();
+  }
+
+  //TODO
+  checkout() {
+    alert('Checkout não implementado ainda');
+  }
 }

@@ -19,18 +19,23 @@
         <td style="text-align:left;">
         <div style="display: flex; align-items: center;">
           <img [src]="item.image" alt="product image" style="width: 50px; height: 50px; margin-right: 10px; display: inline-block;">
-          <div style="display: flex; flex-direction: column; justify-content: center; gap: 12px"> {{item.name}} <span class="cart-button cart-remove" (click)="removeItem(item)">Remover</span> </div>
+          <div style="display: flex; flex-direction: column; justify-content: center; gap: 12px"> {{item.name}} <span class="cart-button cart-remove" (click)="removeItem(item.id)">Remover</span> </div>
         </div>
           </td>
         <td style="text-align:left;">{{item.price}}€</td>
         <td style="text-align:left;">
-          <span class="cart-button" (click)="decrementQuantity(item)">-</span>
+          <span class="cart-button" (click)="decrementQuantity(item.id)">-</span>
           {{item.quantity}}
-          <span class="cart-button" (click)="incrementQuantity(item)">+</span>
+          <span class="cart-button" (click)="incrementQuantity(item.id)">+</span>
         </td>
         <td style="text-align:left;">{{item.price * item.quantity}}€</td>
       </tr>
   </tbody>  
 </table>
 
+<div class="subtotal"> <span> Subtotal: </span> <span> {{total}}€ </span> </div>
+
+<button class="checkout" (click)="checkout()"> Comprar </button>
+
+<span class="termos"> Ao completar esta compra concorda com os <a href="/termos"> Termos de Serviço </a></span>
 </main>

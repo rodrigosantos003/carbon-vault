@@ -146,7 +146,7 @@ namespace Carbon_Vault.Data
                    Status = ProjectStatus.Confirmed,
                    Benefits = "Access to clean water, improved health conditions.",
                    ProjectUrl = new Uri("https://example.com/project1"),
-                   ImageUrl = "https://hub.jhu.edu/at-work/2020/01/15/focus-on-wellness-drinking-more-water/"
+                   ImageUrl = "https://api.hub.jhu.edu/factory/sites/default/files/styles/hub_large/public/drink-more-water-hub.jpg"
                },
                new Project
                {
@@ -163,7 +163,7 @@ namespace Carbon_Vault.Data
                    Status = ProjectStatus.Confirmed,
                    Benefits = "Sustainable energy solutions, reduced carbon emissions.",
                    ProjectUrl = new Uri("https://example.com/project2"),
-                   ImageUrl = "https://www.google.com/imgres?q=solar%20energy%20portugal&imgurl=https%3A%2F%2Fwww.edpr.com%2Fsites%2Fedpr%2Ffiles%2F2022-04%2FAlqueva%2520solar%2520flotante.jpg&imgrefurl=https%3A%2F%2Fwww.edpr.com%2Fpt-pt%2Fnoticias%2F2022%2F04%2F05%2Fedpr-obtem-direito-de-ligacao-a-rede-no-leilao-de-solar-flutuante-em-portugal-0&docid=uEba6PNQx25XkM&tbnid=yXMOjdpzWolGBM&vet=12ahUKEwi2loOxxe2LAxWURPEDHXgyNwgQM3oECGMQAA..i&w=1300&h=975&hcb=2&itg=1&ved=2ahUKEwi2loOxxe2LAxWURPEDHXgyNwgQM3oECGMQAA"
+                   ImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSS2nF0iroOXheUgLiCRjKPFEyxqBqbjMMiBZxtPvybNA14VsZrFMg2wgudNFFSgdW9S5Q&usqp=CAU"
                }
            );
         }

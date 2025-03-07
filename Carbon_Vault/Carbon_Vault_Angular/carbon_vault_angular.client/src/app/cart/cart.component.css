@@ -47,13 +47,19 @@
  
   .cart-table th, 
   .cart-table td {
-    padding: 10px;
-    border-bottom: 1px solid #ddd; /* Linha horizontal entre cada linha */
+    padding: 25px;
+    border-bottom: 1px solid #ddd;
   }
+
+  .cart-table th {
+    width: 15%;
+  }
+
+  .cart-table th:first-child {
+    width: 55%;
+  }
+
   
-  .cart-table tbody tr:last-child td {
-    border-bottom: none; /* Remove a borda da última linha para um visual mais limpo */
-  }
   
   .cart-button{
     font-family: 'Poppins';
@@ -66,5 +72,51 @@
 
   .cart-remove{
     text-decoration-line: underline;
+    text-align: left;
     color: #E35656;
+  }
+
+  .subtotal{
+    display: flex;
+    justify-content: space-between;
+    width: 25%;
+    margin-left: auto;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 11px;
+    text-align: end;
+    margin-top: 150px;
+  }
+
+  .checkout{
+    width: 159px;
+    height: 42px;
+    background: #4EA741;
+    border-radius: 10px;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 11px;
+    color: #FFFFFF;
+    text-align: center;
+    margin-left: auto;
+    margin-top: 50px;
+  }
+
+  .termos{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 19px;
+    line-height: 11px;
+    color: #000000;
+    margin-left: auto;
+    margin-top: 50px;
+  }
+
+  .termos > a{
+    color: gray;
   }
