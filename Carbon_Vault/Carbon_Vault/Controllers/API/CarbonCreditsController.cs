@@ -45,9 +45,9 @@ namespace Carbon_Vault.Controllers.API
         // PUT: api/CarbonCredits/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCarbonCredit(int id, CarbonCredit carbonCredit, string jwt, int userID)
+        public async Task<IActionResult> PutCarbonCredit(int id, CarbonCredit carbonCredit, int userID, [FromHeader] string Authorization)
         {
-            if (AuthHelper.IsTokenValid(jwt, userID))
+            if (!AuthHelper.IsTokenValid(Authorization, userID))
             {
                 return Unauthorized();
             }
@@ -81,9 +81,9 @@ namespace Carbon_Vault.Controllers.API
         // POST: api/CarbonCredits
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<CarbonCredit>> PostCarbonCredit(CarbonCredit carbonCredit, string jwt, int userID)
+        public async Task<ActionResult<CarbonCredit>> PostCarbonCredit(CarbonCredit carbonCredit, int userID, [FromHeader] string Authorization)
         {
-            if (AuthHelper.IsTokenValid(jwt, userID))
+            if (!AuthHelper.IsTokenValid(Authorization, userID))
             {
                 return Unauthorized();
             }
@@ -96,9 +96,9 @@ namespace Carbon_Vault.Controllers.API
 
         // DELETE: api/CarbonCredits/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCarbonCredit(int id, string jwt, int userID)
+        public async Task<IActionResult> DeleteCarbonCredit(int id, int userID, [FromHeader] string Authorization)
         {
-            if (AuthHelper.IsTokenValid(jwt, userID))
+            if (!AuthHelper.IsTokenValid(Authorization, userID))
             {
                 return Unauthorized();
             }

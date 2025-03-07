@@ -62,17 +62,19 @@
             return tokenHandler.WriteToken(token);
         }
 
-        public static bool IsTokenValid(string token, int userID)
+        public static bool IsTokenValid(string Authorization, int userID)
         {
+            if (string.IsNullOrEmpty(Authorization) || !Authorization.StartsWith("Bearer "))
+                return false;
+
+            var token = Authorization.Substring("Bearer ".Length).Trim();
+
             var claimsPrincipal = ValidateToken(token);
 
-            if (claimsPrincipal != null)
-            {
-                var claimerID = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                if (claimerID == userID.ToString()) return true;
-            }
+            if (claimsPrincipal == null) return false;
 
-            return false;
+            var claimerID = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return claimerID == userID.ToString();
         }
 
         private static ClaimsPrincipal ValidateToken(string token)

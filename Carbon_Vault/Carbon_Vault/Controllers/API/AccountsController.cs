@@ -33,11 +33,11 @@ namespace Carbon_Vault.Controllers.API
 
         // GET: api/Accounts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Account>>> GetAccounts(string jwt, int userID)
+        public async Task<ActionResult<IEnumerable<Account>>> GetAccounts([FromHeader] string Authorization, int userID)
         {
-            if (AuthHelper.IsTokenValid(jwt, userID))
+            if (!AuthHelper.IsTokenValid(Authorization, userID))
             {
-                return Unauthorized();
+                return Unauthorized("JWT inválido.");
             }
 
             return await _context.Account.ToListAsync();
@@ -100,9 +100,9 @@ namespace Carbon_Vault.Controllers.API
         // PUT: api/Accounts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAccount(int id, Account account, string jwt)
+        public async Task<IActionResult> PutAccount(int id, Account account, [FromHeader] string Authorization)
         {
-            if (AuthHelper.IsTokenValid(jwt, id))
+            if (!AuthHelper.IsTokenValid(Authorization, id))
             {
                 return Unauthorized();
             }
@@ -162,14 +162,7 @@ namespace Carbon_Vault.Controllers.API
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAccount(int id, [FromHeader] string Authorization)
         {
-            if (string.IsNullOrEmpty(Authorization) || !Authorization.StartsWith("Bearer "))
-            {
-                return Unauthorized();
-            }
-
-            var jwt = Authorization.Substring("Bearer ".Length).Trim();
-
-            if (AuthHelper.IsTokenValid(jwt, id))
+            if (!AuthHelper.IsTokenValid(Authorization, id))
             {
                 return Unauthorized();
             }

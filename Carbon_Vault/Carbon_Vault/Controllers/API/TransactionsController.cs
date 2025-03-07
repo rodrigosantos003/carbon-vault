@@ -106,16 +106,9 @@ namespace Carbon_Vault.Controllers.API
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTransaction(int id, [FromHeader] string Authorization, int accountID)
+        public async Task<IActionResult> DeleteTransaction(int id, [FromHeader] string Authorization, int userID)
         {
-            if (string.IsNullOrEmpty(Authorization) || !Authorization.StartsWith("Bearer "))
-            {
-                return Unauthorized();
-            }
-
-            var jwt = Authorization.Substring("Bearer ".Length).Trim();
-
-            if (AuthHelper.IsTokenValid(jwt, accountID))
+            if (!AuthHelper.IsTokenValid(Authorization, userID))
             {
                 return Unauthorized();
             }
@@ -136,14 +129,7 @@ namespace Carbon_Vault.Controllers.API
         [HttpGet("type/{type}/user/{userID}")]
         public async Task<ActionResult<IEnumerable<Transaction>>> GetTransactionsByType(TransactionType type, int userID, [FromHeader] string Authorization)
         {
-            if (string.IsNullOrEmpty(Authorization) || !Authorization.StartsWith("Bearer "))
-            {
-                return Unauthorized("Autorização não incluída no pedido.");
-            }
-
-            var jwt = Authorization.Substring("Bearer ".Length).Trim();
-
-            if (AuthHelper.IsTokenValid(jwt, userID))
+            if (!AuthHelper.IsTokenValid(Authorization, userID))
             {
                 return Unauthorized("JWT inválido");
             }
