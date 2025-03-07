@@ -1,16 +1,37 @@
 import { Component, Input } from '@angular/core';
+import { CartService } from '../cart.service';
 
 @Component({
   selector: 'app-projectCard',
-  standalone: false,
-  
   templateUrl: './projectCard.component.html',
-  styleUrl: './projectCard.component.css'
+  styleUrls: ['./projectCard.component.css'],
+  standalone: false,
 })
 export class ProjectCardComponent {
-  @Input() name: string = '';         // Título do projeto
-  @Input() imageUrl: string = '';      // URL da imagem do projeto
-  @Input() pricePerCredit: string = '';         // Preço do projeto
-  @Input() quantity: number = 1;       // Quantidade inicial
-  @Input() projectID: number = 1;       // Quantidade inicial
+  @Input() imageUrl!: string;
+  @Input() name!: string;
+  @Input() pricePerCredit!: number;
+  @Input() projectID!: number;
+  @Input() quantity: number = 1; // Valor padrão de 1
+
+  constructor(private cartService: CartService) {}
+
+  ngOnInit() {
+    this.quantity = 1;
+  }
+
+  addToCart() {
+    const item = {
+      id: this.projectID,
+      image: this.imageUrl,
+      name: this.name,
+      price: this.pricePerCredit,
+      quantity: this.quantity,
+    };
+
+    this.cartService.addItem(item);
+
+    alert('Item adicionado ao carrinho!');
+    this.quantity = 1;
+  }
 }

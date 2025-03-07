@@ -10,7 +10,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth.interceptor';
-import { JwtHelperService, JwtModule } from '@auth0/angular-jwt';  // Import JwtHelperService
+import { JwtHelperService, JwtModule } from '@auth0/angular-jwt';
 import { RecoverPasswordComponent } from './recover-password/recover-password.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { UserEmissionsComponent } from './user-emissions/user-emissions.component';
@@ -24,6 +24,7 @@ import { AlertsComponent } from './alerts/alerts.component';
 import { UsersManagerComponent } from './users-manager/users-manager.component';
 import { MarketPlaceNavigationComponent } from './market-place-navigation/market-place-navigation.component';
 import { UserPaymentComponent } from './user-payment/user-payment.component';
+import { CartComponent } from './cart/cart.component';
 import { UserPurchasesComponent } from './user-purchases/user-purchases.component';
 import { UserSalesComponent } from './user-sales/user-sales.component';
 
@@ -47,6 +48,7 @@ import { UserSalesComponent } from './user-sales/user-sales.component';
     UsersManagerComponent,
     MarketPlaceNavigationComponent,
     UserPaymentComponent,
+    CartComponent,
     UserPurchasesComponent,
     UserSalesComponent
   ],

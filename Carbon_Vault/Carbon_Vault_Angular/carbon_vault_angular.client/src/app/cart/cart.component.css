@@ -1,0 +1,122 @@
+.cart-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-inline: 18%;
+}
+
+.cart-title{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 48px;
+    line-height: 11px;
+    text-align: center;
+    margin-top: 100px;
+}
+
+.cart-back{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 11px;
+    text-align: center;
+    text-decoration-line: underline;
+    margin-top: 50px;
+}
+
+.cart-back > a{
+    color: #4EA741;
+}
+
+.cart-table{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 11px;
+    color: #000000;
+    margin-inline: auto;
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 50px;
+    user-select: none;
+}
+ 
+  .cart-table th, 
+  .cart-table td {
+    padding: 25px;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .cart-table th {
+    width: 15%;
+  }
+
+  .cart-table th:first-child {
+    width: 55%;
+  }
+
+  
+  
+  .cart-button{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .cart-remove{
+    text-decoration-line: underline;
+    text-align: left;
+    color: #E35656;
+  }
+
+  .subtotal{
+    display: flex;
+    justify-content: space-between;
+    width: 25%;
+    margin-left: auto;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 11px;
+    text-align: end;
+    margin-top: 150px;
+  }
+
+  .checkout{
+    width: 159px;
+    height: 42px;
+    background: #4EA741;
+    border-radius: 10px;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 11px;
+    color: #FFFFFF;
+    text-align: center;
+    margin-left: auto;
+    margin-top: 50px;
+  }
+
+  .termos{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 19px;
+    line-height: 11px;
+    color: #000000;
+    margin-left: auto;
+    margin-top: 50px;
+  }
+
+  .termos > a{
+    color: gray;
+  }
