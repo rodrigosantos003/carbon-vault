@@ -1,27 +1,46 @@
+<div class="modal-overlay" id="modalOverlay">
+  <div class="delete" id="delete">
+    <div class="delete-content">
+      <p class="delete-heading">Deseja mesmo eliminar este item?</p>
+      <img src="images/DeleteBin.png" />
+      <p class="delete-description">Esta ação irá eliminar permanentemente o item do carrinho.</p>
+    </div>
+    <div class="delete-button-wrapper">
+      <button class="delete-button secondary" (click)="closePopup()">Cancelar</button>
+      <button class="delete-button primary" (click)="deleteItem()">Eliminar</button>
+    </div>
+    <button class="exit-button" (click)="closePopup()">
+      <svg height="20px" viewBox="0 0 384 512">
+        <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"></path>
+      </svg>
+    </button>
+  </div>
+</div>
+
 <app-market-place-navigation></app-market-place-navigation>
 <main class="cart-container">
-  
-<h1 class="cart-title"> O meu Carrinho </h1>
 
-<div class="cart-back"> <a href="/marketplace"> Continuar as Compras </a> </div>
+  <h1 class="cart-title"> O meu Carrinho </h1>
 
-<table style="width:100%; border-collapse: collapse;" class="cart-table">
-  <thead>
-    <tr>
-      <th style="text-align:left;">Produto</th>
-      <th style="text-align:left;">Preço</th>
-      <th style="text-align:left;">Quantidade</th>
-      <th style="text-align:left;">Total</th>
-    </tr>
-  </thead>
-  <tbody>
+  <div class="cart-back"> <a href="/marketplace"> Continuar as Compras </a> </div>
+
+  <table style="width:100%; border-collapse: collapse;" class="cart-table">
+    <thead>
+      <tr>
+        <th style="text-align:left;">Produto</th>
+        <th style="text-align:left;">Preço</th>
+        <th style="text-align:left;">Quantidade</th>
+        <th style="text-align:left;">Total</th>
+      </tr>
+    </thead>
+    <tbody>
       <tr *ngFor="let item of cartItems">
         <td style="text-align:left;">
-        <div style="display: flex; align-items: center;">
-          <img [src]="item.image" alt="product image" style="width: 50px; height: 50px; margin-right: 10px; display: inline-block;">
-          <div style="display: flex; flex-direction: column; justify-content: center; gap: 12px"> {{item.name}} <span class="cart-button cart-remove" (click)="removeItem(item.id)">Remover</span> </div>
-        </div>
-          </td>
+          <div style="display: flex; align-items: center;">
+            <img [src]="item.image" alt="product image" style="width: 50px; height: 50px; margin-right: 10px; display: inline-block;">
+            <div style="display: flex; flex-direction: column; justify-content: center; gap: 12px"> {{item.name}} <span class="cart-button cart-remove" (click)="removeItem(item.id)">Remover</span> </div>
+          </div>
+        </td>
         <td style="text-align:left;">{{item.price}}€</td>
         <td style="text-align:left;">
           <span class="cart-button" (click)="decrementQuantity(item.id)">-</span>
@@ -30,12 +49,12 @@
         </td>
         <td style="text-align:left;">{{item.price * item.quantity}}€</td>
       </tr>
-  </tbody>  
-</table>
+    </tbody>
+  </table>
 
-<div class="subtotal"> <span> Subtotal: </span> <span> {{total}}€ </span> </div>
+  <div class="subtotal"> <span> Subtotal: </span> <span> {{total}}€ </span> </div>
 
-<button class="checkout" (click)="checkout()"> Comprar </button>
+  <button class="checkout" (click)="checkout()"> Comprar </button>
 
-<span class="termos"> Ao completar esta compra concorda com os <a href="/termos"> Termos de Serviço </a></span>
+  <span class="termos"> Ao completar esta compra concorda com os <a href="/termos"> Termos de Serviço </a></span>
 </main>

@@ -15,6 +15,25 @@ export class AlertsService {
     });
   }
 
+  enableSuccess(message: string) {
+    console.log("Success");
+    const loadingButton = document.getElementById('success-popup');
+    if (loadingButton) {
+      const textSpan = loadingButton.querySelector('#success-message');
+      if (textSpan) {
+        textSpan.textContent = message;
+      }
+      loadingButton.style.display = 'inline-flex';
+    }
+  }
+
+  disableSuccess() {
+    const loadingButton = document.getElementById('success-popup');
+    if (loadingButton) {
+      loadingButton.style.display = 'none';
+    }
+  }
+
   enableLoading(newText: string) {
     const loadingButton = document.getElementById('loading');
     if (loadingButton) {

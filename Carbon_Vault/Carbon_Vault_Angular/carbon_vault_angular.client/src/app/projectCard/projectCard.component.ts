@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CartService } from '../cart.service';
+import { AlertsService } from '../alerts.service'
 
 @Component({
   selector: 'app-projectCard',
@@ -14,7 +15,7 @@ export class ProjectCardComponent {
   @Input() projectID!: number;
   @Input() quantity: number = 1; // Valor padrão de 1
 
-  constructor(private cartService: CartService) {}
+  constructor(private cartService: CartService, private alerts: AlertsService) {}
 
   ngOnInit() {
     this.quantity = 1;
@@ -31,7 +32,12 @@ export class ProjectCardComponent {
 
     this.cartService.addItem(item);
 
-    alert('Item adicionado ao carrinho!');
+    this.alerts.enableSuccess("Item adicionado ao carrinho!");
+    //alert('Item adicionado ao carrinho!');
+    setTimeout(() => {
+      this.alerts.disableSuccess();
+    }, 3000);
+
     this.quantity = 1;
   }
 }

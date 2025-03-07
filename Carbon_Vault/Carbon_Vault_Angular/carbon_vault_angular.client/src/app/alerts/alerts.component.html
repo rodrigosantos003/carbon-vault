@@ -8,7 +8,7 @@
 
 
 <div class="popup-container">
-  <div class="popup success-popup">
+  <div class="popup success-popup" id="success-popup">
     <div class="popup-icon success-icon">
       <svg xmlns="http://www.w3.org/2000/svg"
            viewBox="0 0 24 24"
@@ -18,8 +18,8 @@
               clip-rule="evenodd"></path>
       </svg>
     </div>
-    <div class="success-message">Sucesso!!</div>
-    <div class="popup-icon close-icon">
+    <div class="success-message" id="success-message">Sucesso!!</div>
+    <div class="popup-icon close-icon" onclick="this.parentElement.style.display='none'">
       <svg xmlns="http://www.w3.org/2000/svg"
            viewBox="0 0 20 20"
            aria-hidden="true"
@@ -41,7 +41,7 @@
       </svg>
     </div>
     <div class="alert-message">ALERTA!!</div>
-    <div class="popup-icon close-icon">
+    <div class="popup-icon close-icon" onclick="this.parentElement.style.display='none'">
       <svg xmlns="http://www.w3.org/2000/svg"
            viewBox="0 0 20 20"
            class="close-svg">
@@ -62,7 +62,7 @@
       </svg>
     </div>
     <div class="error-message">Insucesso..</div>
-    <div class="popup-icon close-icon">
+    <div class="popup-icon close-icon" onclick="this.parentElement.style.display='none'">
       <svg xmlns="http://www.w3.org/2000/svg"
            viewBox="0 0 20 20"
            class="close-svg">
@@ -83,7 +83,7 @@
       </svg>
     </div>
     <div class="info-message">Informação</div>
-    <div class="popup-icon close-icon">
+    <div class="popup-icon close-icon" onclick="this.parentElement.style.display='none'">
       <svg xmlns="http://www.w3.org/2000/svg"
            viewBox="0 0 20 20"
            class="close-svg">

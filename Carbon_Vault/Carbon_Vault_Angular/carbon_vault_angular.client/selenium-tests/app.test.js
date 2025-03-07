@@ -1,28 +1,33 @@
 import { Builder, By, until } from 'selenium-webdriver';
 import { testLogin } from './tests/login.js';
 import { testEmissionsForm } from './tests/user_emissions.js';
+import { testRegister } from './tests/register.js'
 
 (async function appTest() {
-    let driver = await new Builder().forBrowser('chrome').build();
+  let driver = await new Builder().forBrowser('chrome').build();
+  console.log("WebDriver iniciado com sucesso");
 
-    try {
-        // Fazer login e obter o token
-        let token = await testLogin(driver, 'user1@carbonvault.com', 'User@111');
+  try {
+    // Testar o registo com credenciais validas
+    await testRegister(driver, "selenium user", "Selenium@123", "testing@example.com", "987654321");
 
-        // Definir manualmente o token no localStorage
-        await driver.executeScript(`localStorage.setItem('token', '${token}');`);
+    // Fazer login e obter o token
+    let token = await testLogin(driver, 'user1@carbonvault.com', 'User@111');
 
-        // Recarregar a página para garantir que o token é aplicado
-        await driver.navigate().refresh();
+    // Definir manualmente o token no localStorage
+    await driver.executeScript(`localStorage.setItem('token', '${token}');`);
 
-        // Testar form de emissões
-        await testEmissionsForm(driver);
+    // Recarregar a página para garantir que o token é aplicado
+    await driver.navigate().refresh();
 
-        console.log("Testes concluído com sucesso!");
+    // Testar form de emissões
+    await testEmissionsForm(driver);
 
-    } catch (error) {
-        console.error("Erro nos testes:", error);
-    } finally {
-        await driver.quit();
-    }
+    console.log("Testes concluído com sucesso!");
+
+  } catch (error) {
+    console.error("Erro nos testes:", error);
+  } finally {
+    await driver.quit();
+  }
 })();

@@ -54,8 +54,8 @@
 /* MESSAGE POPUPS */
 .popup {
   position: fixed;
-  top: 1rem;
-  right: 1rem;
+  top: 5rem;
+  right: 2rem;
   box-shadow: 4px 4px 10px -10px rgba(0, 0, 0, 1);
   width: 300px;
   justify-content: space-around;
@@ -63,7 +63,8 @@
   display: flex;
   border-radius: 4px;
   padding: 5px 0;
-  font-weight: 300;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
 }
 
   .popup svg {

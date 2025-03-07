@@ -10,6 +10,7 @@ import { CartService } from '../cart.service';
 export class CartComponent implements OnInit {
   cartItems: any[] = [];
   total: number = 0;
+  selectedItemId: number | null = null;
 
   constructor(private cartService: CartService) {}
 
@@ -33,9 +34,15 @@ export class CartComponent implements OnInit {
   }
 
   removeItem(itemId: number) {
-    if (!confirm('Pretende eliminar o item?')) return;
-    this.cartService.removeItem(itemId);
-    this.updateCart();
+    this.openPopup(itemId);
+  }
+
+  deleteItem() {
+    if (this.selectedItemId !== null) {
+      this.cartService.removeItem(this.selectedItemId);
+      this.updateCart();
+    }
+    this.closePopup();
   }
 
   updateCart(){
@@ -51,5 +58,27 @@ export class CartComponent implements OnInit {
   //TODO
   checkout() {
     alert('Checkout não implementado ainda');
+  }
+
+  openPopup(itemId: number) {
+    this.selectedItemId = itemId;
+    const overlay = document.getElementById('modalOverlay');
+    const delPopup = document.getElementById('delete');
+
+    if (overlay && delPopup) {
+      overlay.style.display = 'flex';
+      delPopup.style.display = 'block';
+    }
+  }
+
+  closePopup() {
+    this.selectedItemId = null;
+    const overlay = document.getElementById('modalOverlay');
+    const delPopup = document.getElementById('delete');
+
+    if (overlay && delPopup) {
+      overlay.style.display = 'none';
+      delPopup.style.display = 'none';
+    }
   }
 }
