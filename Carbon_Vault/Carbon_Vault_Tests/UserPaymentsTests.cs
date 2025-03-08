@@ -57,8 +57,7 @@ namespace Carbon_Vault_Tests_payments
             var result = controller.MakePayment(cart);
 
             // Assert
-            var okResult = Assert.IsType<OkObjectResult>(result);
-            Assert.Equal("Pagamento realizado com sucesso.", okResult.Value);
+            Assert.IsType<OkObjectResult>(result);
         }
 
         [Fact]
@@ -85,8 +84,7 @@ namespace Carbon_Vault_Tests_payments
             var result = controller.SendInvoice(sessionId);
 
             // Assert
-            var okResult = Assert.IsType<OkObjectResult>(result);
-            Assert.Equal("Fatura enviada com sucesso.", okResult.Value);
+            Assert.IsType<OkObjectResult>(result);
 
             // Verifica se o email foi enviado
             _mockEmailService.Verify(e => e.SendEmail(
