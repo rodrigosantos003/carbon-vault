@@ -239,3 +239,19 @@
       fill: rgb(175, 175, 175);
     }
   
+
+    tr{
+      background-color: #e9eae9;
+      padding: 5px;
+    }
+    .purchase-history-table tr:last-child td:first-child {
+      border-bottom-left-radius: 25px;
+    }
+    
+    .purchase-history-table tr:last-child td:last-child {
+      border-bottom-right-radius: 25px;
+    }
+
+    .purchase-history-table tr:last-child td{
+      border-bottom: 0;
+    }

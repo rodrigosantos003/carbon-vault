@@ -4,15 +4,15 @@ namespace Carbon_Vault.Models
 {
     public enum TransactionState
     {
-        Approved,
-        Rejected,
-        Pending
+        Approved, //Concluido
+        Rejected,//Rejeitado
+        Pending//Pendente
     }
 
     public enum TransactionType
     {
-        Purchase,
-        Sale
+        Purchase,//Compra
+        Sale//Venda 
     }
 
     public class Transaction

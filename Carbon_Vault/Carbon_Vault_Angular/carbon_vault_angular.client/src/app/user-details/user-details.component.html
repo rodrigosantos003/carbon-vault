@@ -26,33 +26,37 @@
                   </div>
                 </diV>
                 <!-- Purchase History -->
-            <div class="purchase-history">
-              <h3 class="table-header">Compras efectuadas</h3>
-              <table class="purchase-history-table">
-                <thead>
-                  <tr>
-                    <th>Tipo</th>
-                    <th>Data</th>
-                    <th>Estado de Pagamento</th>
-                    <th>Estado</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <!-- <tr *ngFor="let purchase of client.purchases">
-                    <td>{{ purchase.type }}</td>
-                    <td>{{ purchase.date }}</td>
-                    <td>
-                      <span class="payment-status">{{ purchase.paymentStatus }}</span>
-                    </td>
-                    <td>
-                      <span class="status">
-                        <span class="status-dot"></span> {{ purchase.status }}
-                      </span>
-                    </td>
-                  </tr> -->
-                </tbody>
-              </table>
-            </div>
+                <div class="purchase-history">
+                  <h3 class="table-header">Compras efectuadas</h3>
+                  
+                  <table class="purchase-history-table">
+                    <thead>
+                      <tr>
+                        <th>Tipo</th>
+                        <th>Data</th>
+                        <th>Estado de Pagamento</th>
+                        <th>Estado</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngIf="accountTransactions.length === 0">
+                        <td colspan="4" class="text-center">Nada a mostrar</td>
+                      </tr>
+                      <tr *ngFor="let transaction of accountTransactions">
+                        <td>{{ getTransactionType(transaction.type) }}</td>
+                        <td>{{ transaction.date | date:'dd/MM/yyyy' }}</td>
+                        <td>
+                          <span class="payment-status">{{getTransactionState( transaction.state) }}</span>
+                        </td>
+                        <td>
+                          <span class="status">
+                            <span class="status-dot"></span> {{ getTransactionPaymentState(transaction.state) }}
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             
             </div>

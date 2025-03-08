@@ -14,19 +14,20 @@ export class UserDetailsComponent {
   accountId: string | null = null;
   accountData: any = null;
   private apiURL = 'https://localhost:7117/api/Accounts';
-  accountTransactions:  any = null;
+  accountTransactions: any[] = [];
 
 
   constructor(private route: ActivatedRoute,  private http: HttpClient,     private authService: AuthService ,    private router: Router ,private alerts: AlertsService ) {}
 
   ngOnInit(): void {
-    this.accountId = this.route.snapshot.paramMap.get('id');
+    this.accountId = this.route.snapshot.paramMap.get('id') ?? ""; 
     this.http.get(`https://localhost:7117/api/Accounts/${this.accountId}`).subscribe((data: any) => {
       this.accountData = data;
       console.log(this.accountData)
     }, error => {
       console.error("Erro na requisição:", error);
     });
+    this.getTransactions(this.accountId)
   }
 
 
@@ -80,7 +81,7 @@ export class UserDetailsComponent {
       console.log("Account ID is null");
     }
   }
-  getTransactions(accountID: number): void {
+  getTransactions(accountID : string) {
     const jwtToken = localStorage.getItem('token');
   
     if (!jwtToken) {
@@ -89,18 +90,30 @@ export class UserDetailsComponent {
     }
   
     const headers = { 'Authorization': `Bearer ${jwtToken}` };
-    const params = { accountID: accountID.toString() };
+    const params = { accountID: accountID };
   
     this.http.get<any[]>('https://localhost:7117/api/Transactions', { headers, params }).subscribe({
       next: (data) => {
-        console.log("Transactions:", data);
+        console.log(data)
+        this.accountTransactions = data;
       },
       error: (error) => {
         console.error('Error fetching transactions:', error);
       }
     });
   }
-
+  getTransactionState(state: number): string {
+    const states = ["Concluido", "Rejeitado", "por concluir"];
+    return states[state] ?? "Unknown";
+  }
+  getTransactionPaymentState(state: number): string {
+    const states = ["Pago", "Rejeitado", "Pendente"];
+    return states[state] ?? "Unknown";
+  }
+  getTransactionType(type: number): string {
+    const types = ["Compra", "Venda"];
+    return types[type] ?? "Unknown";
+  }
 
 
 
