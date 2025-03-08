@@ -30,6 +30,7 @@ import { UserSalesComponent } from './user-sales/user-sales.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { ProjectManagerComponent } from './project-manager/project-manager.component';
+import { PaymentSuccessComponent } from './payment-success/payment-success.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { ProjectManagerComponent } from './project-manager/project-manager.compo
     UserSalesComponent,
     UserDetailsComponent,
     ProjectManagerComponent,
+    PaymentSuccessComponent,
   ],
   imports: [
     BrowserModule,

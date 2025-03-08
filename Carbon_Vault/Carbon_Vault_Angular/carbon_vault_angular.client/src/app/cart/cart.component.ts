@@ -13,7 +13,7 @@ export class CartComponent implements OnInit {
   total: number = 0;
   selectedItemId: number | null = null;
 
-  constructor(private cartService: CartService, private http: HttpClient) {}
+  constructor(private cartService: CartService, private http: HttpClient) { }
 
   ngOnInit() {
     this.updateCart();
@@ -46,7 +46,7 @@ export class CartComponent implements OnInit {
     this.closePopup();
   }
 
-  updateCart(){
+  updateCart() {
     this.cartItems = this.cartService.getCart();
     this.total = this.cartService.getTotal();
   }
@@ -64,9 +64,14 @@ export class CartComponent implements OnInit {
       items: this.cartService.getCart()
     };
 
-    this.http.post(apiUrl, paymentData).subscribe(
-      response => console.log('Pagamento realizado com sucesso:', response),
-      error => console.error('Erro ao realizar pagamento:', error)
+    this.http.post<{ message: string; checkout_session: string; payment_url: string }>(apiUrl, paymentData).subscribe({
+      next: (data) => {
+        window.open(data.payment_url, "_self");
+        sessionStorage.setItem("checkoutSession", data.checkout_session);
+      }, error: (error) => {
+        console.error('Erro ao realizar pagamento:', error);
+      }
+    }
     );
   }
 

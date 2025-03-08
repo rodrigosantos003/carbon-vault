@@ -19,6 +19,7 @@ import { AuthGuard } from './auth.guard';
 import { UserPurchasesComponent } from './user-purchases/user-purchases.component';
 import { UserSalesComponent } from './user-sales/user-sales.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
+import { PaymentSuccessComponent } from './payment-success/payment-success.component';
 const routes: Routes = [
   { path: 'confirm-account', component: ConfirmAccountComponent },
   { path: '', component: HomeComponent },
@@ -37,7 +38,8 @@ const routes: Routes = [
   { path: 'cart', component: CartComponent },
   { path: 'purchases', component: UserPurchasesComponent },
   { path: 'sales', component: UserSalesComponent },
-  { path: 'users-manager/user-details/:id', component: UserDetailsComponent,},
+  { path: 'users-manager/user-details/:id', component: UserDetailsComponent, },
+  { path: 'payment-success', component: PaymentSuccessComponent }
 ];
 
 @NgModule({

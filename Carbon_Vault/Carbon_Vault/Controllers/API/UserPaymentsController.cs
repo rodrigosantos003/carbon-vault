@@ -23,7 +23,7 @@ namespace Carbon_Vault.Controllers.API
         [HttpPost]
         public IActionResult MakePayment(PaymentData data)
         {
-            var success_url = "http://localhost:59115/";
+            var success_url = "http://localhost:59115/payment-success";
             var cancel_url = "https://localhost:7117/";
 
             var options = new SessionCreateOptions
@@ -50,8 +50,7 @@ namespace Carbon_Vault.Controllers.API
             Console.WriteLine("Session ID: " + session.Id);
             Console.WriteLine("Session URL: " + session.Url);
 
-            //return Redirect(session.Url);
-            return Ok("Pagamento realizado com sucesso.");
+            return Ok(new { message = "Pagamento realizado com sucesso.", checkout_session = session.Id, payment_url = session.Url });
         }
 
         private List<SessionLineItemOptions> GetLineItems(PaymentData data)
@@ -100,10 +99,10 @@ namespace Carbon_Vault.Controllers.API
                     $"Junto enviamos a fatura {invoice.Id}, referente ao apgamento efetuado no dia {invoice.DueDate}.",
                     invoice.InvoicePdf);
 
-                return Ok("Fatura enviada com sucesso.");
+                return Ok(new { message = "Fatura enviada com sucesso." });
             }
 
-            return NotFound("Fatura não encontrada.");
+            return NotFound(new { message = "Fatura não encontrada." });
         }
 
     }
@@ -120,5 +119,5 @@ namespace Carbon_Vault.Controllers.API
         public decimal Price { get; set; }
         public int Quantity { get; set; }
     }
-    
+
 }
