@@ -27,6 +27,9 @@ import { UserPaymentComponent } from './user-payment/user-payment.component';
 import { CartComponent } from './cart/cart.component';
 import { UserPurchasesComponent } from './user-purchases/user-purchases.component';
 import { UserSalesComponent } from './user-sales/user-sales.component';
+import { UserDetailsComponent } from './user-details/user-details.component';
+import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
+import { ProjectManagerComponent } from './project-manager/project-manager.component';
 
 @NgModule({
   declarations: [
@@ -50,13 +53,16 @@ import { UserSalesComponent } from './user-sales/user-sales.component';
     UserPaymentComponent,
     CartComponent,
     UserPurchasesComponent,
-    UserSalesComponent
+    UserSalesComponent,
+    UserDetailsComponent,
+    ProjectManagerComponent,
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
     FormsModule,
+    BreadcrumbComponent,
     ReactiveFormsModule,
     JwtModule.forRoot({
       config: {

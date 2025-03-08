@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 /*import { ConfirmAccountComponent } from '../confirm-account/confirm-account.component';*/
-import { AlertsService } from '../alerts.service';
+import { AlertsService } from '../services/alerts.service';
 import { AuthService } from '../auth-service.service';  // Importa o AuthService
+import { Router } from '@angular/router';  
+
 
 @Component({
   selector: 'app-users-manager',
@@ -19,7 +21,7 @@ export class UsersManagerComponent {
   private growthPercentageMonthlyURL = 'https://localhost:7117/api/Accounts/UserStatistics';
   growthData: any = {};
 
-  constructor(private http: HttpClient, private alerts: AlertsService, private authService: AuthService ) { }
+  constructor(private http: HttpClient, private alerts: AlertsService, private authService: AuthService, private router: Router ) { }
 
   ngOnInit(): void {
     this.getAccounts();
@@ -50,7 +52,7 @@ export class UsersManagerComponent {
   }
 
   viewAccount(account: any) {
-    console.log(account.id);
+    this.router.navigate([`users-manager/user-details/${account.id}`]);
   }
 
   getAccounts(): void {

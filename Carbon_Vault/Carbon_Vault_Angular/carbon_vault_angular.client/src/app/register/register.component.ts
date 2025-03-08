@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { AlertsService } from '../alerts.service';
+import { AlertsService } from '../services/alerts.service';
 
 @Component({
   selector: 'app-register',
