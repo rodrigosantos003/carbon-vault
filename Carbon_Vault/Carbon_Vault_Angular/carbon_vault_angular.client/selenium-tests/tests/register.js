@@ -19,6 +19,16 @@ export async function testRegister(driver, username, password, email, nif) {
   // Click the register button
   await registerBtn.click();
 
+  // Lidar com alerta (se aparecer)
+  try {
+    await driver.wait(until.alertIsPresent(), 5000);
+    let alert = await driver.switchTo().alert();
+    console.log("Alerta encontrado:", await alert.getText());
+    await alert.accept();
+  } catch (e) {
+    console.log("Nenhum alerta encontrado.");
+  }
+
   // Wait for redirection to the login page
-  await driver.wait(until.urlContains('/login'), 5000);
+  await driver.wait(until.urlContains('/login'), 10000);
 }

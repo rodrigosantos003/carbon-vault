@@ -237,7 +237,7 @@ namespace Carbon_Vault.Controllers.API
             return Ok("Password recovery link sent successfully");
         }
 
-        private string GenerateConfirmationToken(int userId)
+        public string GenerateConfirmationToken(int userId)
         {
             var secretKey = _secretKey;
             var payload = $"{userId}:{DateTime.UtcNow}";
@@ -429,28 +429,31 @@ namespace Carbon_Vault.Controllers.API
         }
 
         [HttpGet("UserStatistics")]
-        public async Task<IActionResult> GetUserStatistics()
+        
+        public async Task<IActionResult> GetUserStatistics(DateTime startDate, DateTime endDate)
         {
-            // Total number of users
+            if (startDate >= endDate)
+            {
+                return BadRequest("Invalid date range: startDate must be earlier than endDate.");
+            }
+
+           
             int totalUsers = await _context.Account.CountAsync();
 
-            
-            DateTime firstDayLastMonth = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month - 1, 1);
-            DateTime lastDayLastMonth = firstDayLastMonth.AddMonths(1).AddDays(-1);
-
-            
-            int previousMonthUsers = await _context.Account
-                .Where(a => a.CreatedAt >= firstDayLastMonth && a.CreatedAt <= lastDayLastMonth)
+           
+            int usersInPeriod = await _context.Account
+                .Where(a => a.CreatedAt >= startDate && a.CreatedAt <= endDate)
                 .CountAsync();
 
-            // Calculate percentage increase
-            double growthPercentage = previousMonthUsers > 0
-                ? ((double)(totalUsers - previousMonthUsers) / previousMonthUsers) * 100
-                : 100; 
+    
+            double growthPercentage = usersInPeriod > 0
+                ? ((double)(totalUsers - usersInPeriod) / usersInPeriod) * 100
+                : 100;
 
             return Ok(new
             {
                 TotalUsers = totalUsers,
+                UsersInPeriod = usersInPeriod,
                 GrowthPercentage = growthPercentage
             });
         }

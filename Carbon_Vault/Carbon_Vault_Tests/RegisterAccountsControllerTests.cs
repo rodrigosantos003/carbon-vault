@@ -2,13 +2,14 @@ using Carbon_Vault.Controllers.API;
 using Carbon_Vault.Data;
 using Carbon_Vault.Models;
 using Carbon_Vault.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using Xunit;
 
-namespace CarbonVault.Test
+namespace Carbon_Vault_Tests_Auth
 {
     public class RegisterAccountsControllerTests
     {
@@ -54,12 +55,20 @@ namespace CarbonVault.Test
         {
             // Arrange
             var controller = new AccountsController(_mockContext, _mockConfiguration.Object, _mockEmailService.Object);
-            Account demo_acount = new Account { Name = "Demo User", Email = "test@example.com", Password = "Account@123", Nif = "123456789" };
+            Account demo_acount = new Account { Id = 4, Name = "Demo User", Email = "user4@example.com", Password = "Account@123", Nif = "123456789", Role = AccountType.User, State = AccountState.Inactive, CreatedAt = DateTime.Now };
+
+            controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext()
+            };
 
             // Act
             var result = await controller.PostAccount(demo_acount);
 
             // Assert
+            _mockEmailService.Setup(x => x.SendEmail(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+     .Returns(Task.CompletedTask);
+
             var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result.Result);
             var returnedAccount = Assert.IsType<Account>(createdAtActionResult.Value);
 
@@ -121,7 +130,7 @@ namespace CarbonVault.Test
             // Arrange
             var controller = new AccountsController(_mockContext, _mockConfiguration.Object, _mockEmailService.Object);
             int account_id = 3;
-            string token = AuthHelper.GerarToken(account_id);
+            string token = controller.GenerateConfirmationToken(account_id);
 
             // Act
             var result = await controller.ConfirmAccount(token);

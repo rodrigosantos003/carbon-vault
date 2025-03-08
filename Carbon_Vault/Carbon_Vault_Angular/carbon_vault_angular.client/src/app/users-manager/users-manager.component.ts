@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 /*import { ConfirmAccountComponent } from '../confirm-account/confirm-account.component';*/
 import { AlertsService } from '../alerts.service';
 import { AuthService } from '../auth-service.service';  // Importa o AuthService
+import { Router } from '@angular/router';  
+
 
 @Component({
   selector: 'app-users-manager',
@@ -19,11 +21,11 @@ export class UsersManagerComponent {
   private growthPercentageMonthlyURL = 'https://localhost:7117/api/Accounts/UserStatistics';
   growthData: any = {};
 
-  constructor(private http: HttpClient, private alerts: AlertsService, private authService: AuthService ) { }
+  constructor(private http: HttpClient, private alerts: AlertsService, private authService: AuthService, private router: Router ) { }
 
   ngOnInit(): void {
     this.getAccounts();
-    this.getGrowthPercentage();
+    this.getPastMonthGrowthPercentage();
     console.log(this.accounts);
   }
 
@@ -50,7 +52,7 @@ export class UsersManagerComponent {
   }
 
   viewAccount(account: any) {
-    console.log(account.id);
+    this.router.navigate([`users-manager/user-details/${account.id}`]);
   }
 
   getAccounts(): void {
@@ -68,16 +70,26 @@ export class UsersManagerComponent {
     });
   }
 
-  getGrowthPercentage(): void {
-    this.http.get<any[]>(this.growthPercentageMonthlyURL).subscribe({
+  getPastMonthGrowthPercentage(): void {
+    const now = new Date();
+    const firstDayLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const lastDayLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+    
+    const params = { 
+      startDate: firstDayLastMonth.toISOString(), 
+      endDate: lastDayLastMonth.toISOString() 
+    };
+    
+    this.http.get<any>(this.growthPercentageMonthlyURL, { params }).subscribe({
       next: (data) => {
-        this.growthData = data; 
+        this.growthData = data;
       },
       error: (error) => {
-        console.error('Erro ao encontrar as subidas:', error);
+        console.error('Error fetching growth data:', error);
       }
     });
   }
+
 
   deleteAccount() {
     if (this.selectedAccountId !== null) {

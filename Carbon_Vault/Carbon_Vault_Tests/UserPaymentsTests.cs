@@ -15,7 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Carbon_Vault_Tests
+namespace Carbon_Vault_Tests_payments
 {
     public class UserPaymentsTests
     {
@@ -37,9 +37,15 @@ namespace Carbon_Vault_Tests
         public void MakePayment_ReturnsOk()
         {
             // Arrange
-            var paymentInfo = new PaymentInfo();
-            paymentInfo.Amount = 12;
-            paymentInfo.Currency = "EUR";
+            var cart = new PaymentData();
+            var item = new CartItem();
+
+            item.Description = "test_description";
+            item.Name = "test_name";
+            item.Price = 12;
+            item.Quantity = 1;
+            cart.Items.Add(item);
+
             var mockSessionService = new Mock<SessionService>();
             var session = new Session { Id = "test_session_id", Url = "https://checkout.stripe.com/test" };
 
@@ -48,7 +54,7 @@ namespace Carbon_Vault_Tests
             var controller = new UserPaymentsController(_mockEmailService.Object);
 
             // Act
-            var result = controller.MakePayment(paymentInfo);
+            var result = controller.MakePayment(cart);
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);

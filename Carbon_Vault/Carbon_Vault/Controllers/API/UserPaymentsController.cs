@@ -120,4 +120,5 @@ namespace Carbon_Vault.Controllers.API
         public decimal Price { get; set; }
         public int Quantity { get; set; }
     }
+    
 }

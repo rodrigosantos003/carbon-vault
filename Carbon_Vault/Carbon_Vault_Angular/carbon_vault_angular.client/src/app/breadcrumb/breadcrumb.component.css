@@ -1,0 +1,19 @@
+.breadcrumb {
+    list-style: none;
+    padding: 0;
+    display: flex;
+  }
+  
+  .breadcrumb-item {
+    margin-right: 10px;
+  }
+  
+  .breadcrumb-item a {
+    text-decoration: none;
+    color: blue;
+  }
+  
+  .breadcrumb-item a:hover {
+    text-decoration: underline;
+  }
+  
