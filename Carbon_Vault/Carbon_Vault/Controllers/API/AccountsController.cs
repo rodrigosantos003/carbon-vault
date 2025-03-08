@@ -237,7 +237,7 @@ namespace Carbon_Vault.Controllers.API
             return Ok("Password recovery link sent successfully");
         }
 
-        private string GenerateConfirmationToken(int userId)
+        public string GenerateConfirmationToken(int userId)
         {
             var secretKey = _secretKey;
             var payload = $"{userId}:{DateTime.UtcNow}";

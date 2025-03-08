@@ -43,6 +43,7 @@ namespace Carbon_Vault_Tests_payments
             item.Description = "test_description";
             item.Name = "test_name";
             item.Price = 12;
+            item.Quantity = 1;
             cart.Items.Add(item);
 
             var mockSessionService = new Mock<SessionService>();
