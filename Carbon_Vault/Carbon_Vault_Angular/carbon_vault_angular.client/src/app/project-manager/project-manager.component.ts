@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { AlertsService } from '../services/alerts.service';
+import { AlertsService } from '../alerts.service';
 import { AuthService } from '../auth-service.service';  // Importa o AuthService
 import { Router } from '@angular/router';  
 import { environment } from '../../environments/environment';

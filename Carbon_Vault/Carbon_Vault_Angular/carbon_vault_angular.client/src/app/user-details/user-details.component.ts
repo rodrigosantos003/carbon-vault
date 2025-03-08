@@ -2,7 +2,7 @@ import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router,ActivatedRoute } from '@angular/router';
 import { AuthService } from '../auth-service.service';
-import { AlertsService } from '../services/alerts.service';
+import { AlertsService } from '../alerts.service';
 @Component({
   selector: 'app-user-details',
   standalone: false,
@@ -14,6 +14,7 @@ export class UserDetailsComponent {
   accountId: string | null = null;
   accountData: any = null;
   private apiURL = 'https://localhost:7117/api/Accounts';
+  accountTransactions:  any = null;
 
 
   constructor(private route: ActivatedRoute,  private http: HttpClient,     private authService: AuthService ,    private router: Router ,private alerts: AlertsService ) {}
@@ -38,7 +39,6 @@ export class UserDetailsComponent {
       delPopup.style.display = 'block';
     }
   }
-
   closePopup() {
     const overlay = document.getElementById('modalOverlay');
     const delPopup = document.getElementById('delete');
@@ -48,9 +48,6 @@ export class UserDetailsComponent {
       delPopup.style.display = 'none';
     }
   }
-
-
-
   deleteAccount() {
     if (this.accountId) {
       const deleteURL = `${this.apiURL}/${this.accountId}`;
@@ -83,5 +80,28 @@ export class UserDetailsComponent {
       console.log("Account ID is null");
     }
   }
+  getTransactions(accountID: number): void {
+    const jwtToken = localStorage.getItem('token');
+  
+    if (!jwtToken) {
+      console.error("JWT token not found");
+      return;
+    }
+  
+    const headers = { 'Authorization': `Bearer ${jwtToken}` };
+    const params = { accountID: accountID.toString() };
+  
+    this.http.get<any[]>('https://localhost:7117/api/Transactions', { headers, params }).subscribe({
+      next: (data) => {
+        console.log("Transactions:", data);
+      },
+      error: (error) => {
+        console.error('Error fetching transactions:', error);
+      }
+    });
+  }
+
+
+
 
 }

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 /*import { ConfirmAccountComponent } from '../confirm-account/confirm-account.component';*/
-import { AlertsService } from '../services/alerts.service';
+import { AlertsService } from '../alerts.service';
 import { AuthService } from '../auth-service.service';  // Importa o AuthService
 import { Router } from '@angular/router';  
 
@@ -25,7 +25,7 @@ export class UsersManagerComponent {
 
   ngOnInit(): void {
     this.getAccounts();
-    this.getGrowthPercentage();
+    this.getPastMonthGrowthPercentage();
     console.log(this.accounts);
   }
 
@@ -70,16 +70,26 @@ export class UsersManagerComponent {
     });
   }
 
-  getGrowthPercentage(): void {
-    this.http.get<any[]>(this.growthPercentageMonthlyURL).subscribe({
+  getPastMonthGrowthPercentage(): void {
+    const now = new Date();
+    const firstDayLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const lastDayLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+    
+    const params = { 
+      startDate: firstDayLastMonth.toISOString(), 
+      endDate: lastDayLastMonth.toISOString() 
+    };
+    
+    this.http.get<any>(this.growthPercentageMonthlyURL, { params }).subscribe({
       next: (data) => {
-        this.growthData = data; 
+        this.growthData = data;
       },
       error: (error) => {
-        console.error('Erro ao encontrar as subidas:', error);
+        console.error('Error fetching growth data:', error);
       }
     });
   }
+
 
   deleteAccount() {
     if (this.selectedAccountId !== null) {

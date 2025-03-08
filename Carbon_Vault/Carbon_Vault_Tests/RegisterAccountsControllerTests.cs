@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Moq;
 using Xunit;
 
-namespace CarbonVault.Test
+namespace Carbon_Vault_Tests_Auth
 {
     public class RegisterAccountsControllerTests
     {

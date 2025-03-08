@@ -65,55 +65,55 @@ namespace Carbon_Vault.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 3, 6, 18, 44, 43, 711, DateTimeKind.Utc).AddTicks(6140),
+                            CreatedAt = new DateTime(2025, 3, 8, 11, 49, 16, 816, DateTimeKind.Utc).AddTicks(6637),
                             Email = "admin@carbonvault.com",
                             Name = "André Castanho",
                             Nif = "123456789",
-                            Password = "xV4pusOayr6vyi1zazQ9A1FC0rhg5/Y1ZcRR2RBNbroG2mZMEUJ4UxyRjKjtDm6+",
+                            Password = "VszGhZKyY3+j9dvCWT/9+LMFuhB3KmopVvPkeI9MjTJsI6KapWaj8pi6eS373yam",
                             Role = 1,
                             State = 1
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 3, 6, 18, 44, 43, 711, DateTimeKind.Utc).AddTicks(6152),
+                            CreatedAt = new DateTime(2025, 3, 8, 11, 49, 16, 816, DateTimeKind.Utc).AddTicks(6642),
                             Email = "user1@carbonvault.com",
                             Name = "John Doe",
                             Nif = "987654321",
-                            Password = "PFTZkATADwXBlV4zodyIyqQpShZBKxzVliteAST4iXyCmWCAmZvtEN2sZs2L6dfV",
+                            Password = "a4pNWrXE2t1NTDu8mJnMf9wWTirrummdA9sKa7kK4Yh4h0xEDi3fk8uvJZAz6kPh",
                             Role = 0,
                             State = 1
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 3, 6, 18, 44, 43, 711, DateTimeKind.Utc).AddTicks(6154),
+                            CreatedAt = new DateTime(2025, 3, 8, 11, 49, 16, 816, DateTimeKind.Utc).AddTicks(6643),
                             Email = "support@carbonvault.com",
                             Name = "John Smith",
                             Nif = "333333333",
-                            Password = "dpsR6aqyrS/m++bD64unQal+nQuE5vtzRvvJoueRpemPeXW4UnZCw5Celpir721y",
+                            Password = "6BS5fsIaGbdSwxIdEolaYgwxKrSTiZ/4rQbPhnM8INjWkeVSjBc7K7+JZFZcTbcD",
                             Role = 3,
                             State = 1
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2025, 3, 6, 18, 44, 43, 711, DateTimeKind.Utc).AddTicks(6156),
+                            CreatedAt = new DateTime(2025, 3, 8, 11, 49, 16, 816, DateTimeKind.Utc).AddTicks(6646),
                             Email = "user2@carbonvault.com",
                             Name = "My User",
                             Nif = "444444444",
-                            Password = "N8cJdCF9tTAZA5hpT89ljEf3XBGnjihDxfhbqGt2HnQM/7KV8nCHStoPPhkzpmty",
+                            Password = "M4nq+sAq28TlYfqNyi0MYWY+BBcouDq8XSqKQB53vDELHumpFFsL1xMh/FNP7buP",
                             Role = 0,
                             State = 1
                         },
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2025, 3, 6, 18, 44, 43, 711, DateTimeKind.Utc).AddTicks(6159),
+                            CreatedAt = new DateTime(2025, 3, 8, 11, 49, 16, 816, DateTimeKind.Utc).AddTicks(6647),
                             Email = "user3@carbonvault.com",
                             Name = "Jane Doe",
                             Nif = "555555555",
-                            Password = "nzjihN2wuU8sceTot7uboQAZPhcqMFcDUHhAgdaxaWZ1cmBhfDn1vH4A8L7k5/9G",
+                            Password = "RanIaekb0o6KelXRws62y3KDFL02pRVnSvDKuo99OSTCqSLJqmPnS4+tZcmGKb++",
                             Role = 0,
                             State = 1
                         });
@@ -233,13 +233,13 @@ namespace Carbon_Vault.Migrations
                             Certification = "ISO 14001",
                             Description = "Providing clean water access to rural communities.",
                             Developer = "Green Solutions",
-                            EndDate = new DateTime(2026, 3, 6, 18, 44, 43, 711, DateTimeKind.Local).AddTicks(7279),
-                            ImageUrl = "https://hub.jhu.edu/at-work/2020/01/15/focus-on-wellness-drinking-more-water/",
+                            EndDate = new DateTime(2026, 3, 8, 11, 49, 16, 816, DateTimeKind.Local).AddTicks(7085),
+                            ImageUrl = "https://api.hub.jhu.edu/factory/sites/default/files/styles/hub_large/public/drink-more-water-hub.jpg",
                             Location = "Africa",
                             Name = "Water Access Initiative",
                             PricePerCredit = 12.50m,
                             ProjectUrl = "https://example.com/project1",
-                            StartDate = new DateTime(2024, 12, 6, 18, 44, 43, 711, DateTimeKind.Local).AddTicks(7165),
+                            StartDate = new DateTime(2024, 12, 8, 11, 49, 16, 816, DateTimeKind.Local).AddTicks(7039),
                             Status = 0
                         },
                         new
@@ -250,13 +250,13 @@ namespace Carbon_Vault.Migrations
                             Certification = "LEED Gold",
                             Description = "Solar energy projects to provide electricity to underserved areas.",
                             Developer = "Renewable Power Inc.",
-                            EndDate = new DateTime(2027, 3, 6, 18, 44, 43, 711, DateTimeKind.Local).AddTicks(7471),
-                            ImageUrl = "https://www.google.com/imgres?q=solar%20energy%20portugal&imgurl=https%3A%2F%2Fwww.edpr.com%2Fsites%2Fedpr%2Ffiles%2F2022-04%2FAlqueva%2520solar%2520flotante.jpg&imgrefurl=https%3A%2F%2Fwww.edpr.com%2Fpt-pt%2Fnoticias%2F2022%2F04%2F05%2Fedpr-obtem-direito-de-ligacao-a-rede-no-leilao-de-solar-flutuante-em-portugal-0&docid=uEba6PNQx25XkM&tbnid=yXMOjdpzWolGBM&vet=12ahUKEwi2loOxxe2LAxWURPEDHXgyNwgQM3oECGMQAA..i&w=1300&h=975&hcb=2&itg=1&ved=2ahUKEwi2loOxxe2LAxWURPEDHXgyNwgQM3oECGMQAA",
+                            EndDate = new DateTime(2027, 3, 8, 11, 49, 16, 816, DateTimeKind.Local).AddTicks(7182),
+                            ImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSS2nF0iroOXheUgLiCRjKPFEyxqBqbjMMiBZxtPvybNA14VsZrFMg2wgudNFFSgdW9S5Q&usqp=CAU",
                             Location = "South America",
                             Name = "Solar Energy for All",
                             PricePerCredit = 15.75m,
                             ProjectUrl = "https://example.com/project2",
-                            StartDate = new DateTime(2025, 2, 6, 18, 44, 43, 711, DateTimeKind.Local).AddTicks(7469),
+                            StartDate = new DateTime(2025, 2, 8, 11, 49, 16, 816, DateTimeKind.Local).AddTicks(7180),
                             Status = 0
                         });
                 });

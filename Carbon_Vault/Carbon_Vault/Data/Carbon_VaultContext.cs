@@ -57,7 +57,7 @@ namespace Carbon_Vault.Data
                 new Models.Account
                 {
                     Id = 1,
-                    Name = "André Castanho",
+                    Name = "Administrador",
                     Email = "admin@carbonvault.com",
                     Password = admin_hashed,
                     Nif = "123456789",

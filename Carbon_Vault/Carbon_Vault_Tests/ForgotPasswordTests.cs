@@ -10,7 +10,7 @@ using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Carbon_Vault_Tests
+namespace Carbon_Vault_Tests_Auth
 {
     public class ForgotPasswordTests : IDisposable
     {
