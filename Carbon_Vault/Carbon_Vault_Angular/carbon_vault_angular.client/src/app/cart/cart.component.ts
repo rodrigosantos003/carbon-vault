@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CartService } from '../cart.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-cart',
@@ -12,7 +13,7 @@ export class CartComponent implements OnInit {
   total: number = 0;
   selectedItemId: number | null = null;
 
-  constructor(private cartService: CartService) {}
+  constructor(private cartService: CartService, private http: HttpClient) {}
 
   ngOnInit() {
     this.updateCart();
@@ -57,7 +58,16 @@ export class CartComponent implements OnInit {
 
   //TODO
   checkout() {
-    alert('Checkout não implementado ainda');
+    //alert('Checkout não implementado ainda');
+    const apiUrl = 'https://localhost:7117/api/UserPayments';
+    const paymentData = {
+      items: this.cartService.getCart()
+    };
+
+    this.http.post(apiUrl, paymentData).subscribe(
+      response => console.log('Pagamento realizado com sucesso:', response),
+      error => console.error('Erro ao realizar pagamento:', error)
+    );
   }
 
   openPopup(itemId: number) {

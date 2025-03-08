@@ -13,6 +13,7 @@ namespace Carbon_Vault.Controllers.API
     public class UserPaymentsController : ControllerBase
     {
         private readonly IEmailService _emailService;
+        private static string CURRENCY = "EUR";
 
         public UserPaymentsController(IEmailService emailService)
         {
@@ -20,7 +21,7 @@ namespace Carbon_Vault.Controllers.API
         }
 
         [HttpPost]
-        public IActionResult MakePayment(PaymentInfo payment)
+        public IActionResult MakePayment(PaymentData data)
         {
             var success_url = "http://localhost:59115/";
             var cancel_url = "https://localhost:7117/";
@@ -31,17 +32,13 @@ namespace Carbon_Vault.Controllers.API
                 {
                     "card"
                 },
-                LineItems = new List<SessionLineItemOptions>
-                {
-                    AddItem(payment, "Demo Product", "Demo product description", 1),
-                    AddItem(payment, "My Product", "My product description", 3),
-                },
+                LineItems = GetLineItems(data),
                 Mode = "payment",
                 SuccessUrl = success_url,
                 CancelUrl = cancel_url,
                 InvoiceCreation = new SessionInvoiceCreationOptions
                 {
-                    Enabled = true 
+                    Enabled = true
                 }
             };
 
@@ -57,14 +54,26 @@ namespace Carbon_Vault.Controllers.API
             return Ok("Pagamento realizado com sucesso.");
         }
 
-        private SessionLineItemOptions AddItem(PaymentInfo payment, string product_name, string product_description, int quantity)
+        private List<SessionLineItemOptions> GetLineItems(PaymentData data)
+        {
+            List<SessionLineItemOptions> my_list = new List<SessionLineItemOptions>();
+
+            foreach (var item in data.Items)
+            {
+                my_list.Add(AddItem(item.Price, item.Name, item.Description, item.Quantity));
+            }
+
+            return my_list;
+        }
+
+        private SessionLineItemOptions AddItem(decimal amount, string product_name, string product_description, int quantity)
         {
             return new SessionLineItemOptions
             {
                 PriceData = new SessionLineItemPriceDataOptions
                 {
-                    Currency = payment.Currency,
-                    UnitAmount = Convert.ToInt32(payment.Amount) * 100,
+                    Currency = CURRENCY,
+                    UnitAmount = (long?)(amount * 100),
                     ProductData = new SessionLineItemPriceDataProductDataOptions
                     {
                         Name = product_name,
@@ -88,7 +97,7 @@ namespace Carbon_Vault.Controllers.API
 
                 _emailService.SendEmail(invoice.CustomerEmail,
                     $"Carbon Vault - Fatura {invoice.Id}",
-                    $"Junto enviamos a fatura {invoice.Id}, referente ao apgamento efetuado no dia {invoice.DueDate}.", 
+                    $"Junto enviamos a fatura {invoice.Id}, referente ao apgamento efetuado no dia {invoice.DueDate}.",
                     invoice.InvoicePdf);
 
                 return Ok("Fatura enviada com sucesso.");
@@ -99,9 +108,16 @@ namespace Carbon_Vault.Controllers.API
 
     }
 
-    public class PaymentInfo
+    public class PaymentData
     {
-        public decimal Amount { get; set; }
-        public string Currency { get; set; }
+        public List<CartItem> Items { get; set; } = new();
+    }
+
+    public class CartItem
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public decimal Price { get; set; }
+        public int Quantity { get; set; }
     }
 }

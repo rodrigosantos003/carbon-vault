@@ -21,6 +21,7 @@
   <div class="grid">
     <app-projectCard *ngFor="let project of projectsToShow"
                      [name]="project.name"
+                     [description]="project.description"
                      [imageUrl]="project.imageUrl"
                      [pricePerCredit]="project.pricePerCredit"
                      [quantity]="project.quantity"

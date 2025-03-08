@@ -11,6 +11,7 @@ import { AlertsService } from '../alerts.service'
 export class ProjectCardComponent {
   @Input() imageUrl!: string;
   @Input() name!: string;
+  @Input() description!: string;
   @Input() pricePerCredit!: number;
   @Input() projectID!: number;
   @Input() quantity: number = 1; // Valor padrão de 1
@@ -26,6 +27,7 @@ export class ProjectCardComponent {
       id: this.projectID,
       image: this.imageUrl,
       name: this.name,
+      description: this.description,
       price: this.pricePerCredit,
       quantity: this.quantity,
     };
