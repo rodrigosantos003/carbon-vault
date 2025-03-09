@@ -2,6 +2,7 @@ import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth-service.service';
+import { environment } from '../../environments/environment';
 
 
 @Component({
@@ -32,7 +33,7 @@ export class MarketplaceComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.http.get('https://localhost:7117/api/projects').subscribe((data: any) => {
+    this.http.get(`${environment.apiUrl}/projects`).subscribe((data: any) => {
       this.allProjects = data;
       this.projectsToShow = this.allProjects;
     }, error => {

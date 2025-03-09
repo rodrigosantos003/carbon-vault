@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Router,ActivatedRoute } from '@angular/router';
 import { AuthService } from '../auth-service.service';
 import { AlertsService } from '../alerts.service';
+import { environment } from '../../environments/environment';
+
 @Component({
   selector: 'app-user-details',
   standalone: false,
@@ -13,7 +15,7 @@ import { AlertsService } from '../alerts.service';
 export class UserDetailsComponent {
   accountId: string | null = null;
   accountData: any = null;
-  private apiURL = 'https://localhost:7117/api/Accounts';
+  private apiURL = `${environment.apiUrl}/Accounts`;
   accountTransactions: any[] = [];
 
 
@@ -21,7 +23,7 @@ export class UserDetailsComponent {
 
   ngOnInit(): void {
     this.accountId = this.route.snapshot.paramMap.get('id') ?? ""; 
-    this.http.get(`https://localhost:7117/api/Accounts/${this.accountId}`).subscribe((data: any) => {
+    this.http.get(`${environment.apiUrl}/Accounts/${this.accountId}`).subscribe((data: any) => {
       this.accountData = data;
       console.log(this.accountData)
     }, error => {
@@ -92,7 +94,7 @@ export class UserDetailsComponent {
     const headers = { 'Authorization': `Bearer ${jwtToken}` };
     const params = { accountID: accountID };
   
-    this.http.get<any[]>('https://localhost:7117/api/Transactions', { headers, params }).subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/Transactions`, { headers, params }).subscribe({
       next: (data) => {
         console.log(data)
         this.accountTransactions = data;

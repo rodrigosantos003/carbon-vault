@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth-service.service';
 import { AlertsService } from '../alerts.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -50,7 +51,7 @@ export class LoginComponent implements OnInit {
 
       console.log('Form Data:', formData);
 
-      this.http.post('https://localhost:7117/api/Accounts/login', formData).subscribe(
+      this.http.post(`${environment.apiUrl}/Accounts/login`, formData).subscribe(
         (response: any) => {
           console.log('Login successful!', response);
           this.alerts.disableLoading();

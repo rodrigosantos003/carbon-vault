@@ -2,6 +2,7 @@ import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router,ActivatedRoute } from '@angular/router';
 import { AuthService } from '../auth-service.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-project-details',
@@ -24,7 +25,7 @@ export class ProjectDetailsComponent {
 
   ngOnInit(): void {
     this.projectId = this.route.snapshot.paramMap.get('id');
-    this.http.get(`https://localhost:7117/api/projects/${this.projectId}`).subscribe((data: any) => {
+    this.http.get(`${environment.apiUrl}/projects/${this.projectId}`).subscribe((data: any) => {
       this.projectData = data;
       this.carbonCredits = this.projectData.carbonCredits || [];
     }, error => {
