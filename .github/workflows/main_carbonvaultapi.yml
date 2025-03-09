@@ -65,4 +65,5 @@ jobs:
         with:
           app-name: 'CarbonVaultAPI'
           slot-name: 'Production'
-          package: ${{ github.workspace }}/myapp
+          package: ./.net-app
+        
