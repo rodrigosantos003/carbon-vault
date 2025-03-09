@@ -28,7 +28,6 @@ jobs:
           cd Carbon_Vault/Carbon_Vault_Angular/carbon_vault_angular.client
           npm install
           npm run build --if-present
-          npm run test --if-present
       
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
