@@ -50,7 +50,7 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: .net-app
+          name: myapp
       
       - name: Login to Azure
         uses: azure/login@v2
@@ -65,4 +65,4 @@ jobs:
         with:
           app-name: 'CarbonVaultAPI'
           slot-name: 'Production'
-          package: ${{ github.workspace }}/.net-app
+          package: ${{ github.workspace }}/myapp
