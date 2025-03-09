@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: windows-latest
     permissions:
-      contents: read # Necessário para actions/checkout
+      contents: read
 
     steps:
       - uses: actions/checkout@v4
@@ -45,17 +45,18 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write # Necessário para autenticação JWT
-      contents: read # Necessário para actions/checkout
+      id-token: write
+      contents: read
 
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: node-app
+          path: ./node-app
 
       - name: Verify artifact download
-        run: ls -R ./node-app  # Verifica se o artefacto foi descarregado corretamente
+        run: ls -R ./node-app
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -70,4 +71,4 @@ jobs:
         with:
           app-name: 'CarbonVaultClient'
           slot-name: 'Production'
-          package: ./node-app  # Usa o caminho do artefacto descarregado
+          package: ./node-app
