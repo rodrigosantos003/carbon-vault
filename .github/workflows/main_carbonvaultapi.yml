@@ -28,13 +28,13 @@ jobs:
         working-directory: Carbon_Vault/Carbon_Vault
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
+        run: dotnet publish Carbon_Vault/Carbon_Vault/Carbon_Vault.csproj -c Release -o "${{ github.workspace }}/myapp"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          path: ${{ github.workspace }}/myapp
 
   deploy:
     runs-on: windows-latest
@@ -65,4 +65,4 @@ jobs:
         with:
           app-name: 'CarbonVaultAPI'
           slot-name: 'Production'
-          package: .
+          package: ${{ github.workspace }}/.net-app
