@@ -202,6 +202,10 @@ namespace Carbon_Vault.Controllers.API
                 return Unauthorized(new { message = "Account is not active." });
             }
 
+            account.LastLogin = DateTime.UtcNow;
+            _context.Account.Update(account);
+            await _context.SaveChangesAsync();
+
             var token = AuthHelper.GerarToken(account.Id);
 
             return Ok(new

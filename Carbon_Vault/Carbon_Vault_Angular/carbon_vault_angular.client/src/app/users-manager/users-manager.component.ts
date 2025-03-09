@@ -100,9 +100,8 @@ export class UsersManagerComponent {
 
       const userIdFromToken = this.authService.getUserId();
 
-      // Verifique se o ID da conta a ser excluída é o mesmo que o ID do usuário logado
       if (userIdFromToken == this.selectedAccountId.toString()) {
-        alert("Você não pode excluir a sua conta.");
+        alert("Não pode excluir a sua conta.");
         return;
       }
 
