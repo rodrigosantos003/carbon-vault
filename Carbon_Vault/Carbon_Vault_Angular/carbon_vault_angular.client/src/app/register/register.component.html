@@ -12,7 +12,27 @@
         <label for="password">
           <i class="fa fa-lock"></i> Password
         </label>
-        <input id="password" type="password" placeholder="Escolha uma Password" formControlName="password" required />
+        <div class="password-container">
+          <input
+            id="password"
+            type="password"
+            placeholder="Escolha uma Password"
+            formControlName="password"
+            required
+            (input)="updatePasswordStrength()"
+            (focus)="showTooltip = true"
+            (blur)="showTooltip = false"
+          />
+          <div class="tooltip" *ngIf="showTooltip">
+            <p [class.valid]="passwordLength">✔ Mínimo de 8 caracteres</p>
+            <p [class.valid]="passwordUpperCase">✔ Pelo menos uma letra maiúscula</p>
+            <p [class.valid]="passwordLowerCase">✔ Pelo menos uma letra minúscula</p>
+            <p [class.valid]="passwordSpecialChar">✔ Pelo menos um caractere especial</p>
+          </div>
+        </div>
+
+
+
 
         <label for="email">
           <i class="fa fa-envelope"></i> E-mail
@@ -27,7 +47,7 @@
         <button type="submit" class="register-button">Registar-me!</button>
       </form>
       <p class="login-link">
-        Já tem conta? <a href="login">Login</a>
+        Já tem conta? <a routerLink="/login">Login</a>
       </p>
     </div>
     <div class="info-box">

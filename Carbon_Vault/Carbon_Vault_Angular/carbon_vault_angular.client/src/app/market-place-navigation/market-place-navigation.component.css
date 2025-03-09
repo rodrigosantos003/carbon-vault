@@ -1,0 +1,74 @@
+.marketplace-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 2rem;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .marketplace-header .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .marketplace-header .logo img {
+    padding-inline-start: 1.5rem;
+    width: 50px;
+  }
+  
+  .marketplace-header .logo span {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 32px;
+    user-select: none;
+    color: #4EA741;
+  }
+  
+  .marketplace-header .nav {
+    display: flex;
+    align-items: center;
+    gap: 5rem;
+  }
+  
+  .marketplace-header .nav a {
+    display: flex;
+    gap: 0.2rem;
+    text-decoration: none;
+    color: #000000;
+    align-items: center;
+    font-weight: bold;
+    justify-content: center;
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+  }
+  
+  .profile-btn {
+    font-family: 'Poppins';
+    display: block;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    background-color: var(--main-color);
+    border: 0px;
+    color: #fff;
+    font-size: 1.6rem;
+    padding: 0;
+    line-height: 40px;
+    font-weight: bold;
+    text-align: center;
+    justify-items: center;
+  }
+  
+  
+  .logout-btn {
+    background-color: var(--main-color);
+    border: none;
+    color: #fff;
+    padding: 0.7rem 1.6rem;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  

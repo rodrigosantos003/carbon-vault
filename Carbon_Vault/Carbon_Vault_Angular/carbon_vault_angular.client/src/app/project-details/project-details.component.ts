@@ -17,13 +17,16 @@ export class ProjectDetailsComponent {
   projectId: string | null = null;
   projectData: any = null
   quantity: number = 1;
+  carbonCredits: any[] = [];  
+  showMetadata: boolean = false; 
+
   constructor(private route: ActivatedRoute,  private http: HttpClient,     private authService: AuthService ,    private router: Router  ) {}
 
   ngOnInit(): void {
     this.projectId = this.route.snapshot.paramMap.get('id');
     this.http.get(`https://localhost:7117/api/projects/${this.projectId}`).subscribe((data: any) => {
       this.projectData = data;
- 
+      this.carbonCredits = this.projectData.carbonCredits || [];
     }, error => {
       console.error("Erro na requisição:", error);
     });

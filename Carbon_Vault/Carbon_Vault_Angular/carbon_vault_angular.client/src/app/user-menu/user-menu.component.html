@@ -1,59 +1,29 @@
-<body>
-  <nav>
-    <div>
-      <div class="title">
-        <img src="images/CV_Logo.png" class="logo" />
-        <span class="navbar-title">Carbon Vault</span>
-      </div>
-
-      <div class="user-profile">
-        <div class="user-circle">
-          <span class="user-initial">{{ userInitial }}</span>
-        </div>
-        <span class="user-name">{{ userName }}</span>
-      </div>
-
-      <h2 class="menu-title">MENU</h2>
-
-      <ul class="menu">
-        <li>
-          <img src="images/menu/DashboardIcon.png" class="menu-icon" />
-          <a href="/dashboard">Dashboard</a>
-        </li>
-        <li>
-          <div class="active"></div>
-          <img src="images/menu/EmissionsIcon.png" class="menu-icon" />
-          <a href="/user-emissions">As minhas Emissões</a>
-        </li>
-        <li>
-          <img src="images/menu/ProjectsIcon.png" class="menu-icon" />
-          <a href="/dashboard">Os meus Projetos</a>
-        </li>
-        <li>
-          <img src="images/menu/PurchasesIcon.png" class="menu-icon" />
-          <a href="/dashboard">As minhas Compras</a>
-        </li>
-        <li>
-          <img src="images/menu/SalesIcon.png" class="menu-icon" />
-          <a href="/dashboard">As minhas Vendas</a>
-        </li>
-        <li>
-          <img src="images/menu/RelatoriosIcon.png" class="menu-icon" />
-          <a href="/dashboard">Relatórios</a>
-        </li>
-        <li>
-          <img src="images/menu/MarketplaceIcon.png" class="menu-icon" />
-          <a href="/marketplace">Marketplace</a>
-        </li>
-        <li>
-          <img src="images/menu/SettingsIcon.png" class="menu-icon2" />
-          <a href="/dashboard">Definições</a>
-        </li>
-        <li>
-          <img src="images/menu/LogoutIcon.png" class="menu-icon2" />
-          <a href="#" class="logout">Terminar Sessão</a>
-        </li>
-      </ul>
+<nav>
+  <div>
+    <div class="title">
+      <img src="images/CV_Logo.png" class="logo" />
+      <span class="navbar-title">Carbon Vault</span>
     </div>
-  </nav>
-</body>
+
+    <div class="user-profile">
+      <div class="user-circle">
+        <span class="user-initial">{{ userInitial }}</span>
+      </div>
+      <span class="user-name">{{ userName }}</span>
+    </div>
+
+    <h2 class="menu-title">MENU</h2>
+
+    <ul class="menu">
+      <li *ngFor="let item of (userRole === 1 ? adminMenu : userMenu)">
+
+        <img [src]="item.icon" class="menu-icon" />
+        <a [routerLink]="item.route">{{ item.label }}</a>
+      </li>
+      <li (click)="onLogout()">
+        <img src="images/menu/LogoutIcon.png" class="menu-icon2" />
+        <a routerLink="#" class="logout">Terminar Sessão</a>
+      </li>
+    </ul>
+  </div>
+</nav>

@@ -33,11 +33,11 @@ namespace Carbon_Vault.Controllers.API
 
         // GET: api/Accounts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Account>>> GetAccounts(string jwt, int userID)
+        public async Task<ActionResult<IEnumerable<Account>>> GetAccounts([FromHeader] string Authorization, int userID)
         {
-            if (AuthHelper.IsTokenValid(jwt, userID))
+            if (!AuthHelper.IsTokenValid(Authorization, userID))
             {
-                return Unauthorized();
+                return Unauthorized("JWT inválido.");
             }
 
             return await _context.Account.ToListAsync();
@@ -53,7 +53,8 @@ namespace Carbon_Vault.Controllers.API
                                      a.Id,
                                      a.Name,
                                      a.Email,
-                                     Role = a.Role.ToString() // Converte o enum para string
+                                     Role = a.Role.ToString(), // Converte o enum para string
+                                     CreatedAt = a.CreatedAt.ToString(),
                                  })
                                  .ToListAsync();
 
@@ -99,9 +100,9 @@ namespace Carbon_Vault.Controllers.API
         // PUT: api/Accounts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAccount(int id, Account account, string jwt)
+        public async Task<IActionResult> PutAccount(int id, Account account, [FromHeader] string Authorization)
         {
-            if (AuthHelper.IsTokenValid(jwt, id))
+            if (!AuthHelper.IsTokenValid(Authorization, id))
             {
                 return Unauthorized();
             }
@@ -150,16 +151,18 @@ namespace Carbon_Vault.Controllers.API
 
 
             // Send confirmation link via email
-            _emailService.SendEmail(account.Email, "Carbon Vault - Confirmar conta", $"Por favor confirme a sua conta clicando neste link: {confirmationLink}");
+            await _emailService.SendEmail(account.Email, 
+                "Carbon Vault - Confirmar conta", 
+                $"Por favor confirme a sua conta clicando neste link: {confirmationLink}",
+                null);
 
             return CreatedAtAction("GetAccount", new { id = account.Id }, account);
         }
 
-        // DELETE: api/Accounts/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAccount(int id, string jwt)
+        public async Task<IActionResult> DeleteAccount(int id, [FromHeader] string Authorization)
         {
-            if (AuthHelper.IsTokenValid(jwt, id))
+            if (!AuthHelper.IsTokenValid(Authorization, id))
             {
                 return Unauthorized();
             }
@@ -175,6 +178,7 @@ namespace Carbon_Vault.Controllers.API
 
             return NoContent();
         }
+
 
         // POST: api/Accounts/Login
         [HttpPost("Login")]
@@ -198,6 +202,10 @@ namespace Carbon_Vault.Controllers.API
                 return Unauthorized(new { message = "Account is not active." });
             }
 
+            account.LastLogin = DateTime.UtcNow;
+            _context.Account.Update(account);
+            await _context.SaveChangesAsync();
+
             var token = AuthHelper.GerarToken(account.Id);
 
             return Ok(new
@@ -214,7 +222,7 @@ namespace Carbon_Vault.Controllers.API
             var account = await _context.Account.FirstOrDefaultAsync(a => a.Email == email);
 
             if (account == null)
-                return NotFound(new { message = "Account not found." });
+                return NotFound("Account not found.");
 
             account.State = AccountState.Pending;
             _context.Entry(account).State = EntityState.Modified;
@@ -225,12 +233,17 @@ namespace Carbon_Vault.Controllers.API
             var confirmationLink = $"{_frontendBaseUrl}recover-password?token={token}";
 
             // Send confirmation link via email
-            _emailService.SendEmail(account.Email, "Carbon Vault - Recuperar Palavra-Passe", $"Por favor recupere a sua palavra-passe clicando neste link: {confirmationLink}");
+            await _emailService.SendEmail(account.Email, 
+                "Carbon Vault - Recuperar Palavra-Passe", 
+                $"Por favor recupere a sua palavra-passe clicando neste link: {confirmationLink}",
+                null);
 
-            return Ok(new { message = "Password recovery link sent successfully" });
+            return Ok(new {
+                message = "Password recovery link sent successfully"
+            });
         }
 
-        private string GenerateConfirmationToken(int userId)
+        public string GenerateConfirmationToken(int userId)
         {
             var secretKey = _secretKey;
             var payload = $"{userId}:{DateTime.UtcNow}";
@@ -419,6 +432,41 @@ namespace Carbon_Vault.Controllers.API
                     return StatusCode(500, new { message = "An error occurred while validating the NIF.", error = ex.Message });
                 }
             }
+        }
+
+        [HttpGet("UserStatistics")]
+        
+        public async Task<IActionResult> GetUserStatistics(DateTime startDate, DateTime endDate)
+        {
+            if (startDate >= endDate)
+            {
+                return BadRequest("Invalid date range: startDate must be earlier than endDate.");
+            }
+
+           
+            int totalUsers = await _context.Account.CountAsync();
+
+           
+            int usersInPeriod = await _context.Account
+                .Where(a => a.CreatedAt >= startDate && a.CreatedAt <= endDate)
+                .CountAsync();
+
+    
+            double growthPercentage = usersInPeriod > 0
+                ? ((double)(totalUsers - usersInPeriod) / usersInPeriod) * 100
+                : 100;
+
+            return Ok(new
+            {
+                TotalUsers = totalUsers,
+                UsersInPeriod = usersInPeriod,
+                GrowthPercentage = growthPercentage
+            });
+        }
+
+        public async Task<ActionResult<IEnumerable<Account>>> GetAccountsTest()
+        {
+            return await _context.Account.ToListAsync();
         }
     }
 }

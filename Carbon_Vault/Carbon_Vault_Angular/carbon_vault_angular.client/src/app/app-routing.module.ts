@@ -13,21 +13,35 @@ import { UserMenuComponent } from './user-menu/user-menu.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { ProjectDetailsComponent } from './project-details/project-details.component';
 import { UsersManagerComponent } from './users-manager/users-manager.component';
-
+import { UserPaymentComponent } from './user-payment/user-payment.component';
+import { CartComponent } from './cart/cart.component';
+import { AuthGuard } from './auth.guard';
+import { UserPurchasesComponent } from './user-purchases/user-purchases.component';
+import { UserSalesComponent } from './user-sales/user-sales.component';
+import { UserDetailsComponent } from './user-details/user-details.component';
+import { ProjectManagerComponent } from './project-manager/project-manager.component';
+import { PaymentSuccessComponent } from './payment-success/payment-success.component';
 const routes: Routes = [
   { path: 'confirm-account', component: ConfirmAccountComponent },
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
-  { path: 'dashboard', component: DashboardComponent },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'recover-password', component: RecoverPasswordComponent },
-  { path: 'user-emissions', component: UserEmissionsComponent },
+  { path: 'user-emissions', component: UserEmissionsComponent, canActivate: [AuthGuard] },
   { path: 'marketplace', component: MarketplaceComponent },
   { path: 'marketplace/project/:id', component: ProjectDetailsComponent },
   { path: 'user-menu', component: UserMenuComponent },
   { path: 'admin-dashboard', component: AdminDashboardComponent },
-  { path: 'users-manager', component: UsersManagerComponent },
+  { path: 'users-manager', component: UsersManagerComponent, canActivate: [AuthGuard] },
+  { path: 'user-payment', component: UserPaymentComponent },
+  { path: 'cart', component: CartComponent },
+  { path: 'purchases', component: UserPurchasesComponent },
+  { path: 'project-manager', component: ProjectManagerComponent },
+  { path: 'sales', component: UserSalesComponent },
+  { path: 'users-manager/user-details/:id', component: UserDetailsComponent, },
+  { path: 'payment-success', component: PaymentSuccessComponent }
 ];
 
 @NgModule({

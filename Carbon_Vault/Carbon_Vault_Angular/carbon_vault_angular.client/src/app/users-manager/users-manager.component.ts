@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ConfirmAccountComponent } from '../confirm-account/confirm-account.component';
+/*import { ConfirmAccountComponent } from '../confirm-account/confirm-account.component';*/
+import { AlertsService } from '../alerts.service';
+import { AuthService } from '../auth-service.service';  // Importa o AuthService
+import { Router } from '@angular/router';  
+
 
 @Component({
   selector: 'app-users-manager',
@@ -10,15 +14,18 @@ import { ConfirmAccountComponent } from '../confirm-account/confirm-account.comp
   styleUrl: './users-manager.component.css'
 })
 export class UsersManagerComponent {
-  accounts: any[] = [];
+  accounts: Account[] = [];
   private userAccountsURL = 'https://localhost:7117/api/Accounts/users';
   private selectedAccountId: number | null = null;
   private apiURL = 'https://localhost:7117/api/Accounts';
+  private growthPercentageMonthlyURL = 'https://localhost:7117/api/Accounts/UserStatistics';
+  growthData: any = {};
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private alerts: AlertsService, private authService: AuthService, private router: Router ) { }
 
   ngOnInit(): void {
     this.getAccounts();
+    this.getPastMonthGrowthPercentage();
     console.log(this.accounts);
   }
 
@@ -45,33 +52,81 @@ export class UsersManagerComponent {
   }
 
   viewAccount(account: any) {
-    console.log(account.id);
+    this.router.navigate([`users-manager/user-details/${account.id}`]);
   }
 
   getAccounts(): void {
+    this.alerts.enableLoading("A carregar utilizadores..");
     this.http.get<any[]>(this.userAccountsURL).subscribe({
       next: (data) => {
+        console.log(data);
         this.accounts = data; // Armazena os dados da API no array
+        this.alerts.disableLoading();
       },
       error: (error) => {
         console.error('Erro ao encontrar as contas:', error);
+        this.alerts.disableLoading();
       }
     });
   }
+
+  getPastMonthGrowthPercentage(): void {
+    const now = new Date();
+    const firstDayLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const lastDayLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+    
+    const params = { 
+      startDate: firstDayLastMonth.toISOString(), 
+      endDate: lastDayLastMonth.toISOString() 
+    };
+    
+    this.http.get<any>(this.growthPercentageMonthlyURL, { params }).subscribe({
+      next: (data) => {
+        this.growthData = data;
+      },
+      error: (error) => {
+        console.error('Error fetching growth data:', error);
+      }
+    });
+  }
+
 
   deleteAccount() {
     if (this.selectedAccountId !== null) {
       const deleteURL = `${this.apiURL}/${this.selectedAccountId}`;
       console.log("ID da conta a eliminar: " + this.selectedAccountId);
 
-      this.http.delete(deleteURL).subscribe(() => {
-        this.accounts = this.accounts.filter(acc => acc.id !== this.selectedAccountId);
-        this.closePopup();
-      }, error => {
-        console.error("Erro ao eliminar conta:", error);
-      });
+      const jwtToken = localStorage.getItem('token');
+
+      const userIdFromToken = this.authService.getUserId();
+
+      if (userIdFromToken == this.selectedAccountId.toString()) {
+        alert("Não pode excluir a sua conta.");
+        return;
+      }
+
+      if (jwtToken) {
+        this.http.delete(deleteURL, {
+          headers: { 'Authorization': `Bearer ${jwtToken}` }
+        }).subscribe(() => {
+          this.accounts = this.accounts.filter(acc => acc.id !== this.selectedAccountId);
+          this.closePopup();
+        }, error => {
+          console.error("Erro ao eliminar conta:", error);
+        });
+      } else {
+        console.error("JWT não encontrado");
+      }
     } else {
       console.log("ID é null");
     }
   }
+
+}
+interface Account {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+  createdAt: string;
 }

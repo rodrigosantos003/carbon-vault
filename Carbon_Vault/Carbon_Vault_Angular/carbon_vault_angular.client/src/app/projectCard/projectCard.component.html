@@ -4,8 +4,8 @@
     <p>{{ name }}</p>
   </div>
   <div class="card-footer">
-    <input type="number" min="1" [(ngModel)]="quantity" [value]="quantity">
+    <input type="number" min="1" [(ngModel)]="quantity">
     <span>{{ pricePerCredit }}€</span>
-    <button class="buy-btn" [routerLink]="['./project', projectID]">COMPRAR</button>
+    <button class="buy-btn" (click)="addToCart()">COMPRAR</button>
   </div>
 </div>

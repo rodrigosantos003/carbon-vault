@@ -28,9 +28,9 @@
         <p>Número Total de Utilizadores</p>
         <div>
           <img src="images/menu/UserIconB.png" />
-          <h2>50</h2>
+          <h2>{{growthData.totalUsers}}</h2>
         </div>
-        <p>15% Desde o último mês</p>
+        <p>{{growthData.growthPercentage}}% Desde o último mês</p>
       </div>
       <div class="card green">
         <p>Número Total de Utilizadores confirmados</p>
@@ -64,7 +64,7 @@
             <td>{{ account.name }}</td>
             <td>{{ account.email }}</td>
             <td>{{ account.role }}</td>
-            <td>09/01/2025 00:00</td>
+            <td>{{ account.createdAt | date:'dd/MM/yyyy HH:mm:ss' }}</td>
             <td><button class="view-btn" (click)="viewAccount(account)">Ver mais</button></td>
             <td><button class="delete-btn" (click)="openPopup(account.id)">Eliminar</button></td>
           </tr>
@@ -72,4 +72,7 @@
       </table>
     </div>
   </div>
+
+  <app-alerts></app-alerts>
+
 </body>
