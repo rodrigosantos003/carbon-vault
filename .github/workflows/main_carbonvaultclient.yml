@@ -64,5 +64,5 @@ jobs:
         with:
           app-name: 'CarbonVaultClient'
           slot-name: 'Production'
-          package: './node-app'
+          package: ${{ github.workspace }}/Carbon_Vault/Carbon_Vault_Angular/carbon_vault_angular.client/dist/carbon_vault_angular.client/browser
           
