@@ -20,6 +20,7 @@ import { UserPurchasesComponent } from './user-purchases/user-purchases.componen
 import { UserSalesComponent } from './user-sales/user-sales.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { ProjectManagerComponent } from './project-manager/project-manager.component';
+import { PaymentSuccessComponent } from './payment-success/payment-success.component';
 const routes: Routes = [
   { path: 'confirm-account', component: ConfirmAccountComponent },
   { path: '', component: HomeComponent },
@@ -39,7 +40,8 @@ const routes: Routes = [
   { path: 'purchases', component: UserPurchasesComponent },
   { path: 'project-manager', component: ProjectManagerComponent },
   { path: 'sales', component: UserSalesComponent },
-  { path: 'users-manager/user-details/:id', component: UserDetailsComponent,},
+  { path: 'users-manager/user-details/:id', component: UserDetailsComponent, },
+  { path: 'payment-success', component: PaymentSuccessComponent }
 ];
 
 @NgModule({

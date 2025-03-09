@@ -238,7 +238,9 @@ namespace Carbon_Vault.Controllers.API
                 $"Por favor recupere a sua palavra-passe clicando neste link: {confirmationLink}",
                 null);
 
-            return Ok("Password recovery link sent successfully");
+            return Ok(new {
+                message = "Password recovery link sent successfully"
+            });
         }
 
         public string GenerateConfirmationToken(int userId)
