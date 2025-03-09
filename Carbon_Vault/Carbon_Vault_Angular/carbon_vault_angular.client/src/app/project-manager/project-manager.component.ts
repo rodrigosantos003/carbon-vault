@@ -13,9 +13,30 @@ import { environment } from '../../environments/environment';
   styleUrl: './project-manager.component.css'
 })
 export class ProjectManagerComponent {
-  projects: object[] = [];
-  private apiURL = `${environment.apiUrl}/Projects`;
+  projects: any[] = [];
+  private projectsURL = `${environment.apiUrl}/Projects`;
 
+  constructor(private http: HttpClient, private alerts: AlertsService, private authService: AuthService, private router: Router ) { }
+  ngOnInit(): void {
+    this.getProjects();
+    
+    console.log(this.projects);
+  }
+  getProjects(): void {
+    this.alerts.enableLoading("A carregar Projetos..");
+    this.http.get<any[]>(this.projectsURL).subscribe({
+      next: (data) => {
+        console.log(data);
+        this.projects = data; 
+        this.alerts.disableLoading();
+      },
+      error: (error) => {
+        console.error('Erro ao encontrar as contas:', error);
+        this.alerts.disableLoading();
+      }
+    });
+  }
+ 
 }
 
 

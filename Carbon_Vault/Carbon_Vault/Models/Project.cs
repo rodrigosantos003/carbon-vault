@@ -29,5 +29,8 @@
 
         // Relationship with CarbonCredit
         public ICollection<CarbonCredit> CarbonCredits { get; set; } = new List<CarbonCredit>();
+        public DateTime CreatedAt { get; set; }
+
+
     }
 }

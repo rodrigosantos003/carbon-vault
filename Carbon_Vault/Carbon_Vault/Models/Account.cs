@@ -41,5 +41,6 @@ namespace Carbon_Vault.Models
         public AccountType Role { get; set; } = AccountType.User;
 
         public DateTime CreatedAt { get; set; }
+        public DateTime LastLogin { get; set; }
     }
 }

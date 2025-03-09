@@ -68,8 +68,8 @@ namespace Carbon_Vault.Data
                 new Models.Account
                 {
                     Id = 2,
-                    Name = "John Doe",
-                    Email = "user1@carbonvault.com",
+                    Name = "Utilizador Comum",
+                    Email = "user@carbonvault.com",
                     Password = user1_hashed,
                     Nif = "987654321",
                     State = AccountState.Active,
@@ -148,7 +148,7 @@ namespace Carbon_Vault.Data
                    Developer = "Green Solutions",
                    Certification = "ISO 14001",
                    PricePerCredit = 12.50M,
-
+                   CreatedAt = DateTime.UtcNow,
                    Status = ProjectStatus.Confirmed,
                    Benefits = "Access to clean water, improved health conditions.",
                    ProjectUrl = new Uri("https://example.com/project1"),
@@ -169,7 +169,9 @@ namespace Carbon_Vault.Data
                    Status = ProjectStatus.Confirmed,
                    Benefits = "Sustainable energy solutions, reduced carbon emissions.",
                    ProjectUrl = new Uri("https://example.com/project2"),
+                   CreatedAt = DateTime.UtcNow,
                    ImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSS2nF0iroOXheUgLiCRjKPFEyxqBqbjMMiBZxtPvybNA14VsZrFMg2wgudNFFSgdW9S5Q&usqp=CAU"
+               
                }
            );
         }

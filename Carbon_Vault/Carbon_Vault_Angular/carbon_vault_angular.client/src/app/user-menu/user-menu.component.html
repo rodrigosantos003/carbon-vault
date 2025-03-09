@@ -18,11 +18,11 @@
       <li *ngFor="let item of (userRole === 1 ? adminMenu : userMenu)">
 
         <img [src]="item.icon" class="menu-icon" />
-        <a [href]="item.route">{{ item.label }}</a>
+        <a [routerLink]="item.route">{{ item.label }}</a>
       </li>
       <li (click)="onLogout()">
         <img src="images/menu/LogoutIcon.png" class="menu-icon2" />
-        <a href="#" class="logout">Terminar Sessão</a>
+        <a routerLink="#" class="logout">Terminar Sessão</a>
       </li>
     </ul>
   </div>

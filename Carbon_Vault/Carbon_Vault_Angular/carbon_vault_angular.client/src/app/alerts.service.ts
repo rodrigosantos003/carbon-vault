@@ -17,20 +17,20 @@ export class AlertsService {
 
   enableSuccess(message: string) {
     console.log("Success");
-    const loadingButton = document.getElementById('success-popup');
-    if (loadingButton) {
-      const textSpan = loadingButton.querySelector('#success-message');
+    const successPopup = document.getElementById('success-popup');
+    if (successPopup) {
+      const textSpan = successPopup.querySelector('#success-message');
       if (textSpan) {
         textSpan.textContent = message;
       }
-      loadingButton.style.display = 'inline-flex';
+      successPopup.style.display = 'inline-flex';
     }
   }
 
   disableSuccess() {
-    const loadingButton = document.getElementById('success-popup');
-    if (loadingButton) {
-      loadingButton.style.display = 'none';
+    const successPopup = document.getElementById('success-popup');
+    if (successPopup) {
+      successPopup.style.display = 'none';
     }
   }
 
@@ -49,6 +49,26 @@ export class AlertsService {
     const loadingButton = document.getElementById('loading');
     if (loadingButton) {
       loadingButton.style.display = 'none';
+    }
+  }
+
+  
+  enableError(message: string) {
+    console.log("Error");
+    const errorPopup = document.getElementById('error-popup');
+    if (errorPopup) {
+      const textSpan = errorPopup.querySelector('#error-message');
+      if (textSpan) {
+        textSpan.textContent = message;
+      }
+      errorPopup.style.display = 'inline-flex';
+    }
+  }
+
+  disableError() {
+    const errorPopup = document.getElementById('error-popup');
+    if (errorPopup) {
+      errorPopup.style.display = 'none';
     }
   }
 }
