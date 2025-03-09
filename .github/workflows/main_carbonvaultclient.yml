@@ -64,5 +64,5 @@ jobs:
         with:
           app-name: 'CarbonVaultClient'
           slot-name: 'Production'
-          package: node-app
+          package: .
           
