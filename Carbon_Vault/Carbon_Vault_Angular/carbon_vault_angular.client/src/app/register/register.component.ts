@@ -28,7 +28,7 @@ export class RegisterComponent {
     // Inicialização do FormGroup com controlos e validações
     this.registerForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
       email: ['', [Validators.required/*, Validators.email*/]],
       nif: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]]
     });
