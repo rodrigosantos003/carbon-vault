@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../auth-service.service';
+import { environment } from '../../environments/environment';
 
 
 @Component({
@@ -30,7 +31,7 @@ export class UserEmissionsComponent {
   }
 
   ngOnInit() {
-    const url = `https://localhost:7117/api/UserEmissions/${this.userId}`;
+    const url = `${environment.apiUrl}/UserEmissions/${this.userId}`;
 
     this.http.get(url).subscribe(
       (data: any) => {
@@ -59,7 +60,7 @@ export class UserEmissionsComponent {
             UserId: this.userId
           };
 
-          this.http.post('https://localhost:7117/api/UserEmissions', emissionData).subscribe(
+          this.http.post(`${environment.apiUrl}/UserEmissions`, emissionData).subscribe(
             () => {
               console.log('Emissões adicionadas com sucesso');
             },
@@ -91,7 +92,7 @@ export class UserEmissionsComponent {
       UserId: this.userId
     };
 
-    const url = `https://localhost:7117/api/UserEmissions/${this.userId}`;
+    const url = `${environment.apiUrl}/UserEmissions/${this.userId}`;
 
     // Verifica se a emissão já existe
     this.http.get(url).subscribe(

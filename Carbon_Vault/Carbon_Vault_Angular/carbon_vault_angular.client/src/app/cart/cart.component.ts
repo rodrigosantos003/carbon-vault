@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CartService } from '../cart.service';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-cart',
@@ -59,7 +60,7 @@ export class CartComponent implements OnInit {
   //TODO
   checkout() {
     //alert('Checkout não implementado ainda');
-    const apiUrl = 'https://localhost:7117/api/UserPayments';
+    const apiUrl = `${environment.apiUrl}/UserPayments`;
     const paymentData = {
       items: this.cartService.getCart()
     };

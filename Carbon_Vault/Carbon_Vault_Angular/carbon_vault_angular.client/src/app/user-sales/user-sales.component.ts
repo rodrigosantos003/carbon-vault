@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { AlertsService } from '../alerts.service';
 import { AuthService } from '../auth-service.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-user-sales',
@@ -15,7 +16,7 @@ export class UserSalesComponent {
   private salesURL: string;
 
   constructor(private http: HttpClient, private alerts: AlertsService, private authService: AuthService) {
-    this.salesURL = `https://localhost:7117/api/Transactions/type/1/user/${this.authService.getUserId()}`;
+    this.salesURL = `${environment.apiUrl}/Transactions/type/1/user/${this.authService.getUserId()}`;
   }
 
   ngOnInit(): void {

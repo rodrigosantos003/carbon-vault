@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common'; // Import CommonModule
 import { Title } from '@angular/platform-browser';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-confirm-account',
@@ -22,17 +23,17 @@ export class ConfirmAccountComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Extract token from query parameters
+    
     const token = this.route.snapshot.queryParamMap.get('token');
 
     if (token) {
-      // Send confirmation request to the backend
+      
       this.http
-        .get(`https://localhost:7117/api/Accounts/Confirm?token=${token}`)
+        .get(`${environment.apiUrl}/Accounts/Confirm?token=${token}`)
         .subscribe({
           next: () => {
             this.confirmationStatus = 'Conta confirmada com sucesso!';
-            // Redirect after a short delay
+            
             setTimeout(() => this.router.navigate(['/login']), 3000);
           },
           error: () => {
@@ -42,7 +43,7 @@ export class ConfirmAccountComponent implements OnInit {
     } else {
       this.confirmationStatus = 'No token provided in the URL.';
     }
-    this.titleService.setTitle('Carbon Vault | Confirmar conta'); // Set the title here
+    this.titleService.setTitle('Carbon Vault | Confirmar conta');
 
   }
 

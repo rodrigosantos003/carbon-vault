@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-payment-success',
@@ -17,7 +18,7 @@ export class PaymentSuccessComponent {
   }
 
   sendInvoice(checkoutSessionId: string) {
-    const apiUrl = `https://localhost:7117/api/UserPayments/invoice/${checkoutSessionId}`;
+    const apiUrl = `${environment.apiUrl}/UserPayments/invoice/${checkoutSessionId}`;
     this.http.get(apiUrl).subscribe({
       next: (data) => {
         console.log("Fatura enviada com sucesso: ", data);

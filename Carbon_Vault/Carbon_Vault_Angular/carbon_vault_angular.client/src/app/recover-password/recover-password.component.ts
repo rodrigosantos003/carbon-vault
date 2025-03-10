@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-recover-password',
@@ -69,7 +70,7 @@ export class RecoverPasswordComponent {
   // Aramzenar nova palavra-passe
   resetPassword(password: string, passwordConfirmation: string) {
     const token = this.route.snapshot.queryParamMap.get('token');
-    const apiUrl = `https://localhost:7117/api/Accounts/ResetPassword?token=${token}`;
+    const apiUrl = `${environment.apiUrl}/Accounts/ResetPassword?token=${token}`;
 
     this.http.post(apiUrl, { "newPassword": password, "passwordConfirmation": passwordConfirmation }).subscribe({
       next: (response) => {

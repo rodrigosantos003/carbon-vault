@@ -3,6 +3,8 @@ import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth-service.service';
+import { environment } from '../../environments/environment';
+
 @Component({
   selector: 'app-market-place-navigation',
   standalone: false,
@@ -25,7 +27,7 @@ export class MarketPlaceNavigationComponent {
     this.userId = this.authService.getUserId();
   }
   ngOnInit(): void {
-    const url = `https://localhost:7117/api/accounts/${this.userId}`;
+    const url = `${environment.apiUrl}/accounts/${this.userId}`;
 
     this.http.get(url).subscribe(
       (data: any) => {

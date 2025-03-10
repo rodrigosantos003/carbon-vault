@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-user-payment',
@@ -10,7 +11,7 @@ import { Component } from '@angular/core';
 })
 
 export class UserPaymentComponent {
-  private apiUrl = 'https://localhost:7117/api/UserPayments';
+  private apiUrl = `${environment.apiUrl}/UserPayments`;
 
   constructor(private http: HttpClient) { }
 

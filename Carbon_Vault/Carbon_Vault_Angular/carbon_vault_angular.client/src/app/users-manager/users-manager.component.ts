@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { AlertsService } from '../alerts.service';
 import { AuthService } from '../auth-service.service';  // Importa o AuthService
 import { Router } from '@angular/router';  
+import { environment } from '../../environments/environment';
 
 
 @Component({
@@ -15,10 +16,10 @@ import { Router } from '@angular/router';
 })
 export class UsersManagerComponent {
   accounts: Account[] = [];
-  private userAccountsURL = 'https://localhost:7117/api/Accounts/users';
+  private userAccountsURL = `${environment.apiUrl}/Accounts/users`;
   private selectedAccountId: number | null = null;
-  private apiURL = 'https://localhost:7117/api/Accounts';
-  private growthPercentageMonthlyURL = 'https://localhost:7117/api/Accounts/UserStatistics';
+  private apiURL = `${environment.apiUrl}/Accounts`;
+  private growthPercentageMonthlyURL = `${environment.apiUrl}/Accounts/UserStatistics`;
   growthData: any = {};
 
   constructor(private http: HttpClient, private alerts: AlertsService, private authService: AuthService, private router: Router ) { }
