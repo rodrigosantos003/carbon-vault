@@ -1,0 +1,80 @@
+<body>
+    <app-user-menu></app-user-menu>
+  
+    <main class="transaction-container">
+
+        <span class="transaction-title"> Detalhes da {{ transactionType }} - #{{ transactionId }} </span>
+
+        <div style="display: flex; flex-direction: row;">
+            <div class="transaction-details">
+                <span class="transaction-header"> Detalhes </span>
+
+                <span class="transaction-label"> {{ transactionType === 'compra' ? 'Fornecedor' : 'Comprador' }} </span>
+
+                <span class="transaction-value"> 
+                    <img src="../../../images/user.svg">  
+                    {{ transactionUser }} 
+                </span>
+
+                <span class="transaction-label"> Projeto </span>
+
+                <span class="transaction-value"> 
+                    <img src="../../../images/project.svg">  
+                    {{ transactionProject }} 
+                </span>
+            </div>
+
+            <div class="transaction-tables">
+                <span class="transaction-header"> Faturação 
+                    <button class="download-button"> Descarregar </button> 
+                </span>
+
+                <div class="table">
+                    <span class="transaction-label"> Últimas Compras </span>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Tipo</th>
+                          <th>Data</th>
+                          <th>Quantidade</th>
+                          <th>Total</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>{{ transactionId }}</td>
+                          <td>{{ transactionDate }}</td>
+                          <td>{{ transactionQuantity }}</td>
+                          <td>{{ transactionTotal }}€</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                <span class="transaction-header" style="margin-top: 100px;"> Transações </span>
+
+                <div class="table">
+                    <span class="transaction-label"> Transação </span>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>ID</th>
+                          <th>Data</th>
+                          <th>Estado</th>
+                          <th>Processador</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>{{ invoiceId }}</td>
+                          <td>{{ invoiceDate }}</td>
+                          <td>{{ invoiceState }}</td>
+                          <td>{{ invoiceProcessor }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+            </div>
+        </div>
+    </main>
+</body>
