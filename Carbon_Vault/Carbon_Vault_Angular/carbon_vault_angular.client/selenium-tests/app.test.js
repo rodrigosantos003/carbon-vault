@@ -12,16 +12,16 @@ import { testRegister } from './tests/register.js'
     await testRegister(driver, "selenium user", "Selenium@123", "testing@example.com", "987654321");
 
     // Fazer login e obter o token
-    // let token = await testLogin(driver, 'user1@carbonvault.com', 'User@111');
+    let token = await testLogin(driver, 'user@carbonvault.com', 'User@111');
 
     // // Definir manualmente o token no localStorage
-    // await driver.executeScript(`localStorage.setItem('token', '${token}');`);
+    await driver.executeScript(`localStorage.setItem('token', '${token}');`);
 
     // // Recarregar a página para garantir que o token é aplicado
-    // await driver.navigate().refresh();
+    await driver.navigate().refresh();
 
     // // Testar form de emissões
-    // await testEmissionsForm(driver);
+    await testEmissionsForm(driver);
 
     console.log("Testes concluído com sucesso!");
 
