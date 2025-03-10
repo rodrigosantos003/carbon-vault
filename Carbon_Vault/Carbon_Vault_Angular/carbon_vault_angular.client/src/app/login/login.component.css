@@ -27,35 +27,35 @@ body {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   padding: 20px;
   width: 40%;
-  height: 50%;
+  height: 70%;
   text-align: center;
 }
 
 .logo-title {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-  .login-box h1 {
-    font-size: 1.8rem;
-    margin-bottom: 20px;
-  }
+.login-box h1 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+}
 
-  .login-box label {
-    display: block;
-    font-size: 20px;
-    margin-top: 10px;
-    text-align: left;
-  }
+.login-box label {
+  display: block;
+  font-size: 20px;
+  margin-top: 10px;
+  text-align: left;
+}
 
-  .login-box input {
-    width: 95%;
-    padding: 10px;
-    margin-top: 5px;
-    border: none;
-    border-bottom: 2px solid black;
-  }
+.login-box input {
+  width: 95%;
+  padding: 10px;
+  margin-top: 5px;
+  border: none;
+  border-bottom: 2px solid black;
+}
 
 .forgot-password {
   display: block;
@@ -67,9 +67,9 @@ body {
   text-decoration: none;
 }
 
-  .forgot-password:hover {
-    text-decoration: underline;
-  }
+.forgot-password:hover {
+  text-decoration: underline;
+}
 
 .login-button {
   width: 100%;
@@ -83,9 +83,9 @@ body {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-  .login-button:hover {
-    background-color: #45a049;
-  }
+.login-button:hover {
+  background-color: #45a049;
+}
 
 .signup {
   display: flex;
@@ -95,14 +95,14 @@ body {
   color: black;
 }
 
-  .signup a {
-    color: var(--main-color);
-    text-decoration: none;
-  }
+.signup a {
+  color: var(--main-color);
+  text-decoration: none;
+}
 
-    .signup a:hover {
-      text-decoration: underline;
-    }
+.signup a:hover {
+  text-decoration: underline;
+}
 
 /* Caixa de informações */
 .info-box {
@@ -110,15 +110,15 @@ body {
   text-align: center;
 }
 
-  .info-box h2 {
-    font-size: 40px;
-    margin-bottom: 20px;
-  }
+.info-box h2 {
+  font-size: 40px;
+  margin-bottom: 20px;
+}
 
-  .info-box p {
-    font-size: 20px;
-    line-height: 1.5;
-  }
+.info-box p {
+  font-size: 20px;
+  line-height: 1.5;
+}
 
 .info-box span {
   background-color: rgba(238, 238, 238, 0.4);
@@ -129,4 +129,3 @@ body {
   width: 150px;
   margin-bottom: 20px;
 }
-

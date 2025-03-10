@@ -11,7 +11,7 @@ using Carbon_Vault.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<Carbon_VaultContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Carbon_VaultContext") ?? throw new InvalidOperationException("Connection string 'Carbon_VaultContext' not found.")));
+    options.UseSqlServer(Environment.GetEnvironmentVariable("DB_CONNECTION") ?? throw new InvalidOperationException("Connection string 'Carbon_VaultContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

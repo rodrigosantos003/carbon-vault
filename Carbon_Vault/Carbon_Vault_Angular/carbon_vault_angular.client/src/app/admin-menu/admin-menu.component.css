@@ -23,7 +23,8 @@ nav {
 }
 
 .logo {
-  width: 40px; /* Tamanho do ícone */
+  width: 40px;
+  /* Tamanho do ícone */
   height: 40px;
   margin-right: 8px;
 }
@@ -86,39 +87,41 @@ nav {
   list-style: none;
 }
 
-  .menu li {
-    margin-bottom: 15px;
-  }
+.menu li {
+  margin-bottom: 15px;
+}
 
-    .menu li a {
-      text-decoration: none;
-      color: var(--text-color);
-      font-size: 16px;
-      font-weight: 600;
-    }
+.menu li a {
+  text-decoration: none;
+  color: var(--text-color);
+  font-size: 16px;
+  font-weight: 600;
+}
 
-      .menu li a:hover {
-        text-decoration: underline;
-      }
+.menu li a:hover {
+  text-decoration: underline;
+}
 
-  .menu li {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
+.menu li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
 .menu-icon {
-  width: 22px; /* Tamanho do ícone */
+  width: 22px;
+  /* Tamanho do ícone */
   height: 22px;
 }
 
 .menu-icon2 {
-  width: 18px !important; /* Tamanho do ícone */
+  width: 18px !important;
+  /* Tamanho do ícone */
   height: 18px !important;
 }
 
 .active {
-  position: fixed;
+  position: absolute;
   left: 50px;
   width: 220px;
   height: 35px;
@@ -131,4 +134,5 @@ nav {
 .logout {
   color: #e53935 !important;
   font-weight: bold;
+  cursor: pointer;
 }
