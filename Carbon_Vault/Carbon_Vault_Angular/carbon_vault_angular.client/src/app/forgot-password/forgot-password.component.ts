@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-forgot-password',
@@ -32,7 +33,7 @@ export class ForgotPasswordComponent {
   }
 
   sendClientEmail(email: string) {
-    const apiUrl = `https://localhost:7117/api/Accounts/ForgotPassword?email=${email}`;
+    const apiUrl = `${environment.apiUrl}/Accounts/ForgotPassword?email=${email}`;
 
     this.http.get(apiUrl).subscribe({
       next: (response) => {

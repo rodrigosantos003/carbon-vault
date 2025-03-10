@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { AlertsService } from '../alerts.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-register',
@@ -50,21 +51,22 @@ export class RegisterComponent {
     //   if (!isValid) {
     //     return;
     //   }
-
-    //   this.http.post("https://localhost:7117/api/Accounts", formData).subscribe(
-    //     (response: any) => {
-    //       this.alerts.disableLoading();
-    //       console.log('Registo bem-sucedido!', response);
-    //       this.alerts.enableSuccess("Registro realizado com sucesso");
-    //       window.location.href = "/login";
-    //     },
-    //     (error) => {
-    //       this.alerts.disableLoading();
-    //       console.error('Erro no registo!', error);
-    //       this.alerts.enableError("Erro no registo. Verifique os dados e tente novamente.");
-    //     }
-    //   );
     // });
+
+    this.http.post(`${environment.apiUrl}/Accounts`, formData).subscribe({
+      next: (response) => {
+        this.alerts.disableLoading();
+        console.log('Registo bem-sucedido!', response);
+        this.alerts.enableSuccess("Registro realizado com sucesso");
+        window.location.href = "/login";
+      },
+      error: (error) => {
+        this.alerts.disableLoading();
+        console.error('Erro no registo!', error);
+        this.alerts.enableError("Erro no registo. Verifique os dados e tente novamente.");
+      }
+    }
+    );
   }
 
   showFormErrors() {
@@ -131,28 +133,28 @@ export class RegisterComponent {
     this.passwordSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
   }
   async validateNif(nif: string): Promise<boolean> {
-    const apiUrl = `https://localhost:7117/api/Accounts/ValidateNIF?nif=${nif}`;
+    const apiUrl = `${environment.apiUrl}/Accounts/ValidateNIF?nif=${nif}`;
     try {
       const response: any = await this.http.get(apiUrl).toPromise();
       console.log('Resposta da API:', response);
-  
+
       if (response.result === 'error') {
         this.isNifValid = false;
         this.nifErrorMessage = response.message || 'Erro ao validar o NIF.';
         this.alerts.enableError("NIF inválido");
         return false;
       }
-  
+
       this.isNifValid = response.valid;
       this.nifErrorMessage = this.isNifValid ? null : 'NIF inválido.';
-  
+
       if (!this.isNifValid) {
         this.alerts.enableError("NIF inválido");
         return false;
       }
-  
+
       return true; // Retorna true quando o NIF é válido
-  
+
     } catch (error) {
       console.error('Erro ao chamar a API:', error);
       this.isNifValid = false;
@@ -161,7 +163,7 @@ export class RegisterComponent {
       return false;
     }
   }
-  
+
 }
 
 

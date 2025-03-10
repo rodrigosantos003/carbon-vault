@@ -3,6 +3,7 @@
 import { Component, Input } from '@angular/core';
 import { AuthService } from '../auth-service.service';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-user-menu',
@@ -47,7 +48,7 @@ export class UserMenuComponent {
   }
 
   ngOnInit() {
-    const url = `https://localhost:7117/api/accounts/${this.userId}`;
+    const url = `${environment.apiUrl}/accounts/${this.userId}`;
 
     this.http.get(url).subscribe(
       (data: any) => {

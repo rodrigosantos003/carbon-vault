@@ -5,24 +5,16 @@
       <h1>Registo</h1>
       <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
         <label for="username">
-          <i class="fa fa-user"></i> Username
+          <i class="fa fa-user"></i> Nome
         </label>
-        <input id="username" type="text" placeholder="Escolha um userName" formControlName="name" required />
+        <input id="username" type="text" placeholder="Introduza o seu nome" formControlName="name" required />
 
         <label for="password">
           <i class="fa fa-lock"></i> Password
         </label>
         <div class="password-container">
-          <input
-            id="password"
-            type="password"
-            placeholder="Escolha uma Password"
-            formControlName="password"
-            required
-            (input)="updatePasswordStrength()"
-            (focus)="showTooltip = true"
-            (blur)="showTooltip = false"
-          />
+          <input id="password" type="password" placeholder="Escolha uma Password" formControlName="password" required
+            (input)="updatePasswordStrength()" (focus)="showTooltip = true" (blur)="showTooltip = false" />
           <div class="tooltip" *ngIf="showTooltip">
             <p [class.valid]="passwordLength">✔ Mínimo de 8 caracteres</p>
             <p [class.valid]="passwordUpperCase">✔ Pelo menos uma letra maiúscula</p>
@@ -42,7 +34,8 @@
         <label for="nif">
           <i class="fa fa-id-card"></i> Número de Identificação Fiscal
         </label>
-        <input id="nif" type="text" placeholder="Indique o número de identificação fiscal" formControlName="nif" required />
+        <input id="nif" type="text" placeholder="Indique o número de identificação fiscal" formControlName="nif"
+          required />
 
         <button type="submit" class="register-button">Registar-me!</button>
       </form>

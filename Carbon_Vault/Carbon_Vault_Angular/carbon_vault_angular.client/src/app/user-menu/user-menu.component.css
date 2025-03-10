@@ -22,7 +22,8 @@ nav {
 }
 
 .logo {
-  width: 40px; /* Tamanho do ícone */
+  width: 40px;
+  /* Tamanho do ícone */
   height: 40px;
   margin-right: 8px;
 }
@@ -85,34 +86,36 @@ nav {
   list-style: none;
 }
 
-  .menu li {
-    margin-bottom: 15px;
-  }
+.menu li {
+  margin-bottom: 15px;
+}
 
-    .menu li a {
-      text-decoration: none;
-      color: var(--text-color);
-      font-size: 16px;
-      font-weight: 600;
-    }
+.menu li a {
+  text-decoration: none;
+  color: var(--text-color);
+  font-size: 16px;
+  font-weight: 600;
+}
 
-      .menu li a:hover {
-        text-decoration: underline;
-      }
+.menu li a:hover {
+  text-decoration: underline;
+}
 
-  .menu li {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
+.menu li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
 .menu-icon {
-  width: 22px; /* Tamanho do ícone */
+  width: 22px;
+  /* Tamanho do ícone */
   height: 22px;
 }
 
 .menu-icon2 {
-  width: 18px !important; /* Tamanho do ícone */
+  width: 18px !important;
+  /* Tamanho do ícone */
   height: 18px !important;
 }
 
@@ -124,12 +127,14 @@ nav {
   border-radius: 5px;
   background-color: var(--main-color);
   opacity: 40%;
-  display: none; /**/
+  display: none;
+  /**/
 }
 
 .logout {
   color: #e53935 !important;
   font-weight: bold;
+  cursor: pointer;
 }
 
 
@@ -141,27 +146,28 @@ nav {
   right: 40px;
 }
 
-  .notifications .icon {
-    position: relative;
-    cursor: pointer;
-  }
+.notifications .icon {
+  position: relative;
+  cursor: pointer;
+}
 
-    .notifications .icon span {
-      position: absolute;
-      top: -5px;
-      right: -5px;
-      background: #e53935;
-      color: white;
-      font-size: 12px;
-      border-radius: 50%;
-      width: 20px;
-      height: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+.notifications .icon span {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #e53935;
+  color: white;
+  font-size: 12px;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .noti-icon {
-  width: 35px; /* Tamanho do ícone */
+  width: 35px;
+  /* Tamanho do ícone */
   height: 35px;
 }

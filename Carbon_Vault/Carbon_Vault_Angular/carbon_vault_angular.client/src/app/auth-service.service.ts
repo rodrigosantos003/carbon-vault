@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private jwtHelper: JwtHelperService) {}
+  constructor(private jwtHelper: JwtHelperService, private router: Router) { }
 
-   // Check if the user is authenticated
-   isAuthenticated(): boolean {
+  // Check if the user is authenticated
+  isAuthenticated(): boolean {
     const token = localStorage.getItem('token');
     return token !== null && !this.jwtHelper.isTokenExpired(token);
   }
@@ -16,6 +17,7 @@ export class AuthService {
   // Log out by removing the token
   logout(): void {
     localStorage.removeItem('token');
+    this.router.navigate(['/login']);
   }
 
   // Get the user's ID
