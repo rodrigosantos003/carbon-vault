@@ -140,9 +140,9 @@ namespace Carbon_Vault.Controllers.API
                 State = t.State.ToString(),
                 t.Type,
                 Project = _context.Projects.Where(p => p.Id == t.ProjectId).Select(p => p.Name).FirstOrDefault(),
-                t.UserId,
-                t.Date
-            }).Where(t => t.Type == type && t.UserId == userID)
+                t.Date,
+                t.BuyerId, t.SellerId
+            }).Where(t => t.Type == type && (t.BuyerId == userID || t.SellerId == userID))
             .ToListAsync();
 
             if (!transactions.Any())

@@ -161,9 +161,9 @@ namespace Carbon_Vault.Controllers.API
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAccount(int id, [FromHeader] string Authorization)
+        public async Task<IActionResult> DeleteAccount(int id, [FromHeader] string Authorization, int userID)
         {
-            if (!AuthHelper.IsTokenValid(Authorization, id))
+            if (!AuthHelper.IsTokenValid(Authorization, userID))
             {
                 return Unauthorized();
             }

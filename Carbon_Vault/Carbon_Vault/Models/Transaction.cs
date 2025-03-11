@@ -23,8 +23,8 @@ namespace Carbon_Vault.Models
         [Required]
         public TransactionType Type { get; set; }
 
-        [Required]
-        public int UserId { get; set; }
+        public int BuyerId { get; set; }
+        public int SellerId { get; set; }
 
         [Required]
         public int ProjectId { get; set; }

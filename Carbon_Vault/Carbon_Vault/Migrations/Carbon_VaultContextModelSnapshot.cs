@@ -68,60 +68,60 @@ namespace Carbon_Vault.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 3, 8, 16, 3, 16, 449, DateTimeKind.Utc).AddTicks(6619),
+                            CreatedAt = new DateTime(2025, 3, 11, 12, 58, 41, 394, DateTimeKind.Utc).AddTicks(744),
                             Email = "admin@carbonvault.com",
                             LastLogin = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Administrador",
                             Nif = "123456789",
-                            Password = "7wuF8hhP0Ag+pqJi/mizJacALJdEiNDqkDzCZTIaJYLsLdRo86fKYDH8EKur0TDW",
+                            Password = "6oVUGR4aZlo0abvox57u7iuFZ45nwLDLZUK92UbTAGEB18Vmd7FB1+0jcsxmlaef",
                             Role = 1,
                             State = 1
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 3, 8, 16, 3, 16, 449, DateTimeKind.Utc).AddTicks(6623),
+                            CreatedAt = new DateTime(2025, 3, 11, 12, 58, 41, 394, DateTimeKind.Utc).AddTicks(749),
                             Email = "user@carbonvault.com",
                             LastLogin = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Utilizador Comum",
                             Nif = "987654321",
-                            Password = "QGuneNvXtyRJ8uLBP1Cja/juaD7gkxfY7eYxu/f5aOyjVUw5qxt0tq2+b9TQ2RcC",
+                            Password = "euHqnk9Kz82JP9p7MCmx1Pk68Y6T2HsrUSgEF1II1QAwB113AY0gjOEUR7WoFy8N",
                             Role = 0,
                             State = 1
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 3, 8, 16, 3, 16, 449, DateTimeKind.Utc).AddTicks(6624),
+                            CreatedAt = new DateTime(2025, 3, 11, 12, 58, 41, 394, DateTimeKind.Utc).AddTicks(750),
                             Email = "support@carbonvault.com",
                             LastLogin = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "John Smith",
                             Nif = "333333333",
-                            Password = "PvJL/uYtlII8tbLnq5LJuwsNo1LBoDykYsGK+XfGhxNhuFptnb4+7Ztgu+2RFMI6",
+                            Password = "4bdtFy1vLsroD8x3WgWxAAJxzJBqikZNwW7AhudC2wvtpytfRq2migjXcMac2LwD",
                             Role = 3,
                             State = 1
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2025, 3, 8, 16, 3, 16, 449, DateTimeKind.Utc).AddTicks(6626),
+                            CreatedAt = new DateTime(2025, 3, 11, 12, 58, 41, 394, DateTimeKind.Utc).AddTicks(751),
                             Email = "user2@carbonvault.com",
                             LastLogin = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "My User",
                             Nif = "444444444",
-                            Password = "54n604bZtAkShyCpyWoVZ1aEYMPC+CfvLXPQvDuKOZsJpY/AHuAS94Ynq0ZoqMVD",
+                            Password = "rDMq32xQ6yDaBkcKvh5RcSYD3I1fok/0jX40E/znb4qGi9QwrjmY3t0xXVoRHFtb",
                             Role = 0,
                             State = 1
                         },
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2025, 3, 8, 16, 3, 16, 449, DateTimeKind.Utc).AddTicks(6627),
+                            CreatedAt = new DateTime(2025, 3, 11, 12, 58, 41, 394, DateTimeKind.Utc).AddTicks(752),
                             Email = "user3@carbonvault.com",
                             LastLogin = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Jane Doe",
                             Nif = "555555555",
-                            Password = "NVj63MrQZ8kL4ULuk2MGxj+sVXJx43QlBeOVr6ueRSuKW5lhGsv/2MiOvTEYhT8a",
+                            Password = "+OA8QeAHWhsIaJJn1pUu4+6rnSSErr10sorfYClZF+WqTiF2KubwQ7EeH4w1lbhH",
                             Role = 0,
                             State = 1
                         });
@@ -242,16 +242,16 @@ namespace Carbon_Vault.Migrations
                             Benefits = "Access to clean water, improved health conditions.",
                             CarbonCreditsGenerated = 1000.0,
                             Certification = "ISO 14001",
-                            CreatedAt = new DateTime(2025, 3, 8, 16, 3, 16, 449, DateTimeKind.Utc).AddTicks(7051),
+                            CreatedAt = new DateTime(2025, 3, 11, 12, 58, 41, 394, DateTimeKind.Utc).AddTicks(1610),
                             Description = "Providing clean water access to rural communities.",
                             Developer = "Green Solutions",
-                            EndDate = new DateTime(2026, 3, 8, 16, 3, 16, 449, DateTimeKind.Local).AddTicks(7046),
+                            EndDate = new DateTime(2026, 3, 11, 12, 58, 41, 394, DateTimeKind.Local).AddTicks(1604),
                             ImageUrl = "https://api.hub.jhu.edu/factory/sites/default/files/styles/hub_large/public/drink-more-water-hub.jpg",
                             Location = "Africa",
                             Name = "Water Access Initiative",
                             PricePerCredit = 12.50m,
                             ProjectUrl = "https://example.com/project1",
-                            StartDate = new DateTime(2024, 12, 8, 16, 3, 16, 449, DateTimeKind.Local).AddTicks(6996),
+                            StartDate = new DateTime(2024, 12, 11, 12, 58, 41, 394, DateTimeKind.Local).AddTicks(1535),
                             Status = 0
                         },
                         new
@@ -260,16 +260,16 @@ namespace Carbon_Vault.Migrations
                             Benefits = "Sustainable energy solutions, reduced carbon emissions.",
                             CarbonCreditsGenerated = 2000.0,
                             Certification = "LEED Gold",
-                            CreatedAt = new DateTime(2025, 3, 8, 16, 3, 16, 449, DateTimeKind.Utc).AddTicks(7146),
+                            CreatedAt = new DateTime(2025, 3, 11, 12, 58, 41, 394, DateTimeKind.Utc).AddTicks(1752),
                             Description = "Solar energy projects to provide electricity to underserved areas.",
                             Developer = "Renewable Power Inc.",
-                            EndDate = new DateTime(2027, 3, 8, 16, 3, 16, 449, DateTimeKind.Local).AddTicks(7137),
+                            EndDate = new DateTime(2027, 3, 11, 12, 58, 41, 394, DateTimeKind.Local).AddTicks(1742),
                             ImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSS2nF0iroOXheUgLiCRjKPFEyxqBqbjMMiBZxtPvybNA14VsZrFMg2wgudNFFSgdW9S5Q&usqp=CAU",
                             Location = "South America",
                             Name = "Solar Energy for All",
                             PricePerCredit = 15.75m,
                             ProjectUrl = "https://example.com/project2",
-                            StartDate = new DateTime(2025, 2, 8, 16, 3, 16, 449, DateTimeKind.Local).AddTicks(7134),
+                            StartDate = new DateTime(2025, 2, 11, 12, 58, 41, 394, DateTimeKind.Local).AddTicks(1740),
                             Status = 0
                         });
                 });
@@ -315,6 +315,9 @@ namespace Carbon_Vault.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("BuyerId")
+                        .HasColumnType("int");
+
                     b.Property<string>("CheckoutSession")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -333,13 +336,13 @@ namespace Carbon_Vault.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<int>("SellerId")
+                        .HasColumnType("int");
+
                     b.Property<int>("State")
                         .HasColumnType("int");
 
                     b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -350,26 +353,28 @@ namespace Carbon_Vault.Migrations
                         new
                         {
                             Id = 1,
+                            BuyerId = 2,
                             CheckoutSession = "cs_123456789",
                             Date = "2025-03-05",
                             PaymentMethod = "card",
                             ProjectId = 1,
                             Quantity = 1,
+                            SellerId = 3,
                             State = 0,
-                            Type = 0,
-                            UserId = 2
+                            Type = 0
                         },
                         new
                         {
                             Id = 2,
+                            BuyerId = 5,
                             CheckoutSession = "cs_987456321",
                             Date = "2025-03-05",
                             PaymentMethod = "card",
                             ProjectId = 2,
                             Quantity = 1,
+                            SellerId = 2,
                             State = 0,
-                            Type = 1,
-                            UserId = 2
+                            Type = 1
                         });
                 });
 

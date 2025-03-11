@@ -183,7 +183,8 @@ namespace Carbon_Vault.Data
                 {
                     Id = 1,
                     Type = TransactionType.Purchase,
-                    UserId = 2,
+                    BuyerId = 2,
+                    SellerId = 3,
                     ProjectId = 1,
                     Quantity = 1,
                     Date = "2025-03-05",
@@ -195,7 +196,8 @@ namespace Carbon_Vault.Data
                 {
                     Id = 2,
                     Type = TransactionType.Sale,
-                    UserId = 2,
+                    SellerId = 2,
+                    BuyerId = 5,
                     ProjectId = 2,
                     Quantity = 1,
                     Date = "2025-03-05",
