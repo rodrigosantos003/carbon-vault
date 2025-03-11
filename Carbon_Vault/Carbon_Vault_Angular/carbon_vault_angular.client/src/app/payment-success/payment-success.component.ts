@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { environment } from '../../environments/environment';
+import { CartService } from '../cart.service';
 
 @Component({
   selector: 'app-payment-success',
@@ -10,9 +11,10 @@ import { environment } from '../../environments/environment';
   styleUrl: './payment-success.component.css'
 })
 export class PaymentSuccessComponent {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private cartService: CartService) { }
 
   ngOnInit() {
+    this.cartService.clearCart();
     const checkoutSession = sessionStorage.getItem("checkoutSession");
     if (checkoutSession) this.sendInvoice(checkoutSession);
   }
