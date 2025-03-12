@@ -1,12 +1,12 @@
 <header class="marketplace-header">
-  <div class="logo">
+  <div (click)="navigateToLanding()" class="logo">
     <img src="/images/CV_Logo.png" alt="Carbon Vault Logo">
     <span>Carbon Vault</span>
   </div>
   <nav class="nav">
-    <a *ngIf="isUserLoggedIn" [routerLink]="'/dashboard'">Projetos</a>
-    <a *ngIf="isUserLoggedIn" [routerLink]="'/cart'"> <img src="/images/cart.svg" /> Carrinho </a>
-    <button *ngIf="isUserLoggedIn" class="profile-btn">{{ userInitial }}</button>
+    <a *ngIf="isUserLoggedIn" [routerLink]="'/marketplace'" class="navigationItem" >MarketPlace</a>
+    <a *ngIf="isUserLoggedIn" [routerLink]="'/cart'" class="navigationItem"> <img src="/images/cart.svg" /> Carrinho </a>
+    <button *ngIf="isUserLoggedIn" class="profile-btn" (click)="navigateToDashboard()" >{{ userInitial }}</button>
     <button #loginBtn class="logout-btn">Terminar sessão</button>
   </nav>
   <link rel="preconnect" routerLink="https://fonts.googleapis.com">

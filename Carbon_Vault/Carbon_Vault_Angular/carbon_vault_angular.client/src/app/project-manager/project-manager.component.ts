@@ -36,6 +36,10 @@ export class ProjectManagerComponent {
       }
     });
   }
+  getProjectStatus (state: number) :string{
+  const states = ["Confirmado", "Em Aprovação", "Rejeitado"];
+    return states[state] ?? "Unknown"
+  }
  
 }
 

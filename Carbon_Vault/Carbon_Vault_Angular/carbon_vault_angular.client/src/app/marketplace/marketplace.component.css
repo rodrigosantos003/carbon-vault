@@ -5,7 +5,9 @@
   width: 70%;
   margin: 0 auto;
 }
-
+::placeholder{
+  color: #ddd;
+}
 .controls {
   display: flex;
   justify-content: flex-start;

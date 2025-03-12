@@ -1,5 +1,5 @@
 <body>
-    <app-admin-menu></app-admin-menu>
+    <app-user-menu></app-user-menu>
   
     <!-- Confirm Delet Popup -->
     <div class="modal-overlay" id="modalOverlay">
@@ -54,7 +54,6 @@
               <th>Preço (€ / tCO2e)</th>
               <th>Data de criação</th>
               <th>Estado</th>
-              <th>Editar</th>
               <th>Alterar Estado</th>
               <th>Eliminar</th>
             </tr>
@@ -63,10 +62,11 @@
             <tr *ngFor="let projet of projects">
               <td>{{ projet.id }}</td>
               <td>{{ projet.name }}</td>
-              <td>a</td>
-              <td>b</td>
-              <td>c</td>
-              <td><button class="view-btn" >Ver mais</button></td>
+              <td>{{projet.pricePerCredit}}</td>
+              <td>{{projet.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}</td>
+              <td>{{getProjectStatus(projet.status)}}</td>
+               
+              <td><button class="view-btn" >Alterar</button></td>
               <td><button class="delete-btn" >Eliminar</button></td>
             </tr>
           </tbody>
