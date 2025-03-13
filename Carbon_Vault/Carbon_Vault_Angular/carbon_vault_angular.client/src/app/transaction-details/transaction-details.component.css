@@ -39,8 +39,11 @@ body {
 .transaction-details, .transaction-tables{
     display: flex;
     flex-direction: column;
-    width: 100%;
     margin-top: 40px;
+}
+
+.transaction-tables{
+  margin-left: auto;
 }
 
 .transaction-label{
@@ -96,10 +99,11 @@ body {
   table td {
     text-align: center;
     padding: 10px;
+    padding-inline: 25px;
   }
 
-  th{
-    font-weight: normal; 
+  th {
+    font-weight: 600;
   }
 
   .download-button{

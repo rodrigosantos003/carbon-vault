@@ -16,9 +16,6 @@ export class TransactionDetailsComponent {
   @Input() transactionDate: string = '9/10/2025 18:36:23'; // Status da transação
   @Input() transactionQuantity: string = '10'; // Processador de pagamento
   @Input() transactionTotal: string = '150'; // Processador de pagamento
-
-  @Input() invoiceId: string = '150'; // ID da fatura
-  @Input() invoiceDate: string = '9/10/2025 18:36:23'; // Data da fatura
-  @Input() invoiceState: string = 'Concluido'; // Total da fatura
-  @Input() invoiceProcessor: string = 'Paypal'; // Total da fatura
+  @Input() transactionSession: string = '123456789'; // Sessão de pagamento
+  @Input() transactionMethod: string = 'PayPal'; // Processador de pagamento
 }

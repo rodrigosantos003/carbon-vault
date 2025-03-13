@@ -153,5 +153,39 @@ namespace Carbon_Vault.Controllers.API
             return Ok(transactions);
         }
 
+        [HttpGet("details/{id}")]
+        public async Task<ActionResult<Transaction>> GetTransactionDetails(int id, [FromHeader] string Authorization, int userID)
+        {
+            if (!AuthHelper.IsTokenValid(Authorization, userID))
+            {
+                return Unauthorized("JWT inválido");
+            }
+
+            var transaction = await _context.Transactions.Select(t => new
+            {
+                t.Id,
+                t.Type,
+                Project = _context.Projects.Where(p => p.Id == t.ProjectId).Select(p => p.Name).FirstOrDefault(),
+                ProjectOwner = _context.Projects.Where(p => p.Id == t.ProjectId).Select(p => p.Developer).FirstOrDefault(),
+                t.UserId,
+                t.Date
+            }).Where(t => t.Id == id && t.UserId == userID).FirstOrDefaultAsync();
+
+            //verifica se o user é o buyer ou seller ou admin
+            var account = await _context.Account.FindAsync(userID);
+
+            if (account.Id != transaction.UserId && account.Role != AccountType.Admin )
+            {
+                return Unauthorized("Você não tem permissão para acessar esta transação.");
+            }
+
+
+            if (transaction == null)
+            {
+                return NotFound("Transação não encontrada.");
+            }
+
+            return Ok(transaction);
+        }
     }
 }
