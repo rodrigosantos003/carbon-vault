@@ -1,0 +1,46 @@
+<body>
+  <app-admin-menu></app-admin-menu>
+
+  <div class="main-content">
+    <h1>Detalhes da Transação com ID #{{ transactionId }}</h1>
+
+    <div class="user-info">
+      <div class="section-title">Dados do Cliente</div>
+      <h2>{{ userInfo?.name }}</h2>
+      <p><strong>E-mail:</strong> {{ userInfo?.email }} </p>
+      <p><strong>Número de Identificação Fiscal:</strong> {{ userInfo?.nif }} </p>
+    </div>
+
+    <div class="transaction-details">
+      <div class="section-title">Detalhes da Transação</div>
+      <table class="transaction-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Tipo</th>
+            <th>User ID</th>
+            <th>Project ID</th>
+            <th>Quantidade</th>
+            <th>Data</th>
+            <th>Estado</th>
+            <th>Checkout Session</th>
+            <th>Método de Pagamento</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ transactionId }}</td>
+            <td>{{ getTransactionType(transactionData.type) }}</td>
+            <td>{{ transactionData.userId }}</td>
+            <td>{{ transactionData.projectId }}</td>
+            <td>{{ transactionData.quantity }}</td>
+            <td>{{ transactionData.date | date:'dd/MM/yyyy' }}</td>
+            <td><span class="status-completed">{{ getTransactionState(transactionData.state) }}</span></td>
+            <td>{{ transactionData.checkoutSession }}</td>
+            <td>{{ showPaymentMethod(transactionData.paymentMethod) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>

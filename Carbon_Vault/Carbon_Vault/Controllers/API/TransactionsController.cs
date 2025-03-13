@@ -40,8 +40,30 @@ namespace Carbon_Vault.Controllers.API
             return await _context.Transactions.ToListAsync();
         }
 
+        [HttpGet("user")]
+        public async Task<ActionResult<IEnumerable<Transaction>>> GetUserTransactions([FromHeader] string Authorization, int accountID)
+        {
+            if (string.IsNullOrEmpty(Authorization) || !Authorization.StartsWith("Bearer "))
+            {
+                return Unauthorized();
+            }
+
+            var jwt = Authorization.Substring("Bearer ".Length).Trim();
+
+            if (AuthHelper.IsTokenValid(jwt, accountID))
+            {
+                return Unauthorized();
+            }
+
+            var transactions = await _context.Transactions
+                                             .Where(t => t.UserId == accountID)
+                                             .ToListAsync();
+
+            return Ok(transactions);
+        }
+
         [HttpGet("{id}")]
-        public async Task<ActionResult<Transaction>> GetTransaction(int id)
+        public async Task<ActionResult<IEnumerable<Transaction>>> GetTransaction(int id)
         {
             var transaction = await _context.Transactions.FindAsync(id);
 

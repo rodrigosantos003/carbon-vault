@@ -1,0 +1,52 @@
+body {
+  font-family: "Poppins", sans-serif;
+  color: black;
+  margin: 0px !important;
+  display: flex;
+  height: 100vh;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 90px 20px 90px;
+}
+
+
+.section-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.user-info {
+  padding: 15px;
+  border: none;
+  margin-bottom: 20px;
+}
+
+  .user-info h2 {
+    color: green;
+  }
+
+.transaction-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+  .transaction-table th, .transaction-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+    text-align: center;
+  }
+
+  .transaction-table th {
+    background-color: #d4edda;
+  }
+
+.status-completed {
+  background-color: #d4edda;
+  padding: 5px 10px;
+  border-radius: 5px;
+}

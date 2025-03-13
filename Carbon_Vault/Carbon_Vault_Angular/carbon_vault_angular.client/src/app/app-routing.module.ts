@@ -21,6 +21,9 @@ import { UserSalesComponent } from './user-sales/user-sales.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { ProjectManagerComponent } from './project-manager/project-manager.component';
 import { PaymentSuccessComponent } from './payment-success/payment-success.component';
+import { AdminTransactionsComponent } from './admin-transactions/admin-transactions.component';
+import { TransactionDetailsComponent } from './transaction-details/transaction-details.component';
+
 const routes: Routes = [
   { path: 'confirm-account', component: ConfirmAccountComponent },
   { path: '', component: HomeComponent },
@@ -41,7 +44,9 @@ const routes: Routes = [
   { path: 'project-manager', component: ProjectManagerComponent },
   { path: 'sales', component: UserSalesComponent },
   { path: 'users-manager/user-details/:id', component: UserDetailsComponent, },
-  { path: 'payment-success', component: PaymentSuccessComponent }
+  { path: 'payment-success', component: PaymentSuccessComponent },
+  { path: 'admin-transactions', component: AdminTransactionsComponent },
+  { path: 'admin-transactions/transaction-details/:id', component: TransactionDetailsComponent },
 ];
 
 @NgModule({
