@@ -11,6 +11,7 @@ using System.Text;
 using System.Security.Cryptography;
 using Carbon_Vault.Services;
 using Microsoft.IdentityModel.Tokens;
+using System.Globalization;
 
 namespace Carbon_Vault.Controllers.API
 {
@@ -28,7 +29,7 @@ namespace Carbon_Vault.Controllers.API
             _context = context;
             _secretKey = configuration["AppSettings:TokenSecretKey"];
             _emailService = emailService;
-            _frontendBaseUrl = configuration["AppSettings:FrontendBaseUrl"];
+            _frontendBaseUrl = Environment.GetEnvironmentVariable("CLIENT_URL");
         }
 
         // GET: api/Accounts
@@ -243,36 +244,50 @@ namespace Carbon_Vault.Controllers.API
             });
         }
 
+        public static string Base64UrlEncode(byte[] input)
+        {
+            return Convert.ToBase64String(input)
+                .TrimEnd('=') // Remove padding
+                .Replace('+', '-') // URL-safe
+                .Replace('/', '_');
+        }
+
+        public static byte[] Base64UrlDecode(string input)
+        {
+            string fixedInput = input.Replace('-', '+').Replace('_', '/');
+
+            // Re-adiciona o padding se necessário
+            switch (fixedInput.Length % 4)
+            {
+                case 2: fixedInput += "=="; break;
+                case 3: fixedInput += "="; break;
+            }
+
+            return Convert.FromBase64String(fixedInput);
+        }
+
+
         public string GenerateConfirmationToken(int userId)
         {
             var secretKey = _secretKey;
-            var payload = $"{userId}:{DateTime.UtcNow}";
+            var timestamp = DateTime.UtcNow.ToString("yyyyMMddHHmmss"); // Formato fixo para evitar problemas de parsing
+            var payload = $"{userId}:{timestamp}";
 
             using (var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(secretKey)))
             {
                 var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(payload));
 
-                // Generate the Base64Url hash (without special characters like +, /, and =)
-                var base64Hash = Convert.ToBase64String(hash)
-                                     .Replace("+", "-")   
-                                     .Replace("/", "_")  
-                                     .TrimEnd('=');
+                string base64Hash = Base64UrlEncode(hash);
+                string base64Payload = Base64UrlEncode(Encoding.UTF8.GetBytes(payload));
 
-                // Base64Url encode the payload (also without special characters)
-                var base64Payload = Convert.ToBase64String(Encoding.UTF8.GetBytes(payload))
-                                     .Replace("+", "-")
-                                     .Replace("/", "_")
-                                     .TrimEnd('=');
-
-                var token = $"{base64Hash}:{base64Payload}";
-                return token;
+                return $"{base64Hash}.{base64Payload}"; // Usa "." em vez de ":" para evitar conflitos na decodificação
             }
         }
 
         private int? ValidateConfirmationToken(string token)
         {
             var secretKey = _secretKey;
-            var parts = token.Split(':');
+            var parts = token.Split('.'); // Alterado de ':' para '.'
 
             if (parts.Length != 2)
             {
@@ -285,17 +300,15 @@ namespace Carbon_Vault.Controllers.API
 
             try
             {
-                // Decode the payload and hash using Base64Url
-                var payloadBytes = Convert.FromBase64String(payloadPart.Replace("-", "+").Replace("_", "/"));
+                // Decodifica o payload corretamente
+                var payloadBytes = Base64UrlDecode(payloadPart);
                 var payload = Encoding.UTF8.GetString(payloadBytes);
 
+                // Verifica o hash
                 using (var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(secretKey)))
                 {
                     var computedHash = hmac.ComputeHash(payloadBytes);
-                    var computedHashString = Convert.ToBase64String(computedHash)
-                                                .Replace("+", "-")
-                                                .Replace("/", "_")
-                                                .TrimEnd('=');
+                    var computedHashString = Base64UrlEncode(computedHash);
 
                     if (computedHashString != hashPart)
                     {
@@ -304,6 +317,7 @@ namespace Carbon_Vault.Controllers.API
                     }
                 }
 
+                // Processa o payload (ID do utilizador e timestamp)
                 var payloadParts = payload.Split(':', 2);
                 if (payloadParts.Length != 2)
                 {
@@ -311,15 +325,30 @@ namespace Carbon_Vault.Controllers.API
                     return null;
                 }
 
-                if (int.TryParse(payloadParts[0], out var userId))
-                {
-                    return userId;
-                }
-                else
+                if (!int.TryParse(payloadParts[0], out var userId))
                 {
                     Console.WriteLine("User ID parsing failed.");
                     return null;
                 }
+
+                // Opcional: validar o timestamp para evitar tokens expirados
+                if (!DateTime.TryParseExact(payloadParts[1], "yyyyMMddHHmmss",
+                                            CultureInfo.InvariantCulture,
+                                            DateTimeStyles.None,
+                                            out var tokenTimestamp))
+                {
+                    Console.WriteLine("Timestamp parsing failed.");
+                    return null;
+                }
+
+                var tokenAge = DateTime.UtcNow - tokenTimestamp;
+                if (tokenAge > TimeSpan.FromHours(24)) // Exemplo: expira após 24h
+                {
+                    Console.WriteLine("Token has expired.");
+                    return null;
+                }
+
+                return userId;
             }
             catch (Exception ex)
             {
@@ -327,7 +356,6 @@ namespace Carbon_Vault.Controllers.API
                 return null;
             }
         }
-
 
 
         [HttpGet("Confirm")]
@@ -435,7 +463,6 @@ namespace Carbon_Vault.Controllers.API
         }
 
         [HttpGet("UserStatistics")]
-        
         public async Task<IActionResult> GetUserStatistics(DateTime startDate, DateTime endDate)
         {
             if (startDate >= endDate)
@@ -461,6 +488,32 @@ namespace Carbon_Vault.Controllers.API
                 TotalUsers = totalUsers,
                 UsersInPeriod = usersInPeriod,
                 GrowthPercentage = growthPercentage
+            });
+        }
+
+        [HttpGet("UserActivePeriod")]
+        public async Task<IActionResult> GetUserActivePeriode(DateTime startDate, DateTime endDate)
+        {
+            if (startDate >= endDate)
+            {
+                return BadRequest("Invalid date range: startDate must be earlier than endDate.");
+            }
+
+            var usersLoggedInPeriod = await _context.Account
+                .Where(a => a.LastLogin >= startDate && a.LastLogin <= endDate)
+                .ToListAsync();
+
+            int morningUsers = usersLoggedInPeriod.Count(a => a.LastLogin.TimeOfDay >= TimeSpan.FromHours(5) && a.LastLogin.TimeOfDay < TimeSpan.FromHours(12));
+            int afternoonUsers = usersLoggedInPeriod.Count(a => a.LastLogin.TimeOfDay >= TimeSpan.FromHours(12) && a.LastLogin.TimeOfDay < TimeSpan.FromHours(18));
+            int nightUsers = usersLoggedInPeriod.Count(a => a.LastLogin.TimeOfDay >= TimeSpan.FromHours(18) || a.LastLogin.TimeOfDay < TimeSpan.FromHours(5));
+
+          
+
+            return Ok(new
+            {
+                MorningUsers = morningUsers,
+                AfternoonUsers = afternoonUsers,
+                NightUsers = nightUsers
             });
         }
 

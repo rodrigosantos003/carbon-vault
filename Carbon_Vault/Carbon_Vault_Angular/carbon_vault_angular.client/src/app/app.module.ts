@@ -31,6 +31,8 @@ import { UserDetailsComponent } from './user-details/user-details.component';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { ProjectManagerComponent } from './project-manager/project-manager.component';
 import { PaymentSuccessComponent } from './payment-success/payment-success.component';
+import { ProjectManagerUserComponent } from './project-manager-user/project-manager-user.component';
+import { ProjectAddComponent } from './project-add/project-add.component';
 import { TransactionDetailsComponent } from './transaction-details/transaction-details.component';
 
 @NgModule({
@@ -59,7 +61,6 @@ import { TransactionDetailsComponent } from './transaction-details/transaction-d
     UserDetailsComponent,
     ProjectManagerComponent,
     PaymentSuccessComponent,
-    TransactionDetailsComponent,
   ],
   imports: [
     BrowserModule,

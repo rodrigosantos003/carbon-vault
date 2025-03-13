@@ -27,6 +27,7 @@
     "chart.js": "^4.4.7",
     "jest-editor-support": "*",
     "ngx-cookie-service": "^19.1.2",
+    "ngx-papaparse": "^8.0.0",
     "ngx-stripe": "^19.0.0",
     "run-script-os": "*",
     "rxjs": "~7.8.0",

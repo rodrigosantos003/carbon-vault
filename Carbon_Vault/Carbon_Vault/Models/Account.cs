@@ -42,5 +42,8 @@ namespace Carbon_Vault.Models
 
         public DateTime CreatedAt { get; set; }
         public DateTime LastLogin { get; set; }
+
+        // Relationship with Projects
+        public ICollection<Project> Projects { get; set; } = new List<Project>();
     }
 }

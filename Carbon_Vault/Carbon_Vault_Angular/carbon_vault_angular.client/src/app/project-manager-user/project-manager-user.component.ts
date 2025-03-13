@@ -5,34 +5,36 @@ import { AuthService } from '../auth-service.service';  // Importa o AuthService
 import { Router } from '@angular/router';  
 import { environment } from '../../environments/environment';
 
+
 @Component({
-  selector: 'app-project-manager',
+  selector: 'app-project-manager-user',
   standalone: false,
   
-  templateUrl: './project-manager.component.html',
-  styleUrl: './project-manager.component.css'
+  templateUrl: './project-manager-user.component.html',
+  styleUrl: './project-manager-user.component.css'
 })
-export class ProjectManagerComponent {
+export class ProjectManagerUserComponent {
   projects: any[] = [];
-  private projectsURL = `${environment.apiUrl}/Projects`;
-  
-  constructor(private http: HttpClient, private alerts: AlertsService, private authService: AuthService, private router: Router ) { }
+  UserId :  string = '';
+  constructor(private http: HttpClient, private alerts: AlertsService, private authService: AuthService, private router: Router ) { 
+    this.UserId = this.authService.getUserId()
+  }
   ngOnInit(): void {
-    this.getProjects();
+    this.getProjects(parseInt(this.UserId));
     
     console.log(this.projects);
    
   }
-  getProjects(): void {
+  getProjects(id: number): void {
     this.alerts.enableLoading("A carregar Projetos..");
-    this.http.get<any[]>(this.projectsURL).subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/Projects/user/${id}`).subscribe({
       next: (data) => {
         console.log(data);
         this.projects = data; 
         this.alerts.disableLoading();
       },
       error: (error) => {
-        console.error('Erro ao encontrar as contas:', error);
+        console.error('Erro ao encontrar os projetos:', error);
         this.alerts.disableLoading();
       }
     });
@@ -46,5 +48,3 @@ export class ProjectManagerComponent {
   }
  
 }
-
-

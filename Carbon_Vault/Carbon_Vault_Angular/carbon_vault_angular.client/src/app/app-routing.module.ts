@@ -20,6 +20,7 @@ import { UserPurchasesComponent } from './user-purchases/user-purchases.componen
 import { UserSalesComponent } from './user-sales/user-sales.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { ProjectManagerComponent } from './project-manager/project-manager.component';
+import { ProjectManagerUserComponent } from './project-manager-user/project-manager-user.component';
 import { PaymentSuccessComponent } from './payment-success/payment-success.component';
 import { TransactionDetailsComponent } from './transaction-details/transaction-details.component';
 const routes: Routes = [
@@ -40,6 +41,7 @@ const routes: Routes = [
   { path: 'cart', component: CartComponent },
   { path: 'purchases', component: UserPurchasesComponent },
   { path: 'project-manager', component: ProjectManagerComponent },
+  { path: 'Account-project-manager', component: ProjectManagerUserComponent,canActivate: [AuthGuard] },
   { path: 'sales', component: UserSalesComponent },
   { path: 'users-manager/user-details/:id', component: UserDetailsComponent, },
   { path: 'payment-success', component: PaymentSuccessComponent },

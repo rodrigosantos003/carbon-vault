@@ -1,11 +1,11 @@
 <div class="card">
-  <img [src]="imageUrl" alt="{{ name }}">
-  <div class="card-title">
+  <img [src]="imageUrl" alt="{{ name }}" [routerLink]="['/marketplace/project', projectID]" style="cursor: pointer;">
+  <div class="card-title" [routerLink]="['/marketplace/project', projectID]" style="cursor: pointer;">
     <p>{{ name }}</p>
   </div>
   <div class="card-footer">
     <input type="number" min="1" [(ngModel)]="quantity">
     <span>{{ pricePerCredit }}€</span>
-    <button class="buy-btn" (click)="addToCart()">COMPRAR</button>
+    <button class="buy-btn" (click)="addToCart()">Adicionar ao Carrinho</button>
   </div>
 </div>

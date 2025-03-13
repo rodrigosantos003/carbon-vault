@@ -68,6 +68,7 @@
     font-size: 15px;
     text-align: center;
     cursor: pointer;
+
   }
 
   .cart-remove{
@@ -91,11 +92,12 @@
   }
 
   .checkout{
-    width: 159px;
+width: 159px;
+    border: none;
     height: 42px;
     background: #4EA741;
     border-radius: 10px;
-    font-family: 'Poppins';
+    font-family: "Poppins";
     font-style: normal;
     font-weight: 700;
     font-size: 20px;
@@ -104,8 +106,19 @@
     text-align: center;
     margin-left: auto;
     margin-top: 50px;
+    cursor: pointer;
   }
-
+  .checkout:hover{
+ 
+      background-color: #3d6836; 
+   
+  }
+  #nothingToShow{
+    text-align: center;
+    border-bottom: none;
+    color: #69b45d;
+    font-weight: bold;
+  }
   .termos{
     font-family: 'Poppins';
     font-style: normal;

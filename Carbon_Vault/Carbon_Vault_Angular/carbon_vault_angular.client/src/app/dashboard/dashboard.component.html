@@ -1,7 +1,8 @@
 <body>
   <app-user-menu></app-user-menu>
 
-  <div class="main-content">
+  <!-- Default User Content -->
+  <div class="main-content" *ngIf="userRole != 1">
     <h1>Dashboard</h1>
     <div class="dashboard-cards">
       <div class="card green">
@@ -76,4 +77,60 @@
       </div>
     </div>
   </div>
+
+  <!-- Admin User Content -->
+  <!-- <main class="dashboard" *ngIf="userRole == 1">
+    
+    <h1>Admin Dashboard</h1>
+    <div class="cards">
+      <div class="card orange">
+        <h3>Número Diário de Visitas</h3>
+        <div>
+          <img src="images/ViewsIconB.png" class="icon" />
+          <span class="value">20</span>
+        </div>
+      </div>
+      <div class="card blue">
+        <h3>Número Total de Utilizadores</h3>
+        <div>
+          <img src="images/UserIconB.png" class="icon" />
+          <span class="value">50</span>
+        </div>
+      </div>
+      <div class="card yellow">
+        <h3>Número Total de Projetos Disponíveis</h3>
+        <div>
+          <img src="images/OnGoingProjects.png" class="icon" />
+          <span class="value">25</span>
+        </div>
+      </div>
+      <div class="card purple">
+        <h3>Número de Transações Feitas</h3>
+        <div>
+          <img src="images/TransactionsIconB.png" class="icon" />
+          <span class="value">10</span>
+        </div>
+      </div>
+      <div class="card green">
+        <h3>Número Total de Créditos de Carbono Disponíveis</h3>
+        <div>
+          <img src="images/CO2-B.png" />
+          <span class="value">100</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="charts">
+      <div class="chart-box line">
+        <canvas id="MyLineChart">{{ lineChart }}</canvas>
+        <button class="export-btn">Exportar</button>
+      </div>
+
+      <div class="chart-box">
+        <canvas id="MyCircularChart">{{ circularChart }}</canvas>
+        <button class="export-btn">Exportar</button>
+      </div>
+    </div>
+  </main> -->
+<app-admin-dashboard *ngIf="userRole == 1"></app-admin-dashboard>
 </body>
