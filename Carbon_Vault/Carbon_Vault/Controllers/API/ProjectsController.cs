@@ -184,5 +184,77 @@ namespace Carbon_Vault.Controllers.API
             return Ok("File deleted successfully.");
         }
 
+        [HttpPut("list-credits/{projectId}")]
+        public async Task<IActionResult> SellCredits([FromHeader] string Authorization, [FromHeader] int userId, int projectId, int credits)
+        {
+            if (!AuthHelper.IsTokenValid(Authorization, userId))
+            {
+                return Unauthorized();
+            }
+
+            var project = await _context.Projects.FindAsync(projectId);
+
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            var creditsAmount = _context.CarbonCredits
+                .Where(c => c.ProjectId == projectId && c.IsSold == false).Count();
+
+            if (creditsAmount < credits)
+            {
+                return BadRequest("Not enough credits to sell.");
+            }
+
+            project.CreditsForSale = credits;
+
+            await _context.SaveChangesAsync();
+
+            return Ok("Credits listed for sale.");
+        }
+
+        [HttpPut("sell-credits/{projectId}")]
+        public async Task<IActionResult> SellCredits([FromHeader] string Authorization, int userId, int projectId, int credits, int buyerId)
+        {
+            if (!AuthHelper.IsTokenValid(Authorization, userId))
+            {
+                return Unauthorized();
+            }
+
+            var project = await _context.Projects.FindAsync(projectId);
+
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            var creditsAmount = _context.CarbonCredits
+                .Where(c => c.ProjectId == projectId && c.IsSold == false).Count();
+
+            if (creditsAmount < credits)
+            {
+                return BadRequest("Not enough credits to sell.");
+            }
+
+            var creditsToSell = _context.CarbonCredits
+                .Where(c => c.ProjectId == projectId && c.IsSold == false)
+                .OrderBy(c => c.ExpiryDate)
+                .Take(credits)
+                .ToList();
+
+            foreach (var credit in creditsToSell)
+            {
+                credit.IsSold = true;
+                //credit.Buyer = buyerId;
+            }
+
+            project.CreditsForSale -= credits;
+
+            await _context.SaveChangesAsync();
+
+            return Ok("Credits sold successfully.");
+        }
+
     }
 }

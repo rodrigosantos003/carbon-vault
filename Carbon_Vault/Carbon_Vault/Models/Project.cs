@@ -23,6 +23,8 @@
         public string Developer { get; set; }
         public string Certification { get; set; }
         public decimal PricePerCredit { get; set; }
+
+        public int CreditsForSale { get; set; }
         public ProjectStatus Status { get; set; }
         public string Benefits { get; set; }
         public Uri ProjectUrl { get; set; }
