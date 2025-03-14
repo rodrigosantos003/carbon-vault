@@ -182,7 +182,6 @@ namespace Carbon_Vault.Data
                 new Transaction
                 {
                     Id = 1,
-                    Type = TransactionType.Purchase,
                     BuyerId = 2,
                     SellerId = 3,
                     ProjectId = 1,
@@ -195,7 +194,6 @@ namespace Carbon_Vault.Data
                 new Transaction
                 {
                     Id = 2,
-                    Type = TransactionType.Sale,
                     SellerId = 2,
                     BuyerId = 5,
                     ProjectId = 2,
