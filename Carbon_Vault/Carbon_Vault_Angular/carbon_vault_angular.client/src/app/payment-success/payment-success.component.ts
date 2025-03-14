@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { CartService } from '../cart.service';
+import { Route, Router } from '@angular/router';
 
 @Component({
   selector: 'app-payment-success',
@@ -11,7 +12,7 @@ import { CartService } from '../cart.service';
   styleUrl: './payment-success.component.css'
 })
 export class PaymentSuccessComponent {
-  constructor(private http: HttpClient, private cartService: CartService) { }
+  constructor(private http: HttpClient, private cartService: CartService, public router: Router) { }
 
   ngOnInit() {
     this.cartService.clearCart();
