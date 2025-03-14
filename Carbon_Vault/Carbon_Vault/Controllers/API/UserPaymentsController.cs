@@ -23,8 +23,8 @@ namespace Carbon_Vault.Controllers.API
         [HttpPost]
         public IActionResult MakePayment(PaymentData data)
         {
-            var success_url = "http://localhost:59115/payment-success";
-            var cancel_url = "https://localhost:7117/";
+            var success_url = Environment.GetEnvironmentVariable("CLIENT_URL") + "payment-success";
+            var cancel_url = Environment.GetEnvironmentVariable("CLIENT_URL") + "dashboard";
 
             var options = new SessionCreateOptions
             {
@@ -44,11 +44,6 @@ namespace Carbon_Vault.Controllers.API
 
             var service = new SessionService();
             var session = service.Create(options);
-
-            //Response.Headers.Append("Location", session.Url);
-
-            Console.WriteLine("Session ID: " + session.Id);
-            Console.WriteLine("Session URL: " + session.Url);
 
             return Ok(new { message = "Pagamento realizado com sucesso.", checkout_session = session.Id, payment_url = session.Url });
         }
