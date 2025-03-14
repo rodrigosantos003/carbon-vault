@@ -1,6 +1,6 @@
 <div class="card">
-  <img [src]="imageUrl" alt="{{ name }}">
-  <div class="card-title">
+  <img [src]="imageUrl" alt="{{ name }}" [routerLink]="['/marketplace/project', projectID]" style="cursor: pointer;">
+  <div class="card-title" [routerLink]="['/marketplace/project', projectID]" style="cursor: pointer;">
     <p>{{ name }}</p>
   </div>
   <div class="card-footer">
