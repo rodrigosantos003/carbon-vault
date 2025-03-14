@@ -61,6 +61,9 @@ import { TransactionDetailsComponent } from './transaction-details/transaction-d
     UserDetailsComponent,
     ProjectManagerComponent,
     PaymentSuccessComponent,
+    ProjectManagerUserComponent,
+    ProjectAddComponent,
+    TransactionDetailsComponent
   ],
   imports: [
     BrowserModule,

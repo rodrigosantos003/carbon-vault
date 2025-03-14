@@ -3,18 +3,29 @@
   
     <main class="transaction-container">
 
-        <span class="transaction-title"> Detalhes da {{ transactionType }} - #{{ transactionId }} </span>
+        <span class="transaction-title"> Detalhes da {{ transactionType == 'Venda' ? 'Venda' : 'Compra' }} - #{{ transactionId }} </span>
 
         <div style="display: flex; flex-direction: row;">
             <div class="transaction-details">
                 <span class="transaction-header"> Detalhes </span>
 
-                <span class="transaction-label"> {{ transactionType === 'compra' ? 'Fornecedor' : 'Comprador' }} </span>
+                <div *ngIf="transactionType != 'Compra'">
+                <span class="transaction-label"> Comprador </span>
 
                 <span class="transaction-value"> 
                     <img src="../../../images/user.svg">  
-                    {{ transactionUser }} 
+                    {{ transactionBuyer }} 
                 </span>
+                </div>
+
+                <div *ngIf="transactionType != 'Venda'" style="margin-top: 30px">
+                <span class="transaction-label"> Vendedor </span>
+
+                <span class="transaction-value"> 
+                    <img src="../../../images/user.svg">  
+                    {{ transactionSeller }} 
+                </span>
+                </div>
 
                 <span class="transaction-label"> Projeto </span>
 

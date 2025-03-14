@@ -138,31 +138,31 @@ namespace Carbon_Vault.Controllers.API
         }
 
         [HttpGet("details/{id}")]
-        public async Task<ActionResult<Transaction>> GetTransactionDetails(int id, [FromHeader] string Authorization, int userID)
+        public async Task<ActionResult<Transaction>> GetTransactionDetails(int id, [FromHeader] string Authorization, [FromHeader] int userID)
         {
+            Console.WriteLine(Authorization);
+            Console.WriteLine(userID);
             if (!AuthHelper.IsTokenValid(Authorization, userID))
             {
                 return Unauthorized("JWT inválido");
             }
 
+            var account = await _context.Account.FindAsync(userID);
+            
             var transaction = await _context.Transactions.Select(t => new
             {
                 t.Id,
-                t.Type,
                 Project = _context.Projects.Where(p => p.Id == t.ProjectId).Select(p => p.Name).FirstOrDefault(),
-                ProjectOwner = _context.Projects.Where(p => p.Id == t.ProjectId).Select(p => p.Developer).FirstOrDefault(),
-                t.UserId,
-                t.Date
-            }).Where(t => t.Id == id && t.UserId == userID).FirstOrDefaultAsync();
-
-            //verifica se o user é o buyer ou seller ou admin
-            var account = await _context.Account.FindAsync(userID);
-
-            if (account.Id != transaction.UserId && account.Role != AccountType.Admin )
-            {
-                return Unauthorized("Você não tem permissão para acessar esta transação.");
-            }
-
+                t.Date,
+                t.BuyerId,
+                t.SellerId,
+                t.TotalPrice,
+                buyerName = _context.Account.Where(a => a.Id == t.BuyerId).Select(a => a.Name).FirstOrDefault(),
+                sellerName = _context.Account.Where(a => a.Id == t.SellerId).Select(a => a.Name).FirstOrDefault(),
+                t.Quantity,
+                t.CheckoutSession,
+                t.PaymentMethod
+            }).Where(t => t.Id == id && t.BuyerId == userID || t.SellerId == userID || account.Role == AccountType.Admin).FirstOrDefaultAsync();
 
             if (transaction == null)
             {

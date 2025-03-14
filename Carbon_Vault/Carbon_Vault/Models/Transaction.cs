@@ -24,6 +24,9 @@ namespace Carbon_Vault.Models
         public int Quantity { get; set; }
 
         [Required]
+        public double TotalPrice { get; set; }
+
+        [Required]
         public string Date { get; set; }
 
         [Required]

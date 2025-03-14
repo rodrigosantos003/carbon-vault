@@ -203,9 +203,10 @@ namespace Carbon_Vault.Data
                     SellerId = 3,
                     ProjectId = 1,
                     Quantity = 1,
+                    TotalPrice = 12.50,
                     Date = "2025-03-05",
                     State = TransactionState.Approved,
-                    PaymentMethod = "card",
+                    PaymentMethod = "Transferência Bancária",
                     CheckoutSession = "cs_123456789"
                 },
                 new Transaction
@@ -215,9 +216,10 @@ namespace Carbon_Vault.Data
                     BuyerId = 5,
                     ProjectId = 2,
                     Quantity = 1,
+                    TotalPrice = 15.75,
                     Date = "2025-03-05",
                     State = TransactionState.Approved,
-                    PaymentMethod = "card",
+                    PaymentMethod = "Paypal",
                     CheckoutSession = "cs_987456321"
                 }
             );
