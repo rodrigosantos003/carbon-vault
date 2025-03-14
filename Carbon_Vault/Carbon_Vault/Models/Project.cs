@@ -6,6 +6,7 @@
         OnReview,
         Denied
     }
+    
 
     public class Project
     {
@@ -31,6 +32,12 @@
         public ICollection<CarbonCredit> CarbonCredits { get; set; } = new List<CarbonCredit>();
         public DateTime CreatedAt { get; set; }
 
+        // Relationship with User
+        public Account Owner { get; set; }
+        public int OwnerId { get; set; }
+
+        // Relationship with documents
+        public ICollection<ProjectFiles> Files { get; set; } = new List<ProjectFiles>();
 
     }
 }

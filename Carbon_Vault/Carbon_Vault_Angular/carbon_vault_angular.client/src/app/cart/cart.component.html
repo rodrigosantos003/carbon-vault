@@ -34,6 +34,9 @@
       </tr>
     </thead>
     <tbody>
+      <tr *ngIf="cartItems.length === 0">
+        <td colspan="4" class="text-center" id="nothingToShow">Nada a mostrar!</td>
+      </tr>
       <tr *ngFor="let item of cartItems">
         <td style="text-align:left;">
           <div style="display: flex; align-items: center;">

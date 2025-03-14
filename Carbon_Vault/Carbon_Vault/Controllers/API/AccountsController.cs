@@ -161,9 +161,9 @@ namespace Carbon_Vault.Controllers.API
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAccount(int id, [FromHeader] string Authorization)
+        public async Task<IActionResult> DeleteAccount(int id, [FromHeader] string Authorization, int userID)
         {
-            if (!AuthHelper.IsTokenValid(Authorization, id))
+            if (!AuthHelper.IsTokenValid(Authorization, userID))
             {
                 return Unauthorized();
             }
@@ -463,7 +463,6 @@ namespace Carbon_Vault.Controllers.API
         }
 
         [HttpGet("UserStatistics")]
-        
         public async Task<IActionResult> GetUserStatistics(DateTime startDate, DateTime endDate)
         {
             if (startDate >= endDate)
@@ -489,6 +488,32 @@ namespace Carbon_Vault.Controllers.API
                 TotalUsers = totalUsers,
                 UsersInPeriod = usersInPeriod,
                 GrowthPercentage = growthPercentage
+            });
+        }
+
+        [HttpGet("UserActivePeriod")]
+        public async Task<IActionResult> GetUserActivePeriode(DateTime startDate, DateTime endDate)
+        {
+            if (startDate >= endDate)
+            {
+                return BadRequest("Invalid date range: startDate must be earlier than endDate.");
+            }
+
+            var usersLoggedInPeriod = await _context.Account
+                .Where(a => a.LastLogin >= startDate && a.LastLogin <= endDate)
+                .ToListAsync();
+
+            int morningUsers = usersLoggedInPeriod.Count(a => a.LastLogin.TimeOfDay >= TimeSpan.FromHours(5) && a.LastLogin.TimeOfDay < TimeSpan.FromHours(12));
+            int afternoonUsers = usersLoggedInPeriod.Count(a => a.LastLogin.TimeOfDay >= TimeSpan.FromHours(12) && a.LastLogin.TimeOfDay < TimeSpan.FromHours(18));
+            int nightUsers = usersLoggedInPeriod.Count(a => a.LastLogin.TimeOfDay >= TimeSpan.FromHours(18) || a.LastLogin.TimeOfDay < TimeSpan.FromHours(5));
+
+          
+
+            return Ok(new
+            {
+                MorningUsers = morningUsers,
+                AfternoonUsers = afternoonUsers,
+                NightUsers = nightUsers
             });
         }
 

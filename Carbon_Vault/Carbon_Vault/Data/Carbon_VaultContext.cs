@@ -19,6 +19,7 @@ namespace Carbon_Vault.Data
         public DbSet<ProjectType> ProjectTypes { get; set; }
         public DbSet<UserEmissions> UserEmissions { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<ProjectFiles> ProjectFiles { get; set; }
 
         public Carbon_VaultContext (DbContextOptions<Carbon_VaultContext> options)
             : base(options)
@@ -33,8 +34,22 @@ namespace Carbon_Vault.Data
             modelBuilder.Entity<CarbonCredit>()
                 .HasOne(cc => cc.Project)                     
                 .WithMany(p => p.CarbonCredits)               
-                .HasForeignKey(cc => cc.ProjectId)           
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(cc => cc.ProjectId).OnDelete(DeleteBehavior.NoAction);
+
+            // Configurar o relacionamento entre Project e Ficheiros deste
+            modelBuilder.Entity<ProjectFiles>()
+               .HasOne(cc => cc.Project)
+               .WithMany(p => p.Files)
+               .HasForeignKey(cc => cc.ProjectId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+            // Configurar o relacionamento entre Project e o seu dono
+            modelBuilder.Entity<Project>()
+               .HasOne(cc => cc.Owner)
+               .WithMany(p => p.Projects)
+               .HasForeignKey(cc => cc.OwnerId);
+               
+
 
             populateAccounts(modelBuilder);
 
@@ -152,7 +167,8 @@ namespace Carbon_Vault.Data
                    Status = ProjectStatus.Confirmed,
                    Benefits = "Access to clean water, improved health conditions.",
                    ProjectUrl = new Uri("https://example.com/project1"),
-                   ImageUrl = "https://api.hub.jhu.edu/factory/sites/default/files/styles/hub_large/public/drink-more-water-hub.jpg"
+                   ImageUrl = "https://api.hub.jhu.edu/factory/sites/default/files/styles/hub_large/public/drink-more-water-hub.jpg",
+                   OwnerId = 1
                },
                new Project
                {
@@ -170,8 +186,9 @@ namespace Carbon_Vault.Data
                    Benefits = "Sustainable energy solutions, reduced carbon emissions.",
                    ProjectUrl = new Uri("https://example.com/project2"),
                    CreatedAt = DateTime.UtcNow,
-                   ImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSS2nF0iroOXheUgLiCRjKPFEyxqBqbjMMiBZxtPvybNA14VsZrFMg2wgudNFFSgdW9S5Q&usqp=CAU"
-               
+                   ImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSS2nF0iroOXheUgLiCRjKPFEyxqBqbjMMiBZxtPvybNA14VsZrFMg2wgudNFFSgdW9S5Q&usqp=CAU",
+                   OwnerId = 2
+
                }
            );
         }
@@ -182,25 +199,27 @@ namespace Carbon_Vault.Data
                 new Transaction
                 {
                     Id = 1,
-                    Type = TransactionType.Purchase,
-                    UserId = 2,
+                    BuyerId = 2,
+                    SellerId = 3,
                     ProjectId = 1,
                     Quantity = 1,
+                    TotalPrice = 12.50,
                     Date = "2025-03-05",
                     State = TransactionState.Approved,
-                    PaymentMethod = "card",
+                    PaymentMethod = "Transferência Bancária",
                     CheckoutSession = "cs_123456789"
                 },
                 new Transaction
                 {
                     Id = 2,
-                    Type = TransactionType.Sale,
-                    UserId = 2,
+                    SellerId = 2,
+                    BuyerId = 5,
                     ProjectId = 2,
                     Quantity = 1,
+                    TotalPrice = 15.75,
                     Date = "2025-03-05",
                     State = TransactionState.Approved,
-                    PaymentMethod = "card",
+                    PaymentMethod = "Paypal",
                     CheckoutSession = "cs_987456321"
                 }
             );

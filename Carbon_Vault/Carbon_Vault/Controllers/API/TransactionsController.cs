@@ -25,14 +25,7 @@ namespace Carbon_Vault.Controllers.API
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Transaction>>> GetTransactions([FromHeader] string Authorization, int accountID)
         {
-            if (string.IsNullOrEmpty(Authorization) || !Authorization.StartsWith("Bearer "))
-            {
-                return Unauthorized();
-            }
-
-            var jwt = Authorization.Substring("Bearer ".Length).Trim();
-
-            if (AuthHelper.IsTokenValid(jwt, accountID))
+            if (!AuthHelper.IsTokenValid(Authorization, accountID))
             {
                 return Unauthorized();
             }
@@ -67,14 +60,7 @@ namespace Carbon_Vault.Controllers.API
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTransaction(int id, Transaction transaction, [FromHeader] string Authorization, int accountID)
         {
-            if (string.IsNullOrEmpty(Authorization) || !Authorization.StartsWith("Bearer "))
-            {
-                return Unauthorized();
-            }
-
-            var jwt = Authorization.Substring("Bearer ".Length).Trim();
-
-            if (AuthHelper.IsTokenValid(jwt, accountID))
+            if (!AuthHelper.IsTokenValid(Authorization, accountID))
             {
                 return Unauthorized();
             }
@@ -122,12 +108,11 @@ namespace Carbon_Vault.Controllers.API
             _context.Transactions.Remove(transaction);
             await _context.SaveChangesAsync();
 
-
             return Ok();
         }
 
         [HttpGet("type/{type}/user/{userID}")]
-        public async Task<ActionResult<IEnumerable<Transaction>>> GetTransactionsByType(TransactionType type, int userID, [FromHeader] string Authorization)
+        public async Task<ActionResult<IEnumerable<Transaction>>> GetTransactionsByType(int type, int userID, [FromHeader] string Authorization)
         {
             if (!AuthHelper.IsTokenValid(Authorization, userID))
             {
@@ -138,20 +123,53 @@ namespace Carbon_Vault.Controllers.API
             {
                 t.Id,
                 State = t.State.ToString(),
-                t.Type,
                 Project = _context.Projects.Where(p => p.Id == t.ProjectId).Select(p => p.Name).FirstOrDefault(),
-                t.UserId,
-                t.Date
-            }).Where(t => t.Type == type && t.UserId == userID)
+                t.Date,
+                t.BuyerId, t.SellerId
+            }).Where(t => type == 0 ? t.BuyerId == userID : t.SellerId == userID)
             .ToListAsync();
 
             if (!transactions.Any())
             {
-                return NotFound("Nenhuma transação encontrada para este tipo.");
+                return NotFound(new {message = "Nenhuma transação encontrada para este tipo."});
             }
 
             return Ok(transactions);
         }
 
+        [HttpGet("details/{id}")]
+        public async Task<ActionResult<Transaction>> GetTransactionDetails(int id, [FromHeader] string Authorization, [FromHeader] int userID)
+        {
+            Console.WriteLine(Authorization);
+            Console.WriteLine(userID);
+            if (!AuthHelper.IsTokenValid(Authorization, userID))
+            {
+                return Unauthorized("JWT inválido");
+            }
+
+            var account = await _context.Account.FindAsync(userID);
+            
+            var transaction = await _context.Transactions.Select(t => new
+            {
+                t.Id,
+                Project = _context.Projects.Where(p => p.Id == t.ProjectId).Select(p => p.Name).FirstOrDefault(),
+                t.Date,
+                t.BuyerId,
+                t.SellerId,
+                t.TotalPrice,
+                buyerName = _context.Account.Where(a => a.Id == t.BuyerId).Select(a => a.Name).FirstOrDefault(),
+                sellerName = _context.Account.Where(a => a.Id == t.SellerId).Select(a => a.Name).FirstOrDefault(),
+                t.Quantity,
+                t.CheckoutSession,
+                t.PaymentMethod
+            }).Where(t => t.Id == id && t.BuyerId == userID || t.SellerId == userID || account.Role == AccountType.Admin).FirstOrDefaultAsync();
+
+            if (transaction == null)
+            {
+                return NotFound("Transação não encontrada.");
+            }
+
+            return Ok(transaction);
+        }
     }
 }

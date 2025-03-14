@@ -45,11 +45,6 @@ namespace Carbon_Vault.Controllers.API
             var service = new SessionService();
             var session = service.Create(options);
 
-            //Response.Headers.Append("Location", session.Url);
-
-            Console.WriteLine("Session ID: " + session.Id);
-            Console.WriteLine("Session URL: " + session.Url);
-
             return Ok(new { message = "Pagamento realizado com sucesso.", checkout_session = session.Id, payment_url = session.Url });
         }
 
