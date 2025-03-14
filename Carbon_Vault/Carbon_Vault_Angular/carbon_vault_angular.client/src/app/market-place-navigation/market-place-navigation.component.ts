@@ -62,4 +62,16 @@ export class MarketPlaceNavigationComponent {
       }
     }
   }
+  navigateToDashboard():void{
+    this.router.navigate(['/dashboard']); 
+
+  }
+  navigateToLanding():void{
+    this.router.navigate(['/']); 
+
+  }
+  navigateToMarketPlace():void{
+    this.router.navigate(['/marketplace']); 
+
+  }
 }

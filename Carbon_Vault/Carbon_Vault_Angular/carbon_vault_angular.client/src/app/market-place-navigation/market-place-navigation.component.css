@@ -11,6 +11,7 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    cursor: pointer;
   }
   
   .marketplace-header .logo img {
@@ -60,6 +61,14 @@
     font-weight: bold;
     text-align: center;
     justify-items: center;
+    cursor: pointer;
+  }
+  .profile-btn:hover{
+   background-color: #3d6836; 
+  }
+  
+  .navigationItem:hover{
+    border-bottom: solid 3px #4ea741
   }
   
   
@@ -72,3 +81,7 @@
     cursor: pointer;
   }
   
+  .logout-btn:hover{
+   
+    background-color: #3d6836; 
+  }
