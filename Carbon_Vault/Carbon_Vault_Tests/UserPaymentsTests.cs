@@ -21,9 +21,16 @@ namespace Carbon_Vault_Tests_payments
     {
         private readonly Mock<IEmailService> _mockEmailService;
         private readonly Mock<IConfiguration> _mockConfiguration;
+        private readonly Carbon_VaultContext _mockContext;
 
         public UserPaymentsTests()
         {
+            var options = new DbContextOptionsBuilder<Carbon_VaultContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            _mockContext = new Carbon_VaultContext(options);
+
             _mockEmailService = new Mock<IEmailService>(); 
             _mockConfiguration = new Mock<IConfiguration>();
             
@@ -52,7 +59,7 @@ namespace Carbon_Vault_Tests_payments
 
             mockSessionService.Setup(s => s.Create(It.IsAny<SessionCreateOptions>(), null)).Returns(session);
 
-            var controller = new UserPaymentsController(_mockEmailService.Object);
+            var controller = new UserPaymentsController(_mockEmailService.Object, _mockContext);
 
             // Act
             var result = controller.MakePayment(cart);
@@ -65,7 +72,7 @@ namespace Carbon_Vault_Tests_payments
         public void SendInvoice_ReturnsOk_WhenInvoiceExists()
         {
             // Arrange
-            var controller = new UserPaymentsController(_mockEmailService.Object);
+            var controller = new UserPaymentsController(_mockEmailService.Object, _mockContext);
             var mockSessionService = new Mock<SessionService>();
             var mockInvoiceService = new Mock<InvoiceService>();
             var sessionId = "cs_test_b1havRvXtiYrqxSJEwUlRtIfggNZbIkw076WzKcT0VhYEN2nFhzIQt1vM6";
