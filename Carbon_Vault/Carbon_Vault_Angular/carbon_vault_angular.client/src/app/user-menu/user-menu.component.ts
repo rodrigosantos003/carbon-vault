@@ -33,7 +33,6 @@ export class UserMenuComponent {
     { icon: 'images/menu/DashboardIcon.png', label: 'Dashboard', route: '/dashboard' },
     { icon: 'images/menu/EmissionsIcon.png', label: 'As minhas Emissões', route: '/user-emissions' },
     { icon: 'images/menu/ProjectsIcon.png', label: 'Os meus Projetos', route: '/Account-project-manager' },
-    /*{ icon: 'images/menu/ProjectsIcon.png', label: 'Os meus Projetos', route: '/user-projects' },*/
     { icon: 'images/menu/PurchasesIcon.png', label: 'As minhas Compras', route: '/purchases' },
     { icon: 'images/menu/SalesIcon.png', label: 'As minhas Vendas', route: '/sales' },
     { icon: 'images/menu/RelatoriosIcon.png', label: 'Relatórios', route: '/dashboard' },
