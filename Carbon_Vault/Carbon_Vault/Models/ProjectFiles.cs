@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Text.Json.Serialization;
 
 namespace Carbon_Vault.Models
 {
@@ -10,6 +11,7 @@ namespace Carbon_Vault.Models
         public string FileType { get; set; } 
         public DateTime UploadedAt { get; set; }
         public int ProjectId { get; set; }
+        [JsonIgnore]
         public Project Project { get; set; }
     }
 }

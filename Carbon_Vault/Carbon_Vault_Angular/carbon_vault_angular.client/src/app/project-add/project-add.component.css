@@ -1,0 +1,120 @@
+.main-content {
+  flex-grow: 1;
+  padding: 20px 90px 20px 90px;
+}
+body {
+  font-family: Poppins, sans-serif;
+  color: #000;
+  margin: 0 !important;
+  display: flex;
+  height: 100vh;
+}
+h3 {
+  font-weight: 700;
+}
+.user-details-header h3 {
+  align-self: flex-end;
+  margin: 0;
+}
+.user-details-header {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+.drag-area {
+  width: 100%;
+  border: 2px dashed #c5e8c0;
+  color: #4ea741;
+  text-align: center;
+  padding: 20px;
+  transition: background-color 0.3s;
+  cursor: pointer;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  align-content: space-around;
+  justify-content: space-around;
+}
+.drag-area:hover {
+  background-color: #f0f0f0;
+}
+.drag-area p {
+  font-size: 16px;
+  color: #4ea741;
+}
+.file-list {
+  margin-top: 10px;
+  list-style: none;
+  padding: 0;
+}
+.file-list li {
+  margin-bottom: 5px;
+  background-color: var(--main-color);
+  padding: 5px;
+  border-radius: 5px;
+  color: #fff;
+}
+input.custom-checkbox {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #4caf50;
+  border-radius: 3px;
+  cursor: pointer;
+  position: relative;
+  top: 6.6px;
+}
+input.custom-checkbox:checked {
+  background-color: #4caf50;
+}
+.add-project-form {
+  gap: 75px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-content: space-around;
+  align-items: flex-start;
+}
+.add-project-form input {
+  border: solid 1px #4ea741;
+  border-radius: 25px;
+  padding: 4px;
+}
+.add-project-form textarea {
+  border: solid 1px #4ea741;
+  border-radius: 6px;
+}
+input::file-selector-button {
+  background-color: #4ea741;
+  color: #fff;
+  padding: 0.5em;
+  border: thin solid grey;
+  border-radius: 25px;
+}
+.first-column {
+  width: 320;
+}
+.first-column input {
+  width: 100%;
+}
+.first-column label,
+.second-column h2,
+.third-column h2 {
+  color: #4caf50;
+}
+.first-column textarea {
+  width: 100%;
+  min-height: 100px;
+}
+.form-item-image-wrap {
+  flex-direction: row;
+  display: flex;
+  gap: 12px;
+}
+#imageInput {
+  max-height: 32px;
+}
+.form-item-image-wrap img {
+  max-width: 165px;
+  max-height: 165px;
+}
