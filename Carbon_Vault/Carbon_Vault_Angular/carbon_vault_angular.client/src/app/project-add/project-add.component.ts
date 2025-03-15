@@ -22,7 +22,7 @@ export class ProjectAddComponent {
   urlImagem: string = '';
   preco: number | null = null;
   documentos: File[] = [];
-  categoriasSelecionadas: string[] = [];
+  categoriasSelecionadas: number[] = [];
   private apiURL = `${environment.apiUrl}/Projects`;
   userId: string;
   imagem: File | null = null;
@@ -30,22 +30,21 @@ export class ProjectAddComponent {
 
 
   categorias = [
-    { nome: 'Poverty', label: 'Erradicar a pobreza' },
-    { nome: 'Hunger', label: 'Erradicar a fome' },
-    { nome: 'Health', label: 'Saúde de Qualidade' },
-    { nome: 'Education', label: 'Educação de Qualidade' },
-    { nome: 'Gender', label: 'Igualdade de Gênero' },
-    { nome: 'Water', label: 'Água Potável e Saneamento' },
-    { nome: 'Energy', label: 'Energias Renováveis e Acessíveis' },
-    { nome: 'Work', label: 'Trabalho e Crescimento Econômico' },
-    { nome: 'Industry', label: 'Indústria, Renovação e Infraestruturas' },
-    { nome: 'Inequalities', label: 'Reduzir as Desigualdades' },
-    { nome: 'Cities', label: 'Cidades e Comunidades Sustentáveis' },
-    { nome: 'Consumption', label: 'Produção e Consumo Sustentáveis' },
-    { nome: 'ClimateAction', label: 'Ação Climática' },
-    { nome: 'Peace', label: 'Paz, Justiça e Instituições Eficazes' },
-    { nome: 'WaterLife', label: 'Proteger a Vida Marinha' },
-    { nome: 'LandLife', label: 'Proteger a Vida Terrestre' }
+    { id: 1, nome: 'Poverty', label: 'Erradicar a pobreza' },
+    { id: 2, nome: 'Hunger', label: 'Erradicar a fome' },
+    { id: 3, nome: 'Health', label: 'Saúde de Qualidade' },
+    { id: 4, nome: 'Education', label: 'Educação de Qualidade' },
+    { id: 5, nome: 'Gender', label: 'Igualdade de Gênero' },
+    { id: 6, nome: 'Water', label: 'Água Potável e Saneamento' },
+    { id: 7, nome: 'Energy', label: 'Energias Renováveis e Acessíveis' },
+    { id: 8, nome: 'Work', label: 'Trabalho e Crescimento Econômico' },
+    { id: 9, nome: 'Industry', label: 'Indústria, Renovação e Infraestruturas' },
+    { id: 10, nome: 'WaterLife', label: 'Proteger a Vida Marinha' },
+    { id: 11, nome: 'LandLife', label: 'Proteger a Vida Terrestre' },
+    { id: 12, nome: 'Peace', label: 'Proteger a Paz global' },
+    { id: 13, nome: 'Partnership', label: 'Parcerias Sustentáveis' }
+   
+   
   ];
   constructor(private http: HttpClient,private authService: AuthService) {
     this.userId = this.authService.getUserId();
@@ -70,19 +69,25 @@ export class ProjectAddComponent {
     }
   }
 
-  uploadImage(projectID : number): Promise<string> {
+  async uploadImage(): Promise<string> {
+    if (!this.imagem) return '';
     const formData = new FormData();
-    if (this.imagem) {
-      formData.append('file', this.imagem);
+    formData.append('file', this.imagem);
+
+    try {
+      const response: any = await this.http.post(`${this.apiURL}/upload-image`, formData).toPromise();
+      return response.filePath;
+    } catch (error) {
+      console.error('Erro ao enviar imagem:', error);
+      return '';
     }
-    return this.http.post<any>(`${this.apiURL}/${projectID}/upload`, formData).toPromise().then(response => response.url);
   }
 
-  onCategoriaChange(categoria: string, event: any) {
+  onCategoriaChange(categoriaId: number, event: any) {
     if (event.target.checked) {
-      this.categoriasSelecionadas.push(categoria);
+      this.categoriasSelecionadas.push(categoriaId);
     } else {
-      this.categoriasSelecionadas = this.categoriasSelecionadas.filter(c => c !== categoria);
+      this.categoriasSelecionadas = this.categoriasSelecionadas.filter(c => c !== categoriaId);
     }
   }
   onDragOver(event: DragEvent) {
@@ -110,25 +115,34 @@ export class ProjectAddComponent {
     event.preventDefault();
     event.stopPropagation();
   }
-
   async onSubmit() {
+    if (this.imagem) {
+      this.urlImagem = await this.uploadImage();
+    }
+
     const projeto = {
       name: this.nome,
+      description: this.descricao,
+      location: this.localizacao,
+      startDate: this.dataInicio,
+      endDate: this.dataFim,
+      developer: this.desenvolvedor,
+      certification: this.certificacao,
       pricePerCredit: this.preco,
-      types: this.categoriasSelecionadas,
-      ownerId: this.userId 
+      status: 0,
+      projectUrl: this.urlProjeto,
+      imageUrl: this.urlImagem,
+      ownerId: Number(this.userId),
+      types: this.categoriasSelecionadas.map(id => ({ id }))
     };
-    
+
     try {
-      
       const response: any = await this.http.post(this.apiURL, projeto).toPromise();
       const projectId = response.id;
 
-     
       if (this.documentos.length > 0) {
         const formData = new FormData();
         this.documentos.forEach(file => formData.append('file', file));
-
         await this.http.post(`${this.apiURL}/${projectId}/upload`, formData).toPromise();
       }
 

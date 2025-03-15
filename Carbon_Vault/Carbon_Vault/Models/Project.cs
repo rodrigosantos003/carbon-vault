@@ -24,10 +24,10 @@ namespace Carbon_Vault.Models
         public DateTime EndDate { get; set; }
         public string Developer { get; set; }
         public string Certification { get; set; }
-        public decimal PricePerCredit { get; set; }
+        public decimal? PricePerCredit { get; set; }
         public ProjectStatus Status { get; set; }
-        public Uri ProjectUrl { get; set; }
-        public string ImageUrl { get; set; }
+        public Uri? ProjectUrl { get; set; }
+        public string? ImageUrl { get; set; }
 
         // Relationship with CarbonCredit
         public ICollection<CarbonCredit> CarbonCredits { get; set; } = new List<CarbonCredit>();

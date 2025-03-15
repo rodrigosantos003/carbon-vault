@@ -67,7 +67,7 @@
             <div class="grid">
               <div *ngFor="let categoria of categorias">
                 <label>
-                  <input type="checkbox" (change)="onCategoriaChange(categoria.nome, $event)" class="custom-checkbox" />
+                  <input type="checkbox" (change)="onCategoriaChange(categoria.id, $event)" class="custom-checkbox" />
                   {{categoria.label}}
                 </label>
               </div>

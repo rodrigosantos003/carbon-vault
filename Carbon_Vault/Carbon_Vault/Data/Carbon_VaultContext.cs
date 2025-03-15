@@ -130,21 +130,19 @@ namespace Carbon_Vault.Data
         private void populateProjectTypes(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ProjectType>().HasData(
-               new ProjectType
-               {
-                   Id = 1,
-                   Type = ProjectTypeEnum.Poverty
-               },
-               new ProjectType
-               {
-                   Id = 2,
-                   Type = ProjectTypeEnum.Hunger
-               },
-               new ProjectType
-               {
-                   Id = 3,
-                   Type = ProjectTypeEnum.Health
-               }
+               new ProjectType{Id = 1, Type = ProjectTypeEnum.Poverty},
+               new ProjectType{Id = 2, Type = ProjectTypeEnum.Hunger},
+               new ProjectType{Id = 3, Type = ProjectTypeEnum.Health},
+               new ProjectType { Id = 4, Type = ProjectTypeEnum.Education },
+               new ProjectType { Id = 5, Type = ProjectTypeEnum.Gender },
+               new ProjectType { Id = 6, Type = ProjectTypeEnum.Water },
+               new ProjectType { Id = 7, Type = ProjectTypeEnum.Energy },
+               new ProjectType { Id = 8, Type = ProjectTypeEnum.Work },
+               new ProjectType { Id = 9, Type = ProjectTypeEnum.Industry },
+               new ProjectType { Id = 10, Type = ProjectTypeEnum.WaterLife },
+               new ProjectType { Id = 11, Type = ProjectTypeEnum.LandLife },
+               new ProjectType { Id = 12, Type = ProjectTypeEnum.Peace },
+               new ProjectType { Id = 13, Type = ProjectTypeEnum.Partnership }
            );
         }
 
