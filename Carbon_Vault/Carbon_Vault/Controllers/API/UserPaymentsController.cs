@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Stripe;
 using Stripe.Checkout;
+using System.ComponentModel.DataAnnotations;
 
 namespace Carbon_Vault.Controllers.API
 {
@@ -24,9 +25,8 @@ namespace Carbon_Vault.Controllers.API
 
         private async Task AddPurchaseTransactionAsync(int userId, int projectId, int quantity, double total, string paymentMethod, string checkoutSession)
         {
-
             var project = await _context.Projects.FindAsync(projectId);
-            int sellerId = project.Owner.Id;
+            int sellerId = project.OwnerId;
 
             Transaction t = new Transaction
             {
@@ -55,12 +55,35 @@ namespace Carbon_Vault.Controllers.API
             {
                 PaymentMethodTypes = new List<string>
                 {
-                    "card"
+                    "card",
+                    /*
+                    Card Success Payment
+                    Email: qualquer
+                    Card Info: 4242 4242 4242 4242
+                    (data superior atual) CVC: 424
+                    Cardholder Name: 424242
+                    */
+
+                    "sepa_debit"
+                    /*
+                    SEPA Success Payment
+                    Email: qualquer
+                    IBAN: DE89370400440532013000
+                    Name account: 424242
+                    Address: 424242
+                    Postal-code: 4242
+                    City: 4242
+                    */
                 },
                 LineItems = GetLineItems(data),
                 Mode = "payment",
                 SuccessUrl = success_url,
                 CancelUrl = cancel_url,
+                Metadata = new Dictionary<string, string>
+                {
+                    { "userId", data.UserId.ToString() },
+                    { "itemID", data.Items.First().Id.ToString() }
+                },
                 InvoiceCreation = new SessionInvoiceCreationOptions
                 {
                     Enabled = true
@@ -180,10 +203,13 @@ namespace Carbon_Vault.Controllers.API
     public class PaymentData
     {
         public List<CartItem> Items { get; set; } = new();
+        public int UserId { get; set; }
     }
 
     public class CartItem
     {
+        [Key]
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }

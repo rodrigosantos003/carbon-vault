@@ -195,7 +195,7 @@ namespace Carbon_Vault.Data
                 {
                     Id = 1,
                     BuyerId = 2,
-                    SellerId = 3,
+                    SellerId = 4,
                     ProjectId = 1,
                     Quantity = 1,
                     TotalPrice = 12.50,
@@ -207,7 +207,7 @@ namespace Carbon_Vault.Data
                 new Transaction
                 {
                     Id = 2,
-                    SellerId = 2,
+                    SellerId = 4,
                     BuyerId = 5,
                     ProjectId = 2,
                     Quantity = 1,

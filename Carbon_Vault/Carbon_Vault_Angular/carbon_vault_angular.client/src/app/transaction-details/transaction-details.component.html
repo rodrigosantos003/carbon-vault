@@ -1,69 +1,70 @@
 <body>
-    <app-user-menu></app-user-menu>
-  
-    <main class="transaction-container">
+  <!--<app-user-menu></app-user-menu>-->
 
-        <span class="transaction-title"> Detalhes da {{ transactionType == 'Venda' ? 'Venda' : 'Compra' }} - #{{ transactionId }} </span>
+  <main class="transaction-container">
 
-        <div style="display: flex; flex-direction: row;">
-            <div class="transaction-details">
-                <span class="transaction-header"> Detalhes </span>
+    <span class="transaction-title"> Detalhes da {{ transactionType == 'Venda' ? 'Venda' : 'Compra' }} - #{{ transactionId }} </span>
 
-                <div *ngIf="transactionType != 'Compra'">
-                <span class="transaction-label"> Comprador </span>
+    <div style="display: flex; flex-direction: row;">
+      <div class="transaction-details">
+        <span class="transaction-header"> Detalhes </span>
 
-                <span class="transaction-value"> 
-                    <img src="../../../images/user.svg">  
-                    {{ transactionBuyer }} 
-                </span>
-                </div>
+        <div *ngIf="transactionType != 'Compra'">
+          <span class="transaction-label"> Comprador </span>
 
-                <div *ngIf="transactionType != 'Venda'" style="margin-top: 30px">
-                <span class="transaction-label"> Vendedor </span>
-
-                <span class="transaction-value"> 
-                    <img src="../../../images/user.svg">  
-                    {{ transactionSeller }} 
-                </span>
-                </div>
-
-                <span class="transaction-label"> Projeto </span>
-
-                <span class="transaction-value"> 
-                    <img src="../../../images/project.svg">  
-                    {{ transactionProject }} 
-                </span>
-            </div>
-
-            <div class="transaction-tables">
-                <span class="transaction-header"> Faturação 
-                    <button class="download-button"> Descarregar </button> 
-                </span>
-
-                <div class="table">
-                    <span class="transaction-label"> Últimas Compras </span>
-                    <table>
-                      <thead>
-                        <tr>
-                          <th>Data</th>
-                          <th>Quantidade</th>
-                          <th>Total</th>
-                          <th>Sessão de pagamento</th>
-                          <th>Método de Pagamento</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>{{ transactionDate }}</td>
-                          <td>{{ transactionQuantity }}</td>
-                          <td>{{ transactionTotal }}€</td>
-                          <td>{{ transactionSession }}</td>
-                          <td>{{ transactionMethod }}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-            </div>
+          <span class="transaction-value">
+            <img src="../../../images/user.svg">
+            {{ transactionBuyer }}
+          </span>
         </div>
-    </main>
+
+        <div *ngIf="transactionType != 'Venda'" style="margin-top: 30px">
+          <span class="transaction-label"> Vendedor </span>
+
+          <span class="transaction-value">
+            <img src="../../../images/user.svg">
+            {{ transactionSeller }}
+          </span>
+        </div>
+
+        <span class="transaction-label"> Projeto </span>
+
+        <span class="transaction-value">
+          <img src="../../../images/project.svg">
+          {{ transactionProject }}
+        </span>
+      </div>
+
+      <div class="transaction-tables">
+        <span class="transaction-header">
+          Faturação
+          <button class="download-button"> Descarregar </button>
+        </span>
+
+        <div class="table">
+          <span class="transaction-label"> Últimas Compras </span>
+          <table>
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Quantidade</th>
+                <th>Total</th>
+                <th>Sessão de pagamento</th>
+                <th>Método de Pagamento</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{ transactionDate }}</td>
+                <td>{{ transactionQuantity }}</td>
+                <td>{{ transactionTotal }}€</td>
+                <td>{{ transactionSession }}</td>
+                <td>{{ transactionMethod }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
 </body>
