@@ -31,17 +31,13 @@ namespace Carbon_Vault.Controllers.API
             return await _context.Projects
                 .Include(p => p.Types)// Ensure project types are loaded
                 .Include(p => p.CarbonCredits)   // Ensure carbon credits are loaded
-        .ToListAsync();
+                .ToListAsync();
         }
 
-        // GET: api/Projects/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Project>> GetProject(int id)
+        public async Task<ActionResult<Project>> GetAccount(int id)
         {
-            var project = await _context.Projects
-        .Include(p => p.Types) // Ensure project types are loaded
-        .Include(p => p.CarbonCredits) // Ensure carbon credits are loaded
-        .FirstOrDefaultAsync(p => p.Id == id);
+            var project = await _context.Projects.FindAsync(id);
 
             if (project == null)
             {
@@ -55,10 +51,10 @@ namespace Carbon_Vault.Controllers.API
         public async Task<ActionResult<IEnumerable<Project>>> GetProjectsFromUser(int userId)
         {
             var projects = await _context.Projects
-                .Where(p => p.Owner.Id == userId)  
-                .Include(p => p.Types)  
-                .Include(p => p.CarbonCredits)  
-                .ToListAsync();  
+                .Where(p => p.Owner.Id == userId)
+                .Include(p => p.Types)
+                .Include(p => p.CarbonCredits)
+                .ToListAsync();
 
             if (projects == null || projects.Count == 0)
             {

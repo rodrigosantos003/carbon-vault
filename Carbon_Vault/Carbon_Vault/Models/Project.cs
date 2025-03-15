@@ -34,7 +34,6 @@
 
         // Relationship with User
         public Account Owner { get; set; }
-        public int OwnerId { get; set; }
 
         // Relationship with documents
         public ICollection<ProjectFiles> Files { get; set; } = new List<ProjectFiles>();

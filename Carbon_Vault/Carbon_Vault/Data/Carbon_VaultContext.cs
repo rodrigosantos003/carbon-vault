@@ -21,7 +21,7 @@ namespace Carbon_Vault.Data
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<ProjectFiles> ProjectFiles { get; set; }
 
-        public Carbon_VaultContext (DbContextOptions<Carbon_VaultContext> options)
+        public Carbon_VaultContext(DbContextOptions<Carbon_VaultContext> options)
             : base(options)
         {
         }
@@ -32,8 +32,8 @@ namespace Carbon_Vault.Data
 
             // Configurar o relacionamento entre Project e CarbonCredit
             modelBuilder.Entity<CarbonCredit>()
-                .HasOne(cc => cc.Project)                     
-                .WithMany(p => p.CarbonCredits)               
+                .HasOne(cc => cc.Project)
+                .WithMany(p => p.CarbonCredits)
                 .HasForeignKey(cc => cc.ProjectId).OnDelete(DeleteBehavior.NoAction);
 
             // Configurar o relacionamento entre Project e Ficheiros deste
@@ -48,7 +48,7 @@ namespace Carbon_Vault.Data
                .HasOne(cc => cc.Owner)
                .WithMany(p => p.Projects)
                .HasForeignKey(cc => cc.OwnerId);
-               
+
 
 
             populateAccounts(modelBuilder);
@@ -59,7 +59,7 @@ namespace Carbon_Vault.Data
 
             populateTransactions(modelBuilder);
         }
-        
+
         private void populateAccounts(ModelBuilder modelBuilder)
         {
             string admin_hashed = AuthHelper.HashPassword("Admin@123");
@@ -168,7 +168,6 @@ namespace Carbon_Vault.Data
                    Benefits = "Access to clean water, improved health conditions.",
                    ProjectUrl = new Uri("https://example.com/project1"),
                    ImageUrl = "https://api.hub.jhu.edu/factory/sites/default/files/styles/hub_large/public/drink-more-water-hub.jpg",
-                   OwnerId = 1
                },
                new Project
                {
@@ -187,8 +186,6 @@ namespace Carbon_Vault.Data
                    ProjectUrl = new Uri("https://example.com/project2"),
                    CreatedAt = DateTime.UtcNow,
                    ImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSS2nF0iroOXheUgLiCRjKPFEyxqBqbjMMiBZxtPvybNA14VsZrFMg2wgudNFFSgdW9S5Q&usqp=CAU",
-                   OwnerId = 2
-
                }
            );
         }
@@ -206,7 +203,7 @@ namespace Carbon_Vault.Data
                     TotalPrice = 12.50,
                     Date = "2025-03-05",
                     State = TransactionState.Approved,
-                    PaymentMethod = "Transferência Bancária",
+                    PaymentMethod = "card",
                     CheckoutSession = "cs_123456789"
                 },
                 new Transaction
@@ -219,7 +216,7 @@ namespace Carbon_Vault.Data
                     TotalPrice = 15.75,
                     Date = "2025-03-05",
                     State = TransactionState.Approved,
-                    PaymentMethod = "Paypal",
+                    PaymentMethod = "SEPA",
                     CheckoutSession = "cs_987456321"
                 }
             );
