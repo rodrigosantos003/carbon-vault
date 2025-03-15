@@ -26,8 +26,9 @@ namespace Carbon_Vault_Tests_payments
         {
             _mockEmailService = new Mock<IEmailService>(); 
             _mockConfiguration = new Mock<IConfiguration>();
-
-            _mockConfiguration.Setup(c => c["AppSettings:FrontendBaseUrl"]).Returns("http://localhost:59115/");
+            
+            Environment.SetEnvironmentVariable("CLIENT_URL", "http://localhost:59115/");
+            
             _mockConfiguration.Setup(c => c["AppSettings:TokenSecretKey"]).Returns("jEJQ#5Hxuh*#[ra7k98J=cBRLj]n6ZP1w*2S.M-Pwgr1D;ZQ.C*WgN&HnCG");
 
             StripeConfiguration.ApiKey = "sk_test_51Qx9k3PqsbpdHFs4jYQFgS4KaeHzPa5zdh3p1RV4NbuK2iCThy0X8pWPc4uMIhpuzRd7H9cYPoBmu4omo4AZMpoX00YEtcCxmW";
