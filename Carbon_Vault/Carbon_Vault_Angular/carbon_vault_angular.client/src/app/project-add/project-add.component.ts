@@ -25,6 +25,8 @@ export class ProjectAddComponent {
   categoriasSelecionadas: string[] = [];
   private apiURL = `${environment.apiUrl}/Projects`;
   userId: string;
+  imagem: File | null = null;
+  imagePreviewUrl: string | null = null;
 
 
   categorias = [
@@ -54,7 +56,27 @@ export class ProjectAddComponent {
   
     this.documentos = [...this.documentos, ...newFiles];
   }
-  
+ 
+  onImageChange(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.imagem = file;
+
+       const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.imagePreviewUrl = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  uploadImage(projectID : number): Promise<string> {
+    const formData = new FormData();
+    if (this.imagem) {
+      formData.append('file', this.imagem);
+    }
+    return this.http.post<any>(`${this.apiURL}/${projectID}/upload`, formData).toPromise().then(response => response.url);
+  }
 
   onCategoriaChange(categoria: string, event: any) {
     if (event.target.checked) {

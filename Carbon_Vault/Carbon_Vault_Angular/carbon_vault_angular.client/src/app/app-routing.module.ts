@@ -41,7 +41,7 @@ const routes: Routes = [
   { path: 'cart', component: CartComponent },
   { path: 'purchases', component: UserPurchasesComponent },
   { path: 'project-manager', component: ProjectManagerComponent },
-  { path: 'project-manager/addProject', component: ProjectAddComponent },
+  { path: 'Account-project-manager/addProject', component: ProjectAddComponent },
   { path: 'Account-project-manager', component: ProjectManagerUserComponent,canActivate: [AuthGuard] },
   { path: 'sales', component: UserSalesComponent },
   { path: 'users-manager/user-details/:id', component: UserDetailsComponent, },
