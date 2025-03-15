@@ -1,0 +1,125 @@
+<body>
+    <app-user-menu></app-user-menu>
+    <div class="main-content">
+      <div class="project-details">
+        <div class="project-details-header">
+          <h3>Editar Projeto</h3>
+        </div>
+        <hr>
+        <div class="status-tooltip" *ngIf="project.status === 1">
+          <p style="margin: 0;color: rgb(255, 255, 255);">Atenção!</p>
+          <span style="color: rgb(255, 255, 255);">O seu projeto ainda está em processo de aprovação, só poderá edita-lo após esse processo</span>
+        </div>
+        
+      </div>
+      <form (ngSubmit)="onSubmit()" class="add-project-form">
+        <div class="first-column">
+          <div class="form-item">
+            <label>Nome</label><br>
+            <input type="text" [(ngModel)]="project.name" name="nome" [disabled]="isEditable" />
+          </div>
+          <div class="form-item">
+            <label>Descrição</label><br>
+            <textarea [(ngModel)]="project.description" name="descricao" [disabled]="isEditable"></textarea>
+          </div>
+          <div class="form-item">
+            <label>Localização</label><br>
+            <input type="text" [(ngModel)]="project.location" name="localizacao" [disabled]="isEditable" />
+          </div>
+          <div class="form-item">
+            <label>Data de Início</label><br>
+            <input type="date" [(ngModel)]="project.startDate" name="dataInicio" [disabled]="isEditable" />
+          </div>
+          <div class="form-item">
+            <label>Data de Fim</label><br>
+            <input type="date" [(ngModel)]="project.endDate" name="dataFim" [disabled]="isEditable" />
+          </div>
+          <div class="form-item">
+            <label>Desenvolvedor</label><br>
+            <input type="text" [(ngModel)]="project.developer" name="desenvolvedor" [disabled]="isEditable" />
+          </div>
+          <div class="form-item">
+            <label>URL do Projeto</label><br>
+            <input type="text" [(ngModel)]="project.projectUrl" name="urlProjeto" [disabled]="isEditable" />
+          </div>
+        </div>
+
+        <div class="second-column">
+          <div class="form-item">
+            <h2>Categorias (ODS)</h2>
+            <div *ngFor="let categoria of categorias">
+              <label>
+                <input
+                  type="checkbox"
+                  [checked]="categoriasSelecionadas.includes(categoria.id)"
+                  (change)="onCategoriaChange(categoria.id, $event)"
+                  class="custom-checkbox"
+                  [disabled]="isEditable"
+                />
+                {{ categoria.label }}
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="third-column">
+          <!-- Mostrar documentos -->
+          <div class="form-item">
+            <h2>Documentos</h2>
+              <!-- Display uploaded files -->
+              <ul *ngIf="documentosAtuais.length > 0" class="file-list">
+                <li *ngFor="let documento of documentosAtuais">
+                  <!-- Display the file name and trigger download on click -->
+                  <span style="z-index: 6;" (click)="downloadFile(documento.filePath, documento.fileName)">
+                    {{ documento.fileName }}
+                  </span>
+                  <!-- Optionally show a delete button if the project is editable -->
+                  <button *ngIf="isEditable" (click)="deleteFile(documento.id)">Deletar</button>
+                </li>
+              </ul>
+              
+          </div>
+          <!-- Adicionar Documentos -->
+          <div class="form-item">
+            <h2>Documentos</h2>
+            <div
+            class="drag-area"
+            (dragover)="onDragOver($event)"
+            (drop)="onDrop($event)"
+            (dragleave)="onDragLeave($event)"
+            (click)="fileInput.click()"
+          >
+            <p>Arraste e solte arquivos aqui ou clique para selecionar</p>
+            <input
+              #fileInput
+              type="file"
+              (change)="onFileChange($event)"
+              multiple
+              style="display:none"
+            />
+  
+            <!-- Display uploaded files -->
+            <ul *ngIf="documentos.length > 0" class="file-list">
+              <li *ngFor="let documento of documentos">{{ documento.name }}</li>
+            </ul>
+          </div>
+          </div>
+                    
+          <div class="form-item">
+            <label>Imagem do Projeto</label><br>
+            <img  *ngIf="project.imageUrl" [src]="project.imageUrl" alt="Imagem do Projeto" />
+            <input type="file" (change)="onImageChange($event)" accept="image/*" [disabled]="isEditable" />
+            <div *ngIf="imagePreviewUrl" class="image-preview">
+              <img [src]="imagePreviewUrl" alt="Imagem do Projeto" />
+            </div>
+          </div>
+          </div>
+
+
+        
+
+        <button type="submit" [disabled]="isEditable">Salvar Alterações</button>
+      </form>
+    </div>
+  </body>
+  

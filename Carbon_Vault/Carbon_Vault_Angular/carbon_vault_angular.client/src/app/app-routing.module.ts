@@ -23,6 +23,7 @@ import { ProjectManagerComponent } from './project-manager/project-manager.compo
 import { ProjectManagerUserComponent } from './project-manager-user/project-manager-user.component';
 import { PaymentSuccessComponent } from './payment-success/payment-success.component';
 import { ProjectAddComponent } from './project-add/project-add.component';
+import { ProjectManagerDetailsComponent } from './project-manager-details/project-manager-details.component';
 const routes: Routes = [
   { path: 'confirm-account', component: ConfirmAccountComponent },
   { path: '', component: HomeComponent },
@@ -42,6 +43,7 @@ const routes: Routes = [
   { path: 'purchases', component: UserPurchasesComponent },
   { path: 'project-manager', component: ProjectManagerComponent },
   { path: 'Account-project-manager/addProject', component: ProjectAddComponent },
+  { path: 'Account-project-manager/:id', component: ProjectManagerDetailsComponent },
   { path: 'Account-project-manager', component: ProjectManagerUserComponent,canActivate: [AuthGuard] },
   { path: 'sales', component: UserSalesComponent },
   { path: 'users-manager/user-details/:id', component: UserDetailsComponent, },

@@ -174,10 +174,54 @@ namespace Carbon_Vault.Controllers.API
         }
 
         [HttpPost("{id}/upload")]
+        public async Task<IActionResult> UploadFiles(int id, List<IFormFile> files)
+        {
+            if (files == null || files.Count == 0)
+                return BadRequest("No files uploaded.");
+
+            var uploadedFiles = new List<ProjectFiles>();
+
+            foreach (var file in files)
+            {
+                if (file.Length == 0) continue;
+
+                var fileName = Path.GetFileName(file.FileName);
+                var filePath = Path.Combine(_environment.WebRootPath, "files", fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                var projectFile = new ProjectFiles
+                {
+                    FileName = fileName,
+                    FilePath = $"{Request.Scheme}://{Request.Host}/files/{fileName}",
+                    FileType = Path.GetExtension(fileName).TrimStart('.'),
+                    UploadedAt = DateTime.Now,
+                    ProjectId = id
+                };
+
+                _context.ProjectFiles.Add(projectFile);
+                uploadedFiles.Add(projectFile);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Ok(uploadedFiles);
+        }
+
+        [HttpPost("{id}/uploadImage")]
         public async Task<IActionResult> UploadFile(int id, IFormFile file)
         {
             if (file == null || file.Length == 0)
                 return BadRequest("No file uploaded.");
+
+            var allowedExtensions = new[] { ".png", ".jpg" };
+            var fileExtension = Path.GetExtension(file.FileName).ToLower();
+
+            if (!allowedExtensions.Contains(fileExtension))
+                return BadRequest("Only .png and .jpg files are allowed.");
 
             var fileName = Path.GetFileName(file.FileName);
             var filePath = Path.Combine(_environment.WebRootPath, "files", fileName);
@@ -190,17 +234,25 @@ namespace Carbon_Vault.Controllers.API
             var projectFile = new ProjectFiles
             {
                 FileName = fileName,
-                FilePath = $"/files/{fileName}",
-                FileType = Path.GetExtension(fileName).TrimStart('.'),
+                FilePath = $"{Request.Scheme}://{Request.Host}/files/{fileName}",
+                FileType = fileExtension.TrimStart('.'),
                 UploadedAt = DateTime.Now,
                 ProjectId = id
             };
 
             _context.ProjectFiles.Add(projectFile);
+
+            var project = await _context.Projects.FindAsync(id);
+            if (project != null)
+            {
+                project.ImageUrl = $"{Request.Scheme}://{Request.Host}/files/{fileName}";
+            }
+
             await _context.SaveChangesAsync();
 
             return Ok(projectFile);
         }
+
 
         [HttpDelete("files/{fileId}")]
         public async Task<IActionResult> DeleteFile(int fileId)

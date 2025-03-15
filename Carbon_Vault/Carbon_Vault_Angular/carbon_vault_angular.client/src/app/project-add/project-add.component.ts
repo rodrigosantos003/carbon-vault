@@ -69,13 +69,13 @@ export class ProjectAddComponent {
     }
   }
 
-  async uploadImage(): Promise<string> {
+  async uploadImage(projectId : number): Promise<string> {
     if (!this.imagem) return '';
     const formData = new FormData();
     formData.append('file', this.imagem);
 
     try {
-      const response: any = await this.http.post(`${this.apiURL}/upload-image`, formData).toPromise();
+      const response: any = await this.http.post(`${this.apiURL}/${projectId}/uploadImage`, formData).toPromise();
       return response.filePath;
     } catch (error) {
       console.error('Erro ao enviar imagem:', error);
@@ -116,8 +116,12 @@ export class ProjectAddComponent {
     event.stopPropagation();
   }
   async onSubmit() {
-    if (this.imagem) {
-      this.urlImagem = await this.uploadImage();
+      const inicio = new Date(this.dataInicio);
+    const fim = new Date(this.dataFim);
+
+    if (inicio > fim) {
+      alert('A data de início não pode ser depois da data de fim.');
+      return;
     }
 
     const projeto = {
@@ -142,8 +146,11 @@ export class ProjectAddComponent {
 
       if (this.documentos.length > 0) {
         const formData = new FormData();
-        this.documentos.forEach(file => formData.append('file', file));
+        this.documentos.forEach(file => formData.append('files', file));
         await this.http.post(`${this.apiURL}/${projectId}/upload`, formData).toPromise();
+      }
+      if (this.imagem) {
+        this.urlImagem = await this.uploadImage(projectId);
       }
 
       alert('Projeto criado com sucesso!');

@@ -76,17 +76,19 @@
         </div>
         <!-- Documents and files -->
         <div class="third-column">
-          <div class="form-item">
+          <div class="form-item-image">
             <h2>Imagem do Projeto</h2>
-            <input type="file" (change)="onImageChange($event)" accept="image/*" />
-            <div *ngIf="imagePreviewUrl" class="imagePreview">
-              <img [src]="imagePreviewUrl" alt="Preview da Imagem" />
-          </div>
+            <div class="form-item-image-wrap">
+              <input type="file" (change)="onImageChange($event)" accept="image/*" id="imageInput"/>
+              <div *ngIf="imagePreviewUrl" class="imagePreview">
+                <img [src]="imagePreviewUrl" alt="Preview da Imagem" />
+              </div>
+            </div>
           </div>
           <div class="form-item">
             <h2>Documentos</h2>
             <div
-            class="border-2 drag-area"
+            class="drag-area"
             (dragover)="onDragOver($event)"
             (drop)="onDrop($event)"
             (dragleave)="onDragLeave($event)"

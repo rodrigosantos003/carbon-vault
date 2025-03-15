@@ -33,6 +33,7 @@ import { ProjectManagerComponent } from './project-manager/project-manager.compo
 import { PaymentSuccessComponent } from './payment-success/payment-success.component';
 import { ProjectManagerUserComponent } from './project-manager-user/project-manager-user.component';
 import { ProjectAddComponent } from './project-add/project-add.component';
+import { ProjectManagerDetailsComponent } from './project-manager-details/project-manager-details.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import { ProjectAddComponent } from './project-add/project-add.component';
     PaymentSuccessComponent,
     ProjectManagerUserComponent,
     ProjectAddComponent,
+    ProjectManagerDetailsComponent,
   ],
   imports: [
     BrowserModule,
