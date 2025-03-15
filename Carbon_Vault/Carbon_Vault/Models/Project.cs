@@ -1,4 +1,6 @@
-﻿namespace Carbon_Vault.Models
+﻿using System.Text.Json.Serialization;
+
+namespace Carbon_Vault.Models
 {
     public enum ProjectStatus
     {
@@ -33,7 +35,8 @@
         public DateTime CreatedAt { get; set; }
 
         // Relationship with User
-        public Account Owner { get; set; }
+        [JsonIgnore]
+        public Account? Owner { get; set; }
         public int OwnerId { get; set; }
 
         // Relationship with documents

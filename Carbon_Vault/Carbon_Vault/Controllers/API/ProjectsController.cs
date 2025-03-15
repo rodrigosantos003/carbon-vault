@@ -104,11 +104,44 @@ namespace Carbon_Vault.Controllers.API
         [HttpPost]
         public async Task<ActionResult<Project>> PostProject(Project project)
         {
+            // Verifica se o OwnerId é válido e define o dono do projeto
+            if (project.OwnerId != 0)
+            {
+                var owner = await _context.Account.FindAsync(project.OwnerId);
+                if (owner == null)
+                {
+                    return BadRequest("O utilizador especificado não existe.");
+                }
+                project.Owner = owner;
+                Console.WriteLine(project);
+            }
+            else
+            {
+                return BadRequest("O campo OwnerId é obrigatório.");
+            }
+
+            // Processa os Project Types (categorias) se existirem
+            if (project.Types != null && project.Types.Any())
+            {
+                var typeIds = project.Types.Select(t => t.Id).ToList();
+                var projectTypes = await _context.ProjectTypes
+                                                 .Where(t => typeIds.Contains(t.Id))
+                                                 .ToListAsync();
+
+                if (projectTypes.Count != typeIds.Count)
+                {
+                    return BadRequest("Um ou mais tipos de projetos fornecidos são inválidos.");
+                }
+
+                project.Types = projectTypes;  // Associar os tipos do projeto
+            }
+
             _context.Projects.Add(project);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetProject", new { id = project.Id }, project);
         }
+
 
         // DELETE: api/Projects/5
         [HttpDelete("{id}")]

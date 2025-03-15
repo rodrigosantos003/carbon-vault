@@ -1,1 +1,67 @@
-<p>project-add works!</p>
+<body>
+    <app-user-menu></app-user-menu>
+  
+    <div class="main-content">
+      <!-- Project Details -->
+      <div class="project-details">
+        <div class="project-details-header">
+          <h3>Adicionar Projeto</h3>
+        </div>
+        <hr>
+      </div>
+  
+      <form (ngSubmit)="onSubmit()">
+        <div class="text-fields">
+          <div class="form-item">
+            <label>Nome</label>
+            <input type="text" [(ngModel)]="nome" name="nome" />
+          </div>
+          <div class="form-item">
+            <label>Preço</label>
+            <input type="number" [(ngModel)]="preco" name="preco" />
+          </div>
+        </div>
+        
+  
+        <div class="form-item">
+          <h2>Categorias (ODS)</h2>
+          <div class="grid">
+            <div *ngFor="let categoria of categorias">
+              <label>
+                <input type="checkbox" (change)="onCategoriaChange(categoria.nome, $event)" />
+                {{categoria.label}}
+              </label>
+            </div>
+          </div>
+        </div>
+  
+        <div class="form-item">
+          <h2>Documentos</h2>
+          <div
+          class="border-2 drag-area"
+          (dragover)="onDragOver($event)"
+          (drop)="onDrop($event)"
+          (dragleave)="onDragLeave($event)"
+          (click)="fileInput.click()"
+        >
+          <p>Arraste e solte arquivos aqui ou clique para selecionar</p>
+          <input
+            #fileInput
+            type="file"
+            (change)="onFileChange($event)"
+            multiple
+            style="display:none"
+          />
+
+          <!-- Display uploaded files -->
+          <ul *ngIf="documentos.length > 0" class="file-list">
+            <li *ngFor="let documento of documentos">{{ documento.name }}</li>
+          </ul>
+        </div>
+        </div>
+  
+        <button type="submit">Adicionar</button>
+      </form>
+    </div>
+  </body>
+  
