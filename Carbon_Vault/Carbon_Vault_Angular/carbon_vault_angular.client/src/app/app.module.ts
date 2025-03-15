@@ -34,6 +34,8 @@ import { PaymentSuccessComponent } from './payment-success/payment-success.compo
 import { ProjectManagerUserComponent } from './project-manager-user/project-manager-user.component';
 import { ProjectAddComponent } from './project-add/project-add.component';
 import { TransactionDetailsComponent } from './transaction-details/transaction-details.component';
+import { UserProjectsComponent } from './user-projects/user-projects.component';
+import { EditProjectComponent } from './edit-project/edit-project.component';
 
 @NgModule({
   declarations: [
@@ -61,9 +63,16 @@ import { TransactionDetailsComponent } from './transaction-details/transaction-d
     UserDetailsComponent,
     ProjectManagerComponent,
     PaymentSuccessComponent,
+<<<<<<< Updated upstream
     ProjectManagerUserComponent,
     ProjectAddComponent,
     TransactionDetailsComponent
+=======
+    AdminTransactionsComponent,
+    TransactionDetailsComponent,
+    UserProjectsComponent,
+    EditProjectComponent,
+>>>>>>> Stashed changes
   ],
   imports: [
     BrowserModule,

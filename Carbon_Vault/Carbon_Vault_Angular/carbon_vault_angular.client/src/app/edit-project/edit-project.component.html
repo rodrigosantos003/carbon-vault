@@ -1,0 +1,69 @@
+<body>
+  <app-user-menu></app-user-menu>
+
+  <div class="main-content">
+    <div class="edit-project">
+      <div class="section-title">Editar Projeto</div>
+
+      <!--Edit Project Form-->
+      <form [formGroup]="editProjectForm" (ngSubmit)="onSubmit()">
+        <div class="form-grid">
+          <div class="form-column">
+            <label for="name">
+              <i class="fa fa-project-diagram"></i> Nome do Projeto
+            </label>
+            <input id="name" type="text" formControlName="name" [value]="project?.name" required />
+
+            <label for="description">
+              <i class="fa fa-pen"></i> Descrição
+            </label>
+            <textarea id="description" formControlName="description" required>{{ project?.description }}</textarea>
+
+            <label for="pricePerCredit">
+              <i class="fa fa-euro-sign"></i> Preço por Crédito
+            </label>
+            <input id="pricePerCredit" type="number" formControlName="pricePerCredit" [value]="project?.pricePerCredit" required />
+
+            <label for="carbonCreditsGenerated">
+              <i class="fa fa-leaf"></i> Créditos de Carbono Gerados
+            </label>
+            <input id="carbonCreditsGenerated" type="number" formControlName="carbonCreditsGenerated" [value]="project?.carbonCreditsGenerated" required />
+          </div>
+
+          <div class="form-column">
+            <label for="benefits">
+              <i class="fa fa-hand-holding-heart"></i> Benefícios
+            </label>
+            <textarea id="benefits" formControlName="benefits" required>{{ project?.benefits }}</textarea>
+
+            <label for="location">
+              <i class="fa fa-location-arrow"></i> Localização
+            </label>
+            <input id="location" type="text" formControlName="location" [value]="project?.location" required />
+
+            <label for="status">
+              <i class="fa fa-check-circle"></i> Estado
+            </label>
+            <select id="status" formControlName="status" required>
+              <option value="Confirmado" [selected]="project?.status === 0">Confirmado</option>
+              <option value="Em Revisão" [selected]="project?.status === 1">Em Revisão</option>
+              <option value="Recusado" [selected]="project?.status === 2">Recusado</option>
+            </select>
+
+            <label for="forSale">
+              <i class="fa fa-tags"></i> À Venda
+            </label>
+            <select id="forSale" formControlName="forSale" required>
+              <option value="1" [selected]="project?.forSale === 1">Sim</option>
+              <option value="0" [selected]="project?.forSale === 0">Não</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit" class="edit-button">Salvar Alterações</button>
+      </form>
+
+
+    </div>
+  </div>
+</body>

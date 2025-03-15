@@ -154,6 +154,7 @@ namespace Carbon_Vault.Data
                new Project
                {
                    Id = 1,
+                   OwnerId = 2,
                    Name = "Water Access Initiative",
                    Description = "Providing clean water access to rural communities.",
                    Location = "Africa",
@@ -173,6 +174,7 @@ namespace Carbon_Vault.Data
                new Project
                {
                    Id = 2,
+                   OwnerId = 2,
                    Name = "Solar Energy for All",
                    Description = "Solar energy projects to provide electricity to underserved areas.",
                    Location = "South America",
@@ -199,8 +201,13 @@ namespace Carbon_Vault.Data
                 new Transaction
                 {
                     Id = 1,
+<<<<<<< Updated upstream
                     BuyerId = 2,
                     SellerId = 3,
+=======
+                    Type = TransactionType.Purchase,
+                    UserId = 4,
+>>>>>>> Stashed changes
                     ProjectId = 1,
                     Quantity = 1,
                     TotalPrice = 12.50,
