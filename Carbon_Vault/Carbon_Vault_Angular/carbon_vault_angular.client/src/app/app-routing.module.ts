@@ -24,6 +24,10 @@ import { ProjectManagerUserComponent } from './project-manager-user/project-mana
 import { PaymentSuccessComponent } from './payment-success/payment-success.component';
 import { ProjectAddComponent } from './project-add/project-add.component';
 import { ProjectManagerDetailsComponent } from './project-manager-details/project-manager-details.component';
+import { TransactionDetailsComponent } from './transaction-details/transaction-details.component';
+import { UserProjectsComponent } from './user-projects/user-projects.component';
+/*import { EditProjectComponent } from './edit-project/edit-project.component';*/
+
 const routes: Routes = [
   { path: 'confirm-account', component: ConfirmAccountComponent },
   { path: '', component: HomeComponent },
@@ -47,7 +51,12 @@ const routes: Routes = [
   { path: 'Account-project-manager', component: ProjectManagerUserComponent,canActivate: [AuthGuard] },
   { path: 'sales', component: UserSalesComponent },
   { path: 'users-manager/user-details/:id', component: UserDetailsComponent, },
-  { path: 'payment-success', component: PaymentSuccessComponent }
+  { path: 'payment-success', component: PaymentSuccessComponent },
+  { path: 'transaction-details/:id', component: TransactionDetailsComponent },
+  /*{ path: 'admin-transactions', component: AdminTransactionsComponent },*/
+  { path: 'admin-transactions/transaction-details/:id', component: TransactionDetailsComponent },
+  { path: 'user-projects', component: UserProjectsComponent },
+  /*{ path: 'user-projects/edit-project/:id', component: EditProjectComponent, },*/
 ];
 
 @NgModule({

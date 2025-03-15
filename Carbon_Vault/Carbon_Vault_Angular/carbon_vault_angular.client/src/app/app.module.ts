@@ -34,6 +34,8 @@ import { PaymentSuccessComponent } from './payment-success/payment-success.compo
 import { ProjectManagerUserComponent } from './project-manager-user/project-manager-user.component';
 import { ProjectAddComponent } from './project-add/project-add.component';
 import { ProjectManagerDetailsComponent } from './project-manager-details/project-manager-details.component';
+import { TransactionDetailsComponent } from './transaction-details/transaction-details.component';
+import { UserProjectsComponent } from './user-projects/user-projects.component';
 
 @NgModule({
   declarations: [

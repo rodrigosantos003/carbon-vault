@@ -44,8 +44,7 @@ namespace Carbon_Vault_Tests_Auth
             var result = await controller.ForgotPassword("nonexistent@example.com");
 
             // Assert
-            var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
-            Assert.Equal("Account not found.", notFoundResult.Value as string);
+            Assert.IsType<NotFoundObjectResult>(result);
         }
 
         [Fact]
@@ -68,8 +67,7 @@ namespace Carbon_Vault_Tests_Auth
                 "Carbon Vault - Recuperar Palavra-Passe",
                 It.Is<string>(body => body.Contains("recover-password")), null), Times.Once);
 
-            var okResult = Assert.IsType<OkObjectResult>(result);
-            Assert.Equal("Password recovery link sent successfully", okResult.Value as string);
+            Assert.IsType<OkObjectResult>(result);
         }
 
         public void Dispose()

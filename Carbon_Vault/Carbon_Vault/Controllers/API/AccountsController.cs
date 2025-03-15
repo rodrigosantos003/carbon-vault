@@ -32,13 +32,23 @@ namespace Carbon_Vault.Controllers.API
             _frontendBaseUrl = Environment.GetEnvironmentVariable("CLIENT_URL");
         }
 
+        private bool AccountExists(string email)
+        {
+            return _context.Account.Any(a => a.Email == email);
+        }
+
+        private bool AccountExists(int id)
+        {
+            return _context.Account.Any(a =>a.Id == id);
+        }
+
         // GET: api/Accounts
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Account>>> GetAccounts([FromHeader] string Authorization, int userID)
         {
             if (!AuthHelper.IsTokenValid(Authorization, userID))
             {
-                return Unauthorized("JWT inválido.");
+                return Unauthorized(new { message = "JWT inválido." });
             }
 
             return await _context.Account.ToListAsync();
@@ -61,7 +71,7 @@ namespace Carbon_Vault.Controllers.API
 
             if (!accounts.Any())
             {
-                return NotFound("Nenhuma conta de usuário encontrada.");
+                return NotFound(new { message = "Nenhuma conta de utilizador encontrada." });
             }
 
             return Ok(accounts);
@@ -77,7 +87,7 @@ namespace Carbon_Vault.Controllers.API
 
             if (!accounts.Any())
             {
-                return NotFound("Nenhuma conta de administrador encontrada.");
+                return NotFound(new { message = "Nenhuma conta de administrador encontrada." });
             }
 
             return accounts;
@@ -92,7 +102,7 @@ namespace Carbon_Vault.Controllers.API
 
             if (account == null)
             {
-                return NotFound();
+                return NotFound(new {message = "Conta não encontrada."});
             }
 
             return account;
@@ -105,12 +115,12 @@ namespace Carbon_Vault.Controllers.API
         {
             if (!AuthHelper.IsTokenValid(Authorization, id))
             {
-                return Unauthorized();
+                return Unauthorized(new {message = "JWT inválido."});
             }
 
             if (id != account.Id)
             {
-                return BadRequest();
+                return BadRequest(new {message = "Pedido inválido."});
             }
 
             _context.Entry(account).State = EntityState.Modified;
@@ -123,7 +133,7 @@ namespace Carbon_Vault.Controllers.API
             {
                 if (!AccountExists(id))
                 {
-                    return NotFound();
+                    return NotFound(new {message = "Conta não encontrada."});
                 }
                 else
                 {
@@ -131,7 +141,7 @@ namespace Carbon_Vault.Controllers.API
                 }
             }
 
-            return NoContent();
+            return Ok(new {message = "Conta atualizada com sucesso."});
         }
 
         // POST: api/Accounts
@@ -139,6 +149,9 @@ namespace Carbon_Vault.Controllers.API
         [HttpPost]
         public async Task<ActionResult<Account>> PostAccount(Account account)
         {
+            if(AccountExists(account.Email))
+                return BadRequest(new {message = "Já existe uma conta com o e-mail fornecido."});
+
             account.State = AccountState.Pending;
             account.Password = AuthHelper.HashPassword(account.Password);
 
@@ -161,11 +174,11 @@ namespace Carbon_Vault.Controllers.API
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAccount(int id, [FromHeader] string Authorization)
+        public async Task<IActionResult> DeleteAccount(int id, [FromHeader] string Authorization, int userID)
         {
-            if (!AuthHelper.IsTokenValid(Authorization, id))
+            if (!AuthHelper.IsTokenValid(Authorization, userID))
             {
-                return Unauthorized();
+                return Unauthorized(new {message = "JWT inválido."});
             }
 
             var account = await _context.Account.FindAsync(id);
@@ -177,7 +190,7 @@ namespace Carbon_Vault.Controllers.API
             _context.Account.Remove(account);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok(new {message = "Conta eliminada com sucesso."});
         }
 
 
@@ -223,7 +236,7 @@ namespace Carbon_Vault.Controllers.API
             var account = await _context.Account.FirstOrDefaultAsync(a => a.Email == email);
 
             if (account == null)
-                return NotFound("Account not found.");
+                return NotFound(new { message = "Account not found." });
 
             account.State = AccountState.Pending;
             _context.Entry(account).State = EntityState.Modified;
@@ -421,11 +434,6 @@ namespace Carbon_Vault.Controllers.API
             return Ok(new { message = "Password reset successfully." });
         }
 
-        private bool AccountExists(int id)
-        {
-            return _context.Account.Any(e => e.Id == id);
-        }
-
         [HttpGet("ValidateNIF")]
         public async Task<IActionResult> ValidateNIF([FromQuery] string nif)
         {
@@ -467,7 +475,7 @@ namespace Carbon_Vault.Controllers.API
         {
             if (startDate >= endDate)
             {
-                return BadRequest("Invalid date range: startDate must be earlier than endDate.");
+                return BadRequest(new { message = "Invalid date range: startDate must be earlier than endDate." });
             }
 
            
@@ -496,7 +504,7 @@ namespace Carbon_Vault.Controllers.API
         {
             if (startDate >= endDate)
             {
-                return BadRequest("Invalid date range: startDate must be earlier than endDate.");
+                return BadRequest(new { message = "Invalid date range: startDate must be earlier than endDate." });
             }
 
             var usersLoggedInPeriod = await _context.Account

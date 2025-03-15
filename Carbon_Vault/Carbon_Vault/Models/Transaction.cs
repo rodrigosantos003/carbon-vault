@@ -9,28 +9,22 @@ namespace Carbon_Vault.Models
         Pending//Pendente
     }
 
-    public enum TransactionType
-    {
-        Purchase,//Compra
-        Sale//Venda 
-    }
-
     public class Transaction
     {
         [Key]
         public int Id { get; set; }
 
-        [Required]
-        public TransactionType Type { get; set; }
-
-        [Required]
-        public int UserId { get; set; }
+        public int BuyerId { get; set; }
+        public int SellerId { get; set; }
 
         [Required]
         public int ProjectId { get; set; }
 
         [Required]
         public int Quantity { get; set; }
+
+        [Required]
+        public double TotalPrice { get; set; }
 
         [Required]
         public string Date { get; set; }

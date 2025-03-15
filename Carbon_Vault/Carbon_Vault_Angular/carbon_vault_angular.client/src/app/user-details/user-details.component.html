@@ -32,7 +32,8 @@
                   <table class="purchase-history-table">
                     <thead>
                       <tr>
-                        <th>Tipo</th>
+                        <th>ID Comprador</th>
+                        <th>ID Vendedor</th>
                         <th>Data</th>
                         <th>Estado de Pagamento</th>
                         <th>Estado</th>
@@ -43,7 +44,8 @@
                         <td colspan="4" class="text-center">Nada a mostrar</td>
                       </tr>
                       <tr *ngFor="let transaction of accountTransactions">
-                        <td>{{ getTransactionType(transaction.type) }}</td>
+                        <td>{{ transaction.buyerId }}</td>
+                        <td>{{ transaction.sellerId }}</td>
                         <td>{{ transaction.date | date:'dd/MM/yyyy' }}</td>
                         <td>
                           <span class="payment-status">{{getTransactionState( transaction.state) }}</span>

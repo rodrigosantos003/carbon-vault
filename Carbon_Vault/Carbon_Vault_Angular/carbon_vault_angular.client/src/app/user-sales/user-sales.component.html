@@ -13,6 +13,9 @@
                         <th>Detalhes</th>
                 </thead>
                 <tbody>
+                  <tr *ngIf="sales.length === 0">
+                    <td colspan="4" class="text-center" id="nothingToShow">Nada a mostrar!</td>
+                  </tr>
                     <tr *ngFor="let purchase of sales">
                         <td>{{purchase.project}}</td>
                         <td>{{purchase.date}}</td>

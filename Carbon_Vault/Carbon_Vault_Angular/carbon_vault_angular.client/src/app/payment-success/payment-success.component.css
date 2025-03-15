@@ -1,0 +1,31 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--main-color) !important;
+    margin: 0px !important;
+}
+
+.confirmation-container {
+    border-radius: 25px;
+    padding: 50px;
+    text-align: center;
+    background-color: #fff;
+}
+
+.success-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 100vh;
+}
+
+.dashboard-button {
+    width: 170px;
+    padding: 10px;
+    background-color: var(--main-color);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
