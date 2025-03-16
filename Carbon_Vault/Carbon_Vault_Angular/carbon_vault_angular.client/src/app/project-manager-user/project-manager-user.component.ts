@@ -46,5 +46,7 @@ export class ProjectManagerUserComponent {
   filterActiveProjects(): number {
     return this.projects.filter(project => project.status == 0).length;
   }
- 
+ goToAddProject(){
+  this.router.navigate(['/Account-project-manager/addProject'])
+ }
 }

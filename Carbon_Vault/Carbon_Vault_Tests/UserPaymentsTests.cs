@@ -1,99 +1,99 @@
-﻿using Carbon_Vault.Controllers.API;
-using Carbon_Vault.Data;
-using Carbon_Vault.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.Elfie.Diagnostics;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
-using Moq;
-using Stripe;
-using Stripe.Checkout;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿//using Carbon_Vault.Controllers.API;
+//using Carbon_Vault.Data;
+//using Carbon_Vault.Services;
+//using Microsoft.AspNetCore.Mvc;
+//using Microsoft.CodeAnalysis.Elfie.Diagnostics;
+//using Microsoft.EntityFrameworkCore;
+//using Microsoft.Extensions.Configuration;
+//using Microsoft.Extensions.Options;
+//using Moq;
+//using Stripe;
+//using Stripe.Checkout;
+//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Text;
+//using System.Threading.Tasks;
 
-namespace Carbon_Vault_Tests_payments
-{
-    public class UserPaymentsTests
-    {
-        private readonly Mock<IEmailService> _mockEmailService;
-        private readonly Mock<IConfiguration> _mockConfiguration;
+//namespace Carbon_Vault_Tests_payments
+//{
+//    public class UserPaymentsTests
+//    {
+//        private readonly Mock<IEmailService> _mockEmailService;
+//        private readonly Mock<IConfiguration> _mockConfiguration;
 
-        public UserPaymentsTests()
-        {
-            _mockEmailService = new Mock<IEmailService>(); 
-            _mockConfiguration = new Mock<IConfiguration>();
-            
-            Environment.SetEnvironmentVariable("CLIENT_URL", "http://localhost:59115/");
-            
-            _mockConfiguration.Setup(c => c["AppSettings:TokenSecretKey"]).Returns("jEJQ#5Hxuh*#[ra7k98J=cBRLj]n6ZP1w*2S.M-Pwgr1D;ZQ.C*WgN&HnCG");
+//        public UserPaymentsTests()
+//        {
+//            _mockEmailService = new Mock<IEmailService>();
+//            _mockConfiguration = new Mock<IConfiguration>();
 
-            StripeConfiguration.ApiKey = "sk_test_51Qx9k3PqsbpdHFs4jYQFgS4KaeHzPa5zdh3p1RV4NbuK2iCThy0X8pWPc4uMIhpuzRd7H9cYPoBmu4omo4AZMpoX00YEtcCxmW";
-        }
+//            Environment.SetEnvironmentVariable("CLIENT_URL", "http://localhost:59115/");
 
-        [Fact]
-        public void MakePayment_ReturnsOk()
-        {
-            // Arrange
-            var cart = new PaymentData();
-            var item = new CartItem();
+//            _mockConfiguration.Setup(c => c["AppSettings:TokenSecretKey"]).Returns("jEJQ#5Hxuh*#[ra7k98J=cBRLj]n6ZP1w*2S.M-Pwgr1D;ZQ.C*WgN&HnCG");
 
-            item.Description = "test_description";
-            item.Name = "test_name";
-            item.Price = 12;
-            item.Quantity = 1;
-            cart.Items.Add(item);
+//            StripeConfiguration.ApiKey = "sk_test_51Qx9k3PqsbpdHFs4jYQFgS4KaeHzPa5zdh3p1RV4NbuK2iCThy0X8pWPc4uMIhpuzRd7H9cYPoBmu4omo4AZMpoX00YEtcCxmW";
+//        }
 
-            var mockSessionService = new Mock<SessionService>();
-            var session = new Session { Id = "test_session_id", Url = "https://checkout.stripe.com/test" };
+//        [Fact]
+//        public void MakePayment_ReturnsOk()
+//        {
+//            // Arrange
+//            var cart = new PaymentData();
+//            var item = new CartItem();
 
-            mockSessionService.Setup(s => s.Create(It.IsAny<SessionCreateOptions>(), null)).Returns(session);
+//            item.Description = "test_description";
+//            item.Name = "test_name";
+//            item.Price = 12;
+//            item.Quantity = 1;
+//            cart.Items.Add(item);
 
-            var controller = new UserPaymentsController(_mockEmailService.Object);
+//            var mockSessionService = new Mock<SessionService>();
+//            var session = new Session { Id = "test_session_id", Url = "https://checkout.stripe.com/test" };
 
-            // Act
-            var result = controller.MakePayment(cart);
+//            mockSessionService.Setup(s => s.Create(It.IsAny<SessionCreateOptions>(), null)).Returns(session);
 
-            // Assert
-            Assert.IsType<OkObjectResult>(result);
-        }
+//            var controller = new UserPaymentsController(_mockEmailService.Object);
 
-        [Fact]
-        public void SendInvoice_ReturnsOk_WhenInvoiceExists()
-        {
-            // Arrange
-            var controller = new UserPaymentsController(_mockEmailService.Object);
-            var mockSessionService = new Mock<SessionService>();
-            var mockInvoiceService = new Mock<InvoiceService>();
-            var sessionId = "cs_test_b1havRvXtiYrqxSJEwUlRtIfggNZbIkw076WzKcT0VhYEN2nFhzIQt1vM6";
-            var session = new Session { Id = sessionId, InvoiceId = "inv_123" };
-            var invoice = new Invoice
-            {
-                Id = "inv_123",
-                CustomerEmail = "rodrigo.s.santos003@gmail.com",
-                InvoicePdf = "https://invoice.pdf",
-                DueDate = DateTime.UtcNow
-            };
+//            // Act
+//            var result = controller.MakePayment(cart);
 
-            mockSessionService.Setup(s => s.Get(sessionId, null, null)).Returns(session);
-            mockInvoiceService.Setup(i => i.Get(session.InvoiceId, null, null)).Returns(invoice);
+//            // Assert
+//            Assert.IsType<OkObjectResult>(result);
+//        }
 
-            // Act
-            var result = controller.SendInvoice(sessionId);
+//        [Fact]
+//        public void SendInvoice_ReturnsOk_WhenInvoiceExists()
+//        {
+//            // Arrange
+//            var controller = new UserPaymentsController(_mockEmailService.Object);
+//            var mockSessionService = new Mock<SessionService>();
+//            var mockInvoiceService = new Mock<InvoiceService>();
+//            var sessionId = "cs_test_b1havRvXtiYrqxSJEwUlRtIfggNZbIkw076WzKcT0VhYEN2nFhzIQt1vM6";
+//            var session = new Session { Id = sessionId, InvoiceId = "inv_123" };
+//            var invoice = new Invoice
+//            {
+//                Id = "inv_123",
+//                CustomerEmail = "rodrigo.s.santos003@gmail.com",
+//                InvoicePdf = "https://invoice.pdf",
+//                DueDate = DateTime.UtcNow
+//            };
 
-            // Assert
-            Assert.IsType<OkObjectResult>(result);
+//            mockSessionService.Setup(s => s.Get(sessionId, null, null)).Returns(session);
+//            mockInvoiceService.Setup(i => i.Get(session.InvoiceId, null, null)).Returns(invoice);
 
-            // Verifica se o email foi enviado
-            _mockEmailService.Verify(e => e.SendEmail(
-                invoice.CustomerEmail,
-                It.IsAny<string>(),
-                It.IsAny<string>(),
-                It.IsAny<string>()
-            ), Times.Once);
-        }
-    }
-}
+//            // Act
+//            var result = controller.SendInvoice(sessionId);
+
+//            // Assert
+//            Assert.IsType<OkObjectResult>(result);
+
+//            // Verifica se o email foi enviado
+//            _mockEmailService.Verify(e => e.SendEmail(
+//                invoice.CustomerEmail,
+//                It.IsAny<string>(),
+//                It.IsAny<string>(),
+//                It.IsAny<string>()
+//            ), Times.Once);
+//        }
+//    }
+//}

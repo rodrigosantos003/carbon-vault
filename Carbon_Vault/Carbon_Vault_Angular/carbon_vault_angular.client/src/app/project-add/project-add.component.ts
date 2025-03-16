@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { AlertsService } from '../alerts.service';
+import { Location } from '@angular/common';
 import { AuthService } from '../auth-service.service';
 @Component({
   selector: 'app-project-add',
@@ -46,16 +48,74 @@ export class ProjectAddComponent {
    
    
   ];
-  constructor(private http: HttpClient,private authService: AuthService) {
+  constructor(private http: HttpClient,private authService: AuthService,private alerts: AlertsService,private location: Location) {
     this.userId = this.authService.getUserId();
 
   }
+
+  goBack(): void {
+    this.location.back();
+  }
+  validateForm(): boolean {
+    if (!this.nome.trim()) {
+      this.alerts.enableError('O nome é obrigatório.');
+      return false;
+    }
+    if (this.preco !== null && this.preco < 0) {
+      this.alerts.enableError('O preço não pode ser negativo.');
+      return false;
+    }
+    if (!this.localizacao.trim()) {
+      this.alerts.enableError('A localização é obrigatória.');
+      return false;
+    }
+    if (!this.descricao.trim()) {
+      this.alerts.enableError('A descrição é obrigatória.');
+      return false;
+    }
+  
+    if (!this.dataInicio) {
+      this.alerts.enableError('A data de início é obrigatória.');
+      return false;
+    }
+    if (!this.dataFim) {
+      this.alerts.enableError('A data de fim é obrigatória.');
+      return false;
+    }
+    if (!this.desenvolvedor.trim()) {
+      this.alerts.enableError('A indicação do desenvolvedor é obrigatória.');
+      return false;
+    }
+    
+    if (!this.certificacao.trim()) {
+      this.alerts.enableError('A indicação da certificação é obrigatória.');
+      return false;
+    }
+  
+    if (this.dataInicio && this.dataFim) {
+      const inicio = new Date(this.dataInicio);
+      const fim = new Date(this.dataFim);
+      if (inicio > fim) {
+        this.alerts.enableError('A data de início não pode ser posterior à data de fim.');
+        return false;
+      }
+    }
+    if (this.categoriasSelecionadas.length === 0) {
+      alert('Deve selecionar pelo menos uma categoria .');
+      return false;
+    }
+
+    return true;
+  }
+
   onFileChange(event: any) {
     const newFiles = Array.from(event.target.files) as File[]; // Type cast here
   
     this.documentos = [...this.documentos, ...newFiles];
   }
- 
+  removeFile(index: number) {
+    this.documentos.splice(index, 1);
+  }
   onImageChange(event: any): void {
     const file = event.target.files[0];
     if (file) {
@@ -68,6 +128,9 @@ export class ProjectAddComponent {
       reader.readAsDataURL(file);
     }
   }
+  errors: any = {};
+
+
 
   async uploadImage(projectId : number): Promise<string> {
     if (!this.imagem) return '';
@@ -116,13 +179,8 @@ export class ProjectAddComponent {
     event.stopPropagation();
   }
   async onSubmit() {
-      const inicio = new Date(this.dataInicio);
-    const fim = new Date(this.dataFim);
-
-    if (inicio > fim) {
-      alert('A data de início não pode ser depois da data de fim.');
-      return;
-    }
+    if (!this.validateForm()) return;
+      
 
     const projeto = {
       name: this.nome,
@@ -133,7 +191,7 @@ export class ProjectAddComponent {
       developer: this.desenvolvedor,
       certification: this.certificacao,
       pricePerCredit: this.preco,
-      status: 0,
+      status: 1,
       projectUrl: this.urlProjeto,
       imageUrl: this.urlImagem,
       ownerId: Number(this.userId),
@@ -152,10 +210,11 @@ export class ProjectAddComponent {
       if (this.imagem) {
         this.urlImagem = await this.uploadImage(projectId);
       }
-
-      alert('Projeto criado com sucesso!');
+      this.alerts.enableSuccess('Projeto criado com sucesso!')
+      this.goBack()
     } catch (error) {
-      console.error('Erro ao criar o projeto:', error);
+      this.alerts.enableError('Erro ao criar o projeto:');
+      console.log(error)
     }
   }
 }

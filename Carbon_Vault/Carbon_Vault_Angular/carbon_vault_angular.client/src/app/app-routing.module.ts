@@ -25,6 +25,7 @@ import { PaymentSuccessComponent } from './payment-success/payment-success.compo
 import { ProjectAddComponent } from './project-add/project-add.component';
 import { ProjectManagerDetailsComponent } from './project-manager-details/project-manager-details.component';
 import { TransactionDetailsComponent } from './transaction-details/transaction-details.component';
+import { ProjectManagerDetailsAdminComponent } from './project-manager-details-admin/project-manager-details-admin.component';
 /*import { EditProjectComponent } from './edit-project/edit-project.component';*/
 
 const routes: Routes = [
@@ -47,6 +48,7 @@ const routes: Routes = [
   { path: 'project-manager', component: ProjectManagerComponent },
   { path: 'Account-project-manager/addProject', component: ProjectAddComponent },
   { path: 'Account-project-manager/:id', component: ProjectManagerDetailsComponent },
+  { path: 'project-manager/:id', component: ProjectManagerDetailsAdminComponent,canActivate: [AuthGuard] },
   { path: 'Account-project-manager', component: ProjectManagerUserComponent,canActivate: [AuthGuard] },
   { path: 'sales', component: UserSalesComponent },
   { path: 'users-manager/user-details/:id', component: UserDetailsComponent, },

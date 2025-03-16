@@ -7,13 +7,14 @@ import { DatePipe } from '@angular/common';
 import { AlertsService } from '../alerts.service';
 
 @Component({
-  selector: 'app-project-manager-details',
+  selector: 'app-project-manager-details-admin',
   standalone: false,
   
-  templateUrl: './project-manager-details.component.html',
-  styleUrl: './project-manager-details.component.css'
+  templateUrl: './project-manager-details-admin.component.html',
+  styleUrl: './project-manager-details-admin.component.css'
 })
-export class ProjectManagerDetailsComponent {
+export class ProjectManagerDetailsAdminComponent {
+
 
   project: any = {};
   categoriasSelecionadas: number[] = [];
@@ -24,6 +25,11 @@ export class ProjectManagerDetailsComponent {
   isEditable: boolean = true;
   isAddingFiles: boolean = false;
   private apiURL = `${environment.apiUrl}/Projects`;
+  showRejectionFeedback: boolean = false;
+  showAprovedFeedback :boolean = false;
+  showAddCredits :boolean = true;
+  showChangeState :boolean = false;
+  additionalCredits : number = 0 ;
 
   categorias = [
     { id: 1, nome: 'Poverty', label: 'Erradicar a pobreza' },
@@ -50,7 +56,88 @@ export class ProjectManagerDetailsComponent {
     
 
   }
+  
 
+  getProjectStatus (state: number) :string{
+    const states = ["Ativo", "Pendente", "inátivo"];
+      return states[state] ?? "Unknown"
+    }
+
+  approveProject() {
+    const projectId = this.project.id;
+    const url = `${this.apiURL}/${projectId}/approve`;
+    const creditsGenerated = this.project.carbonCreditsGenerated; 
+
+    if (creditsGenerated <= 0) {
+      this.alerts.enableError('O número de créditos deve ser maior que 0.');
+      return; 
+    }
+
+    console.log(creditsGenerated)
+  
+    const token = localStorage.getItem('token');
+    const userId = this.authService.getUserId();
+  
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'userID': userId.toString(),
+      'CreditsGenerated': creditsGenerated.toString() 
+    });
+  
+
+
+    
+    // Send the POST request with the header
+    this.http.post(url, {}, { headers }).subscribe(
+      (response) => {
+        this.alerts.enableSuccess('Projeto aprovado e créditos gerados com sucesso!');
+        this.showAprovedFeedback = true;  // Show success feedback
+        console.log(response);
+      },
+      (error) => {
+        console.error('Erro ao aprovar o projeto:', error);
+        this.alerts.enableError('Ocorreu um erro ao aprovar o projeto. Tente novamente mais tarde.');
+      }
+    );
+  }
+
+  addCredits() {
+    const projectId = this.project.id;
+    const url = `${this.apiURL}/${projectId}/addCredits`;
+    const creditsGenerated = this.additionalCredits; 
+
+    if (this.additionalCredits <= 0) {
+      this.alerts.enableError('O número de créditos deve ser maior que 0.');
+      return; 
+    }
+
+
+  
+    const token = localStorage.getItem('token');
+    const userId = this.authService.getUserId();
+  
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'userID': userId.toString(),
+      'NumberOfCredits': creditsGenerated.toString() 
+    });
+  
+
+
+    
+    // Send the POST request with the header
+    this.http.post(url, {}, { headers }).subscribe(
+      (response) => {
+        this.alerts.enableSuccess('créditos gerados com sucesso!');
+        this.fetchProjectDetails(this.route.snapshot.params['id']);
+        console.log(response);
+      },
+      (error) => {
+        console.error('Erro ao aprovar o projeto:', error);
+        this.alerts.enableError('Ocorreu um erro ao aprovar o projeto. Tente novamente mais tarde.');
+      }
+    );
+  }
  async fetchProjectDetails(projectId: number) {
     this.http.get(`${this.apiURL}/${projectId}`).subscribe((response: any) => {
       this.project = response;
@@ -78,7 +165,6 @@ export class ProjectManagerDetailsComponent {
     event.stopPropagation();
     event.dataTransfer!.dropEffect = 'copy'; 
   }
-
   
   onDrop(event: DragEvent) {
     event.preventDefault();
@@ -116,7 +202,6 @@ export class ProjectManagerDetailsComponent {
     const newFiles = Array.from(event.target.files) as File[];
     this.documentos = [...this.documentos, ...newFiles];
   }
-
   deleteFile(fileId: number): void {
     var token = localStorage.getItem('token');
     var userId = this.authService.getUserId();
@@ -141,7 +226,34 @@ export class ProjectManagerDetailsComponent {
       console.error('Error deleting file:', error);
     });
   }
-  
+ rejectProject() {
+    if (!this.project.rejectionFeedback || this.project.rejectionFeedback.trim() === "") {
+      this.alerts.enableError('Por favor, insira um feedback antes de rejeitar o projeto.');
+      return;
+    }
+
+    const projectId = this.project.id;
+    const url = `${this.apiURL}/${projectId}/reject`;
+    const body = { feedback: this.project.rejectionFeedback };
+    const token = localStorage.getItem('token');
+    const userId = this.authService.getUserId();
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'userID': userId
+    });
+
+    this.http.post(url, body, { headers }).subscribe(
+      () => {
+        this.alerts.enableSuccess('Projeto rejeitado com sucesso!');
+        this.isEditable = false; 
+      },
+      (error) => {
+        console.error('Erro ao rejeitar o projeto:', error);
+        this.alerts.enableError('Ocorreu um erro ao rejeitar o projeto. Tente novamente mais tarde.');
+      }
+    );
+  }
 
   onImageChange(event: any): void {
     const file = event.target.files[0];
@@ -173,6 +285,7 @@ RevertToEditMode(){
   this.isAddingFiles = false;
   this.documentos = [];
 }
+
   async onSubmit(): Promise<void> {
     if (this.imagem) {
       const projectId = this.project.id;
@@ -201,6 +314,7 @@ RevertToEditMode(){
     }
   }
 }
+
 interface Documento {
   id: number;
   fileName: string;

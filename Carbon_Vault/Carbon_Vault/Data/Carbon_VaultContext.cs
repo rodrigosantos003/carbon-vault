@@ -163,7 +163,7 @@ namespace Carbon_Vault.Data
                    PricePerCredit = 12.50M,
                    CreatedAt = DateTime.UtcNow,
                    Status = ProjectStatus.Confirmed,
-                 
+                    OwnerId = 1,
                    ProjectUrl = new Uri("https://example.com/project1"),
                    ImageUrl = "https://api.hub.jhu.edu/factory/sites/default/files/styles/hub_large/public/drink-more-water-hub.jpg",
                },
@@ -178,6 +178,7 @@ namespace Carbon_Vault.Data
                    EndDate = DateTime.Now.AddMonths(24),
                    Developer = "Renewable Power Inc.",
                    Certification = "LEED Gold",
+                   OwnerId = 2,
                    PricePerCredit = 15.75M,
                    Status = ProjectStatus.Confirmed,
                    ProjectUrl = new Uri("https://example.com/project2"),

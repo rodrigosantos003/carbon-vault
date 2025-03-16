@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Carbon_Vault.Data;
 using Carbon_Vault.Models;
 using Microsoft.Extensions.Hosting;
+using Carbon_Vault.Services;
 
 namespace Carbon_Vault.Controllers.API
 {
@@ -17,11 +18,15 @@ namespace Carbon_Vault.Controllers.API
     {
         private readonly Carbon_VaultContext _context;
         private readonly IWebHostEnvironment _environment;
-        public ProjectsController(Carbon_VaultContext context, IWebHostEnvironment environment)
+        private readonly IEmailService _emailService;
+        private readonly string _frontendBaseUrl;
+
+        public ProjectsController(Carbon_VaultContext context, IWebHostEnvironment environment, IEmailService emailService)
         {
             _context = context;
             _environment = environment;
-
+            _emailService = emailService;
+            _frontendBaseUrl = Environment.GetEnvironmentVariable("CLIENT_URL");
         }
 
         // GET: api/Projects
@@ -34,10 +39,14 @@ namespace Carbon_Vault.Controllers.API
                 .ToListAsync();
         }
 
+        // GET: api/Projects/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Project>> GetAccount(int id)
+        public async Task<ActionResult<Project>> GetProject(int id)
         {
-            var project = await _context.Projects.FindAsync(id);
+            var project = await _context.Projects
+        .Include(p => p.Types) // Ensure project types are loaded
+        .Include(p => p.CarbonCredits) // Ensure carbon credits are loaded
+        .FirstOrDefaultAsync(p => p.Id == id);
 
             if (project == null)
             {
@@ -134,6 +143,32 @@ namespace Carbon_Vault.Controllers.API
 
             _context.Projects.Add(project);
             await _context.SaveChangesAsync();
+
+            var ProjectLink = $"{_frontendBaseUrl}/project-manager/{project.Id}";
+
+            var admins = await _context.Account
+                             .Where(a => a.Role == AccountType.Admin) 
+                             .ToListAsync();
+            foreach (var admin in admins)
+            {
+                var adminEmail = admin.Email; 
+               
+                // Envio do e-mail para o administrador
+                await _emailService.SendEmail(
+                    adminEmail, 
+                    "Nova Proposta de Projeto Enviada",
+                    $"Um novo projeto foi enviado e aguarda validação. Projeto: {project.Name}, por {project.Owner.Name}<br> Pode aceder ao projeto <a href={ProjectLink}>aqui</a>",
+                    null
+                );
+            }
+
+            var userEmail = project.Owner.Email; 
+            await _emailService.SendEmail(
+                userEmail, 
+                "Projeto Enviado para Validação",
+                $"O seu projeto {project.Name} foi enviado para validação.Será notificado sobre a sua aprovação num periodo de 7-14 dias.<br> Pode aceder ao projeto <a href={ProjectLink}>aqui</a>",
+                null
+                );
 
             return CreatedAtAction("GetProject", new { id = project.Id }, project);
         }
@@ -250,20 +285,183 @@ namespace Carbon_Vault.Controllers.API
         }
 
 
-        [HttpDelete("files/{fileId}")]
-        public async Task<IActionResult> DeleteFile(int fileId)
+        [HttpDelete("{projectId}/files/{fileId}")]
+        public async Task<IActionResult> DeleteFile(int projectId, int fileId, [FromHeader] string Authorization, [FromHeader] int userID)
         {
+            Console.WriteLine(userID);
+            if (!AuthHelper.IsTokenValid(Authorization, userID))
+            {
+                return Unauthorized();
+            }
+
+           
+            var project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == projectId);
+            var account = await _context.Account.FindAsync(userID);
+
+
+            if (project == null)
+            {
+                return NotFound(new { message = "Project not found." });
+            }
+            if (account == null)
+            {
+                return NotFound(new { message = "Account not found." });
+            }
+
+            // Authorization check for non-admin users
+            if (account.Role != AccountType.Admin && project.Owner.Id != userID)
+            {
+                return Unauthorized(new { message = "This project does not belong to you." });
+            }
+         
             var file = await _context.ProjectFiles.FindAsync(fileId);
-            if (file == null) return NotFound();
+            if (file == null)
+            {
+                return NotFound(new { message = "File not found." });
+            }
 
-            var filePath = Path.Combine(_environment.WebRootPath, "files", file.FileName);
-            if (System.IO.File.Exists(filePath)) System.IO.File.Delete(filePath);
-
+            // Remove the file from the database table
             _context.ProjectFiles.Remove(file);
             await _context.SaveChangesAsync();
 
-            return Ok("File deleted successfully.");
+            return Ok(new { message = "File deleted successfully from the database." });
         }
+
+
+
+
+
+
+
+        [HttpPost("{id}/approve")]
+        public async Task<IActionResult> ApproveProject(int id, [FromHeader] string Authorization, [FromHeader] int userID, [FromHeader] int CreditsGenerated)
+        {
+            Console.WriteLine($"Received creditsGenerated: {CreditsGenerated}");
+
+            if (!AuthHelper.IsTokenValid(Authorization, userID))
+            {
+                return Unauthorized();
+            }
+            var account = await _context.Account.FindAsync(userID);
+            if (account == null)
+            {
+                return NotFound(new { message = "Account not found." });
+            }
+
+            // Authorization check for non-admin users
+            if (account.Role != AccountType.Admin)
+            {
+                return Unauthorized(new { message = "Only admins can aprove projects" });
+            }
+
+
+            var project = await _context.Projects.FindAsync(id);
+            if (project == null)
+            {
+                return NotFound("Projeto não encontrado.");
+            }
+
+            project.Status = ProjectStatus.Confirmed;
+            project.CarbonCreditsGenerated = CreditsGenerated;
+            await _context.SaveChangesAsync();
+
+            var owner = await _context.Account.FindAsync(project.OwnerId);
+
+            await _emailService.SendEmail(
+                owner.Email,
+                "Projeto Aprovado",
+                $"O seu projeto {project.Name} foi aprovado e recebeu {CreditsGenerated} créditos de carbono para venda. <br> Poderá selecionar agora aqueles que quiser vender na sua aba de gestão do projeto",
+                null
+            );
+
+            var carbonCredits = new List<CarbonCredit>();
+
+            for (int i = 0; i < CreditsGenerated; i++)
+            {
+                var newCredit = new CarbonCredit
+                {
+                    ProjectId = project.Id,
+                    IssueDate = DateTime.UtcNow,
+                    ExpiryDate = DateTime.UtcNow.AddYears(5),
+                    SerialNumber = Guid.NewGuid().ToString(),
+                    Certification = project.Certification,
+                    Price = (decimal)project.PricePerCredit,
+                    IsSold = false,
+                    Status = CreditStatus.Available
+                };
+
+                carbonCredits.Add(newCredit);
+            }
+
+            await _context.CarbonCredits.AddRangeAsync(carbonCredits);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Projeto aprovado e créditos de carbono gerados com sucesso.", creditsGenerated = CreditsGenerated });
+
+
+        }
+        [HttpPost("{id}/addCredits")]
+        public async Task<IActionResult> AddCredits(int id, [FromHeader] string Authorization, [FromHeader] int userID, [FromHeader] int NumberOfCredits)
+        {
+            
+
+            if (!AuthHelper.IsTokenValid(Authorization, userID))
+            {
+                return Unauthorized();
+            }
+            var account = await _context.Account.FindAsync(userID);
+            if (account == null)
+            {
+                return NotFound(new { message = "Account not found." });
+            }
+
+            // Authorization check for non-admin users
+            if (account.Role != AccountType.Admin)
+            {
+                return Unauthorized(new { message = "Only admins can aprove projects" });
+            }
+
+
+            var project = await _context.Projects.FindAsync(id);
+            if (project == null)
+            {
+                return NotFound("Projeto não encontrado.");
+            }
+
+           
+            project.CarbonCreditsGenerated = project.CarbonCreditsGenerated + NumberOfCredits;
+            await _context.SaveChangesAsync();
+
+  
+
+            var carbonCredits = new List<CarbonCredit>();
+
+            for (int i = 0; i < NumberOfCredits; i++)
+            {
+                var newCredit = new CarbonCredit
+                {
+                    ProjectId = project.Id,
+                    IssueDate = DateTime.UtcNow,
+                    ExpiryDate = DateTime.UtcNow.AddYears(5),
+                    SerialNumber = Guid.NewGuid().ToString(),
+                    Certification = project.Certification,
+                    Price = (decimal)project.PricePerCredit,
+                    IsSold = false,
+                    Status = CreditStatus.Available
+                };
+
+                carbonCredits.Add(newCredit);
+            }
+
+            await _context.CarbonCredits.AddRangeAsync(carbonCredits);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Novos creditos adicionados ao projeto", creditsGenerated = NumberOfCredits });
+
+
+        }
+
+
 
     }
 }

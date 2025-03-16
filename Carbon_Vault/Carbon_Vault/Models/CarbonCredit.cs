@@ -19,7 +19,8 @@
         public string Certification { get; set; }
         public decimal Price { get; set; }
         public bool IsSold { get; set; }
-        public Account Buyer { get; set; }
+        public Account? Buyer { get; set; }
+        public int? BuyerId { get; set; }
         public CreditStatus Status { get; set; }
     }
 

@@ -125,3 +125,16 @@
     background-color: rgb(228, 203, 61);
     padding: 20px;
   }
+
+  .preview{
+    max-width: 150px;
+    max-height: 150px;
+  }
+
+  .third-column{
+    max-width: 372px;
+    min-width: 372px;
+  }
+  .header-section{
+    margin-bottom: 0;
+  }
