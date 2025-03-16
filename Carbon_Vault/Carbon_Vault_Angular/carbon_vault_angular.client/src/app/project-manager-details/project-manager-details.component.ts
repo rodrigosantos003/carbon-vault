@@ -181,13 +181,12 @@ RevertToEditMode(){
 
       try {
         const response: any = await this.http.post(`${this.apiURL}/${projectId}/uploadImage`, formData).toPromise();
-        this.project.imageUrl = response.filePath; // Update project image URL
+        this.project.imageUrl = response.filePath; 
       } catch (error) {
         console.error('Erro ao enviar imagem:', error);
       }
     }
 
-    // You can implement the actual update logic here for other project details
     const updatedProject = {
       ...this.project,
       types: this.categoriasSelecionadas.map((id) => ({ id })),

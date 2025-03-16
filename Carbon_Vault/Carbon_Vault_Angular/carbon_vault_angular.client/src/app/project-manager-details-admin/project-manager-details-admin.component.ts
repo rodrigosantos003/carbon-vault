@@ -56,7 +56,6 @@ export class ProjectManagerDetailsAdminComponent {
     
 
   }
-  
 
   getProjectStatus (state: number) :string{
     const states = ["Ativo", "Pendente", "inátivo"];
@@ -87,11 +86,11 @@ export class ProjectManagerDetailsAdminComponent {
 
 
     
-    // Send the POST request with the header
+    
     this.http.post(url, {}, { headers }).subscribe(
       (response) => {
         this.alerts.enableSuccess('Projeto aprovado e créditos gerados com sucesso!');
-        this.showAprovedFeedback = true;  // Show success feedback
+        this.showAprovedFeedback = true; 
         console.log(response);
       },
       (error) => {
@@ -125,7 +124,7 @@ export class ProjectManagerDetailsAdminComponent {
 
 
     
-    // Send the POST request with the header
+   
     this.http.post(url, {}, { headers }).subscribe(
       (response) => {
         this.alerts.enableSuccess('créditos gerados com sucesso!');
@@ -294,13 +293,12 @@ RevertToEditMode(){
 
       try {
         const response: any = await this.http.post(`${this.apiURL}/${projectId}/uploadImage`, formData).toPromise();
-        this.project.imageUrl = response.filePath; // Update project image URL
+        this.project.imageUrl = response.filePath; 
       } catch (error) {
         console.error('Erro ao enviar imagem:', error);
       }
     }
 
-    // You can implement the actual update logic here for other project details
     const updatedProject = {
       ...this.project,
       types: this.categoriasSelecionadas.map((id) => ({ id })),

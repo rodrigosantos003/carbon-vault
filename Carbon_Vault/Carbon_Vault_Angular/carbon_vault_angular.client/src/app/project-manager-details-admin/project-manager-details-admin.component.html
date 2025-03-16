@@ -157,7 +157,7 @@
             <button class="Aprove-button-top" (click)="approveProject()">Gerar créditos e Aprovar</button>
           </div>
       
-          <!-- New Tab Content for Adding More Credits (only shows if approved) -->
+          
           <div class="tab-pane" *ngIf="showAddCredits">
             <div style="text-align: center;"><span class="creditsNumber">{{project.carbonCreditsGenerated}}</span><span class="creditsText"> Créditos gerados até ao momento</span><br></div>
             <label>Adicionar Créditos de Carbono</label><br>
@@ -171,7 +171,7 @@
             <button class="Aprove-button-top" (click)="addCredits()">Adicionar Créditos</button> 
           </div>
       
-          <!-- New Tab Content for Changing Status (only shows if approved) -->
+        
           <div class="tab-pane" *ngIf="showChangeState">
             <div style="text-align: center;"><span [ngClass]="getProjectStatus(project.status)" >{{getProjectStatus(project.status)}}</span><br></div>
             <label>Alterar Estado do Projeto</label><br>
@@ -180,7 +180,7 @@
               <option value=0>Ativo</option>
               <option value=2>Inátivo</option>
             </select><br>
-            <button class="Aprove-button-top" (click)="changeStatus()">Alterar Status</button>
+            <!-- <button class="Aprove-button-top" (click)="changeStatus()">Alterar Status</button> -->
           </div>
         </div>
       </div>
