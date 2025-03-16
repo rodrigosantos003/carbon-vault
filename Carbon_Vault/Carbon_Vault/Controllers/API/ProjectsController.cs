@@ -34,6 +34,16 @@ namespace Carbon_Vault.Controllers.API
                 .ToListAsync();
         }
 
+        [HttpGet("forSale")]
+        public async Task<ActionResult<IEnumerable<Project>>> GetProjectsForSale()
+        {
+            return await _context.Projects
+                .Where(p => p.IsForSale)
+                .Include(p => p.Types)// Ensure project types are loaded
+                .Include(p => p.CarbonCredits)   // Ensure carbon credits are loaded
+                .ToListAsync();
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Project>> GetAccount(int id)
         {
