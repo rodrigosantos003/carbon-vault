@@ -67,6 +67,7 @@ import { AdminTransactionsComponent } from './admin-transactions/admin-transacti
     ProjectAddComponent,
     ProjectManagerDetailsComponent,
     AdminTransactionsComponent,
+    TransactionDetailsComponent,
   ],
   imports: [
     BrowserModule,

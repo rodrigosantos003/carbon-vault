@@ -2,7 +2,7 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Component, Input } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { AuthService } from '../auth-service.service';
-import { Router,ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-transaction-details',
@@ -26,9 +26,9 @@ export class TransactionDetailsComponent {
   constructor(private route: ActivatedRoute, private http: HttpClient, private auth: AuthService) { }
 
   ngOnInit() {
-    this.transactionId = this.route.snapshot.paramMap.get('id') ?? ""; 
+    this.transactionId = this.route.snapshot.paramMap.get('id') ?? "";
 
-    if(!this.transactionId) {
+    if (!this.transactionId) {
       console.error("ID da transação não informado");
       return;
     }
@@ -52,7 +52,7 @@ export class TransactionDetailsComponent {
 
       var type;
 
-      switch(userId){
+      switch (userId) {
         case data.buyerId:
           type = "Compra";
           break;
@@ -62,7 +62,7 @@ export class TransactionDetailsComponent {
         default:
           type = "Admin";
       }
-      
+
       this.transactionType = type;
       this.transactionBuyer = data.buyerName;
       this.transactionSeller = data.sellerName;

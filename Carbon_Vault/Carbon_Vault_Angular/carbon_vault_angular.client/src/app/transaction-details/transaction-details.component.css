@@ -13,7 +13,7 @@ body {
     width: 100%;
 }
 
-.transaction-title{
+.transaction-title {
     font-weight: 700;
     font-size: 20px;
     line-height: 24px;
@@ -25,7 +25,7 @@ body {
     border-bottom: 3px solid #000000;
 }
 
-.transaction-header{
+.transaction-header {
     font-weight: 700;
     font-size: 40px;
     line-height: 24px;
@@ -36,17 +36,18 @@ body {
     align-items: center;
 }
 
-.transaction-details, .transaction-tables{
+.transaction-details,
+.transaction-tables {
     display: flex;
     flex-direction: column;
     margin-top: 40px;
 }
 
-.transaction-tables{
-  margin-left: auto;
+.transaction-tables {
+    margin-left: auto;
 }
 
-.transaction-label{
+.transaction-label {
     font-weight: 700;
     font-size: 20px;
     line-height: 24px;
@@ -55,7 +56,7 @@ body {
     margin-top: 30px;
 }
 
-.transaction-value{
+.transaction-value {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -63,7 +64,7 @@ body {
     margin-left: 10px;
 }
 
-.transaction-table-container{
+.transaction-table-container {
     display: flex;
     gap: 100px;
     padding-top: 50px;
@@ -74,39 +75,39 @@ body {
     background: #EEE;
     border-radius: 10px;
     padding-top: 25px;
-  }
-  
-  .table thead {
-    background-color: #D3E2D0;
-  }
-  
-  .table h2 {
-    margin-bottom: 20px;
-  }
+}
 
-  .table span{
+.table thead {
+    background-color: #D3E2D0;
+}
+
+.table h2 {
+    margin-bottom: 20px;
+}
+
+.table span {
     padding: 20px;
-  }
-  
-  table {
+}
+
+table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
     margin-bottom: 20px;
-  }
+}
 
-  table th,
-  table td {
+table th,
+table td {
     text-align: center;
     padding: 10px;
     padding-inline: 25px;
-  }
+}
 
-  th {
+th {
     font-weight: 600;
-  }
+}
 
-  .download-button{
+.download-button {
     width: 175px;
     height: 30px;
     background: #4EA741;
@@ -118,4 +119,4 @@ body {
     text-align: center;
     color: #FFFFFF;
     margin-left: auto;
-  }
+}

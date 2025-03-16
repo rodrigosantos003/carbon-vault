@@ -48,13 +48,12 @@ const routes: Routes = [
   { path: 'project-manager', component: ProjectManagerComponent },
   { path: 'Account-project-manager/addProject', component: ProjectAddComponent },
   { path: 'Account-project-manager/:id', component: ProjectManagerDetailsComponent },
-  { path: 'Account-project-manager', component: ProjectManagerUserComponent,canActivate: [AuthGuard] },
+  { path: 'Account-project-manager', component: ProjectManagerUserComponent, canActivate: [AuthGuard] },
   { path: 'sales', component: UserSalesComponent },
   { path: 'users-manager/user-details/:id', component: UserDetailsComponent, },
   { path: 'payment-success', component: PaymentSuccessComponent },
   { path: 'transaction-details/:id', component: TransactionDetailsComponent },
   { path: 'admin-transactions', component: AdminTransactionsComponent },
-  { path: 'transaction-details/:id', component: TransactionDetailsComponent },
 ];
 
 @NgModule({
