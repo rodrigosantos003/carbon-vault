@@ -126,6 +126,51 @@
 
         <button type="submit" [disabled]="isEditable">Salvar Alterações</button>
       </form>
+
+      <br>
+      <h2 style="color: #4ea741;"> Créditos Disponiveis </h2>
+      
+      <div  style="max-height: 295px; overflow-y: scroll; position: relative;">
+      <table>
+        <thead>
+          <tr>
+            <th> Nº Série</th>
+            <th> Data de Emissão</th>
+            <th> Data de Validade</th>
+            <th> Certificação</th>
+            <th> À Venda</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let credit of project.carbonCredits" >
+            <td>{{ credit.serialNumber }}</td>
+            <td>{{ credit.issueDate | date:'dd/MM/yyyy HH:mm:ss'}}</td>
+            <td>{{ credit.expiryDate | date:'dd/MM/yyyy HH:mm:ss'}}</td>
+            <td>{{ credit.certification}}</td>
+            <td>{{ getCreditSaleStatus(credit) ? '✔' : '✖'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+      <div class="credits-info"> O projeto tem <b>{{project.carbonCredits.length}}</b> créditos disponiveis dos quais <b>{{project.creditsForSale}}</b> estão à venda por <b>{{project.pricePerCredit}}€</b> cada. 
+        <button class="credits-button" (click)="openPopup()"> Editar critérios de Venda</button></div>
+
+        
+    </div>
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="credits-form" id="credits-form">
+        <div class="credits-form-content">
+          <p class="credits-form-heading">Critérios de Venda dos Créditos</p>
+          <p class="credits-form-field" style="text-align: center; font-weight: 500;">Créditos totais do Projeto: {{project.carbonCredits.length}}</p>
+          <p class="credits-form-field">Créditos para venda: <input type="text" [(ngModel)]="newCreditsForSale"></p>
+          <p class="credits-form-field">Preço por Crédito: <input type="text" [(ngModel)]="newPricePerCredit"></p>
+        </div>
+        <div class="credits-form-button-wrapper">
+          <button class="credits-form-button secondary" (click)="closePopup()">Cancelar</button>
+          <button class="credits-form-button primary" (click)="saveCarbonInfo()">Guardar</button>
+        </div>
+      </div>
     </div>
     <app-alerts></app-alerts>
 

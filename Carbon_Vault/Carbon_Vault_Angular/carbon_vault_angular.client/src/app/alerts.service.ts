@@ -24,6 +24,10 @@ export class AlertsService {
         textSpan.textContent = message;
       }
       successPopup.style.display = 'inline-flex';
+
+      setTimeout(() => {
+        this.disableSuccess();
+      }, 3000);
     }
   }
 
@@ -62,6 +66,10 @@ export class AlertsService {
         textSpan.textContent = message;
       }
       errorPopup.style.display = 'inline-flex';
+
+      setTimeout(() => {
+        this.disableError();
+      }, 3000);
     }
   }
 

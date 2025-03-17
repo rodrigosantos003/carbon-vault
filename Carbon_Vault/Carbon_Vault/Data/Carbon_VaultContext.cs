@@ -48,9 +48,7 @@ namespace Carbon_Vault.Data
                .HasOne(cc => cc.Owner)
                .WithMany(p => p.Projects)
                .HasForeignKey(cc => cc.OwnerId);
-
-
-
+               
             populateAccounts(modelBuilder);
 
             populateProjectTypes(modelBuilder);
@@ -164,10 +162,11 @@ namespace Carbon_Vault.Data
                    PricePerCredit = 12.50M,
                    CreatedAt = DateTime.UtcNow,
                    Status = ProjectStatus.Confirmed,
-                   OwnerId = 1,
                    benefits = "Providing clean water access to rural communities.",
+                   OwnerId = 4,
                    ProjectUrl = new Uri("https://example.com/project1"),
                    ImageUrl = "https://api.hub.jhu.edu/factory/sites/default/files/styles/hub_large/public/drink-more-water-hub.jpg",
+                   IsForSale = true,
                },
                new Project
                {
@@ -187,6 +186,7 @@ namespace Carbon_Vault.Data
                    ProjectUrl = new Uri("https://example.com/project2"),
                    CreatedAt = DateTime.UtcNow,
                    ImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSS2nF0iroOXheUgLiCRjKPFEyxqBqbjMMiBZxtPvybNA14VsZrFMg2wgudNFFSgdW9S5Q&usqp=CAU",
+                   IsForSale = true,
                }
            );
         }
@@ -198,7 +198,7 @@ namespace Carbon_Vault.Data
                 {
                     Id = 1,
                     BuyerId = 2,
-                    SellerId = 3,
+                    SellerId = 4,
                     ProjectId = 1,
                     Quantity = 1,
                     TotalPrice = 12.50,
@@ -210,7 +210,7 @@ namespace Carbon_Vault.Data
                 new Transaction
                 {
                     Id = 2,
-                    SellerId = 2,
+                    SellerId = 4,
                     BuyerId = 5,
                     ProjectId = 2,
                     Quantity = 1,

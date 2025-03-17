@@ -39,7 +39,16 @@ namespace Carbon_Vault.Controllers.API
                 .ToListAsync();
         }
 
-        // GET: api/Projects/5
+        [HttpGet("forSale")]
+        public async Task<ActionResult<IEnumerable<Project>>> GetProjectsForSale()
+        {
+            return await _context.Projects
+                .Where(p => p.IsForSale)
+                .Include(p => p.Types)// Ensure project types are loaded
+                .Include(p => p.CarbonCredits)   // Ensure carbon credits are loaded
+                .ToListAsync();
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Project>> GetProject(int id)
         {
@@ -471,12 +480,9 @@ namespace Carbon_Vault.Controllers.API
             {
                 return NotFound("Projeto não encontrado.");
             }
-
            
             project.CarbonCreditsGenerated = project.CarbonCreditsGenerated + NumberOfCredits;
             await _context.SaveChangesAsync();
-
-  
 
             var carbonCredits = new List<CarbonCredit>();
 
@@ -539,5 +545,110 @@ namespace Carbon_Vault.Controllers.API
         }
 
 
+        [HttpPut("list-credits/{projectId}")]
+        public async Task<IActionResult> SellCredits([FromHeader] string Authorization, [FromHeader] int userId, int projectId, int credits)
+        {
+            if (!AuthHelper.IsTokenValid(Authorization, userId))
+            {
+                return Unauthorized();
+            }
+
+            var project = await _context.Projects.FindAsync(projectId);
+
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            var creditsAmount = _context.CarbonCredits
+                .Where(c => c.ProjectId == projectId && c.IsSold == false).Count();
+
+            if (creditsAmount < credits)
+            {
+                return BadRequest("Not enough credits to sell.");
+            }
+
+            project.CreditsForSale = credits;
+
+            await _context.SaveChangesAsync();
+
+            return Ok("Credits listed for sale.");
+        }
+
+        [HttpPut("sell-credits/{projectId}")]
+        public async Task<IActionResult> SellCredits([FromHeader] string Authorization, int userId, int projectId, int credits, int buyerId)
+        {
+            if (!AuthHelper.IsTokenValid(Authorization, userId))
+            {
+                return Unauthorized();
+            }
+
+            var project = await _context.Projects.FindAsync(projectId);
+
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            var creditsAmount = _context.CarbonCredits
+                .Where(c => c.ProjectId == projectId && c.IsSold == false).Count();
+
+            if (creditsAmount < credits)
+            {
+                return BadRequest("Not enough credits to sell.");
+            }
+
+            var creditsToSell = _context.CarbonCredits
+                .Where(c => c.ProjectId == projectId && c.IsSold == false)
+                .OrderBy(c => c.ExpiryDate)
+                .Take(credits)
+                .ToList();
+
+            foreach (var credit in creditsToSell)
+            {
+                credit.IsSold = true;
+                //credit.Buyer = buyerId;
+            }
+
+            project.CreditsForSale -= credits;
+
+            await _context.SaveChangesAsync();
+
+            return Ok("Credits sold successfully.");
+        }
+
+
+    public class UpdateCreditsInfoDto
+    {
+        public decimal PricePerCredit { get; set; }
+        public int CreditsForSale { get; set; }
+    }
+
+    [HttpPut("credits-info/{projectId}")]
+    public async Task<IActionResult> UpdateCreditsInfo(int projectId, [FromBody] UpdateCreditsInfoDto newInfo)
+        {
+            var project = await _context.Projects.FindAsync(projectId);
+
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            project.PricePerCredit = newInfo.PricePerCredit;
+            project.CreditsForSale = newInfo.CreditsForSale;
+
+            var credits = _context.CarbonCredits
+                .Where(c => c.ProjectId == projectId && c.IsSold == false)
+                .ToList();
+
+            foreach (var credit in credits)
+            {
+                credit.Price = newInfo.PricePerCredit;
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Credits info updated successfully." });
+        }
     }
 }

@@ -2,7 +2,8 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Component, Input } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { AuthService } from '../auth-service.service';
-import { Router,ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { AlertsService } from '../alerts.service';
 
 @Component({
   selector: 'app-transaction-details',
@@ -24,12 +25,12 @@ export class TransactionDetailsComponent {
   @Input() transactionSession: string = ''; // Sessão de pagamento
   @Input() transactionMethod: string = ''; // Processador de pagamento
 
-  constructor(private route: ActivatedRoute, private http: HttpClient, private auth: AuthService) { }
+  constructor(private route: ActivatedRoute, private http: HttpClient, private auth: AuthService, private alerts: AlertsService) { }
 
   ngOnInit() {
-    this.transactionId = this.route.snapshot.paramMap.get('id') ?? ""; 
+    this.transactionId = this.route.snapshot.paramMap.get('id') ?? "";
 
-    if(!this.transactionId) {
+    if (!this.transactionId) {
       console.error("ID da transação não informado");
       return;
     }
@@ -53,7 +54,7 @@ export class TransactionDetailsComponent {
 
       var type;
 
-      switch(userId){
+      switch (userId) {
         case data.buyerId:
           type = "Compra";
           break;
@@ -63,7 +64,7 @@ export class TransactionDetailsComponent {
         default:
           type = "Admin";
       }
-      
+
       this.transactionType = type;
       this.transactionBuyer = data.buyerName;
       this.transactionSeller = data.sellerName;
@@ -75,6 +76,24 @@ export class TransactionDetailsComponent {
       this.transactionMethod = data.paymentMethod;
     }, error => {
       console.error("Erro na requisição:", error);
+      this.alerts.enableError("Erro ao obter transação");
     });
+  }
+
+  downloadInvoice() {
+    this.alerts.enableLoading("A obter fatura...");
+
+    const invoiceURL = `${environment.apiUrl}/UserPayments/invoice/${this.transactionSession}`;
+
+    this.http.get<{ message: string, file?: string }>(invoiceURL).subscribe({
+      next: (response) => {
+        this.alerts.disableLoading();
+        window.open(response.file);
+      },
+      error: (error) => {
+        this.alerts.disableLoading();
+        this.alerts.enableError("Erro ao obter fatura");
+      }
+    })
   }
 }

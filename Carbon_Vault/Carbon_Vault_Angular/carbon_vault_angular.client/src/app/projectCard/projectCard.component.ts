@@ -36,9 +36,9 @@ export class ProjectCardComponent {
 
     this.alerts.enableSuccess("Item adicionado ao carrinho!");
     //alert('Item adicionado ao carrinho!');
-    setTimeout(() => {
-      this.alerts.disableSuccess();
-    }, 3000);
+    //setTimeout(() => {
+    //  this.alerts.disableSuccess();
+    //}, 3000);
 
     this.quantity = 1;
   }

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
+import { AlertsService } from '../alerts.service';
 
 @Component({
   selector: 'app-forgot-password',
@@ -16,7 +17,7 @@ export class ForgotPasswordComponent {
   isEmailSent: boolean | null = null; // Estado da envio do email
   emailErrorMessage: string | null = null;
 
-  constructor(private fb: FormBuilder, private http: HttpClient , private router : Router) {
+  constructor(private fb: FormBuilder, private http: HttpClient, private router: Router, private alerts: AlertsService) {
     // Inicialização do FormGroup com controlos e validações
     this.forgotPasswordForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -33,16 +34,25 @@ export class ForgotPasswordComponent {
   }
 
   sendClientEmail(email: string) {
+    this.alerts.enableLoading("A enviar recuperação de palavra-passe...");
+
     const apiUrl = `${environment.apiUrl}/Accounts/ForgotPassword?email=${email}`;
 
-    this.http.get(apiUrl).subscribe({
+    this.http.get<{ message: string }>(apiUrl).subscribe({
       next: (response) => {
-        if (response.hasOwnProperty("message")) {
-          alert("Recuperação de palavra-passe enviada para o seu e-mail!");
+        if (response.message.includes("sucesso")) {
+          this.alerts.disableLoading();
+          this.alerts.enableSuccess("Recuperação de palavra-passe enviada para o seu e-mail!")
           this.router.navigate(['/login']);
-        } else alert("E-mail inválido");
+        } else {
+          this.alerts.disableLoading();
+          this.alerts.enableError("E-mail inválido");
+        }
       },
-      error: (error) => alert("Erro ao enviar e-mail de recuperação")
+      error: (error) => {
+        this.alerts.disableLoading();
+        this.alerts.enableError("Erro ao enviar recuperação de palavra-passe");
+      }
     })
   }
 }

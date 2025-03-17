@@ -46,7 +46,27 @@ export class ProjectManagerUserComponent {
   filterActiveProjects(): number {
     return this.projects.filter(project => project.status == 0).length;
   }
+  
  goToAddProject(){
   this.router.navigate(['/Account-project-manager/addProject'])
  }
+
+  viewProject(id: number) {
+    this.alerts.enableSuccess("Clicou para ver projeto " + id);
+  }
+
+  eliminar(id: number) {
+    console.log("ID projeto " + id);
+    this.http.delete(`${environment.apiUrl}/Projects/${id}`).subscribe({
+      next: () => {
+        console.log('Project deleted successfully');
+        this.alerts.enableSuccess("Projeto eliminado com sucesso");
+        // Optionally refresh the project list or notify the user
+      },
+      error: (err) => {
+        console.error('Error deleting project:', err);
+        this.alerts.enableError("Erro ao apagar projeto com ID = " + id);
+      }
+    });
+  }
 }
