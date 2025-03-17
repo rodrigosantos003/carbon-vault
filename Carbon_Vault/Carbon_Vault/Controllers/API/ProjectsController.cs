@@ -395,15 +395,14 @@ namespace Carbon_Vault.Controllers.API
 
 
         }
-
         [HttpPost("{id}/reject")]
-        public async Task<IActionResult> RejectProject(int id, [FromHeader] string Authorization, [FromHeader] int userID, [FromBody] String message)
+        public async Task<IActionResult> RejectProject(int id, [FromHeader] string Authorization, [FromHeader] int userID, [FromHeader] string feedback)
         {
-
             if (!AuthHelper.IsTokenValid(Authorization, userID))
             {
                 return Unauthorized();
             }
+
             var account = await _context.Account.FindAsync(userID);
             if (account == null)
             {
@@ -413,9 +412,8 @@ namespace Carbon_Vault.Controllers.API
             // Authorization check for non-admin users
             if (account.Role != AccountType.Admin)
             {
-                return Unauthorized(new { message = "Only admins can aprove projects" });
+                return Unauthorized(new { message = "Only admins can approve projects" });
             }
-
 
             var project = await _context.Projects.FindAsync(id);
             if (project == null)
@@ -423,8 +421,14 @@ namespace Carbon_Vault.Controllers.API
                 return NotFound("Projeto não encontrado.");
             }
 
-            project.Status = ProjectStatus.Denied;
+            // Ensure feedback is not null or empty
+            if (string.IsNullOrEmpty(feedback))
+            {
+                return BadRequest(new { message = "The feedback field is required." });
+            }
 
+            // Reject the project
+            project.Status = ProjectStatus.Denied;
             await _context.SaveChangesAsync();
 
             var owner = await _context.Account.FindAsync(project.OwnerId);
@@ -432,16 +436,13 @@ namespace Carbon_Vault.Controllers.API
             await _emailService.SendEmail(
                 owner.Email,
                 "Projeto Rejeitado",
-                $"O seu projeto {project.Name} foi rejeitado <br> Razão : <br> {message}",
+                $"O seu projeto {project.Name} foi rejeitado <br> Razão : <br> {feedback}",
                 null
             );
 
-            await _context.SaveChangesAsync();
-
             return Ok(new { message = "Projeto Rejeitado com sucesso." });
-
-
         }
+
 
         [HttpPost("{id}/addCredits")]
         public async Task<IActionResult> AddCredits(int id, [FromHeader] string Authorization, [FromHeader] int userID, [FromHeader] int NumberOfCredits)
@@ -504,6 +505,38 @@ namespace Carbon_Vault.Controllers.API
 
         }
 
+        // PUT: api/Projects/5/ChangeStatus
+        [HttpPut("{id}/ChangeStatus")]
+        public async Task<IActionResult> ChangeProjectStatus(int id, [FromHeader] string Authorization, [FromHeader] int userID, [FromBody] int newStatus)
+        {
+            if (!AuthHelper.IsTokenValid(Authorization, userID))
+            {
+                return Unauthorized();
+            }
+
+            var account = await _context.Account.FindAsync(userID);
+            if (account == null)
+            {
+                return NotFound(new { message = "Account not found." });
+            }
+
+            var project = await _context.Projects.FindAsync(id);
+            if (project == null)
+            {
+                return NotFound(new { message = "Project not found." });
+            }
+
+            // Authorization check for non-admin users
+            if (account.Role != AccountType.Admin && project.OwnerId != userID)
+            {
+                return Unauthorized(new { message = "You are not authorized to change the status of this project." });
+            }
+
+            project.Status = (ProjectStatus)newStatus;
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Project status updated successfully.", newStatus = project.Status });
+        }
 
 
     }

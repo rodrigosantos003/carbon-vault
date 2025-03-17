@@ -5,6 +5,7 @@ import { AuthService } from '../auth-service.service';
 import { ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { AlertsService } from '../alerts.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-project-manager-details-admin',
@@ -30,7 +31,7 @@ export class ProjectManagerDetailsAdminComponent {
   showAddCredits :boolean = true;
   showChangeState :boolean = false;
   additionalCredits : number = 0 ;
-
+  rejectionFeedback: string | null = null;
   categorias = [
     { id: 1, nome: 'Poverty', label: 'Erradicar a pobreza' },
     { id: 2, nome: 'Hunger', label: 'Erradicar a fome' },
@@ -47,7 +48,7 @@ export class ProjectManagerDetailsAdminComponent {
     { id: 13, nome: 'Partnership', label: 'Parcerias Sustentáveis' }
   ];
 
-  constructor(private http: HttpClient, private route: ActivatedRoute, private authService: AuthService,private alerts: AlertsService) {}
+  constructor(private http: HttpClient, private route: ActivatedRoute, private authService: AuthService,private alerts: AlertsService , private location: Location) {}
 
   async ngOnInit() {
     const projectId = this.route.snapshot.params['id'];
@@ -92,6 +93,7 @@ export class ProjectManagerDetailsAdminComponent {
         this.alerts.enableSuccess('Projeto aprovado e créditos gerados com sucesso!');
         this.showAprovedFeedback = true; 
         console.log(response);
+        this.goBack()
       },
       (error) => {
         console.error('Erro ao aprovar o projeto:', error);
@@ -140,7 +142,7 @@ export class ProjectManagerDetailsAdminComponent {
  async fetchProjectDetails(projectId: number) {
     this.http.get(`${this.apiURL}/${projectId}`).subscribe((response: any) => {
       this.project = response;
-      if (this.project.status === 0) {
+      if (this.project.status !== 0) {
         this.isEditable = false;
       }
       if (this.project.endDate && this.project.startDate) {
@@ -225,34 +227,69 @@ export class ProjectManagerDetailsAdminComponent {
       console.error('Error deleting file:', error);
     });
   }
- rejectProject() {
-    if (!this.project.rejectionFeedback || this.project.rejectionFeedback.trim() === "") {
-      this.alerts.enableError('Por favor, insira um feedback antes de rejeitar o projeto.');
-      return;
+  changeProjectStatus(newStatus: number) {
+    const projectId = this.project.id;
+    const url = `${this.apiURL}/${projectId}/ChangeStatus`;
+    const token = localStorage.getItem('token');
+    const userId = this.authService.getUserId();
+  
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'userID': userId.toString(),
+      'Content-Type': 'application/json'
+    });
+  
+    const body = JSON.stringify(newStatus);
+  
+    this.http.put(url, body, { headers }).subscribe(
+      (response) => {
+        this.alerts.enableSuccess('O estado do projeto foi atualizado com sucesso!');
+        console.log(response);
+        this.fetchProjectDetails(projectId); // Refresh the project details
+      },
+      (error) => {
+        console.error('Erro ao atualizar o estado do projeto:', error);
+        this.alerts.enableError('Ocorreu um erro ao atualizar o estado do projeto. Tente novamente mais tarde.');
+      }
+    );
+  }
+
+  rejectProject() {
+    if (!this.rejectionFeedback || this.rejectionFeedback.trim() === "") {
+        this.alerts.enableError('Por favor, insira um feedback antes de rejeitar o projeto.');
+        return;
     }
+
+    console.log('Feedback to send:', this.rejectionFeedback);
 
     const projectId = this.project.id;
     const url = `${this.apiURL}/${projectId}/reject`;
-    const body = { feedback: this.project.rejectionFeedback };
+
     const token = localStorage.getItem('token');
     const userId = this.authService.getUserId();
 
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'userID': userId
+        'Authorization': `Bearer ${token}`,
+        'userID': userId,
+        'Content-Type': 'application/json',
+        'feedback': this.rejectionFeedback  
     });
 
-    this.http.post(url, body, { headers }).subscribe(
-      () => {
-        this.alerts.enableSuccess('Projeto rejeitado com sucesso!');
-        this.isEditable = false; 
-      },
-      (error) => {
-        console.error('Erro ao rejeitar o projeto:', error);
-        this.alerts.enableError('Ocorreu um erro ao rejeitar o projeto. Tente novamente mais tarde.');
-      }
+    this.http.post(url, {}, { headers }).subscribe(  
+        () => {
+            this.alerts.enableSuccess('Projeto rejeitado com sucesso!');
+            this.isEditable = false;
+            this.goBack()
+        },
+        (error) => {
+            console.error('Erro ao rejeitar o projeto:', error);
+            this.alerts.enableError('Ocorreu um erro ao rejeitar o projeto. Tente novamente mais tarde.');
+        }
     );
-  }
+   
+}
+
+
 
   onImageChange(event: any): void {
     const file = event.target.files[0];
@@ -284,7 +321,9 @@ RevertToEditMode(){
   this.isAddingFiles = false;
   this.documentos = [];
 }
-
+goBack(): void {
+  this.location.back();
+}
   async onSubmit(): Promise<void> {
     if (this.imagem) {
       const projectId = this.project.id;
