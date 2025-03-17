@@ -24,7 +24,7 @@ export class ProjectManagerDetailsComponent {
   documentosAtuais: Documento[] = [];
   imagem: File | null = null;
   imagePreviewUrl: string | null = null;
-  isEditable: boolean = true;
+  isEditable: boolean = false;
   isAddingFiles: boolean = false;
   private apiURL = `${environment.apiUrl}/Projects`;
 
@@ -52,7 +52,7 @@ export class ProjectManagerDetailsComponent {
     await this.loadProjectFiles(projectId);
   }
 
- async fetchProjectDetails(projectId: number) {
+  async fetchProjectDetails(projectId: number) {
     this.http.get(`${this.apiURL}/${projectId}`).subscribe((response: any) => {
       this.project = response;
       if (this.project.status === 0) {
@@ -79,7 +79,7 @@ export class ProjectManagerDetailsComponent {
     });
   }
 
-  getCreditSaleStatus(credit: any) : boolean{
+  getCreditSaleStatus(credit: any): boolean {
     return this.project.carbonCredits.indexOf(credit) < this.project.creditsForSale;
   }
 
@@ -103,6 +103,23 @@ export class ProjectManagerDetailsComponent {
     }
   }
 
+  async toggleEditMode() {
+    if (this.isEditable) {
+      const updatedProject = {
+        ...this.project,
+        types: this.categoriasSelecionadas.map((id) => ({ id })),
+      };
+
+      try {
+        await this.http.put(`${this.apiURL}/${this.project.id}`, updatedProject).toPromise();
+        this.alerts.enableSuccess('Projeto atualizado com sucesso!');
+      } catch (error) {
+        console.error('Erro ao atualizar o projeto:', error);
+      }
+    }
+    this.isEditable = !this.isEditable;
+  }
+
   saveCarbonInfo() {
     var creditsForSaleValid = this.newCreditsForSale > 0 && this.newCreditsForSale <= this.project.carbonCredits.length;
     var pricePerCreditValid = this.newPricePerCredit > 0;
@@ -117,8 +134,7 @@ export class ProjectManagerDetailsComponent {
       creditsForSale: this.newCreditsForSale
     };
 
-    this.http.put(`${this.apiURL}/credits-info/${this.project.id}`, body).subscribe(() => 
-    {
+    this.http.put(`${this.apiURL}/credits-info/${this.project.id}`, body).subscribe(() => {
       alert("Informações de créditos atualizadas com sucesso!");
       this.newCreditsForSale = 0;
       this.newPricePerCredit = 0;
@@ -172,7 +188,7 @@ export class ProjectManagerDetailsComponent {
   deleteFile(fileId: number): void {
     var token = localStorage.getItem('token');
     var userId = this.authService.getUserId();
-    
+
     console.log(userId)
 
     const headers = new HttpHeaders({
@@ -182,18 +198,18 @@ export class ProjectManagerDetailsComponent {
 
     console.log(headers)
     const projectId = this.project.id;
-    this.http.delete<void>(`${this.apiURL}/${projectId}/files/${fileId}`,{ headers }).subscribe(() => {
-      
+    this.http.delete<void>(`${this.apiURL}/${projectId}/files/${fileId}`, { headers }).subscribe(() => {
+
       this.fetchProjectDetails(projectId);
       this.loadProjectFiles(projectId);
       this.alerts.enableSuccess('Ficheiro Eliminado com sucesso do projeto');
     }, error => {
-     
+
       this.alerts.enableError('Um erro aconteceu tente novamente mais tarde');
       console.error('Error deleting file:', error);
     });
   }
-  
+
 
   onImageChange(event: any): void {
     const file = event.target.files[0];
@@ -218,13 +234,13 @@ export class ProjectManagerDetailsComponent {
     document.body.removeChild(a);
   }
 
-changeToEditMode(){
-  this.isAddingFiles = true;
-}
-RevertToEditMode(){
-  this.isAddingFiles = false;
-  this.documentos = [];
-}
+  changeToEditMode() {
+    this.isAddingFiles = true;
+  }
+  RevertToEditMode() {
+    this.isAddingFiles = false;
+    this.documentos = [];
+  }
   async onSubmit(): Promise<void> {
     if (this.imagem) {
       const projectId = this.project.id;
@@ -233,7 +249,7 @@ RevertToEditMode(){
 
       try {
         const response: any = await this.http.post(`${this.apiURL}/${projectId}/uploadImage`, formData).toPromise();
-        this.project.imageUrl = response.filePath; 
+        this.project.imageUrl = response.filePath;
       } catch (error) {
         console.error('Erro ao enviar imagem:', error);
       }

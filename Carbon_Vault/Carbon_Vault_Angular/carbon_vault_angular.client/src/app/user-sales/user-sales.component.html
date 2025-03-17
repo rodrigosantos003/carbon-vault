@@ -20,7 +20,7 @@
                         <td>{{purchase.project}}</td>
                         <td>{{purchase.date}}</td>
                         <td>{{purchase.state}}</td>
-                        <td><button class="details-button">Ver detalhes</button></td>
+                        <td><button class="details-button" (click)="transactionDetails(purchase.id)">Ver detalhes</button></td>
                     </tr>
                 </tbody>
             </table>

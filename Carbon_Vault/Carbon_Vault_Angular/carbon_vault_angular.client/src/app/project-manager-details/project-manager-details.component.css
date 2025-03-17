@@ -292,3 +292,27 @@
       padding: 5px;
       padding-inline: 10px;
     }
+
+
+
+
+
+.button-edit-save {
+  background-color: var(--main-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+  .button-edit-save:hover {
+    background-color: green;
+  }
+
+  .button-edit-save:active {
+    background-color: #3A5D3A; /* Verde ainda mais escuro ao clicar */
+  }

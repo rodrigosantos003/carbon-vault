@@ -82,6 +82,41 @@ namespace Carbon_Vault.Controllers.API
             return Ok(projects); // Return 200 with the list of projects
         }
 
+        [HttpGet("forSale/{id}")]
+        public async Task<IActionResult> UpdateProjectState(int id)
+        {
+            var project = await _context.Projects.FindAsync(id);
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            // Update the project state
+            project.IsForSale = !project.IsForSale;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(); // Return 204 No Content on success
+        }
+
+        [HttpPatch("forSale/{id}")]
+        public async Task<IActionResult> UpdateProjectSale(int id)
+        {
+            var project = await _context.Projects.FindAsync(id);
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            // Update the project state (flip the IsForSale value)
+            project.IsForSale = !project.IsForSale;
+
+            await _context.SaveChangesAsync();
+
+            return NoContent(); // 204 No Content on success
+        }
+
+
         // PUT: api/Projects/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
