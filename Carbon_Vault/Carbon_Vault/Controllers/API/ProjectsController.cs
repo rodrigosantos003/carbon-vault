@@ -421,12 +421,9 @@ namespace Carbon_Vault.Controllers.API
             {
                 return NotFound("Projeto não encontrado.");
             }
-
            
             project.CarbonCreditsGenerated = project.CarbonCreditsGenerated + NumberOfCredits;
             await _context.SaveChangesAsync();
-
-  
 
             var carbonCredits = new List<CarbonCredit>();
 
@@ -530,149 +527,15 @@ namespace Carbon_Vault.Controllers.API
         }
 
 
+    public class UpdateCreditsInfoDto
+    {
+        public decimal PricePerCredit { get; set; }
+        public int CreditsForSale { get; set; }
+    }
 
-
-
-
-
-        [HttpPost("{id}/approve")]
-        public async Task<IActionResult> ApproveProject(int id, [FromHeader] string Authorization, [FromHeader] int userID, [FromHeader] int CreditsGenerated)
+    [HttpPut("credits-info/{projectId}")]
+    public async Task<IActionResult> UpdateCreditsInfo(int projectId, [FromBody] UpdateCreditsInfoDto newInfo)
         {
-            Console.WriteLine($"Received creditsGenerated: {CreditsGenerated}");
-
-            if (!AuthHelper.IsTokenValid(Authorization, userID))
-            {
-                return Unauthorized();
-            }
-            var account = await _context.Account.FindAsync(userID);
-            if (account == null)
-            {
-                return NotFound(new { message = "Account not found." });
-            }
-
-            // Authorization check for non-admin users
-            if (account.Role != AccountType.Admin)
-            {
-                return Unauthorized(new { message = "Only admins can aprove projects" });
-            }
-
-
-            var project = await _context.Projects.FindAsync(id);
-            if (project == null)
-            {
-                return NotFound("Projeto não encontrado.");
-            }
-
-            project.Status = ProjectStatus.Confirmed;
-            project.CarbonCreditsGenerated = CreditsGenerated;
-            await _context.SaveChangesAsync();
-
-            var owner = await _context.Account.FindAsync(project.OwnerId);
-
-            await _emailService.SendEmail(
-                owner.Email,
-                "Projeto Aprovado",
-                $"O seu projeto {project.Name} foi aprovado e recebeu {CreditsGenerated} créditos de carbono para venda. <br> Poderá selecionar agora aqueles que quiser vender na sua aba de gestão do projeto",
-                null
-            );
-
-            var carbonCredits = new List<CarbonCredit>();
-
-            for (int i = 0; i < CreditsGenerated; i++)
-            {
-                var newCredit = new CarbonCredit
-                {
-                    ProjectId = project.Id,
-                    IssueDate = DateTime.UtcNow,
-                    ExpiryDate = DateTime.UtcNow.AddYears(5),
-                    SerialNumber = Guid.NewGuid().ToString(),
-                    Certification = project.Certification,
-                    Price = (decimal)project.PricePerCredit,
-                    IsSold = false,
-                    Status = CreditStatus.Available
-                };
-
-                carbonCredits.Add(newCredit);
-            }
-
-            await _context.CarbonCredits.AddRangeAsync(carbonCredits);
-            await _context.SaveChangesAsync();
-
-            return Ok(new { message = "Projeto aprovado e créditos de carbono gerados com sucesso.", creditsGenerated = CreditsGenerated });
-
-
-        }
-        [HttpPost("{id}/addCredits")]
-        public async Task<IActionResult> AddCredits(int id, [FromHeader] string Authorization, [FromHeader] int userID, [FromHeader] int NumberOfCredits)
-        {
-            
-
-            if (!AuthHelper.IsTokenValid(Authorization, userID))
-            {
-                return Unauthorized();
-            }
-            var account = await _context.Account.FindAsync(userID);
-            if (account == null)
-            {
-                return NotFound(new { message = "Account not found." });
-            }
-
-            // Authorization check for non-admin users
-            if (account.Role != AccountType.Admin)
-            {
-                return Unauthorized(new { message = "Only admins can aprove projects" });
-            }
-
-
-            var project = await _context.Projects.FindAsync(id);
-            if (project == null)
-            {
-                return NotFound("Projeto não encontrado.");
-            }
-
-           
-            project.CarbonCreditsGenerated = project.CarbonCreditsGenerated + NumberOfCredits;
-            await _context.SaveChangesAsync();
-
-  
-
-            var carbonCredits = new List<CarbonCredit>();
-
-            for (int i = 0; i < NumberOfCredits; i++)
-            {
-                var newCredit = new CarbonCredit
-                {
-                    ProjectId = project.Id,
-                    IssueDate = DateTime.UtcNow,
-                    ExpiryDate = DateTime.UtcNow.AddYears(5),
-                    SerialNumber = Guid.NewGuid().ToString(),
-                    Certification = project.Certification,
-                    Price = (decimal)project.PricePerCredit,
-                    IsSold = false,
-                    Status = CreditStatus.Available
-                };
-
-                carbonCredits.Add(newCredit);
-            }
-
-            await _context.CarbonCredits.AddRangeAsync(carbonCredits);
-            await _context.SaveChangesAsync();
-
-            return Ok(new { message = "Novos creditos adicionados ao projeto", creditsGenerated = NumberOfCredits });
-
-
-        }
-
-
-
-        [HttpPut("list-credits/{projectId}")]
-        public async Task<IActionResult> SellCredits([FromHeader] string Authorization, [FromHeader] int userId, int projectId, int credits)
-        {
-            if (!AuthHelper.IsTokenValid(Authorization, userId))
-            {
-                return Unauthorized();
-            }
-
             var project = await _context.Projects.FindAsync(projectId);
 
             if (project == null)
@@ -680,62 +543,21 @@ namespace Carbon_Vault.Controllers.API
                 return NotFound();
             }
 
-            var creditsAmount = _context.CarbonCredits
-                .Where(c => c.ProjectId == projectId && c.IsSold == false).Count();
+            project.PricePerCredit = newInfo.PricePerCredit;
+            project.CreditsForSale = newInfo.CreditsForSale;
 
-            if (creditsAmount < credits)
-            {
-                return BadRequest("Not enough credits to sell.");
-            }
-
-            project.CreditsForSale = credits;
-
-            await _context.SaveChangesAsync();
-
-            return Ok("Credits listed for sale.");
-        }
-
-        [HttpPut("sell-credits/{projectId}")]
-        public async Task<IActionResult> SellCredits([FromHeader] string Authorization, int userId, int projectId, int credits, int buyerId)
-        {
-            if (!AuthHelper.IsTokenValid(Authorization, userId))
-            {
-                return Unauthorized();
-            }
-
-            var project = await _context.Projects.FindAsync(projectId);
-
-            if (project == null)
-            {
-                return NotFound();
-            }
-
-            var creditsAmount = _context.CarbonCredits
-                .Where(c => c.ProjectId == projectId && c.IsSold == false).Count();
-
-            if (creditsAmount < credits)
-            {
-                return BadRequest("Not enough credits to sell.");
-            }
-
-            var creditsToSell = _context.CarbonCredits
+            var credits = _context.CarbonCredits
                 .Where(c => c.ProjectId == projectId && c.IsSold == false)
-                .OrderBy(c => c.ExpiryDate)
-                .Take(credits)
                 .ToList();
 
-            foreach (var credit in creditsToSell)
+            foreach (var credit in credits)
             {
-                credit.IsSold = true;
-                //credit.Buyer = buyerId;
+                credit.Price = newInfo.PricePerCredit;
             }
-
-            project.CreditsForSale -= credits;
 
             await _context.SaveChangesAsync();
 
-            return Ok("Credits sold successfully.");
+            return Ok(new { message = "Credits info updated successfully." });
         }
-
     }
 }

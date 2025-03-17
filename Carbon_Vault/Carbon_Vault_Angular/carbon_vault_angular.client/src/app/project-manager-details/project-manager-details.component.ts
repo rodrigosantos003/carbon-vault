@@ -15,6 +15,9 @@ import { AlertsService } from '../alerts.service';
 })
 export class ProjectManagerDetailsComponent {
 
+  newCreditsForSale: number = 0;
+  newPricePerCredit: number = 0;
+  credits: any[] = [];
   project: any = {};
   categoriasSelecionadas: number[] = [];
   documentos: File[] = [];
@@ -47,8 +50,6 @@ export class ProjectManagerDetailsComponent {
     const projectId = this.route.snapshot.params['id'];
     await this.fetchProjectDetails(projectId);
     await this.loadProjectFiles(projectId);
-    
-
   }
 
  async fetchProjectDetails(projectId: number) {
@@ -68,8 +69,61 @@ export class ProjectManagerDetailsComponent {
       }
   
       this.categoriasSelecionadas = response.types.map((type: any) => type.id);
+
+      this.project.carbonCredits.sort((a: any, b: any) => {
+        return new Date(a.date).getTime() - new Date(b.date).getTime();
+      });
+
       console.log(this.project)
       console.log(this.categoriasSelecionadas)
+    });
+  }
+
+  getCreditSaleStatus(credit: any) : boolean{
+    return this.project.carbonCredits.indexOf(credit) < this.project.creditsForSale;
+  }
+
+  openPopup() {
+    const overlay = document.getElementById('modalOverlay');
+    const delPopup = document.getElementById('credits-form');
+
+    if (overlay && delPopup) {
+      overlay.style.display = 'flex';
+      delPopup.style.display = 'block';
+    }
+  }
+
+  closePopup() {
+    const overlay = document.getElementById('modalOverlay');
+    const delPopup = document.getElementById('credits-form');
+
+    if (overlay && delPopup) {
+      overlay.style.display = 'none';
+      delPopup.style.display = 'none';
+    }
+  }
+
+  saveCarbonInfo() {
+    var creditsForSaleValid = this.newCreditsForSale > 0 && this.newCreditsForSale <= this.project.carbonCredits.length;
+    var pricePerCreditValid = this.newPricePerCredit > 0;
+
+    if (!creditsForSaleValid || !pricePerCreditValid) {
+      alert('Por favor, preencha todos os campos corretamente');
+      return;
+    }
+
+    const body = {
+      pricePerCredit: this.newPricePerCredit,
+      creditsForSale: this.newCreditsForSale
+    };
+
+    this.http.put(`${this.apiURL}/credits-info/${this.project.id}`, body).subscribe(() => 
+    {
+      alert("Informações de créditos atualizadas com sucesso!");
+      this.newCreditsForSale = 0;
+      this.newPricePerCredit = 0;
+      this.closePopup();
+      this.fetchProjectDetails(this.project.id);
     });
   }
 
