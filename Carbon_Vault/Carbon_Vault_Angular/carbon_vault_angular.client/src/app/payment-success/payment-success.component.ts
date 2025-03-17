@@ -4,6 +4,7 @@ import { environment } from '../../environments/environment';
 import { CartService } from '../cart.service';
 import { Route, Router } from '@angular/router';
 import { loadStripe, Stripe } from '@stripe/stripe-js';
+import { AlertsService } from '../alerts.service';
 
 @Component({
   selector: 'app-payment-success',
@@ -14,7 +15,7 @@ import { loadStripe, Stripe } from '@stripe/stripe-js';
 })
 export class PaymentSuccessComponent {
   sessionData: any;
-  constructor(private http: HttpClient, private cartService: CartService, public router: Router) { }
+  constructor(private http: HttpClient, private cartService: CartService, public router: Router, private alerts: AlertsService) { }
 
   ngOnInit() {
     this.cartService.clearCart();
@@ -40,14 +41,15 @@ export class PaymentSuccessComponent {
   }
 
   sendInvoice(checkoutSessionId: string) {
-    const apiUrl = `${environment.apiUrl}/UserPayments/invoice/${checkoutSessionId}`;
+    const apiUrl = `${environment.apiUrl}/UserPayments/invoice/${checkoutSessionId}/send`;
     this.http.get(apiUrl).subscribe({
       next: (data) => {
-        console.log("Fatura enviada com sucesso: ", data);
+        this.alerts.enableSuccess("Fatura enviada com sucesso");
         sessionStorage.clear();
       },
       error: (error) => {
         console.error("Erro ao enviar a fatura: ", error);
+        this.alerts.enableError("Erro ao enviar a fatura");
         sessionStorage.clear();
       }
     })

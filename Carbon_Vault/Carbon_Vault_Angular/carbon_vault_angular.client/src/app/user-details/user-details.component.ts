@@ -1,6 +1,6 @@
 import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Router,ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../auth-service.service';
 import { AlertsService } from '../alerts.service';
 import { environment } from '../../environments/environment';
@@ -8,7 +8,7 @@ import { environment } from '../../environments/environment';
 @Component({
   selector: 'app-user-details',
   standalone: false,
-  
+
   templateUrl: './user-details.component.html',
   styleUrl: './user-details.component.css'
 })
@@ -19,10 +19,10 @@ export class UserDetailsComponent {
   accountTransactions: any[] = [];
 
 
-  constructor(private route: ActivatedRoute,  private http: HttpClient,     private authService: AuthService ,    private router: Router ,private alerts: AlertsService ) {}
+  constructor(private route: ActivatedRoute, private http: HttpClient, private authService: AuthService, private router: Router, private alerts: AlertsService) { }
 
   ngOnInit(): void {
-    this.accountId = this.route.snapshot.paramMap.get('id') ?? ""; 
+    this.accountId = this.route.snapshot.paramMap.get('id') ?? "";
     this.http.get(`${environment.apiUrl}/Accounts/${this.accountId}`).subscribe((data: any) => {
       this.accountData = data;
       console.log(this.accountData)
@@ -57,9 +57,9 @@ export class UserDetailsComponent {
       const jwtToken = localStorage.getItem('token');
       const userIdFromToken = this.authService.getUserId();
 
-     
+
       if (userIdFromToken == this.accountId) {
-        alert("Não pode Eliminar a sua própria conta");
+        this.alerts.enableError("Não pode Eliminar a sua própria conta");
         return;
       }
 
@@ -68,12 +68,12 @@ export class UserDetailsComponent {
           headers: { 'Authorization': `Bearer ${jwtToken}` }
         }).subscribe(
           () => {
-            this.router.navigate(['/users-manager']); 
-            this.closePopup();  
+            this.router.navigate(['/users-manager']);
+            this.closePopup();
           },
           error => {
             console.error("Error deleting account:", error);
-            alert('Error deleting the account.');
+            this.alerts.enableError('Error deleting the account.');
           }
         );
       } else {
@@ -83,17 +83,17 @@ export class UserDetailsComponent {
       console.log("Account ID is null");
     }
   }
-  getTransactions(accountID : string) {
+  getTransactions(accountID: string) {
     const jwtToken = localStorage.getItem('token');
-  
+
     if (!jwtToken) {
       console.error("JWT token not found");
       return;
     }
-  
+
     const headers = { 'Authorization': `Bearer ${jwtToken}` };
     const params = { accountID: accountID };
-  
+
     this.http.get<any[]>(`${environment.apiUrl}/Transactions`, { headers, params }).subscribe({
       next: (data) => {
         console.log(data)

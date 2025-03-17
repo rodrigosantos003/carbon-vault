@@ -177,6 +177,23 @@ namespace Carbon_Vault.Controllers.API
         }
 
         [HttpGet("invoice/{sessionId}")]
+        public IActionResult GetInvoicePdf(string sessionId)
+        {
+            var sessionService = new SessionService();
+            var session = sessionService.Get(sessionId);
+
+            if (session.InvoiceId != null)
+            {
+                var invoiceService = new InvoiceService();
+                var invoice = invoiceService.Get(session.InvoiceId);
+
+                return Ok(new { message = "Fatura enviada com sucesso.", file = invoice.InvoicePdf });
+            }
+
+            return NotFound(new { message = "Fatura não encontrada." });
+        }
+
+        [HttpGet("invoice/{sessionId}/send")]
         public IActionResult SendInvoice(string sessionId)
         {
             var sessionService = new SessionService();

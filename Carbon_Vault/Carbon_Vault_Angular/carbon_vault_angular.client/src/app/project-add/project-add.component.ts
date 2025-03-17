@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { AuthService } from '../auth-service.service';
+import { AlertsService } from '../alerts.service';
 @Component({
   selector: 'app-project-add',
   standalone: false,
-  
+
   templateUrl: './project-add.component.html',
   styleUrl: './project-add.component.css'
 })
@@ -17,7 +18,7 @@ export class ProjectAddComponent {
   dataFim: string = '';
   desenvolvedor: string = '';
   certificacao: string = '';
-  status:  number | null = null;
+  status: number | null = null;
   urlProjeto: string = '';
   urlImagem: string = '';
   preco: number | null = null;
@@ -43,25 +44,25 @@ export class ProjectAddComponent {
     { id: 11, nome: 'LandLife', label: 'Proteger a Vida Terrestre' },
     { id: 12, nome: 'Peace', label: 'Proteger a Paz global' },
     { id: 13, nome: 'Partnership', label: 'Parcerias Sustentáveis' }
-   
-   
+
+
   ];
-  constructor(private http: HttpClient,private authService: AuthService) {
+  constructor(private http: HttpClient, private authService: AuthService, private alerts: AlertsService) {
     this.userId = this.authService.getUserId();
 
   }
   onFileChange(event: any) {
     const newFiles = Array.from(event.target.files) as File[]; // Type cast here
-  
+
     this.documentos = [...this.documentos, ...newFiles];
   }
- 
+
   onImageChange(event: any): void {
     const file = event.target.files[0];
     if (file) {
       this.imagem = file;
 
-       const reader = new FileReader();
+      const reader = new FileReader();
       reader.onload = (e: any) => {
         this.imagePreviewUrl = e.target.result;
       };
@@ -69,7 +70,7 @@ export class ProjectAddComponent {
     }
   }
 
-  async uploadImage(projectId : number): Promise<string> {
+  async uploadImage(projectId: number): Promise<string> {
     if (!this.imagem) return '';
     const formData = new FormData();
     formData.append('file', this.imagem);
@@ -93,34 +94,34 @@ export class ProjectAddComponent {
   onDragOver(event: DragEvent) {
     event.preventDefault();
     event.stopPropagation();
-    event.dataTransfer!.dropEffect = 'copy'; 
+    event.dataTransfer!.dropEffect = 'copy';
   }
 
-  
+
   onDrop(event: DragEvent) {
     event.preventDefault();
     event.stopPropagation();
-  
+
     const fileList: FileList = event.dataTransfer?.files!;
     if (fileList && fileList.length > 0) {
       const newFiles = Array.from(fileList);
-  
-      
+
+
       this.documentos = [...this.documentos, ...newFiles];
     }
     console.log(this.documentos);
   }
- 
+
   onDragLeave(event: DragEvent) {
     event.preventDefault();
     event.stopPropagation();
   }
   async onSubmit() {
-      const inicio = new Date(this.dataInicio);
+    const inicio = new Date(this.dataInicio);
     const fim = new Date(this.dataFim);
 
     if (inicio > fim) {
-      alert('A data de início não pode ser depois da data de fim.');
+      this.alerts.enableError('A data de início não pode ser depois da data de fim.');
       return;
     }
 
@@ -153,9 +154,9 @@ export class ProjectAddComponent {
         this.urlImagem = await this.uploadImage(projectId);
       }
 
-      alert('Projeto criado com sucesso!');
+      this.alerts.enableSuccess('Projeto criado com sucesso!');
     } catch (error) {
-      console.error('Erro ao criar o projeto:', error);
+      this.alerts.enableError('Erro ao criar o projeto');
     }
   }
 }
