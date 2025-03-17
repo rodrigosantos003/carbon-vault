@@ -180,7 +180,6 @@ namespace Carbon_Vault.Data
                    OwnerId = 2,
                    PricePerCredit = 15.75M,
                    Status = ProjectStatus.Confirmed,
-                   OwnerId = 4,
                    ProjectUrl = new Uri("https://example.com/project2"),
                    CreatedAt = DateTime.UtcNow,
                    ImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSS2nF0iroOXheUgLiCRjKPFEyxqBqbjMMiBZxtPvybNA14VsZrFMg2wgudNFFSgdW9S5Q&usqp=CAU",

@@ -4,7 +4,7 @@ import { environment } from '../../environments/environment';
 import { AlertsService } from '../alerts.service';
 import { Location } from '@angular/common';
 import { AuthService } from '../auth-service.service';
-import { AlertsService } from '../alerts.service';
+
 @Component({
   selector: 'app-project-add',
   standalone: false,
@@ -50,7 +50,7 @@ export class ProjectAddComponent {
 
   ];
 
-  constructor(private http: HttpClient,private authService: AuthService,private alerts: AlertsService,private location: Location) {
+  constructor(private http: HttpClient, private authService: AuthService, private alerts: AlertsService, private location: Location) {
     this.userId = this.authService.getUserId();
 
   }
@@ -75,7 +75,7 @@ export class ProjectAddComponent {
       this.alerts.enableError('A descrição é obrigatória.');
       return false;
     }
-  
+
     if (!this.dataInicio) {
       this.alerts.enableError('A data de início é obrigatória.');
       return false;
@@ -88,12 +88,12 @@ export class ProjectAddComponent {
       this.alerts.enableError('A indicação do desenvolvedor é obrigatória.');
       return false;
     }
-    
+
     if (!this.certificacao.trim()) {
       this.alerts.enableError('A indicação da certificação é obrigatória.');
       return false;
     }
-  
+
     if (this.dataInicio && this.dataFim) {
       const inicio = new Date(this.dataInicio);
       const fim = new Date(this.dataFim);
@@ -184,7 +184,7 @@ export class ProjectAddComponent {
   }
   async onSubmit() {
     if (!this.validateForm()) return;
-      
+
     const inicio = new Date(this.dataInicio);
     const fim = new Date(this.dataFim);
 
@@ -221,7 +221,7 @@ export class ProjectAddComponent {
       if (this.imagem) {
         this.urlImagem = await this.uploadImage(projectId);
       }
-      
+
       this.alerts.enableSuccess('Projeto criado com sucesso!')
       this.goBack()
     } catch (error) {
