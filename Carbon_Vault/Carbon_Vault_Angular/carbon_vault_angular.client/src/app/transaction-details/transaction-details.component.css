@@ -101,6 +101,9 @@ table td {
     text-align: center;
     padding: 10px;
     padding-inline: 25px;
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 th {
@@ -119,4 +122,5 @@ th {
     text-align: center;
     color: #FFFFFF;
     margin-left: auto;
+    cursor: pointer;
 }
