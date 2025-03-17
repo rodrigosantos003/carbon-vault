@@ -7,17 +7,15 @@ import { DatePipe } from '@angular/common';
 import { AlertsService } from '../alerts.service';
 
 @Component({
-  selector: 'app-project-manager-details',
+  selector: 'app-project-manager-details-admin',
   standalone: false,
-
-  templateUrl: './project-manager-details.component.html',
-  styleUrl: './project-manager-details.component.css'
+  
+  templateUrl: './project-manager-details-admin.component.html',
+  styleUrl: './project-manager-details-admin.component.css'
 })
-export class ProjectManagerDetailsComponent {
+export class ProjectManagerDetailsAdminComponent {
 
-  newCreditsForSale: number = 0;
-  newPricePerCredit: number = 0;
-  credits: any[] = [];
+
   project: any = {};
   categoriasSelecionadas: number[] = [];
   documentos: File[] = [];
@@ -27,6 +25,11 @@ export class ProjectManagerDetailsComponent {
   isEditable: boolean = true;
   isAddingFiles: boolean = false;
   private apiURL = `${environment.apiUrl}/Projects`;
+  showRejectionFeedback: boolean = false;
+  showAprovedFeedback :boolean = false;
+  showAddCredits :boolean = true;
+  showChangeState :boolean = false;
+  additionalCredits : number = 0 ;
 
   categorias = [
     { id: 1, nome: 'Poverty', label: 'Erradicar a pobreza' },
@@ -44,14 +47,96 @@ export class ProjectManagerDetailsComponent {
     { id: 13, nome: 'Partnership', label: 'Parcerias Sustentáveis' }
   ];
 
-  constructor(private http: HttpClient, private route: ActivatedRoute, private authService: AuthService, private alerts: AlertsService) { }
+  constructor(private http: HttpClient, private route: ActivatedRoute, private authService: AuthService,private alerts: AlertsService) {}
 
   async ngOnInit() {
     const projectId = this.route.snapshot.params['id'];
     await this.fetchProjectDetails(projectId);
     await this.loadProjectFiles(projectId);
+    
+
   }
 
+  getProjectStatus (state: number) :string{
+    const states = ["Ativo", "Pendente", "inátivo"];
+      return states[state] ?? "Unknown"
+    }
+
+  approveProject() {
+    const projectId = this.project.id;
+    const url = `${this.apiURL}/${projectId}/approve`;
+    const creditsGenerated = this.project.carbonCreditsGenerated; 
+
+    if (creditsGenerated <= 0) {
+      this.alerts.enableError('O número de créditos deve ser maior que 0.');
+      return; 
+    }
+
+    console.log(creditsGenerated)
+  
+    const token = localStorage.getItem('token');
+    const userId = this.authService.getUserId();
+  
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'userID': userId.toString(),
+      'CreditsGenerated': creditsGenerated.toString() 
+    });
+  
+
+
+    
+    
+    this.http.post(url, {}, { headers }).subscribe(
+      (response) => {
+        this.alerts.enableSuccess('Projeto aprovado e créditos gerados com sucesso!');
+        this.showAprovedFeedback = true; 
+        console.log(response);
+      },
+      (error) => {
+        console.error('Erro ao aprovar o projeto:', error);
+        this.alerts.enableError('Ocorreu um erro ao aprovar o projeto. Tente novamente mais tarde.');
+      }
+    );
+  }
+
+  addCredits() {
+    const projectId = this.project.id;
+    const url = `${this.apiURL}/${projectId}/addCredits`;
+    const creditsGenerated = this.additionalCredits; 
+
+    if (this.additionalCredits <= 0) {
+      this.alerts.enableError('O número de créditos deve ser maior que 0.');
+      return; 
+    }
+
+
+  
+    const token = localStorage.getItem('token');
+    const userId = this.authService.getUserId();
+  
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'userID': userId.toString(),
+      'NumberOfCredits': creditsGenerated.toString() 
+    });
+  
+
+
+    
+   
+    this.http.post(url, {}, { headers }).subscribe(
+      (response) => {
+        this.alerts.enableSuccess('créditos gerados com sucesso!');
+        this.fetchProjectDetails(this.route.snapshot.params['id']);
+        console.log(response);
+      },
+      (error) => {
+        console.error('Erro ao aprovar o projeto:', error);
+        this.alerts.enableError('Ocorreu um erro ao aprovar o projeto. Tente novamente mais tarde.');
+      }
+    );
+  }
  async fetchProjectDetails(projectId: number) {
     this.http.get(`${this.apiURL}/${projectId}`).subscribe((response: any) => {
       this.project = response;
@@ -61,93 +146,39 @@ export class ProjectManagerDetailsComponent {
       if (this.project.endDate && this.project.startDate) {
         const dateObj_start = new Date(this.project.startDate);
         const dateObj_end = new Date(this.project.endDate);
-        const formattedDate_start = dateObj_start.toISOString().split('T')[0];
-        const formattedDate_end = dateObj_end.toISOString().split('T')[0];
-
+        const formattedDate_start = dateObj_start.toISOString().split('T')[0]; 
+        const formattedDate_end = dateObj_end.toISOString().split('T')[0]; 
+       
         this.project.endDate = formattedDate_end;
         this.project.startDate = formattedDate_start;
       }
-
+  
       this.categoriasSelecionadas = response.types.map((type: any) => type.id);
-
-      this.project.carbonCredits.sort((a: any, b: any) => {
-        return new Date(a.date).getTime() - new Date(b.date).getTime();
-      });
-
       console.log(this.project)
       console.log(this.categoriasSelecionadas)
-    });
-  }
-
-  getCreditSaleStatus(credit: any) : boolean{
-    return this.project.carbonCredits.indexOf(credit) < this.project.creditsForSale;
-  }
-
-  openPopup() {
-    const overlay = document.getElementById('modalOverlay');
-    const delPopup = document.getElementById('credits-form');
-
-    if (overlay && delPopup) {
-      overlay.style.display = 'flex';
-      delPopup.style.display = 'block';
-    }
-  }
-
-  closePopup() {
-    const overlay = document.getElementById('modalOverlay');
-    const delPopup = document.getElementById('credits-form');
-
-    if (overlay && delPopup) {
-      overlay.style.display = 'none';
-      delPopup.style.display = 'none';
-    }
-  }
-
-  saveCarbonInfo() {
-    var creditsForSaleValid = this.newCreditsForSale > 0 && this.newCreditsForSale <= this.project.carbonCredits.length;
-    var pricePerCreditValid = this.newPricePerCredit > 0;
-
-    if (!creditsForSaleValid || !pricePerCreditValid) {
-      alert('Por favor, preencha todos os campos corretamente');
-      return;
-    }
-
-    const body = {
-      pricePerCredit: this.newPricePerCredit,
-      creditsForSale: this.newCreditsForSale
-    };
-
-    this.http.put(`${this.apiURL}/credits-info/${this.project.id}`, body).subscribe(() => 
-    {
-      alert("Informações de créditos atualizadas com sucesso!");
-      this.newCreditsForSale = 0;
-      this.newPricePerCredit = 0;
-      this.closePopup();
-      this.fetchProjectDetails(this.project.id);
     });
   }
 
   onDragOver(event: DragEvent) {
     event.preventDefault();
     event.stopPropagation();
-    event.dataTransfer!.dropEffect = 'copy';
+    event.dataTransfer!.dropEffect = 'copy'; 
   }
-
-
+  
   onDrop(event: DragEvent) {
     event.preventDefault();
     event.stopPropagation();
-
+  
     const fileList: FileList = event.dataTransfer?.files!;
     if (fileList && fileList.length > 0) {
       const newFiles = Array.from(fileList);
-
-
+  
+      
       this.documentos = [...this.documentos, ...newFiles];
     }
     console.log(this.documentos);
   }
-
+ 
   onDragLeave(event: DragEvent) {
     event.preventDefault();
     event.stopPropagation();
@@ -161,14 +192,15 @@ export class ProjectManagerDetailsComponent {
   }
   async loadProjectFiles(projectId: number): Promise<void> {
     this.http.get<any[]>(`${this.apiURL}/${projectId}/files`).subscribe((files) => {
-      this.documentosAtuais = files.filter(file => file.filePath != this.project.ImageUrl);
+      console.log(this.project)
+      this.documentosAtuais = files.filter(file => file.filePath != this.project.imageUrl);
+     
     });
   }
   onFileChange(event: any) {
     const newFiles = Array.from(event.target.files) as File[];
     this.documentos = [...this.documentos, ...newFiles];
   }
-
   deleteFile(fileId: number): void {
     var token = localStorage.getItem('token');
     var userId = this.authService.getUserId();
@@ -193,7 +225,34 @@ export class ProjectManagerDetailsComponent {
       console.error('Error deleting file:', error);
     });
   }
-  
+ rejectProject() {
+    if (!this.project.rejectionFeedback || this.project.rejectionFeedback.trim() === "") {
+      this.alerts.enableError('Por favor, insira um feedback antes de rejeitar o projeto.');
+      return;
+    }
+
+    const projectId = this.project.id;
+    const url = `${this.apiURL}/${projectId}/reject`;
+    const body = { feedback: this.project.rejectionFeedback };
+    const token = localStorage.getItem('token');
+    const userId = this.authService.getUserId();
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'userID': userId
+    });
+
+    this.http.post(url, body, { headers }).subscribe(
+      () => {
+        this.alerts.enableSuccess('Projeto rejeitado com sucesso!');
+        this.isEditable = false; 
+      },
+      (error) => {
+        console.error('Erro ao rejeitar o projeto:', error);
+        this.alerts.enableError('Ocorreu um erro ao rejeitar o projeto. Tente novamente mais tarde.');
+      }
+    );
+  }
 
   onImageChange(event: any): void {
     const file = event.target.files[0];
@@ -206,17 +265,17 @@ export class ProjectManagerDetailsComponent {
       reader.readAsDataURL(file);
     }
   }
-  downloadFile(filePath: string, fileName: string) {
-    const url = `${filePath}`;
+downloadFile(filePath: string, fileName: string) {
+    const url = `${filePath}`;  
     const a = document.createElement('a');
 
-    a.href = url;
-    a.download = fileName;
+    a.href = url;  
+    a.download = fileName;  
     document.body.appendChild(a);
     a.click();
 
     document.body.removeChild(a);
-  }
+}
 
 changeToEditMode(){
   this.isAddingFiles = true;
@@ -225,6 +284,7 @@ RevertToEditMode(){
   this.isAddingFiles = false;
   this.documentos = [];
 }
+
   async onSubmit(): Promise<void> {
     if (this.imagem) {
       const projectId = this.project.id;
@@ -246,12 +306,13 @@ RevertToEditMode(){
 
     try {
       await this.http.put(`${this.apiURL}/${this.project.id}`, updatedProject).toPromise();
-      this.alerts.enableSuccess('Projeto atualizado com sucesso!');
+      alert('Projeto atualizado com sucesso!');
     } catch (error) {
       console.error('Erro ao atualizar o projeto:', error);
     }
   }
 }
+
 interface Documento {
   id: number;
   fileName: string;

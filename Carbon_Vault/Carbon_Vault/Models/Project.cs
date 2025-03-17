@@ -25,6 +25,7 @@ namespace Carbon_Vault.Models
         public string Developer { get; set; }
         public string Certification { get; set; }
         public decimal? PricePerCredit { get; set; }
+        public int CreditsForSale { get; set; }
         public ProjectStatus Status { get; set; }
         public Uri? ProjectUrl { get; set; }
         public string? ImageUrl { get; set; }

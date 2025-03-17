@@ -8,6 +8,7 @@ import { AlertsService } from '../alerts.service';
 @Component({
   selector: 'app-transaction-details',
   standalone: false,
+  
   templateUrl: './transaction-details.component.html',
   styleUrl: './transaction-details.component.css'
 })

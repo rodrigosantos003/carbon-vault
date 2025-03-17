@@ -118,3 +118,66 @@ input::file-selector-button {
   max-width: 165px;
   max-height: 165px;
 }
+
+.tooltip{
+  color: grey;
+  font-size: 10px;
+}
+.mandatory{
+  color: red;
+}
+#category{
+  margin-bottom: 0;
+}
+
+.project-details-header{
+  display:flex;
+  flex-direction: row;
+  width: 100%;
+}
+.submit-button-top {
+  background-color: var(--main-color);
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  float: right;
+  font-family: Poppins;
+  margin-left: auto;
+  height: 40px;
+  align-self: flex-end;
+}
+
+.remove{
+  border: none;
+  border-radius: 5px;
+  background-color: white;
+  color: #4ea741;
+  margin-left: 5px;
+}
+
+.back-button{
+  display: flex;
+      flex-direction: row;
+      align-content: space-around;
+      justify-content: flex-start;
+      cursor: pointer;
+}
+.back-button span{
+  color: #4ea741;
+  align-self: center;
+  font-weight: 700;
+  font-size: 25px;
+}
+ .add-project-form select {
+  border: solid 1px #4ea741;
+  border-radius: 25px;
+  padding: 4px;
+  width: 100%;
+}
+
+.project-details-header h3{
+  align-self: flex-end;
+  margin: 0px;
+}

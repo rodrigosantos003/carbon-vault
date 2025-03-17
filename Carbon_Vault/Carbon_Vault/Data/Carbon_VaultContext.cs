@@ -48,9 +48,7 @@ namespace Carbon_Vault.Data
                .HasOne(cc => cc.Owner)
                .WithMany(p => p.Projects)
                .HasForeignKey(cc => cc.OwnerId);
-
-
-
+               
             populateAccounts(modelBuilder);
 
             populateProjectTypes(modelBuilder);
@@ -179,6 +177,7 @@ namespace Carbon_Vault.Data
                    EndDate = DateTime.Now.AddMonths(24),
                    Developer = "Renewable Power Inc.",
                    Certification = "LEED Gold",
+                   OwnerId = 2,
                    PricePerCredit = 15.75M,
                    Status = ProjectStatus.Confirmed,
                    OwnerId = 4,
