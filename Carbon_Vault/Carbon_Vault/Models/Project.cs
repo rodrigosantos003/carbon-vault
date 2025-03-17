@@ -42,5 +42,7 @@ namespace Carbon_Vault.Models
         // Relationship with documents
         public ICollection<ProjectFiles> Files { get; set; } = new List<ProjectFiles>();
 
+        public bool IsForSale { get; set; } = false;
+
     }
 }

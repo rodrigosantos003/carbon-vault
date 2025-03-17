@@ -9,7 +9,7 @@ import { AlertsService } from '../alerts.service';
 @Component({
   selector: 'app-project-manager-details',
   standalone: false,
-  
+
   templateUrl: './project-manager-details.component.html',
   styleUrl: './project-manager-details.component.css'
 })
@@ -44,7 +44,7 @@ export class ProjectManagerDetailsComponent {
     { id: 13, nome: 'Partnership', label: 'Parcerias Sustentáveis' }
   ];
 
-  constructor(private http: HttpClient, private route: ActivatedRoute, private authService: AuthService,private alerts: AlertsService) {}
+  constructor(private http: HttpClient, private route: ActivatedRoute, private authService: AuthService, private alerts: AlertsService) { }
 
   async ngOnInit() {
     const projectId = this.route.snapshot.params['id'];
@@ -61,13 +61,13 @@ export class ProjectManagerDetailsComponent {
       if (this.project.endDate && this.project.startDate) {
         const dateObj_start = new Date(this.project.startDate);
         const dateObj_end = new Date(this.project.endDate);
-        const formattedDate_start = dateObj_start.toISOString().split('T')[0]; 
-        const formattedDate_end = dateObj_end.toISOString().split('T')[0]; 
-       
+        const formattedDate_start = dateObj_start.toISOString().split('T')[0];
+        const formattedDate_end = dateObj_end.toISOString().split('T')[0];
+
         this.project.endDate = formattedDate_end;
         this.project.startDate = formattedDate_start;
       }
-  
+
       this.categoriasSelecionadas = response.types.map((type: any) => type.id);
 
       this.project.carbonCredits.sort((a: any, b: any) => {
@@ -130,24 +130,24 @@ export class ProjectManagerDetailsComponent {
   onDragOver(event: DragEvent) {
     event.preventDefault();
     event.stopPropagation();
-    event.dataTransfer!.dropEffect = 'copy'; 
+    event.dataTransfer!.dropEffect = 'copy';
   }
 
-  
+
   onDrop(event: DragEvent) {
     event.preventDefault();
     event.stopPropagation();
-  
+
     const fileList: FileList = event.dataTransfer?.files!;
     if (fileList && fileList.length > 0) {
       const newFiles = Array.from(fileList);
-  
-      
+
+
       this.documentos = [...this.documentos, ...newFiles];
     }
     console.log(this.documentos);
   }
- 
+
   onDragLeave(event: DragEvent) {
     event.preventDefault();
     event.stopPropagation();
@@ -161,9 +161,7 @@ export class ProjectManagerDetailsComponent {
   }
   async loadProjectFiles(projectId: number): Promise<void> {
     this.http.get<any[]>(`${this.apiURL}/${projectId}/files`).subscribe((files) => {
-      console.log(this.project)
-      this.documentosAtuais = files.filter(file => file.filePath != this.project.imageUrl);
-     
+      this.documentosAtuais = files.filter(file => file.filePath != this.project.ImageUrl);
     });
   }
   onFileChange(event: any) {
@@ -208,17 +206,17 @@ export class ProjectManagerDetailsComponent {
       reader.readAsDataURL(file);
     }
   }
-downloadFile(filePath: string, fileName: string) {
-    const url = `${filePath}`;  
+  downloadFile(filePath: string, fileName: string) {
+    const url = `${filePath}`;
     const a = document.createElement('a');
 
-    a.href = url;  
-    a.download = fileName;  
+    a.href = url;
+    a.download = fileName;
     document.body.appendChild(a);
     a.click();
 
     document.body.removeChild(a);
-}
+  }
 
 changeToEditMode(){
   this.isAddingFiles = true;
@@ -248,7 +246,7 @@ RevertToEditMode(){
 
     try {
       await this.http.put(`${this.apiURL}/${this.project.id}`, updatedProject).toPromise();
-      alert('Projeto atualizado com sucesso!');
+      this.alerts.enableSuccess('Projeto atualizado com sucesso!');
     } catch (error) {
       console.error('Erro ao atualizar o projeto:', error);
     }

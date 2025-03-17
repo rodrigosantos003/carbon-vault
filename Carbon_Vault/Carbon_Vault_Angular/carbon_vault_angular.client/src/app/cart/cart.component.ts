@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CartService } from '../cart.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { AuthService } from '../auth-service.service';
 
 @Component({
   selector: 'app-cart',
@@ -14,7 +15,7 @@ export class CartComponent implements OnInit {
   total: number = 0;
   selectedItemId: number | null = null;
 
-  constructor(private cartService: CartService, private http: HttpClient) { }
+  constructor(private cartService: CartService, private http: HttpClient, private authService: AuthService) { }
 
   ngOnInit() {
     this.updateCart();
@@ -57,13 +58,14 @@ export class CartComponent implements OnInit {
     this.updateCart();
   }
 
-  //TODO
   checkout() {
-    //alert('Checkout não implementado ainda');
     const apiUrl = `${environment.apiUrl}/UserPayments`;
     const paymentData = {
-      items: this.cartService.getCart()
+      items: this.cartService.getCart(),
+      userId: this.authService.getUserId(),
     };
+
+    console.log("Sending payment data:", paymentData);
 
     this.http.post<{ message: string; checkout_session: string; payment_url: string }>(apiUrl, paymentData).subscribe({
       next: (data) => {

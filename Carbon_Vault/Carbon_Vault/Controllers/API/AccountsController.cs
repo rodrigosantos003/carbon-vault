@@ -253,7 +253,7 @@ namespace Carbon_Vault.Controllers.API
                 null);
 
             return Ok(new {
-                message = "Password recovery link sent successfully"
+                message = "Link de recuperação enviado com sucesso"
             });
         }
 
