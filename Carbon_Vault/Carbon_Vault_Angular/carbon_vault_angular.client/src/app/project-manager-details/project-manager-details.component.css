@@ -144,7 +144,7 @@
     width: 100%;
     border-collapse: collapse;
   }
-  
+
   th, td {
     border: 1px solid #ddd;
     padding: 10px;
@@ -152,7 +152,7 @@
   }
   
   thead {
-      background: var(--main-faded);
+    background: var(--main-faded);
   }
 
   .credits-info{
