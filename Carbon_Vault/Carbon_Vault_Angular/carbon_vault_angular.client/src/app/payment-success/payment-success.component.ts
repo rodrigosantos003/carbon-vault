@@ -12,6 +12,7 @@ import { Route, Router } from '@angular/router';
   styleUrl: './payment-success.component.css'
 })
 export class PaymentSuccessComponent {
+  sessionData: any;
   constructor(private http: HttpClient, private cartService: CartService, public router: Router) { }
 
   ngOnInit() {

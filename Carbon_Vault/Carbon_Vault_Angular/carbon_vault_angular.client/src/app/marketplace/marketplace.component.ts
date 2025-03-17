@@ -21,7 +21,7 @@ export class MarketplaceComponent implements OnInit{
   allProjects: any[] = [];
 
   projectsToShow: any[] = [];
-
+  backendUrl : string = environment.apiUrl
   isFiltersWindowVisible: boolean = false;
   isUserLoggedIn: boolean = false;
 

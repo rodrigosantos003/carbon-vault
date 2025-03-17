@@ -1,1 +1,147 @@
-<p>project-add works!</p>
+<body>
+  <app-alerts></app-alerts>
+    <app-user-menu></app-user-menu>
+  
+    <div class="main-content">
+      <!-- Project Details -->
+      <div class="project-details">
+        <div class="back-button" (click)="goBack()"> 
+          <svg width="35px" height="35px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M4 10L3.29289 10.7071L2.58579 10L3.29289 9.29289L4 10ZM21 18C21 18.5523 20.5523 19 20 19C19.4477 19 19 18.5523 19 18L21 18ZM8.29289 15.7071L3.29289 10.7071L4.70711 9.29289L9.70711 14.2929L8.29289 15.7071ZM3.29289 9.29289L8.29289 4.29289L9.70711 5.70711L4.70711 10.7071L3.29289 9.29289ZM4 9L14 9L14 11L4 11L4 9ZM21 16L21 18L19 18L19 16L21 16ZM14 9C17.866 9 21 12.134 21 16L19 16C19 13.2386 16.7614 11 14 11L14 9Z" fill="#4caf50"></path> </g></svg>
+          <span>Voltar</span>
+        </div>
+        <div class="project-details-header">
+          <h3>Adicionar Projeto</h3>
+          <button class="submit-button-top" type="button" (click)="onSubmit()">Adicionar</button>
+        </div>
+        <hr>
+      </div>
+  
+      <form (ngSubmit)="onSubmit()" class="add-project-form">
+        <!-- Text-Fields -->
+        <div class="first-column">
+          <span class="mandatory">Todos os campos com * são obrigatórios</span>
+            <div class="form-item">
+              <label>Nome<span class="mandatory"> *</span></label><br>
+              <span class="tooltip">Indique o nome do seu projeto sustentavel</span>
+              <input type="text" [(ngModel)]="nome" name="nome" />
+            </div>
+            <div class="form-item">
+              <label>Preço<span class="mandatory"> *</span></label><br>
+              <span class="tooltip">Indique a quantidade desejada por crédito vendido</span>
+              <input type="number" [(ngModel)]="preco" name="preco" />
+            </div>
+            <div class="form-item">
+              <label>Localização<span class="mandatory"> *</span></label><br>
+              <span class="tooltip">Indique as coordenadas concretas de onde se situa o seu projeto</span>
+              <input type="text" [(ngModel)]="localizacao" name="localizacao" />
+            </div>
+            <div class="form-item">
+              <div class="form-item">
+                <label>Descrição<span class="mandatory"> *</span></label><br>
+                <span class="tooltip">Descreva um pouco sobre o contexto do seu projeto</span>
+                <textarea [(ngModel)]="descricao" name="descricao"></textarea>
+              </div>    
+            </div>
+            
+            <div class="form-item">
+              <label>Data de Início<span class="mandatory"> *</span></label><br>
+              <span class="tooltip">Indique quando começou o projeto</span>
+              <input type="date" [(ngModel)]="dataInicio" name="dataInicio" />
+            </div>
+    
+            <div class="form-item">
+              <label>Data de Fim<span class="mandatory"> *</span></label><br>
+              <span class="tooltip">Indique quando terminou/terminará o projeto</span>
+              <input type="date" [(ngModel)]="dataFim" name="dataFim" />
+            </div>
+    
+            <div class="form-item">
+              <label>Desenvolvedor<span class="mandatory"> *</span></label><br>
+              <span class="tooltip">Indique o promotor do projeto</span>
+              <input type="text" [(ngModel)]="desenvolvedor" name="desenvolvedor" />
+            </div>
+    
+            <div class="form-item">
+              <label>Certificador de Créditos de Carbono<span class="mandatory"> *</span></label><br>
+              <span class="tooltip">Selecione o certificador que validou o projeto</span><br>
+              <select [(ngModel)]="certificacao" name="certificador">
+                <option value="">Selecione o Certificador</option>
+                <option value="VERRA">VERRA</option>
+                <option value="Gold Standard">Gold Standard</option>
+      
+              </select>
+            </div>
+  
+            <div class="form-item">
+              <label>URL do Projeto</label><br>
+              <span class="tooltip">Indique o website do seu projeto</span>
+              <input type="text" [(ngModel)]="urlProjeto" name="urlProjeto" />
+            </div>
+           
+  
+        </div>
+        <!-- Category Fields -->
+        <div class="second-column">
+          <div class="form-item">
+            <h2 id="category">Categorias (ODS)</h2>
+            <span class="tooltip">Em que categoria se enquadra o seu projeto?</span>
+            <div class="grid">
+              <div *ngFor="let categoria of categorias">
+                <label>
+                  <input type="checkbox" (change)="onCategoriaChange(categoria.id, $event)" class="custom-checkbox" />
+                  {{categoria.label}}
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Documents and files -->
+        <div class="third-column">
+          <div class="form-item-image">
+            <h2>Imagem do Projeto</h2>
+            <div class="form-item-image-wrap">
+              <input type="file" (change)="onImageChange($event)" accept="image/*" id="imageInput"/>
+              <div *ngIf="imagePreviewUrl" class="imagePreview">
+                <img [src]="imagePreviewUrl" alt="Preview da Imagem" />
+              </div>
+            </div>
+          </div>
+          <div class="form-item">
+            <h2>Documentos</h2>
+            <div
+            class="drag-area"
+            (dragover)="onDragOver($event)"
+            (drop)="onDrop($event)"
+            (dragleave)="onDragLeave($event)"
+            (click)="fileInput.click()"
+          >
+            <p>Arraste e solte arquivos aqui ou clique para selecionar</p>
+            <input
+              #fileInput
+              type="file"
+              (change)="onFileChange($event)"
+              multiple
+              style="display:none"
+            />
+  
+            <!-- Display uploaded files -->
+            <ul *ngIf="documentos.length > 0" class="file-list">
+              <li *ngFor="let documento of documentos; let i = index">{{ documento.name }}<button type="button" class="remove" (click)="removeFile(i)">Remover</button></li>
+            </ul>
+          </div>
+          </div>
+
+        </div>
+        
+        
+  
+        
+  
+       
+  
+        
+      </form>
+    </div>
+
+  </body>
+  

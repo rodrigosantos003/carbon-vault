@@ -13,12 +13,15 @@
                         <th>Detalhes</th>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let purchase of purchases">
-                        <td>{{purchase.project}}</td>
-                        <td>{{purchase.date}}</td>
-                        <td>{{purchase.state}}</td>
-                        <td><button class="details-button">Ver detalhes</button></td>
-                    </tr>
+                  <tr *ngIf="purchases.length === 0">
+                    <td colspan="4" class="text-center" id="nothingToShow">Nada a mostrar!</td>
+                  </tr>
+                  <tr *ngFor="let purchase of purchases">
+                    <td>{{purchase.project}}</td>
+                    <td>{{purchase.date}}</td>
+                    <td>{{purchase.state}}</td>
+                    <td><button class="details-button">Ver detalhes</button></td>
+                  </tr>
                 </tbody>
             </table>
         </div>

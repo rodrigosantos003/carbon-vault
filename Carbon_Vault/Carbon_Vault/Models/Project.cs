@@ -1,4 +1,6 @@
-﻿namespace Carbon_Vault.Models
+﻿using System.Text.Json.Serialization;
+
+namespace Carbon_Vault.Models
 {
     public enum ProjectStatus
     {
@@ -22,20 +24,19 @@
         public DateTime EndDate { get; set; }
         public string Developer { get; set; }
         public string Certification { get; set; }
-        public decimal PricePerCredit { get; set; }
-
+        public decimal? PricePerCredit { get; set; }
         public int CreditsForSale { get; set; }
         public ProjectStatus Status { get; set; }
-        public string Benefits { get; set; }
-        public Uri ProjectUrl { get; set; }
-        public string ImageUrl { get; set; }
+        public Uri? ProjectUrl { get; set; }
+        public string? ImageUrl { get; set; }
 
         // Relationship with CarbonCredit
         public ICollection<CarbonCredit> CarbonCredits { get; set; } = new List<CarbonCredit>();
         public DateTime CreatedAt { get; set; }
 
         // Relationship with User
-        public Account Owner { get; set; }
+        [JsonIgnore]
+        public Account? Owner { get; set; }
         public int OwnerId { get; set; }
 
         // Relationship with documents

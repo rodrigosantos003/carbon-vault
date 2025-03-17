@@ -1,0 +1,197 @@
+<body>
+    <app-user-menu></app-user-menu>
+    <div class="main-content">
+      <div class="project-details">
+        <div class="project-details-header">
+          <h3>Detalhes Projeto</h3>
+        </div>
+        <hr>
+       
+      </div>
+      <form (ngSubmit)="onSubmit()" class="add-project-form">
+        <div class="first-column">
+          <div class="form-item">
+            <label>Nome</label><br>
+            <input type="text" [(ngModel)]="project.name" name="nome" [disabled]="isEditable" />
+          </div>
+          <div class="form-item">
+            <label>Descrição</label><br>
+            <textarea [(ngModel)]="project.description" name="descricao" [disabled]="isEditable"></textarea>
+          </div>
+          <div class="form-item">
+            <label>Localização</label><br>
+            <input type="text" [(ngModel)]="project.location" name="localizacao" [disabled]="isEditable" />
+          </div>
+          <div class="form-item">
+            <label>Data de Início</label><br>
+            <input type="date" [(ngModel)]="project.startDate" name="dataInicio" [disabled]="isEditable" />
+          </div>
+          <div class="form-item">
+            <label>Data de Fim</label><br>
+            <input type="date" [(ngModel)]="project.endDate" name="dataFim" [disabled]="isEditable" />
+          </div>
+          <div class="form-item">
+            <label>Desenvolvedor</label><br>
+            <input type="text" [(ngModel)]="project.developer" name="desenvolvedor" [disabled]="isEditable" />
+          </div>
+          <div class="form-item">
+            <label>URL do Projeto</label><br>
+            <input type="text" [(ngModel)]="project.projectUrl" name="urlProjeto" [disabled]="isEditable" />
+          </div>
+        </div>
+
+        <div class="second-column">
+          <div class="form-item">
+            <h2>Categorias (ODS)</h2>
+            <div *ngFor="let categoria of categorias">
+              <label>
+                <input
+                  type="checkbox"
+                  [checked]="categoriasSelecionadas.includes(categoria.id)"
+                  (change)="onCategoriaChange(categoria.id, $event)"
+                  class="custom-checkbox"
+                  [disabled]="isEditable"
+                />
+                {{ categoria.label }}
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="third-column">
+          <!-- Mostrar documentos -->
+          <div class="form-item">
+            <h2>Documentos Atuais </h2>
+              <!-- Display uploaded files -->
+              <div *ngIf="documentos.length == 0" class="file-list">
+                <p>Sem documentos</p>
+              </div>
+              <ul *ngIf="documentosAtuais.length > 0" class="file-list">
+                <li *ngFor="let documento of documentosAtuais">
+                 
+                  <span style="z-index: 6;" (click)="downloadFile(documento.filePath, documento.fileName)">
+                    {{ documento.fileName }}
+                  </span>
+            
+                  <!-- <button *ngIf="isEditable" (click)="deleteFile(documento.id)" >Remover</button> -->
+                </li>
+              </ul>
+              
+          </div>
+
+                    
+          <div class="form-item">
+            <h2 class="header-section">Imagem do Projeto</h2><br>
+            <img  *ngIf="project.imageUrl" class="preview" [src]="project.imageUrl" alt="Imagem do Projeto" /><br>
+            
+          </div>
+          </div>
+
+
+        
+
+       
+      </form>
+      <br>
+
+
+      <div class="project-details-header">
+       
+    </div>
+    <div class="admin-panel-actions">
+        <h2>Área de Administração</h2>
+        <div class="tabs">
+          <button 
+            class="tab-button" 
+            [class.active]="showAprovedFeedback" 
+            (click)="showAprovedFeedback = !showAprovedFeedback; showRejectionFeedback = false;"  
+            *ngIf="isEditable"
+          >
+            Aprovar Projeto
+          </button>
+      
+          <button 
+            class="tab-button" 
+            [class.active]="showRejectionFeedback" 
+            (click)="showRejectionFeedback = !showRejectionFeedback; showAprovedFeedback = false;"  
+            *ngIf="isEditable"
+          >
+            Rejeitar Projeto
+          </button>
+      
+          <button 
+            class="tab-button" 
+            [class.active]="showAddCredits" 
+            (click)="showAddCredits = !showAddCredits;  showChangeState = false;"  
+            *ngIf="!isEditable"
+          >
+            Adicionar Créditos
+          </button>
+      
+          
+          <button 
+            class="tab-button" 
+            [class.active]="showChangeState" 
+            (click)="showChangeState = !showChangeState; showAddCredits = false;"  
+            *ngIf="!isEditable"
+          >
+            Alterar Estado do projeto
+          </button>
+        </div>
+      
+        <div class="tab-content">
+          <div class="tab-pane" *ngIf="showRejectionFeedback">
+            <label>Feedback para o Utilizador:</label><br>
+            <textarea [(ngModel)]="project.rejectionFeedback" name="rejectionFeedback"></textarea><br>
+            <button class="decline-button-top" (click)="rejectProject()">Enviar Feedback e Rejeitar</button>
+          </div>
+      
+          <div class="tab-pane" *ngIf="showAprovedFeedback">
+            <label>Número de Créditos de Carbono Iniciais</label><br>
+            <input 
+              type="number" 
+              id="creditsGenerated" 
+              [(ngModel)]="project.carbonCreditsGenerated"  
+              name="creditsGenerated"
+            /><br>
+            <button class="Aprove-button-top" (click)="approveProject()">Gerar créditos e Aprovar</button>
+          </div>
+      
+          
+          <div class="tab-pane" *ngIf="showAddCredits">
+            <div style="text-align: center;"><span class="creditsNumber">{{project.carbonCreditsGenerated}}</span><span class="creditsText"> Créditos gerados até ao momento</span><br></div>
+            <label>Adicionar Créditos de Carbono</label><br>
+            <input 
+              type="number" 
+              id="additionalCredits" 
+              [(ngModel)]="additionalCredits"  
+              name="additionalCredits"
+              placeholder="Adicionar créditos"
+            /><br>
+            <button class="Aprove-button-top" (click)="addCredits()">Adicionar Créditos</button> 
+          </div>
+      
+        
+          <div class="tab-pane" *ngIf="showChangeState">
+            <div style="text-align: center;"><span [ngClass]="getProjectStatus(project.status)" >{{getProjectStatus(project.status)}}</span><br></div>
+            <label>Alterar Estado do Projeto</label><br>
+            <select [(ngModel)]="project.status" name="status">
+              <option value=1>Pendente</option>
+              <option value=0>Ativo</option>
+              <option value=2>Inátivo</option>
+            </select><br>
+            <!-- <button class="Aprove-button-top" (click)="changeStatus()">Alterar Status</button> -->
+          </div>
+        </div>
+      </div>
+      
+
+    
+    
+     
+
+    </div>
+    <app-alerts></app-alerts>
+
+  </body>
+  
