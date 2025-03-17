@@ -68,60 +68,60 @@ namespace Carbon_Vault.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 3, 16, 17, 23, 26, 514, DateTimeKind.Utc).AddTicks(8338),
+                            CreatedAt = new DateTime(2025, 3, 17, 10, 55, 46, 919, DateTimeKind.Utc).AddTicks(3885),
                             Email = "admin@carbonvault.com",
                             LastLogin = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Administrador",
                             Nif = "123456789",
-                            Password = "qEZUYu3JslgsAvlPcQZCzysvmHunaSTSf6CRoyraVLBLL1NM9zf0DmSliLMhGAjf",
+                            Password = "yYUSi43TJUfM4c7poQL/DZmts/DgKs4hXeuyaNbnGzTYhjA9mN+bxeztKRhlAOPf",
                             Role = 1,
                             State = 1
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 3, 16, 17, 23, 26, 514, DateTimeKind.Utc).AddTicks(8346),
+                            CreatedAt = new DateTime(2025, 3, 17, 10, 55, 46, 919, DateTimeKind.Utc).AddTicks(3895),
                             Email = "user@carbonvault.com",
                             LastLogin = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Utilizador Comum",
                             Nif = "987654321",
-                            Password = "6OI3PjG+gT8tlUn731V/rbbx1rh0U1gQvNfdL9URvf+26iPKRVpdv+enwTKaz7jW",
+                            Password = "Tko51gPPAIMC6o8dxd8SGRw6PEhjxTY420scJoUPB4aWHZ0wIcWsZqo2f+crrlnZ",
                             Role = 0,
                             State = 1
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 3, 16, 17, 23, 26, 514, DateTimeKind.Utc).AddTicks(8348),
+                            CreatedAt = new DateTime(2025, 3, 17, 10, 55, 46, 919, DateTimeKind.Utc).AddTicks(3897),
                             Email = "support@carbonvault.com",
                             LastLogin = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "John Smith",
                             Nif = "333333333",
-                            Password = "r72FIIbBYxZlgSla6UufHCUz4PJ6yl0pyo7UJ4xoD2s6S9Xc4+1NMWJSvR2pitaR",
+                            Password = "rYmQpzuZ9ZPNpVs3mkgtcb07ketc2Lc3P8uWX47DHuq7u3IG+Dozw1zq4rzkgakj",
                             Role = 3,
                             State = 1
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2025, 3, 16, 17, 23, 26, 514, DateTimeKind.Utc).AddTicks(8350),
+                            CreatedAt = new DateTime(2025, 3, 17, 10, 55, 46, 919, DateTimeKind.Utc).AddTicks(3899),
                             Email = "user2@carbonvault.com",
                             LastLogin = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "My User",
                             Nif = "444444444",
-                            Password = "SrTtQZQHXtxF14TEoWTiO1GJnwLNUNclgkqoMc6A8Dq90t9LI8ORHEegPf2pg8Mo",
+                            Password = "B/+3sEJRrFl7xGeFDUUYLHRSleEoCcoH717ebETRMuDo2pToEakLS+JnfB2/X5g1",
                             Role = 0,
                             State = 1
                         },
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2025, 3, 16, 17, 23, 26, 514, DateTimeKind.Utc).AddTicks(8353),
+                            CreatedAt = new DateTime(2025, 3, 17, 10, 55, 46, 919, DateTimeKind.Utc).AddTicks(3902),
                             Email = "user3@carbonvault.com",
                             LastLogin = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Jane Doe",
                             Nif = "555555555",
-                            Password = "5bzAJjLK7yxH5bB4ak5C/fTt5WllJ2x+d7QYj10PWRLdRxHbrY4HKXZ6WVbVZeDZ",
+                            Password = "XXPFpgxHfSI0lkF4CKz1V49CbRTQmVmjLdtRg6cVwbk6ixn+KP3aOlFq3hlG0on2",
                             Role = 0,
                             State = 1
                         });
@@ -228,6 +228,10 @@ namespace Carbon_Vault.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<string>("benefits")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("OwnerId");
@@ -240,36 +244,38 @@ namespace Carbon_Vault.Migrations
                             Id = 1,
                             CarbonCreditsGenerated = 1000.0,
                             Certification = "ISO 14001",
-                            CreatedAt = new DateTime(2025, 3, 16, 17, 23, 26, 514, DateTimeKind.Utc).AddTicks(8962),
+                            CreatedAt = new DateTime(2025, 3, 17, 10, 55, 46, 919, DateTimeKind.Utc).AddTicks(4405),
                             Description = "Providing clean water access to rural communities.",
                             Developer = "Green Solutions",
-                            EndDate = new DateTime(2026, 3, 16, 17, 23, 26, 514, DateTimeKind.Local).AddTicks(8954),
+                            EndDate = new DateTime(2026, 3, 17, 10, 55, 46, 919, DateTimeKind.Local).AddTicks(4398),
                             ImageUrl = "https://api.hub.jhu.edu/factory/sites/default/files/styles/hub_large/public/drink-more-water-hub.jpg",
                             Location = "Africa",
                             Name = "Water Access Initiative",
                             OwnerId = 1,
                             PricePerCredit = 12.50m,
                             ProjectUrl = "https://example.com/project1",
-                            StartDate = new DateTime(2024, 12, 16, 17, 23, 26, 514, DateTimeKind.Local).AddTicks(8901),
-                            Status = 0
+                            StartDate = new DateTime(2024, 12, 17, 10, 55, 46, 919, DateTimeKind.Local).AddTicks(4337),
+                            Status = 0,
+                            benefits = "Providing clean water access to rural communities."
                         },
                         new
                         {
                             Id = 2,
                             CarbonCreditsGenerated = 2000.0,
                             Certification = "LEED Gold",
-                            CreatedAt = new DateTime(2025, 3, 16, 17, 23, 26, 514, DateTimeKind.Utc).AddTicks(9064),
+                            CreatedAt = new DateTime(2025, 3, 17, 10, 55, 46, 919, DateTimeKind.Utc).AddTicks(4519),
                             Description = "Solar energy projects to provide electricity to underserved areas.",
                             Developer = "Renewable Power Inc.",
-                            EndDate = new DateTime(2027, 3, 16, 17, 23, 26, 514, DateTimeKind.Local).AddTicks(9056),
+                            EndDate = new DateTime(2027, 3, 17, 10, 55, 46, 919, DateTimeKind.Local).AddTicks(4508),
                             ImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSS2nF0iroOXheUgLiCRjKPFEyxqBqbjMMiBZxtPvybNA14VsZrFMg2wgudNFFSgdW9S5Q&usqp=CAU",
                             Location = "South America",
                             Name = "Solar Energy for All",
                             OwnerId = 2,
                             PricePerCredit = 15.75m,
                             ProjectUrl = "https://example.com/project2",
-                            StartDate = new DateTime(2025, 2, 16, 17, 23, 26, 514, DateTimeKind.Local).AddTicks(9053),
-                            Status = 0
+                            StartDate = new DateTime(2025, 2, 17, 10, 55, 46, 919, DateTimeKind.Local).AddTicks(4505),
+                            Status = 0,
+                            benefits = "Solar energy projects to provide electricity to underserved areas."
                         });
                 });
 

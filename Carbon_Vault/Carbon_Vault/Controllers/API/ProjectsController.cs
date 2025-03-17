@@ -140,6 +140,7 @@ namespace Carbon_Vault.Controllers.API
 
                 project.Types = projectTypes;  // Associar os tipos do projeto
             }
+            
 
             _context.Projects.Add(project);
             await _context.SaveChangesAsync();
@@ -149,26 +150,26 @@ namespace Carbon_Vault.Controllers.API
             var admins = await _context.Account
                              .Where(a => a.Role == AccountType.Admin) 
                              .ToListAsync();
-            foreach (var admin in admins)
-            {
-                var adminEmail = admin.Email; 
+            //foreach (var admin in admins)
+            //{
+            //    var adminEmail = admin.Email; 
                
-                // Envio do e-mail para o administrador
-                await _emailService.SendEmail(
-                    adminEmail, 
-                    "Nova Proposta de Projeto Enviada",
-                    $"Um novo projeto foi enviado e aguarda validação. Projeto: {project.Name}, por {project.Owner.Name}<br> Pode aceder ao projeto <a href={ProjectLink}>aqui</a>",
-                    null
-                );
-            }
+            //    // Envio do e-mail para o administrador
+            //    await _emailService.SendEmail(
+            //        adminEmail, 
+            //        "Nova Proposta de Projeto Enviada",
+            //        $"Um novo projeto foi enviado e aguarda validação. Projeto: {project.Name}, por {project.Owner.Name}<br> Pode aceder ao projeto <a href={ProjectLink}>aqui</a>",
+            //        null
+            //    );
+            //}
 
             var userEmail = project.Owner.Email; 
-            await _emailService.SendEmail(
-                userEmail, 
-                "Projeto Enviado para Validação",
-                $"O seu projeto {project.Name} foi enviado para validação.Será notificado sobre a sua aprovação num periodo de 7-14 dias.<br> Pode aceder ao projeto <a href={ProjectLink}>aqui</a>",
-                null
-                );
+            //await _emailService.SendEmail(
+            //    userEmail, 
+            //    "Projeto Enviado para Validação",
+            //    $"O seu projeto {project.Name} foi enviado para validação.Será notificado sobre a sua aprovação num periodo de 7-14 dias.<br> Pode aceder ao projeto <a href={ProjectLink}>aqui</a>",
+            //    null
+            //    );
 
             return CreatedAtAction("GetProject", new { id = project.Id }, project);
         }
@@ -226,7 +227,7 @@ namespace Carbon_Vault.Controllers.API
 
                 var projectFile = new ProjectFiles
                 {
-                    FileName = fileName,
+                    FileName = Guid.NewGuid().ToString() + fileName,
                     FilePath = $"{Request.Scheme}://{Request.Host}/files/{fileName}",
                     FileType = Path.GetExtension(fileName).TrimStart('.'),
                     UploadedAt = DateTime.Now,
@@ -264,7 +265,7 @@ namespace Carbon_Vault.Controllers.API
 
             var projectFile = new ProjectFiles
             {
-                FileName = fileName,
+                FileName = Guid.NewGuid().ToString() + fileName,
                 FilePath = $"{Request.Scheme}://{Request.Host}/files/{fileName}",
                 FileType = fileExtension.TrimStart('.'),
                 UploadedAt = DateTime.Now,
@@ -326,12 +327,6 @@ namespace Carbon_Vault.Controllers.API
 
             return Ok(new { message = "File deleted successfully from the database." });
         }
-
-
-
-
-
-
 
         [HttpPost("{id}/approve")]
         public async Task<IActionResult> ApproveProject(int id, [FromHeader] string Authorization, [FromHeader] int userID, [FromHeader] int CreditsGenerated)
@@ -400,6 +395,54 @@ namespace Carbon_Vault.Controllers.API
 
 
         }
+
+        [HttpPost("{id}/reject")]
+        public async Task<IActionResult> RejectProject(int id, [FromHeader] string Authorization, [FromHeader] int userID, [FromBody] String message)
+        {
+
+            if (!AuthHelper.IsTokenValid(Authorization, userID))
+            {
+                return Unauthorized();
+            }
+            var account = await _context.Account.FindAsync(userID);
+            if (account == null)
+            {
+                return NotFound(new { message = "Account not found." });
+            }
+
+            // Authorization check for non-admin users
+            if (account.Role != AccountType.Admin)
+            {
+                return Unauthorized(new { message = "Only admins can aprove projects" });
+            }
+
+
+            var project = await _context.Projects.FindAsync(id);
+            if (project == null)
+            {
+                return NotFound("Projeto não encontrado.");
+            }
+
+            project.Status = ProjectStatus.Denied;
+
+            await _context.SaveChangesAsync();
+
+            var owner = await _context.Account.FindAsync(project.OwnerId);
+
+            await _emailService.SendEmail(
+                owner.Email,
+                "Projeto Rejeitado",
+                $"O seu projeto {project.Name} foi rejeitado <br> Razão : <br> {message}",
+                null
+            );
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Projeto Rejeitado com sucesso." });
+
+
+        }
+
         [HttpPost("{id}/addCredits")]
         public async Task<IActionResult> AddCredits(int id, [FromHeader] string Authorization, [FromHeader] int userID, [FromHeader] int NumberOfCredits)
         {
