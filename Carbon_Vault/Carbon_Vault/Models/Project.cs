@@ -30,6 +30,8 @@ namespace Carbon_Vault.Models
         public Uri? ProjectUrl { get; set; }
         public string? ImageUrl { get; set; }
 
+        public string benefits { get; set; }
+
         // Relationship with CarbonCredit
         public ICollection<CarbonCredit> CarbonCredits { get; set; } = new List<CarbonCredit>();
         public DateTime CreatedAt { get; set; }

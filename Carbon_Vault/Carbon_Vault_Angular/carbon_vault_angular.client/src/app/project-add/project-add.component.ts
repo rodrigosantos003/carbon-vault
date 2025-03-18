@@ -24,6 +24,7 @@ export class ProjectAddComponent {
   urlProjeto: string = '';
   urlImagem: string = '';
   preco: number | null = null;
+  benefits: string = '';
   documentos: File[] = [];
   categoriasSelecionadas: number[] = [];
   private apiURL = `${environment.apiUrl}/Projects`;
@@ -206,6 +207,7 @@ export class ProjectAddComponent {
       projectUrl: this.urlProjeto,
       imageUrl: this.urlImagem,
       ownerId: Number(this.userId),
+      benefits : this.benefits,
       types: this.categoriasSelecionadas.map(id => ({ id }))
     };
 
