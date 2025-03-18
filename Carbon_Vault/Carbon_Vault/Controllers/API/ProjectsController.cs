@@ -263,6 +263,7 @@ namespace Carbon_Vault.Controllers.API
 
                 var fileName = Path.GetFileName(file.FileName);
                 var filePath = Path.Combine(_environment.WebRootPath, "files", fileName);
+                Directory.CreateDirectory(filePath);
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
@@ -301,6 +302,7 @@ namespace Carbon_Vault.Controllers.API
 
             var fileName = Path.GetFileName(file.FileName);
             var filePath = Path.Combine(_environment.WebRootPath, "files", fileName);
+            Directory.CreateDirectory(filePath);
 
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
