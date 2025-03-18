@@ -1,0 +1,306 @@
+.main-content {
+    flex-grow: 1;
+    padding: 20px 90px 20px 90px;
+  }
+  body {
+    font-family: Poppins, sans-serif;
+    color: #000;
+    margin: 0 !important;
+    display: flex;
+    height: 100vh;
+  }
+  h3 {
+    font-weight: 700;
+  }
+  .user-details-header h3 {
+    align-self: flex-end;
+    margin: 0;
+  }
+  .user-details-header {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+  }
+  .drag-area {
+    width: 100%;
+    border: 2px dashed #c5e8c0;
+    color: #4ea741;
+    text-align: center;
+    padding: 20px;
+    transition: background-color 0.3s;
+    cursor: pointer;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    align-content: space-around;
+    justify-content: space-around;
+  }
+  .drag-area:hover {
+    background-color: #f0f0f0;
+  }
+  .drag-area p {
+    font-size: 16px;
+    color: #4ea741;
+  }
+  .file-list {
+    margin-top: 10px;
+    list-style: none;
+    padding: 0;
+  }
+  .file-list li {
+    margin-bottom: 5px;
+    background-color: var(--main-color);
+    padding: 5px;
+    border-radius: 5px;
+    color: #fff;
+  }
+  input.custom-checkbox {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #4caf50;
+    border-radius: 3px;
+    cursor: pointer;
+    position: relative;
+    top: 6.6px;
+  }
+  input.custom-checkbox:checked {
+    background-color: #4caf50;
+  }
+  .add-project-form {
+    gap: 75px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: space-around;
+    align-items: flex-start;
+  }
+  .add-project-form input {
+    border: solid 1px #4ea741;
+    border-radius: 25px;
+    padding: 4px;
+  }
+  .add-project-form textarea {
+    border: solid 1px #4ea741;
+    border-radius: 6px;
+  }
+  input::file-selector-button {
+    background-color: #4ea741;
+    color: #fff;
+    padding: 0.5em;
+    border: thin solid grey;
+    border-radius: 25px;
+  }
+  .first-column {
+    width: 320;
+  }
+  .first-column input {
+    width: 100%;
+  }
+  .first-column label,
+  .second-column h2,
+  .third-column h2 {
+    color: #4caf50;
+  }
+  .first-column textarea {
+    width: 100%;
+    min-height: 100px;
+  }
+  .form-item-image-wrap {
+    flex-direction: row;
+    display: flex;
+    gap: 12px;
+  }
+  #imageInput {
+    max-height: 32px;
+  }
+  .form-item-image-wrap img {
+    max-width: 165px;
+    max-height: 165px;
+  }
+  
+
+  .status-tooltip{
+    margin-bottom: 20px;
+    background-color: rgb(228, 203, 61);
+    padding: 20px;
+  }
+
+  .preview{
+    max-width: 150px;
+    max-height: 150px;
+  }
+
+  .third-column{
+    max-width: 372px;
+    min-width: 372px;
+  }
+  .header-section{
+    margin-bottom: 0;
+  }
+
+  .Aprove-button-top {
+    background-color: var(--main-color);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+   
+    font-family: Poppins;
+    height: 40px;
+   
+  }
+  .decline-button-top {
+    background-color: #c04d4d;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+  
+    font-family: Poppins;
+    height: 40px;
+   
+  }
+
+  .admin-panel-actions{
+        display: flex;
+flex-direction: column;
+        flex-wrap: nowrap;
+        align-content: space-around;
+        justify-content: flex-start;
+       
+  }
+
+  .rejection label{
+    color:#4ea741;
+  }
+
+  .rejection  textarea {
+    border: solid 1px #4ea741;
+    border-radius: 6px;
+    min-width: 500px;
+    min-height:200px
+  }
+  .actions{
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+
+  }
+
+
+  .admin-panel-actions {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+
+.tabs {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: solid 1px #4ea741;
+}
+
+.tab-button {
+    flex: 1;
+    padding: 10px;
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    border-radius: 5px 5px 0 0;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.tab-button:hover {
+    background-color: #e0e0e0;
+}
+
+.tab-button.active {
+    background-color: #fff;
+    border-bottom: 2px solid #4ea741;
+    color: #4ea741;
+}
+
+
+.tab-content {
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 0 0 5px 5px;
+}
+
+
+.tab-pane {
+    display: none;
+}
+
+.tab-pane:first-child {
+    display: block;
+}
+
+
+.showRejectionFeedback .tab-pane:first-child {
+    display: block;
+}
+
+.showAprovedFeedback .tab-pane:nth-child(2) {
+    display: block;
+}
+
+textarea, input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+.admin-panel-actions textarea{
+    width: 40%;
+    height: 150px;
+}
+.admin-panel-actions input{
+    width: 40%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid rgb(204, 204, 204);
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.creditsNumber{
+    color: #4EA741;
+    font-size: 38px;
+}
+.creditsText{
+    color: #4EA741;
+  
+}
+
+.Ativo{
+    color: #4EA741;
+    font-size: 38px;
+} 
+.Pendente {
+    color: #dbca33;
+    font-size: 38px;
+}
+.inátivo{
+    color: #ac3535;
+    font-size: 38px;
+}
+
+select {
+    border: solid 1px #4ea741;
+    border-radius: 25px;
+    padding: 4px;
+    width: 40%;
+    font-family: Poppins;
+  }
+  

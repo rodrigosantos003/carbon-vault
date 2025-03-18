@@ -33,7 +33,7 @@ namespace Carbon_Vault.Services
             var client = new SendGridClient(_SMTP_PASSWORD);
             var from = new EmailAddress(EMAIL, "Carbon Vault");
             var to = new EmailAddress(receiver);
-            var msg = MailHelper.CreateSingleEmail(from, to, subject, message, null);
+            var msg = MailHelper.CreateSingleEmail(from, to, subject, null , message);
 
             if (!string.IsNullOrEmpty(attachmentURL))
             {

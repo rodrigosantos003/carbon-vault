@@ -21,7 +21,7 @@ namespace Carbon_Vault.Data
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<ProjectFiles> ProjectFiles { get; set; }
 
-        public Carbon_VaultContext (DbContextOptions<Carbon_VaultContext> options)
+        public Carbon_VaultContext(DbContextOptions<Carbon_VaultContext> options)
             : base(options)
         {
         }
@@ -32,8 +32,8 @@ namespace Carbon_Vault.Data
 
             // Configurar o relacionamento entre Project e CarbonCredit
             modelBuilder.Entity<CarbonCredit>()
-                .HasOne(cc => cc.Project)                     
-                .WithMany(p => p.CarbonCredits)               
+                .HasOne(cc => cc.Project)
+                .WithMany(p => p.CarbonCredits)
                 .HasForeignKey(cc => cc.ProjectId).OnDelete(DeleteBehavior.NoAction);
 
             // Configurar o relacionamento entre Project e Ficheiros deste
@@ -49,8 +49,6 @@ namespace Carbon_Vault.Data
                .WithMany(p => p.Projects)
                .HasForeignKey(cc => cc.OwnerId);
                
-
-
             populateAccounts(modelBuilder);
 
             populateProjectTypes(modelBuilder);
@@ -59,7 +57,7 @@ namespace Carbon_Vault.Data
 
             populateTransactions(modelBuilder);
         }
-        
+
         private void populateAccounts(ModelBuilder modelBuilder)
         {
             string admin_hashed = AuthHelper.HashPassword("Admin@123");
@@ -79,6 +77,7 @@ namespace Carbon_Vault.Data
                     State = AccountState.Active,
                     Role = Models.AccountType.Admin,
                     CreatedAt = DateTime.UtcNow,
+                    
                 },
                 new Models.Account
                 {
@@ -130,21 +129,19 @@ namespace Carbon_Vault.Data
         private void populateProjectTypes(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ProjectType>().HasData(
-               new ProjectType
-               {
-                   Id = 1,
-                   Type = ProjectTypeEnum.Poverty
-               },
-               new ProjectType
-               {
-                   Id = 2,
-                   Type = ProjectTypeEnum.Hunger
-               },
-               new ProjectType
-               {
-                   Id = 3,
-                   Type = ProjectTypeEnum.Health
-               }
+               new ProjectType{Id = 1, Type = ProjectTypeEnum.Poverty},
+               new ProjectType{Id = 2, Type = ProjectTypeEnum.Hunger},
+               new ProjectType{Id = 3, Type = ProjectTypeEnum.Health},
+               new ProjectType { Id = 4, Type = ProjectTypeEnum.Education },
+               new ProjectType { Id = 5, Type = ProjectTypeEnum.Gender },
+               new ProjectType { Id = 6, Type = ProjectTypeEnum.Water },
+               new ProjectType { Id = 7, Type = ProjectTypeEnum.Energy },
+               new ProjectType { Id = 8, Type = ProjectTypeEnum.Work },
+               new ProjectType { Id = 9, Type = ProjectTypeEnum.Industry },
+               new ProjectType { Id = 10, Type = ProjectTypeEnum.WaterLife },
+               new ProjectType { Id = 11, Type = ProjectTypeEnum.LandLife },
+               new ProjectType { Id = 12, Type = ProjectTypeEnum.Peace },
+               new ProjectType { Id = 13, Type = ProjectTypeEnum.Partnership }
            );
         }
 
@@ -165,10 +162,11 @@ namespace Carbon_Vault.Data
                    PricePerCredit = 12.50M,
                    CreatedAt = DateTime.UtcNow,
                    Status = ProjectStatus.Confirmed,
-                   Benefits = "Access to clean water, improved health conditions.",
+                   benefits = "Providing clean water access to rural communities.",
+                   OwnerId = 4,
                    ProjectUrl = new Uri("https://example.com/project1"),
                    ImageUrl = "https://api.hub.jhu.edu/factory/sites/default/files/styles/hub_large/public/drink-more-water-hub.jpg",
-                   OwnerId = 1
+                   IsForSale = true,
                },
                new Project
                {
@@ -181,14 +179,14 @@ namespace Carbon_Vault.Data
                    EndDate = DateTime.Now.AddMonths(24),
                    Developer = "Renewable Power Inc.",
                    Certification = "LEED Gold",
+                   OwnerId = 2,
+                   benefits = "Solar energy projects to provide electricity to underserved areas.",
                    PricePerCredit = 15.75M,
                    Status = ProjectStatus.Confirmed,
-                   Benefits = "Sustainable energy solutions, reduced carbon emissions.",
                    ProjectUrl = new Uri("https://example.com/project2"),
                    CreatedAt = DateTime.UtcNow,
                    ImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSS2nF0iroOXheUgLiCRjKPFEyxqBqbjMMiBZxtPvybNA14VsZrFMg2wgudNFFSgdW9S5Q&usqp=CAU",
-                   OwnerId = 2
-
+                   IsForSale = true,
                }
            );
         }
@@ -200,26 +198,26 @@ namespace Carbon_Vault.Data
                 {
                     Id = 1,
                     BuyerId = 2,
-                    SellerId = 3,
+                    SellerId = 4,
                     ProjectId = 1,
                     Quantity = 1,
                     TotalPrice = 12.50,
                     Date = "2025-03-05",
                     State = TransactionState.Approved,
-                    PaymentMethod = "Transferência Bancária",
+                    PaymentMethod = "card",
                     CheckoutSession = "cs_123456789"
                 },
                 new Transaction
                 {
                     Id = 2,
-                    SellerId = 2,
+                    SellerId = 4,
                     BuyerId = 5,
                     ProjectId = 2,
                     Quantity = 1,
                     TotalPrice = 15.75,
                     Date = "2025-03-05",
                     State = TransactionState.Approved,
-                    PaymentMethod = "Paypal",
+                    PaymentMethod = "SEPA",
                     CheckoutSession = "cs_987456321"
                 }
             );

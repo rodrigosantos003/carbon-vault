@@ -21,13 +21,21 @@ namespace Carbon_Vault_Tests_payments
     {
         private readonly Mock<IEmailService> _mockEmailService;
         private readonly Mock<IConfiguration> _mockConfiguration;
+        private readonly Carbon_VaultContext _mockContext;
 
         public UserPaymentsTests()
         {
+            var options = new DbContextOptionsBuilder<Carbon_VaultContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            _mockContext = new Carbon_VaultContext(options);
+
             _mockEmailService = new Mock<IEmailService>(); 
             _mockConfiguration = new Mock<IConfiguration>();
-
-            _mockConfiguration.Setup(c => c["AppSettings:FrontendBaseUrl"]).Returns("http://localhost:59115/");
+            
+            Environment.SetEnvironmentVariable("CLIENT_URL", "http://localhost:59115/");
+            
             _mockConfiguration.Setup(c => c["AppSettings:TokenSecretKey"]).Returns("jEJQ#5Hxuh*#[ra7k98J=cBRLj]n6ZP1w*2S.M-Pwgr1D;ZQ.C*WgN&HnCG");
 
             StripeConfiguration.ApiKey = "sk_test_51Qx9k3PqsbpdHFs4jYQFgS4KaeHzPa5zdh3p1RV4NbuK2iCThy0X8pWPc4uMIhpuzRd7H9cYPoBmu4omo4AZMpoX00YEtcCxmW";
@@ -51,7 +59,7 @@ namespace Carbon_Vault_Tests_payments
 
             mockSessionService.Setup(s => s.Create(It.IsAny<SessionCreateOptions>(), null)).Returns(session);
 
-            var controller = new UserPaymentsController(_mockEmailService.Object);
+            var controller = new UserPaymentsController(_mockEmailService.Object, _mockContext);
 
             // Act
             var result = controller.MakePayment(cart);
@@ -64,7 +72,7 @@ namespace Carbon_Vault_Tests_payments
         public void SendInvoice_ReturnsOk_WhenInvoiceExists()
         {
             // Arrange
-            var controller = new UserPaymentsController(_mockEmailService.Object);
+            var controller = new UserPaymentsController(_mockEmailService.Object, _mockContext);
             var mockSessionService = new Mock<SessionService>();
             var mockInvoiceService = new Mock<InvoiceService>();
             var sessionId = "cs_test_b1havRvXtiYrqxSJEwUlRtIfggNZbIkw076WzKcT0VhYEN2nFhzIQt1vM6";

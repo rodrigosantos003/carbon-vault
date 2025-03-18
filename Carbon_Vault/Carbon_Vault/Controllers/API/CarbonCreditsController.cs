@@ -42,6 +42,12 @@ namespace Carbon_Vault.Controllers.API
             return carbonCredit;
         }
 
+        [HttpGet("user/{userID}")]
+        public async Task<ActionResult<IEnumerable<CarbonCredit>>> GetUserCarbonCredits(int userID)
+        {
+            return await _context.CarbonCredits.Where(c => c.BuyerId == userID).ToListAsync();
+        }
+
         // PUT: api/CarbonCredits/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

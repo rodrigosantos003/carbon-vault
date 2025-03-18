@@ -6,7 +6,7 @@ import { AuthService } from './auth-service.service';
   providedIn: 'root',
 })
 export class CartService {
-  constructor(private cookieService: CookieService, private authService: AuthService) {}
+  constructor(private cookieService: CookieService, private authService: AuthService) { }
 
   private getUserId(): string {
     // Simula a obtenção do ID do usuário do localStorage ou JWT
@@ -38,19 +38,17 @@ export class CartService {
   addItem(item: any) {
     let cart = this.getCart();
     const existingItem = cart.find(i => i.id === item.id);
-    
+
     if (existingItem) {
-      existingItem.quantity += item.quantity; 
+      existingItem.quantity += item.quantity;
     } else {
       cart.push({ ...item, quantity: item.quantity });
     }
-  
+
     this.saveCart(cart);
   }
-  
-  incrementQuantity(itemId: number) {
-    console.log(itemId);
 
+  incrementQuantity(itemId: number) {
     let cart = this.getCart();
     const item = cart.find(i => i.id === itemId);
     if (item) {
@@ -75,7 +73,6 @@ export class CartService {
 
   removeItem(itemId: number) {
     let cart = this.getCart();
-    console.log(itemId);
     cart = cart.filter(i => i.id !== itemId);
     this.saveCart(cart);
   }
@@ -84,7 +81,7 @@ export class CartService {
     this.cookieService.delete(this.getCartCookieName(), '/');
   }
 
-  getTotal(){
+  getTotal() {
     let cart = this.getCart();
     let total = 0;
 

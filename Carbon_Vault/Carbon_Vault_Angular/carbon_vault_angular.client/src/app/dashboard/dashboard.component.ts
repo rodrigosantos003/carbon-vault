@@ -1,15 +1,16 @@
-import { Component, Input,OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { AuthService } from '../auth-service.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
 import { Chart, registerables } from 'chart.js';
+import { Router } from '@angular/router';
 Chart.register(...registerables);
 
 @Component({
   selector: 'app-dashboard',
   standalone: false,
-  
+
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
@@ -18,19 +19,29 @@ export class DashboardComponent {
   userId: string;
   lineChart: any;
   circularChart: any;
-  constructor(private authService: AuthService, private http: HttpClient) {
+  emissions: number;
+  projects: number;
+  credits: number;
+  purchases: Transaction[];
+  sales: Transaction[];
+
+  constructor(private authService: AuthService, private http: HttpClient, private router: Router) {
 
     this.userId = this.authService.getUserId();
- 
+    this.emissions = 0;
+    this.projects = 0;
+    this.credits = 0;
+    this.purchases = [];
+    this.sales = [];
   }
+
   ngOnInit() {
     const url = `${environment.apiUrl}/accounts/${this.userId}`;
     this.http.get(url).subscribe(
       (data: any) => {
         // Se a requisição for bem-sucedida, preenche o formulário com os dados recebidos
         this.userRole = data.role
-        console.log("aaaaaa")
-      
+        this.fetchDashboardData();
       },
       error => {
         // Caso contrário, exibe o erro no console
@@ -38,15 +49,95 @@ export class DashboardComponent {
 
       }
     );
-    if( this.userRole != 0){
+    if (this.userRole != 0) {
       this.createLineChart();
       this.createCircularChart();
     }
-  
-   
-    
   }
-  
+
+  fetchDashboardData() {
+    Promise.all([
+      this.getCredits(),
+      this.getProjects(),
+      this.getEmissions(),
+      this.getTransactions()]);
+  }
+
+  getTransactions() {
+    const purchasesURL = `${environment.apiUrl}/Transactions/type/0/user/${this.userId}`;
+    const salesURL = `${environment.apiUrl}/Transactions/type/1/user/${this.userId}`;
+
+    const jwtToken = localStorage.getItem('token');
+
+    this.http.get<Transaction[]>(purchasesURL, {
+      headers: { 'Authorization': `Bearer ${jwtToken}` }
+    }).subscribe({
+      next: (data) => {
+        this.purchases = data;
+      },
+      error: (error) => {
+        console.error("Erro ao obter compras: ", error);
+      }
+    });
+
+    this.http.get<Transaction[]>(salesURL, {
+      headers: { 'Authorization': `Bearer ${jwtToken}` }
+    }).subscribe({
+      next: (data) => {
+        this.sales = data;
+      },
+      error: (error) => {
+        console.error("Erro ao obter compras: ", error);
+      }
+    });
+  }
+
+  getCredits() {
+    const url = `${environment.apiUrl}/CarbonCredits/user/${this.userId}`;
+
+    this.http.get(url).subscribe({
+      next: (data: any) => {
+        this.projects = data.length;
+      }
+    });
+  }
+
+  getProjects() {
+    const url = `${environment.apiUrl}/Projects/user/${this.userId}`;
+
+    this.http.get(url).subscribe({
+      next: (data: any) => {
+        this.projects = data.length;
+      }
+    });
+  }
+
+  getEmissions() {
+    const url = `${environment.apiUrl}/UserEmissions/${this.userId}`;
+
+    this.http.get(url).subscribe({
+      next: (data: any) => {
+        this.emissions = this.calculateEmissions(data);
+      }
+    });
+  }
+
+  calculateEmissions(data: { electricity: number, petrol: number, diesel: number }) {
+    const electricityEquivalent = data.electricity * 0.189;
+    const petrolEquivalent = data.petrol * 0.00231;
+    const dieselEquivalent = data.diesel * 0.00268;
+
+    const sumTotal = electricityEquivalent + petrolEquivalent + dieselEquivalent;
+
+    const total = Math.round(sumTotal * 100) / 100;
+
+    return total;
+  }
+
+  transactionDetails(transaction_id: number) {
+    this.router.navigate([`transaction-details/${transaction_id}`]);
+  }
+
   createLineChart(): void {
     this.lineChart = new Chart('MyLineChart', {
       type: 'line',
@@ -123,4 +214,14 @@ export class DashboardComponent {
       }
     });
   }
+}
+
+interface Transaction {
+  id: number,
+  project: string,
+  quantity: number,
+  date: string,
+  state: string,
+  checkoutSession: string,
+  paymentMethod: string
 }

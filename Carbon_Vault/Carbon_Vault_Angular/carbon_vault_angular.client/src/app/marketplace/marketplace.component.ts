@@ -21,7 +21,7 @@ export class MarketplaceComponent implements OnInit{
   allProjects: any[] = [];
 
   projectsToShow: any[] = [];
-
+  backendUrl : string = environment.apiUrl
   isFiltersWindowVisible: boolean = false;
   isUserLoggedIn: boolean = false;
 
@@ -33,7 +33,7 @@ export class MarketplaceComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.http.get(`${environment.apiUrl}/projects`).subscribe((data: any) => {
+    this.http.get(`${environment.apiUrl}/projects/forSale`).subscribe((data: any) => {
       this.allProjects = data;
       this.projectsToShow = this.allProjects;
     }, error => {

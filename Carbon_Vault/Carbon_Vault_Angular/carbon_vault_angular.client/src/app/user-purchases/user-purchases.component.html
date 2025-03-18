@@ -1,27 +1,31 @@
 <body>
-    <app-user-menu></app-user-menu>
-    <main class="content">
-        <h1>As minhas compras</h1>
+  <app-user-menu></app-user-menu>
+  <app-alerts></app-alerts>
 
-        <div class="table">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Projeto</th>
-                        <th>Data</th>
-                        <th>Estado</th>
-                        <th>Detalhes</th>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let purchase of purchases">
-                        <td>{{purchase.project}}</td>
-                        <td>{{purchase.date}}</td>
-                        <td>{{purchase.state}}</td>
-                        <td><button class="details-button">Ver detalhes</button></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </main>
+  <main class="content">
+    <h1>As minhas compras</h1>
 
+    <div class="table">
+      <table>
+        <thead>
+          <tr>
+            <th>Projeto</th>
+            <th>Data</th>
+            <th>Estado</th>
+            <th>Detalhes</th>
+        </thead>
+        <tbody>
+          <tr *ngIf="purchases.length === 0">
+            <td colspan="4" class="text-center" id="nothingToShow">Nada a mostrar!</td>
+          </tr>
+          <tr *ngFor="let purchase of purchases">
+            <td>{{purchase.project}}</td>
+            <td>{{purchase.date}}</td>
+            <td>{{purchase.state}}</td>
+            <td><button class="details-button" (click)="transactionDetails(purchase.id)">Ver detalhes</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
 </body>

@@ -13,7 +13,7 @@ import { environment } from '../../environments/environment';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
-  
+
   loginForm: FormGroup;
 
   constructor(
@@ -31,10 +31,9 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.alerts.closePopup();
-    console.log(this.authService.isAuthenticated())
+
     // Check if user is already authenticated
     if (this.authService.isAuthenticated()) {
-     
       this.router.navigate(['/dashboard']);
     }
   }
@@ -49,25 +48,21 @@ export class LoginComponent implements OnInit {
 
       const formData = this.loginForm.value;
 
-      console.log('Form Data:', formData);
-
       this.http.post(`${environment.apiUrl}/Accounts/login`, formData).subscribe(
         (response: any) => {
-          console.log('Login successful!', response);
           this.alerts.disableLoading();
-          alert("Login bem sucedido!");
+          this.alerts.enableSuccess("Login bem sucedido!");
           this.setToken(response.token);  // Save the token in localStorage
           this.router.navigate(['/dashboard']);  // Redirect to dashboard
         },
         (error) => {
           console.error('Login failed!', error);
           this.alerts.disableLoading();
-          alert("Credenciais inválidas!");
+          this.alerts.enableError("Credenciais inválidas");
         }
       );
     } else {
-      console.log('Invalid form submission!');
-      alert("Dados em falta!");
+      this.alerts.enableError("Dados em falta");
     }
   }
 }

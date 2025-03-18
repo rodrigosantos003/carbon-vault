@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { AlertsService } from '../alerts.service';
 
 @Component({
   selector: 'app-recover-password',
@@ -12,8 +13,8 @@ import { environment } from '../../environments/environment';
   styleUrl: './recover-password.component.css'
 })
 export class RecoverPasswordComponent {
-  recoverPasswordForm: FormGroup;  
-  
+  recoverPasswordForm: FormGroup;
+
   showTooltip = false;
 
   passwordLength = false;
@@ -21,7 +22,7 @@ export class RecoverPasswordComponent {
   passwordLowerCase = false;
   passwordSpecialChar = false;
 
-  constructor(private fb: FormBuilder, private http: HttpClient, private route: ActivatedRoute, public router: Router) {
+  constructor(private fb: FormBuilder, private http: HttpClient, private route: ActivatedRoute, public router: Router, private alerts: AlertsService) {
     // Inicialização do FormGroup com controlos e validações
     this.recoverPasswordForm = this.fb.group({
       password: ['', [Validators.required, Validators.minLength(8)]],
@@ -44,7 +45,7 @@ export class RecoverPasswordComponent {
     );
   }
 
-   updatePasswordStrength() {
+  updatePasswordStrength() {
     const password = this.recoverPasswordForm.get('password')?.value || '';
 
     this.passwordLength = password.length >= 8;
@@ -53,13 +54,13 @@ export class RecoverPasswordComponent {
     this.passwordSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
   }
 
-  
+
   onSubmit() {
     if (this.recoverPasswordForm.valid) {
       const formData = this.recoverPasswordForm.value;
 
       if (!this.isPasswordValid(formData.password) || formData.password !== formData.passwordConfirmation) {
-        alert("Password inválida!");
+        this.alerts.enableError("Password inválida!");
         return;
       }
 
@@ -75,13 +76,13 @@ export class RecoverPasswordComponent {
     this.http.post(apiUrl, { "newPassword": password, "passwordConfirmation": passwordConfirmation }).subscribe({
       next: (response) => {
         if (response.hasOwnProperty("message")) {
-          alert("Palavra-passe recuperada com sucesso!");
+          this.alerts.enableSuccess("Palavra-passe recuperada com sucesso!");
           location.href = "/login";
         }
-        else alert("Password inválida");
+        else this.alerts.enableError("Password inválida");
       },
       error: (error) => {
-        alert("Erro ao alterar a password. Tente novamente mais tarde");
+        this.alerts.enableError("Erro ao alterar a password");
       }
     });
   }

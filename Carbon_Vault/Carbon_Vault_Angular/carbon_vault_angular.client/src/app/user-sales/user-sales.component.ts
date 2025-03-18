@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { AlertsService } from '../alerts.service';
 import { AuthService } from '../auth-service.service';
 import { environment } from '../../environments/environment';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-sales',
@@ -15,7 +16,7 @@ export class UserSalesComponent {
   sales: Sale[] = [];
   private salesURL: string;
 
-  constructor(private http: HttpClient, private alerts: AlertsService, private authService: AuthService) {
+  constructor(private http: HttpClient, private alerts: AlertsService, private authService: AuthService, private router: Router) {
     this.salesURL = `${environment.apiUrl}/Transactions/type/1/user/${this.authService.getUserId()}`;
   }
 
@@ -40,6 +41,10 @@ export class UserSalesComponent {
         this.alerts.disableLoading();
       }
     })
+  }
+
+  transactionDetails(transaction_id: number) {
+    this.router.navigate([`transaction-details/${transaction_id}`]);
   }
 }
 

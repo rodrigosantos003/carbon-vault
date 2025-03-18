@@ -1,0 +1,273 @@
+.main-content {
+  flex-grow: 1;
+  padding: 20px 90px 20px 90px;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  color: black;
+  margin: 0px !important;
+  display: flex;
+  height: 100vh;
+}
+
+.container {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+.client-details {
+  margin-bottom: 20px;
+}
+
+h3 {
+  font-weight: bold;
+}
+
+.client-name {
+  color: var(--main-color);
+  font-size: 31px;
+}
+
+.info {
+  margin-top: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+th, td {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #e0f2d8;
+}
+
+.view-btn {
+  background: var(--main-color);
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  padding: 8px;
+}
+
+  .view-btn:hover {
+    background: #397d2f;
+    cursor: pointer;
+  }
+
+.payment-status {
+  background-color: #a8e6a2;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  background-color: green;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.delete-button-top {
+  background-color: #F2383A;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  float: right;
+  font-family: Poppins;
+  margin-left: auto;
+  height: 40px;
+  align-self: flex-end;
+}
+
+.user-details-header h3 {
+  align-self: flex-end;
+  margin: 0px;
+}
+
+.user-details-header {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.purchase-history {
+  width: 80%;
+}
+
+.client-details-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.table-header {
+  border-top-right-radius: 25px;
+  margin: 0;
+  padding: 15px;
+  background-color: #d1d3d07a;
+  border-top-left-radius: 25px;
+}
+
+.purchase-history-table {
+  margin: 0;
+}
+
+
+
+/* POP-UP*/
+
+
+
+
+
+
+
+/* Confirm Delte Popup */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  /*pointer-events: none;*/
+  display: none;
+  z-index: 999;
+}
+
+.delete {
+  width: 600px;
+  height: fit-content;
+  background: rgb(255, 255, 255);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 30px;
+  position: relative;
+  box-shadow: 20px 20px 30px rgba(0, 0, 0, 0.15);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -60%);
+  z-index: 1000;
+  display: none;
+}
+
+.delete-content {
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+  .delete-content img {
+    width: 60px;
+    height: 60px;
+  }
+
+.delete-heading {
+  font-size: 20px;
+  font-weight: 700;
+  color: rgb(27, 27, 27);
+}
+
+.delete-description {
+  font-weight: 300;
+  color: rgb(102, 102, 102);
+}
+
+.delete-button-wrapper {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.delete-button {
+  width: 50%;
+  height: 35px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.primary {
+  background-color: rgb(255, 114, 109);
+  color: white;
+}
+
+  .primary:hover {
+    background-color: rgb(255, 73, 66);
+  }
+
+.secondary {
+  background-color: #ddd;
+}
+
+  .secondary:hover {
+    background-color: rgb(197, 197, 197);
+  }
+
+.exit-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background-color: transparent;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+}
+
+  .exit-button:hover svg {
+    fill: black;
+  }
+
+  .exit-button svg {
+    fill: rgb(175, 175, 175);
+  }
+
+
+tr {
+  background-color: #e9eae9;
+  padding: 5px;
+}
+
+.purchase-history-table tr:last-child td:first-child {
+  border-bottom-left-radius: 25px;
+}
+
+.purchase-history-table tr:last-child td:last-child {
+  border-bottom-right-radius: 25px;
+}
+
+.purchase-history-table tr:last-child td {
+  border-bottom: 0;
+}
