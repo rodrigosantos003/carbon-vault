@@ -261,9 +261,12 @@ namespace Carbon_Vault.Controllers.API
             {
                 if (file.Length == 0) continue;
 
-                var fileName = Path.GetFileName(file.FileName);
-                var filePath = Path.Combine(_environment.WebRootPath, "files", fileName);
-                Directory.CreateDirectory(filePath);
+                var fileName = Guid.NewGuid().ToString() + Path.GetFileName(file.FileName);
+                var directoryPath = Path.Combine(_environment.ContentRootPath, "App_Data", "files");
+
+                Directory.CreateDirectory(directoryPath);
+
+                var filePath = Path.Combine(directoryPath, fileName);
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
@@ -300,9 +303,12 @@ namespace Carbon_Vault.Controllers.API
             if (!allowedExtensions.Contains(fileExtension))
                 return BadRequest("Only .png and .jpg files are allowed.");
 
-            var fileName = Path.GetFileName(file.FileName);
-            var filePath = Path.Combine(_environment.WebRootPath, "files", fileName);
-            Directory.CreateDirectory(filePath);
+            var fileName = Guid.NewGuid().ToString() + Path.GetFileName(file.FileName);
+            var directoryPath = Path.Combine(_environment.ContentRootPath, "App_Data", "files");
+
+            Directory.CreateDirectory(directoryPath);
+
+            var filePath = Path.Combine(directoryPath, fileName);
 
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
@@ -311,7 +317,7 @@ namespace Carbon_Vault.Controllers.API
 
             var projectFile = new ProjectFiles
             {
-                FileName = Guid.NewGuid().ToString() + fileName,
+                FileName = fileName,
                 FilePath = $"{Request.Scheme}://{Request.Host}/files/{fileName}",
                 FileType = fileExtension.TrimStart('.'),
                 UploadedAt = DateTime.Now,
@@ -330,6 +336,7 @@ namespace Carbon_Vault.Controllers.API
 
             return Ok(projectFile);
         }
+
 
 
         [HttpDelete("{projectId}/files/{fileId}")]
