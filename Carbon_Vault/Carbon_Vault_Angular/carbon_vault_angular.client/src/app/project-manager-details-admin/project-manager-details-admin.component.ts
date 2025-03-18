@@ -251,7 +251,7 @@ export class ProjectManagerDetailsAdminComponent {
       'userID': userId
     });
 
-    this.http.post(url, body, { headers }).subscribe(
+    this.http.post(url, {}, { headers }).subscribe(
       () => {
         this.alerts.enableSuccess('Projeto rejeitado com sucesso!');
         this.isEditable = false;
