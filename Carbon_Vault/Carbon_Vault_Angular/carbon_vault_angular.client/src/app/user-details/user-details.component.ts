@@ -25,7 +25,6 @@ export class UserDetailsComponent {
     this.accountId = this.route.snapshot.paramMap.get('id') ?? "";
     this.http.get(`${environment.apiUrl}/Accounts/${this.accountId}`).subscribe((data: any) => {
       this.accountData = data;
-      console.log(this.accountData)
     }, error => {
       console.error("Erro na requisição:", error);
     });
@@ -96,7 +95,6 @@ export class UserDetailsComponent {
 
     this.http.get<any[]>(`${environment.apiUrl}/Transactions`, { headers, params }).subscribe({
       next: (data) => {
-        console.log(data)
         this.accountTransactions = data;
       },
       error: (error) => {

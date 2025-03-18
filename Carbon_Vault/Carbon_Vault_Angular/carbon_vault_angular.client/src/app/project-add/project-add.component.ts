@@ -134,8 +134,6 @@ export class ProjectAddComponent {
   }
   errors: any = {};
 
-
-
   async uploadImage(projectId: number): Promise<string> {
     if (!this.imagem) return '';
     const formData = new FormData();
@@ -145,7 +143,7 @@ export class ProjectAddComponent {
       const response: any = await this.http.post(`${this.apiURL}/${projectId}/uploadImage`, formData).toPromise();
       return response.filePath;
     } catch (error) {
-      console.error('Erro ao enviar imagem:', error);
+      this.alerts.enableError("Erro ao enviar imagem");
       return '';
     }
   }
@@ -175,7 +173,6 @@ export class ProjectAddComponent {
 
       this.documentos = [...this.documentos, ...newFiles];
     }
-    console.log(this.documentos);
   }
 
   onDragLeave(event: DragEvent) {
@@ -226,7 +223,6 @@ export class ProjectAddComponent {
       this.goBack()
     } catch (error) {
       this.alerts.enableError('Erro ao criar o projeto:');
-      console.log(error)
     }
   }
 }

@@ -47,7 +47,6 @@ export class AdminTransactionsComponent {
 
     this.http.get<any[]>(`${environment.apiUrl}/Transactions`, { headers, params }).subscribe({
       next: (data) => {
-        console.log(data)
         this.accountTransactions = data;
       },
       error: (error) => {
@@ -78,7 +77,6 @@ export class AdminTransactionsComponent {
 
   //TODO
   transactionDetails(transaction_id: number) {
-    console.log("Detalhes " + transaction_id);
     this.router.navigate([`transaction-details/${transaction_id}`]);
   }
 }

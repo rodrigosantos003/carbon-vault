@@ -8,7 +8,7 @@ import { AlertsService } from '../alerts.service';
 @Component({
   selector: 'app-transaction-details',
   standalone: false,
-  
+
   templateUrl: './transaction-details.component.html',
   styleUrl: './transaction-details.component.css'
 })
@@ -41,17 +41,12 @@ export class TransactionDetailsComponent {
 
     var userId = this.auth.getUserId();
 
-    console.log("Token:", token);
-    console.log("UserID:", userId);
-
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,
       'userID': userId
     });
 
     this.http.get(url, { headers }).subscribe((data: any) => {
-      console.log("Dados da transação:", data);
-
       var type;
 
       switch (userId) {

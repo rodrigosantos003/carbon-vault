@@ -3,7 +3,6 @@ body {
   color: black;
   margin: 0px !important;
   display: flex;
-  height: 100vh;
 }
 
 nav {
@@ -12,7 +11,7 @@ nav {
   padding: 20px;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: 100vh;
   justify-content: space-between;
 }
 

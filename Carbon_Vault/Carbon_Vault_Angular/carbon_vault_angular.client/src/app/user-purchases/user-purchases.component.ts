@@ -44,7 +44,6 @@ export class UserPurchasesComponent {
   }
 
   transactionDetails(transaction_id: number) {
-    console.log("Detalhes " + transaction_id);
     this.router.navigate([`transaction-details/${transaction_id}`]);
   }
 }

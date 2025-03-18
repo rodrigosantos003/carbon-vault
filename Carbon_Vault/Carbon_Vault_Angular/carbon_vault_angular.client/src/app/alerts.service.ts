@@ -16,7 +16,6 @@ export class AlertsService {
   }
 
   enableSuccess(message: string) {
-    console.log("Success");
     const successPopup = document.getElementById('success-popup');
     if (successPopup) {
       const textSpan = successPopup.querySelector('#success-message');
@@ -56,9 +55,8 @@ export class AlertsService {
     }
   }
 
-  
+
   enableError(message: string) {
-    console.log("Error");
     const errorPopup = document.getElementById('error-popup');
     if (errorPopup) {
       const textSpan = errorPopup.querySelector('#error-message');

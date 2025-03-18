@@ -27,7 +27,6 @@ export class UsersManagerComponent {
   ngOnInit(): void {
     this.getAccounts();
     this.getPastMonthGrowthPercentage();
-    console.log(this.accounts);
   }
 
   openPopup(account_id: number) {
@@ -60,7 +59,6 @@ export class UsersManagerComponent {
     this.alerts.enableLoading("A carregar utilizadores..");
     this.http.get<any[]>(this.userAccountsURL).subscribe({
       next: (data) => {
-        console.log(data);
         this.accounts = data; // Armazena os dados da API no array
         this.alerts.disableLoading();
       },
@@ -95,7 +93,6 @@ export class UsersManagerComponent {
   deleteAccount() {
     if (this.selectedAccountId !== null) {
       const deleteURL = `${this.apiURL}/${this.selectedAccountId}`;
-      console.log("ID da conta a eliminar: " + this.selectedAccountId);
 
       const jwtToken = localStorage.getItem('token');
 

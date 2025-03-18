@@ -5,11 +5,12 @@ import { AuthService } from '../auth-service.service';
 import { ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { AlertsService } from '../alerts.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-project-manager-details-admin',
   standalone: false,
-  
+
   templateUrl: './project-manager-details-admin.component.html',
   styleUrl: './project-manager-details-admin.component.css'
 })
@@ -26,10 +27,10 @@ export class ProjectManagerDetailsAdminComponent {
   isAddingFiles: boolean = false;
   private apiURL = `${environment.apiUrl}/Projects`;
   showRejectionFeedback: boolean = false;
-  showAprovedFeedback :boolean = false;
-  showAddCredits :boolean = true;
-  showChangeState :boolean = false;
-  additionalCredits : number = 0 ;
+  showAprovedFeedback: boolean = false;
+  showAddCredits: boolean = true;
+  showChangeState: boolean = false;
+  additionalCredits: number = 0;
 
   categorias = [
     { id: 1, nome: 'Poverty', label: 'Erradicar a pobreza' },
@@ -47,54 +48,46 @@ export class ProjectManagerDetailsAdminComponent {
     { id: 13, nome: 'Partnership', label: 'Parcerias Sustentáveis' }
   ];
 
-  constructor(private http: HttpClient, private route: ActivatedRoute, private authService: AuthService,private alerts: AlertsService) {}
+  constructor(private http: HttpClient, private route: ActivatedRoute, private authService: AuthService, private alerts: AlertsService) { }
 
-  async ngOnInit() {
+  ngOnInit() {
     const projectId = this.route.snapshot.params['id'];
-    await this.fetchProjectDetails(projectId);
-    await this.loadProjectFiles(projectId);
-    
 
+    this.alerts.enableLoading("A carregar informação do projeto...");
+
+    Promise.all([this.fetchProjectDetails(projectId), this.loadProjectFiles(projectId)]);
   }
 
-  getProjectStatus (state: number) :string{
+  getProjectStatus(state: number): string {
     const states = ["Ativo", "Pendente", "inátivo"];
-      return states[state] ?? "Unknown"
-    }
+    return states[state] ?? "Unknown"
+  }
 
   approveProject() {
     const projectId = this.project.id;
     const url = `${this.apiURL}/${projectId}/approve`;
-    const creditsGenerated = this.project.carbonCreditsGenerated; 
+    const creditsGenerated = this.project.carbonCreditsGenerated;
 
     if (creditsGenerated <= 0) {
       this.alerts.enableError('O número de créditos deve ser maior que 0.');
-      return; 
+      return;
     }
 
-    console.log(creditsGenerated)
-  
     const token = localStorage.getItem('token');
     const userId = this.authService.getUserId();
-  
+
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,
       'userID': userId.toString(),
-      'CreditsGenerated': creditsGenerated.toString() 
+      'CreditsGenerated': creditsGenerated.toString()
     });
-  
 
-
-    
-    
     this.http.post(url, {}, { headers }).subscribe(
       (response) => {
         this.alerts.enableSuccess('Projeto aprovado e créditos gerados com sucesso!');
-        this.showAprovedFeedback = true; 
-        console.log(response);
+        this.showAprovedFeedback = true;
       },
       (error) => {
-        console.error('Erro ao aprovar o projeto:', error);
         this.alerts.enableError('Ocorreu um erro ao aprovar o projeto. Tente novamente mais tarde.');
       }
     );
@@ -103,33 +96,26 @@ export class ProjectManagerDetailsAdminComponent {
   addCredits() {
     const projectId = this.project.id;
     const url = `${this.apiURL}/${projectId}/addCredits`;
-    const creditsGenerated = this.additionalCredits; 
+    const creditsGenerated = this.additionalCredits;
 
     if (this.additionalCredits <= 0) {
       this.alerts.enableError('O número de créditos deve ser maior que 0.');
-      return; 
+      return;
     }
 
-
-  
     const token = localStorage.getItem('token');
     const userId = this.authService.getUserId();
-  
+
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,
       'userID': userId.toString(),
-      'NumberOfCredits': creditsGenerated.toString() 
+      'NumberOfCredits': creditsGenerated.toString()
     });
-  
 
-
-    
-   
     this.http.post(url, {}, { headers }).subscribe(
       (response) => {
         this.alerts.enableSuccess('créditos gerados com sucesso!');
         this.fetchProjectDetails(this.route.snapshot.params['id']);
-        console.log(response);
       },
       (error) => {
         console.error('Erro ao aprovar o projeto:', error);
@@ -137,7 +123,7 @@ export class ProjectManagerDetailsAdminComponent {
       }
     );
   }
- async fetchProjectDetails(projectId: number) {
+  async fetchProjectDetails(projectId: number) {
     this.http.get(`${this.apiURL}/${projectId}`).subscribe((response: any) => {
       this.project = response;
       if (this.project.status === 0) {
@@ -146,39 +132,36 @@ export class ProjectManagerDetailsAdminComponent {
       if (this.project.endDate && this.project.startDate) {
         const dateObj_start = new Date(this.project.startDate);
         const dateObj_end = new Date(this.project.endDate);
-        const formattedDate_start = dateObj_start.toISOString().split('T')[0]; 
-        const formattedDate_end = dateObj_end.toISOString().split('T')[0]; 
-       
+        const formattedDate_start = dateObj_start.toISOString().split('T')[0];
+        const formattedDate_end = dateObj_end.toISOString().split('T')[0];
+
         this.project.endDate = formattedDate_end;
         this.project.startDate = formattedDate_start;
       }
-  
+
       this.categoriasSelecionadas = response.types.map((type: any) => type.id);
-      console.log(this.project)
-      console.log(this.categoriasSelecionadas)
     });
   }
 
   onDragOver(event: DragEvent) {
     event.preventDefault();
     event.stopPropagation();
-    event.dataTransfer!.dropEffect = 'copy'; 
+    event.dataTransfer!.dropEffect = 'copy';
   }
-  
+
   onDrop(event: DragEvent) {
     event.preventDefault();
     event.stopPropagation();
-  
+
     const fileList: FileList = event.dataTransfer?.files!;
     if (fileList && fileList.length > 0) {
       const newFiles = Array.from(fileList);
-  
-      
+
+
       this.documentos = [...this.documentos, ...newFiles];
     }
-    console.log(this.documentos);
   }
- 
+
   onDragLeave(event: DragEvent) {
     event.preventDefault();
     event.stopPropagation();
@@ -192,9 +175,7 @@ export class ProjectManagerDetailsAdminComponent {
   }
   async loadProjectFiles(projectId: number): Promise<void> {
     this.http.get<any[]>(`${this.apiURL}/${projectId}/files`).subscribe((files) => {
-      console.log(this.project)
       this.documentosAtuais = files.filter(file => file.filePath != this.project.imageUrl);
-     
     });
   }
   onFileChange(event: any) {
@@ -204,28 +185,25 @@ export class ProjectManagerDetailsAdminComponent {
   deleteFile(fileId: number): void {
     var token = localStorage.getItem('token');
     var userId = this.authService.getUserId();
-    
-    console.log(userId)
 
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,
       'userID': userId
     });
 
-    console.log(headers)
     const projectId = this.project.id;
-    this.http.delete<void>(`${this.apiURL}/${projectId}/files/${fileId}`,{ headers }).subscribe(() => {
-      
+    this.http.delete<void>(`${this.apiURL}/${projectId}/files/${fileId}`, { headers }).subscribe(() => {
+
       this.fetchProjectDetails(projectId);
       this.loadProjectFiles(projectId);
       this.alerts.enableSuccess('Ficheiro Eliminado com sucesso do projeto');
     }, error => {
-     
+
       this.alerts.enableError('Um erro aconteceu tente novamente mais tarde');
       console.error('Error deleting file:', error);
     });
   }
- rejectProject() {
+  rejectProject() {
     if (!this.project.rejectionFeedback || this.project.rejectionFeedback.trim() === "") {
       this.alerts.enableError('Por favor, insira um feedback antes de rejeitar o projeto.');
       return;
@@ -245,7 +223,7 @@ export class ProjectManagerDetailsAdminComponent {
     this.http.post(url, body, { headers }).subscribe(
       () => {
         this.alerts.enableSuccess('Projeto rejeitado com sucesso!');
-        this.isEditable = false; 
+        this.isEditable = false;
       },
       (error) => {
         console.error('Erro ao rejeitar o projeto:', error);
@@ -265,25 +243,25 @@ export class ProjectManagerDetailsAdminComponent {
       reader.readAsDataURL(file);
     }
   }
-downloadFile(filePath: string, fileName: string) {
-    const url = `${filePath}`;  
+  downloadFile(filePath: string, fileName: string) {
+    const url = `${filePath}`;
     const a = document.createElement('a');
 
-    a.href = url;  
-    a.download = fileName;  
+    a.href = url;
+    a.download = fileName;
     document.body.appendChild(a);
     a.click();
 
     document.body.removeChild(a);
-}
+  }
 
-changeToEditMode(){
-  this.isAddingFiles = true;
-}
-RevertToEditMode(){
-  this.isAddingFiles = false;
-  this.documentos = [];
-}
+  changeToEditMode() {
+    this.isAddingFiles = true;
+  }
+  RevertToEditMode() {
+    this.isAddingFiles = false;
+    this.documentos = [];
+  }
 
   async onSubmit(): Promise<void> {
     if (this.imagem) {
@@ -293,7 +271,7 @@ RevertToEditMode(){
 
       try {
         const response: any = await this.http.post(`${this.apiURL}/${projectId}/uploadImage`, formData).toPromise();
-        this.project.imageUrl = response.filePath; 
+        this.project.imageUrl = response.filePath;
       } catch (error) {
         console.error('Erro ao enviar imagem:', error);
       }

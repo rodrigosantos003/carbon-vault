@@ -65,7 +65,7 @@ export class CartComponent implements OnInit {
       userId: this.authService.getUserId(),
     };
 
-    console.log("Sending payment data:", paymentData);
+    this
 
     this.http.post<{ message: string; checkout_session: string; payment_url: string }>(apiUrl, paymentData).subscribe({
       next: (data) => {

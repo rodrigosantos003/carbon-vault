@@ -1,94 +1,91 @@
 <body>
-    <app-user-menu></app-user-menu>
-    <div class="main-content">
-      <div class="project-details">
-        <div class="project-details-header">
-          <h3>{{ isEditable ? 'Editar Projeto' : 'Detalhes do Projeto' }}</h3>
+  <app-user-menu></app-user-menu>
+  <div class="main-content">
+    <div class="project-details">
+      <div class="project-details-header">
+        <h3>{{ isEditable ? 'Editar Projeto' : 'Detalhes do Projeto' }}</h3>
+      </div>
+      <hr>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" class="add-project-form">
+      <div class="first-column">
+        <div class="form-item">
+          <label>Nome</label><br>
+          <input type="text" [(ngModel)]="project.name" name="nome" [disabled]="!isEditable" />
         </div>
-        <hr>
+        <div class="form-item">
+          <label>Descrição</label><br>
+          <textarea [(ngModel)]="project.description" name="descricao" [disabled]="!isEditable"></textarea>
+        </div>
+        <div class="form-item">
+          <label>Localização</label><br>
+          <input type="text" [(ngModel)]="project.location" name="localizacao" [disabled]="!isEditable" />
+        </div>
+        <div class="form-item">
+          <label>Data de Início</label><br>
+          <input type="date" [(ngModel)]="project.startDate" name="dataInicio" [disabled]="!isEditable" />
+        </div>
+        <div class="form-item">
+          <label>Data de Fim</label><br>
+          <input type="date" [(ngModel)]="project.endDate" name="dataFim" [disabled]="!isEditable" />
+        </div>
+        <div class="form-item">
+          <label>Desenvolvedor</label><br>
+          <input type="text" [(ngModel)]="project.developer" name="desenvolvedor" [disabled]="!isEditable" />
+        </div>
+        <div class="form-item">
+          <label>URL do Projeto</label><br>
+          <input type="text" [(ngModel)]="project.projectUrl" name="urlProjeto" [disabled]="!isEditable" />
+        </div>
       </div>
 
-      <form (ngSubmit)="onSubmit()" class="add-project-form">
-        <div class="first-column">
-          <div class="form-item">
-            <label>Nome</label><br>
-            <input type="text" [(ngModel)]="project.name" name="nome" [disabled]="!isEditable" />
-          </div>
-          <div class="form-item">
-            <label>Descrição</label><br>
-            <textarea [(ngModel)]="project.description" name="descricao" [disabled]="!isEditable"></textarea>
-          </div>
-          <div class="form-item">
-            <label>Localização</label><br>
-            <input type="text" [(ngModel)]="project.location" name="localizacao" [disabled]="!isEditable" />
-          </div>
-          <div class="form-item">
-            <label>Data de Início</label><br>
-            <input type="date" [(ngModel)]="project.startDate" name="dataInicio" [disabled]="!isEditable" />
-          </div>
-          <div class="form-item">
-            <label>Data de Fim</label><br>
-            <input type="date" [(ngModel)]="project.endDate" name="dataFim" [disabled]="!isEditable" />
-          </div>
-          <div class="form-item">
-            <label>Desenvolvedor</label><br>
-            <input type="text" [(ngModel)]="project.developer" name="desenvolvedor" [disabled]="!isEditable" />
-          </div>
-          <div class="form-item">
-            <label>URL do Projeto</label><br>
-            <input type="text" [(ngModel)]="project.projectUrl" name="urlProjeto" [disabled]="!isEditable" />
+      <div class="second-column">
+        <div class="form-item">
+          <h2>Categorias (ODS)</h2>
+          <div *ngFor="let categoria of categorias">
+            <label>
+              <input type="checkbox" [checked]="categoriasSelecionadas.includes(categoria.id)"
+                (change)="onCategoriaChange(categoria.id, $event)" class="custom-checkbox" [disabled]="!isEditable" />
+              {{ categoria.label }}
+            </label>
           </div>
         </div>
+      </div>
 
-        <div class="second-column">
-          <div class="form-item">
-            <h2>Categorias (ODS)</h2>
-            <div *ngFor="let categoria of categorias">
-              <label>
-                <input type="checkbox"
-                       [checked]="categoriasSelecionadas.includes(categoria.id)"
-                       (change)="onCategoriaChange(categoria.id, $event)"
-                       class="custom-checkbox"
-                       [disabled]="!isEditable" />
-                {{ categoria.label }}
-              </label>
-            </div>
+      <div class="third-column">
+        <div class="form-item">
+          <h2>Documentos Atuais</h2>
+          <div *ngIf="documentos.length == 0" class="file-list">
+            <p>Sem documentos</p>
           </div>
+          <ul *ngIf="documentosAtuais.length > 0" class="file-list">
+            <li *ngFor="let documento of documentosAtuais">
+              <span style="z-index: 6;" (click)="downloadFile(documento.filePath, documento.fileName)">
+                {{ documento.fileName }}
+              </span>
+              <button *ngIf="isEditable" (click)="deleteFile(documento.id)">Remover</button>
+            </li>
+          </ul>
         </div>
 
-        <div class="third-column">
-          <div class="form-item">
-            <h2>Documentos Atuais</h2>
-            <div *ngIf="documentos.length == 0" class="file-list">
-              <p>Sem documentos</p>
-            </div>
-            <ul *ngIf="documentosAtuais.length > 0" class="file-list">
-              <li *ngFor="let documento of documentosAtuais">
-                <span style="z-index: 6;" (click)="downloadFile(documento.filePath, documento.fileName)">
-                  {{ documento.fileName }}
-                </span>
-                <button *ngIf="isEditable" (click)="deleteFile(documento.id)">Remover</button>
-              </li>
-            </ul>
-          </div>
-
-          <div class="form-item">
-            <h2>Imagem do Projeto</h2><br>
-            <img *ngIf="project.imageUrl" class="preview" [src]="project.imageUrl" alt="Imagem do Projeto" /><br>
-            <input type="file" (change)="onImageChange($event)" accept="image/*" [disabled]="!isEditable" />
-          </div>
+        <div class="form-item">
+          <h2>Imagem do Projeto</h2><br>
+          <img *ngIf="project.imageUrl" class="preview" [src]="project.imageUrl" alt="Imagem do Projeto" /><br>
+          <input type="file" (change)="onImageChange($event)" accept="image/*" [disabled]="!isEditable" />
         </div>
+      </div>
 
-        <button class="button-edit-save" id="button-edit-save" type="button" (click)="toggleEditMode()">
-          {{ isEditable ? 'Salvar Alterações' : 'Editar' }}
-        </button>
-      </form>
+      <button class="button-edit-save" id="button-edit-save" type="button" (click)="toggleEditMode()">
+        {{ isEditable ? 'Salvar Alterações' : 'Editar' }}
+      </button>
+    </form>
 
 
-      <br>
-      <h2 style="color: #4ea741;"> Créditos Disponiveis </h2>
-      
-      <div  style="max-height: 295px; overflow-y: scroll; position: relative;">
+    <br>
+    <h2 style="color: #4ea741;"> Créditos Disponiveis </h2>
+
+    <div style="max-height: 295px; overflow-y: scroll; position: relative;">
       <table>
         <thead>
           <tr>
@@ -111,27 +108,29 @@
       </table>
     </div>
 
-      <div class="credits-info">
-        O projeto tem <b>{{project.carbonCredits.length}}</b> créditos disponiveis dos quais <b>{{project.creditsForSale}}</b> estão à venda por <b>{{project.pricePerCredit}}€</b> cada.
-        <button class="credits-button" (click)="openPopup()"> Editar critérios de Venda</button>
-      </div>
-
-
+    <div class="credits-info">
+      O projeto tem <b>{{project.carbonCredits.length}}</b> créditos disponiveis dos quais
+      <b>{{project.creditsForSale}}</b> estão à venda por <b>{{project.pricePerCredit}}€</b> cada.
+      <button class="credits-button" (click)="openPopup()"> Editar critérios de Venda</button>
     </div>
-    <div class="modal-overlay" id="modalOverlay">
-      <div class="credits-form" id="credits-form">
-        <div class="credits-form-content">
-          <p class="credits-form-heading">Critérios de Venda dos Créditos</p>
-          <p class="credits-form-field" style="text-align: center; font-weight: 500;">Créditos totais do Projeto: {{project.carbonCredits.length}}</p>
-          <p class="credits-form-field">Créditos para venda: <input type="text" [(ngModel)]="newCreditsForSale"></p>
-          <p class="credits-form-field">Preço por Crédito: <input type="text" [(ngModel)]="newPricePerCredit"></p>
-        </div>
-        <div class="credits-form-button-wrapper">
-          <button class="credits-form-button secondary" (click)="closePopup()">Cancelar</button>
-          <button class="credits-form-button primary" (click)="saveCarbonInfo()">Guardar</button>
-        </div>
+
+
+  </div>
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="credits-form" id="credits-form">
+      <div class="credits-form-content">
+        <p class="credits-form-heading">Critérios de Venda dos Créditos</p>
+        <p class="credits-form-field" style="text-align: center; font-weight: 500;">Créditos totais do Projeto:
+          {{project.carbonCredits.length}}</p>
+        <p class="credits-form-field">Créditos para venda: <input type="text" [(ngModel)]="newCreditsForSale"></p>
+        <p class="credits-form-field">Preço por Crédito: <input type="text" [(ngModel)]="newPricePerCredit"></p>
+      </div>
+      <div class="credits-form-button-wrapper">
+        <button class="credits-form-button secondary" (click)="closePopup()">Cancelar</button>
+        <button class="credits-form-button primary" (click)="saveCarbonInfo()">Guardar</button>
       </div>
     </div>
-    <app-alerts></app-alerts>
+  </div>
+  <app-alerts></app-alerts>
 
-  </body>
+</body>

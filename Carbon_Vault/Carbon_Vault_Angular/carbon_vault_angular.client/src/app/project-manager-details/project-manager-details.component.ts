@@ -73,9 +73,6 @@ export class ProjectManagerDetailsComponent {
       this.project.carbonCredits.sort((a: any, b: any) => {
         return new Date(a.date).getTime() - new Date(b.date).getTime();
       });
-
-      console.log(this.project)
-      console.log(this.categoriasSelecionadas)
     });
   }
 
@@ -161,7 +158,6 @@ export class ProjectManagerDetailsComponent {
 
       this.documentos = [...this.documentos, ...newFiles];
     }
-    console.log(this.documentos);
   }
 
   onDragLeave(event: DragEvent) {
@@ -189,14 +185,11 @@ export class ProjectManagerDetailsComponent {
     var token = localStorage.getItem('token');
     var userId = this.authService.getUserId();
 
-    console.log(userId)
-
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,
       'userID': userId
     });
 
-    console.log(headers)
     const projectId = this.project.id;
     this.http.delete<void>(`${this.apiURL}/${projectId}/files/${fileId}`, { headers }).subscribe(() => {
 
@@ -217,7 +210,7 @@ export class ProjectManagerDetailsComponent {
       this.imagem = file;
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        this.imagePreviewUrl = e.target.result;
+        this.project.imageUrl = e.target.result;
       };
       reader.readAsDataURL(file);
     }
@@ -251,6 +244,7 @@ export class ProjectManagerDetailsComponent {
         const response: any = await this.http.post(`${this.apiURL}/${projectId}/uploadImage`, formData).toPromise();
         this.project.imageUrl = response.filePath;
       } catch (error) {
+        this.alerts.enableError("Erro ao enviar imagem");
         console.error('Erro ao enviar imagem:', error);
       }
     }

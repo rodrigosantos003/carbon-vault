@@ -41,7 +41,6 @@ export class RegisterComponent {
     this.alerts.enableLoading("A verificar os dados submetidos...");
 
     const formData = this.registerForm.value;
-    console.log('Dados do formulário:', formData);
 
     if (!this.validatePassword(formData.password)) {
       return;
@@ -56,13 +55,11 @@ export class RegisterComponent {
     this.http.post(`${environment.apiUrl}/Accounts`, formData).subscribe({
       next: (response) => {
         this.alerts.disableLoading();
-        console.log('Registo bem-sucedido!', response);
         this.alerts.enableSuccess("Registro realizado com sucesso");
         window.location.href = "/login";
       },
       error: (error) => {
         this.alerts.disableLoading();
-        console.error('Erro no registo!', error);
         this.alerts.enableError("Erro no registo. Verifique os dados e tente novamente.");
       }
     }
@@ -136,7 +133,6 @@ export class RegisterComponent {
     const apiUrl = `${environment.apiUrl}/Accounts/ValidateNIF?nif=${nif}`;
     try {
       const response: any = await this.http.get(apiUrl).toPromise();
-      console.log('Resposta da API:', response);
 
       if (response.result === 'error') {
         this.isNifValid = false;

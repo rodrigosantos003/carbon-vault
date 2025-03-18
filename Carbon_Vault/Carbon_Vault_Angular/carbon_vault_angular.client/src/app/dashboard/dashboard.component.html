@@ -8,20 +8,20 @@
       <div class="card green">
         <h2>Número de créditos de carbono</h2>
         <div>
-          <img src="images/CO2-W.png"/>
-          <p> 21</p>
+          <img src="images/CO2-W.png" />
+          <p> {{credits}}</p>
         </div>
       </div>
       <div class="card yellow">
         <h2>Projetos em curso</h2>
         <div>
           <img src="images/OnGoingProjects.png" />
-          <p> 4</p>
+          <p> {{projects}}</p>
         </div>
       </div>
       <div class="card blue">
         <h2>Total de Emissões</h2>
-        <p>tCO<sub>2</sub>: 1021</p>
+        <p>tCO<sub>2</sub>: {{emissions}}</p>
       </div>
     </div>
 
@@ -31,21 +31,19 @@
         <table>
           <thead>
             <tr>
-              <th>Vendedor</th>
+              <th>Projeto</th>
               <th>Data</th>
               <th>Detalhes</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Rúben Dámaso</td>
-              <td>9/10/2025 18:36:23</td>
-              <td><button class="details-button">Ver detalhes</button></td>
+            <tr *ngIf="purchases.length === 0">
+              <td colspan="4" class="text-center" id="nothingToShow">Nada a mostrar!</td>
             </tr>
-            <tr>
-              <td>Rodrigo Santos</td>
-              <td>13/10/2025 21:31:46</td>
-              <td><button class="details-button">Ver detalhes</button></td>
+            <tr *ngFor="let purchase of purchases">
+              <td>{{purchase.project}}</td>
+              <td>{{purchase.date}}</td>
+              <td><button class="details-button" (click)="transactionDetails(purchase.id)">Ver detalhes</button></td>
             </tr>
           </tbody>
         </table>
@@ -56,21 +54,19 @@
         <table>
           <thead>
             <tr>
-              <th>Comprador</th>
+              <th>Projeto</th>
               <th>Data</th>
               <th>Detalhes</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>João Fernandes</td>
-              <td>9/10/2025 18:36:23</td>
-              <td><button class="details-button">Ver detalhes</button></td>
+            <tr *ngIf="sales.length === 0">
+              <td colspan="4" class="text-center" id="nothingToShow">Nada a mostrar!</td>
             </tr>
-            <tr>
-              <td>André Castanho</td>
-              <td>13/10/2025 21:31:46</td>
-              <td><button class="details-button">Ver detalhes</button></td>
+            <tr *ngFor="let sale of sales">
+              <td>{{sale.project}}</td>
+              <td>{{sale.date}}</td>
+              <td><button class="details-button" (click)="transactionDetails(sale.id)">Ver detalhes</button></td>
             </tr>
           </tbody>
         </table>
@@ -132,5 +128,5 @@
       </div>
     </div>
   </main> -->
-<app-admin-dashboard *ngIf="userRole == 1"></app-admin-dashboard>
+  <app-admin-dashboard *ngIf="userRole == 1"></app-admin-dashboard>
 </body>

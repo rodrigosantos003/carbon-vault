@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { AlertsService } from '../alerts.service';
 import { AuthService } from '../auth-service.service';
 import { environment } from '../../environments/environment';
-import { Router } from '@angular/router'; 
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-sales',
@@ -44,7 +44,6 @@ export class UserSalesComponent {
   }
 
   transactionDetails(transaction_id: number) {
-    console.log("Detalhes " + transaction_id);
     this.router.navigate([`transaction-details/${transaction_id}`]);
   }
 }

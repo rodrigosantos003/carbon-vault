@@ -28,7 +28,7 @@ export class UserMenuComponent {
     { icon: 'images/menu/MarketplaceIcon.png', label: 'Marketplace', route: '/marketplace' },
     { icon: 'images/menu/SettingsIcon.png', label: 'Definições', route: '/dashboard' },
   ];
-   
+
   userMenu = [
     { icon: 'images/menu/DashboardIcon.png', label: 'Dashboard', route: '/dashboard' },
     { icon: 'images/menu/EmissionsIcon.png', label: 'As minhas Emissões', route: '/user-emissions' },
@@ -48,15 +48,14 @@ export class UserMenuComponent {
   }
 
   ngOnInit() {
-    const url = `${environment.apiUrl}/accounts/${this.userId}`; 
+    const url = `${environment.apiUrl}/accounts/${this.userId}`;
 
     this.http.get(url).subscribe(
       (data: any) => {
         // Se a requisição for bem-sucedida, preenche o formulário com os dados recebidos
         this.userName = data.name
         this.userInitial = data.name[0],
-        this.userRole = data.role
-        console.log(data)
+          this.userRole = data.role
       },
       error => {
         // Caso contrário, exibe o erro no console

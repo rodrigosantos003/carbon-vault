@@ -2,14 +2,14 @@ import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AlertsService } from '../alerts.service';
 import { AuthService } from '../auth-service.service';  // Importa o AuthService
-import { Router } from '@angular/router';  
+import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 
 
 @Component({
   selector: 'app-project-manager-user',
   standalone: false,
-  
+
   templateUrl: './project-manager-user.component.html',
   styleUrl: './project-manager-user.component.css'
 })
@@ -19,57 +19,50 @@ export class ProjectManagerUserComponent {
   selectedProjectId: any;
   saleTitle: string = "Tem a certeza que quer retirar este projeto de venda?";
   saleContent: string = "Esta ação irá retirar o projeto do Marketplace e outros utilizadores não o poderão ver.";
-  constructor(private http: HttpClient, private alerts: AlertsService, private authService: AuthService, private router: Router ) { 
+  constructor(private http: HttpClient, private alerts: AlertsService, private authService: AuthService, private router: Router) {
     this.UserId = this.authService.getUserId()
   }
   ngOnInit(): void {
     this.getProjects(parseInt(this.UserId));
-    
-    console.log(this.projects);
-   
   }
+
   getProjects(id: number): void {
     this.alerts.enableLoading("A carregar Projetos..");
     this.http.get<any[]>(`${environment.apiUrl}/Projects/user/${id}`).subscribe({
       next: (data) => {
-        console.log(data);
-        this.projects = data; 
+        this.projects = data;
         this.alerts.disableLoading();
       },
       error: (error) => {
-        console.error('Erro ao encontrar os projetos:', error);
         this.alerts.disableLoading();
+        this.alerts.enableError("Erro ao carregar projetos");
       }
     });
   }
-  getProjectStatus (state: number) :string{
-  const states = ["Ativo", "Pendente", "inátivo"];
+  getProjectStatus(state: number): string {
+    const states = ["Ativo", "Pendente", "inátivo"];
     return states[state] ?? "Unknown"
   }
   filterActiveProjects(): number {
     return this.projects.filter(project => project.status == 0).length;
   }
-  
- goToAddProject(){
-  this.router.navigate(['/Account-project-manager/addProject'])
- }
+
+  goToAddProject() {
+    this.router.navigate(['/Account-project-manager/addProject'])
+  }
 
   viewProject(id: number) {
-    this.alerts.enableSuccess("Clicou para ver projeto " + id);
     this.router.navigate([`/Account-project-manager/${id}`]);
   }
 
   eliminar() {
     if (this.selectedProjectId) {
-      console.log("ID projeto " + this.selectedProjectId);
       this.http.delete(`${environment.apiUrl}/Projects/${this.selectedProjectId}`).subscribe({
         next: () => {
-          console.log('Project deleted successfully');
           this.alerts.enableSuccess("Projeto eliminado com sucesso");
           this.getProjects(parseInt(this.UserId));
         },
         error: (err) => {
-          console.error('Error deleting project:', err);
           this.alerts.enableError("Erro ao apagar projeto com ID = " + this.selectedProjectId);
         }
       });
