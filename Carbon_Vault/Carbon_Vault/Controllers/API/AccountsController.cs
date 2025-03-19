@@ -123,6 +123,8 @@ namespace Carbon_Vault.Controllers.API
                 return BadRequest(new {message = "Pedido inválido."});
             }
 
+            account.State = AccountState.Active;
+
             _context.Entry(account).State = EntityState.Modified;
 
             try
@@ -229,9 +231,9 @@ namespace Carbon_Vault.Controllers.API
             });
         }
 
-        // GET: api/Account/ForgotPassword?email=:
-        [HttpGet("ForgotPassword")]
-        public async Task<IActionResult> ForgotPassword([FromQuery] string email)
+        // GET: api/Account/NewPassword?email=:
+        [HttpGet("NewPassword")]
+        public async Task<IActionResult> NewPassword([FromQuery] string email)
         {
             var account = await _context.Account.FirstOrDefaultAsync(a => a.Email == email);
 
@@ -248,8 +250,8 @@ namespace Carbon_Vault.Controllers.API
 
             // Send confirmation link via email
             await _emailService.SendEmail(account.Email, 
-                "Carbon Vault - Recuperar Palavra-Passe", 
-                $"Por favor recupere a sua palavra-passe clicando neste link: {confirmationLink}",
+                "Carbon Vault - Nova Palavra-Passe", 
+                $"Por favor defina uma nova palavra-passe clicando neste link: {confirmationLink}",
                 null);
 
             return Ok(new {
@@ -399,9 +401,9 @@ namespace Carbon_Vault.Controllers.API
             return Ok(new { message = "Account confirmed successfully." });
         }
 
-        // POST: api/Accounts/ResetPassword
-        [HttpPost("ResetPassword")]
-        public async Task<IActionResult> ResetAccountPassword([FromQuery] string token, [FromBody] ResetPasswordModel model)
+        // POST: api/Accounts/SetPassword
+        [HttpPost("SetPassword")]
+        public async Task<IActionResult> SetPassword([FromQuery] string token, [FromBody] ResetPasswordModel model)
         {
             if (string.IsNullOrEmpty(token))
             {

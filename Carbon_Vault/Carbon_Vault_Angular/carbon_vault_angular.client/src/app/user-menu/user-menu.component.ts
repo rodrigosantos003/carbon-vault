@@ -26,7 +26,7 @@ export class UserMenuComponent {
     { icon: 'images/menu/RelatoriosIcon.png', label: 'Relatórios', route: '/dashboard' },
     { icon: 'images/menu/TicketsIcon.png', label: 'Tickets', route: '/dashboard' },
     { icon: 'images/menu/MarketplaceIcon.png', label: 'Marketplace', route: '/marketplace' },
-    { icon: 'images/menu/SettingsIcon.png', label: 'Definições', route: '/dashboard' },
+    { icon: 'images/menu/SettingsIcon.png', label: 'Definições', route: '/settings' },
   ];
 
   userMenu = [
@@ -37,7 +37,7 @@ export class UserMenuComponent {
     { icon: 'images/menu/SalesIcon.png', label: 'As minhas Vendas', route: '/sales' },
     { icon: 'images/menu/RelatoriosIcon.png', label: 'Relatórios', route: '/dashboard' },
     { icon: 'images/menu/MarketplaceIcon.png', label: 'Marketplace', route: '/marketplace' },
-    { icon: 'images/menu/SettingsIcon.png', label: 'Definições', route: '/dashboard' },
+    { icon: 'images/menu/SettingsIcon.png', label: 'Definições', route: '/settings' },
   ];
 
   constructor(private authService: AuthService, private http: HttpClient) {

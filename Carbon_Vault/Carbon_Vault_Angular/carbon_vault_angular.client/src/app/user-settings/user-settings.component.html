@@ -1,0 +1,58 @@
+<body>
+    <app-user-menu></app-user-menu>
+    <app-alerts></app-alerts>
+
+    <main>
+        <form [formGroup]="settingsForm" (ngSubmit)="onSubmit()" class="content">
+            <h1>As minhas definições</h1>
+            <div class="form-group">
+                <label>Nome</label>
+                <input type="text" id="name" formControlName="name">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="text" id="email" formControlName="email">
+            </div>
+            <div class="form-group">
+                <label>Número de Identificação Fiscal</label>
+                <input type="text" id="nif" formControlName="nif">
+            </div>
+            <button class="save-button" type="submit">Guardar</button>
+        </form>
+
+        <div class="settings-buttons">
+            <button id="open-delete-btn" (click)="openDeleteAccount()">Apagar conta</button>
+            <button (click)="changePassword()">Alterar palavra-passe</button>
+        </div>
+    </main>
+
+    <!-- Confirm Delet Popup -->
+    <div class="modal-overlay" id="deleteAccountPopup">
+        <div class="delete" id="delete">
+            <div class="popup-content">
+                <p class="delete-heading">Deseja mesmo eliminar este utilizador?</p>
+                <img src="images/DeleteBin.png" />
+                <p class="delete-description">Esta ação irá eliminar permanentemente o utilizador e toda a informação
+                    associada.
+                </p>
+            </div>
+            <div class="delete-button-wrapper">
+                <button class="delete-button secondary" (click)="closeDeleteAccount()">Cancelar</button>
+                <button class="delete-button primary" (click)="deleteAccount()">Eliminar</button>
+            </div>
+            <button class="exit-button" (click)="closeDeleteAccount()">
+                <svg height="20px" viewBox="0 0 384 512">
+                    <path
+                        d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z">
+                    </path>
+                </svg>
+            </button>
+        </div>
+    </div>
+    <!--<div class="notifications">
+      <div class="icon">
+        <img src="images/notificationsIcon.png" alt="Notificações" class="noti-icon">
+        <span>2</span>
+      </div>
+    </div>-->
+</body>

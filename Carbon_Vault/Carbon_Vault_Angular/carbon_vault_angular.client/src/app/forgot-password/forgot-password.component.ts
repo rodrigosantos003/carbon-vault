@@ -36,7 +36,7 @@ export class ForgotPasswordComponent {
   sendClientEmail(email: string) {
     this.alerts.enableLoading("A enviar recuperação de palavra-passe...");
 
-    const apiUrl = `${environment.apiUrl}/Accounts/ForgotPassword?email=${email}`;
+    const apiUrl = `${environment.apiUrl}/Accounts/NewPassword?email=${email}`;
 
     this.http.get<{ message: string }>(apiUrl).subscribe({
       next: (response) => {
