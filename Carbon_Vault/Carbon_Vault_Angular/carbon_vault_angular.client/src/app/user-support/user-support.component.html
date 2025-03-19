@@ -1,0 +1,34 @@
+<body>
+  <app-user-menu></app-user-menu>
+
+  <div style="display: flex; align-items: center;" class="main">
+    <div class="container">
+      <form [formGroup]="supportForm" (ngSubmit)="onSubmit()">
+        <label for="titulo">Título</label>
+        <input type="text" id="titulo" name="titulo" formControlName="titulo" required>
+
+        <label for="categoria">Categoria</label>
+        <select id="categoria" name="categoria" formControlName="categoria" required>
+          <option value="">Selecione uma categoria</option>
+          <option value="problema_tecnico">Ajuda com Compra e/ou Venda</option>
+          <option value="transacoes">Ajuda com Transações</option>
+          <option value="relatorio">Ajuda com Relatórios</option>
+          <option value="outro">Outro</option>
+        </select>
+
+        <label for="descricao">Como podemos ajudar?</label>
+        <textarea id="descricao" name="descricao" rows="4" formControlName="descricao" required></textarea>
+
+        <button type="submit">Submeter</button>
+      </form>
+    </div>
+    <div class="side-text">
+      <div class="title">
+        <img src="images/CV_Logo.png" class="logo" />
+        <h1>Carbon Vault</h1>
+      </div>
+      <p><em>Estamos <span class="highlight">sempre aqui para ajudar</span></em></p>
+      <p>Preencha o formulário de suporte para que um dos nossos técnicos consiga resolver o seu problema mais rapidamente possível!</p>
+    </div>
+  </div>
+</body>

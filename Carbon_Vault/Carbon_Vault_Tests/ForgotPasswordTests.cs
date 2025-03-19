@@ -41,7 +41,7 @@ namespace Carbon_Vault_Tests_Auth
             var controller = new AccountsController(_mockContext, _mockConfiguration.Object, _mockEmailService.Object);
 
             // Act
-            var result = await controller.ForgotPassword("nonexistent@example.com");
+            var result = await controller.NewPassword("nonexistent@example.com");
 
             // Assert
             Assert.IsType<NotFoundObjectResult>(result);
@@ -59,7 +59,7 @@ namespace Carbon_Vault_Tests_Auth
             var controller = new AccountsController(_mockContext, _mockConfiguration.Object, _mockEmailService.Object);
 
             // Act
-            var result = await controller.ForgotPassword(email);
+            var result = await controller.NewPassword(email);
 
             // Assert
             _mockEmailService.Verify(e => e.SendEmail(

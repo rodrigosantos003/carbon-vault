@@ -87,7 +87,7 @@
             <td>{{project.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}</td>
             <td>{{getProjectStatus(project.status)}}</td>
             <td>
-              <button class="for-sale-btn" (click)="openForSale(project.id, project.isForSale); $event.stopPropagation()">{{ project.isForSale ? 'Sim' : 'Não' }}</button>
+              <button class="for-sale-btn" (click)="openForSale(project.id, project.isForSale, project.carbonCredits.length); $event.stopPropagation()">{{ project.isForSale ? 'Sim' : 'Não' }}</button>
             </td>
 
             <td>

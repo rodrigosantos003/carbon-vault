@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AlertsService } from '../alerts.service';
-import { AuthService } from '../auth-service.service';  // Importa o AuthService
+import { AuthService } from '../auth-service.service';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 
@@ -17,8 +17,6 @@ export class ProjectManagerUserComponent {
   projects: any[] = [];
   UserId: string = '';
   selectedProjectId: any;
-  saleTitle: string = "Tem a certeza que quer retirar este projeto de venda?";
-  saleContent: string = "Esta ação irá retirar o projeto do Marketplace e outros utilizadores não o poderão ver.";
   constructor(private http: HttpClient, private alerts: AlertsService, private authService: AuthService, private router: Router) {
     this.UserId = this.authService.getUserId()
   }
@@ -75,7 +73,7 @@ export class ProjectManagerUserComponent {
         next: () => {
           this.closeForSale();
           this.getProjects(parseInt(this.UserId)); // Refresh the project list after updating
-          this.alerts.enableSuccess('Projeto colocado à venda com sucesso!');
+          this.alerts.enableSuccess('Estado de venda do projeto alterado com sucesso!');
         },
         error: (error) => {
           console.error('Erro ao colocar projeto à venda:', error);
@@ -107,8 +105,13 @@ export class ProjectManagerUserComponent {
     }
   }
 
-  openForSale(account_id: number, isForSale: boolean) {
-    this.selectedProjectId = account_id;
+  openForSale(project_id: number, isForSale: boolean, availableCC: number) {
+    this.selectedProjectId = project_id;
+
+    //if (availableCC === 0) {
+    //  this.alerts.enableError("Não é possivel alterar o estado de venda, o projeto não tem creditos de carbono disponiveis suficientes", 6);
+    //  return;
+    //}
 
     const overlay = document.getElementById('modalOverlayForSale');
     const delPopup = document.getElementById('popup-for-sale');
@@ -120,7 +123,6 @@ export class ProjectManagerUserComponent {
       delPopup.style.display = 'block';
     }
 
-    // Atualiza dinamicamente o texto com base no estado do projeto
     if (heading && description) {
       heading.textContent = isForSale
         ? 'Tem a certeza que quer retirar este projeto de venda?'

@@ -68,36 +68,27 @@ namespace Carbon_Vault.Controllers.API
         [HttpGet("user/{userId}")]
         public async Task<ActionResult<IEnumerable<Project>>> GetProjectsFromUser(int userId)
         {
-            var projects = await _context.Projects
-                .Where(p => p.Owner.Id == userId)
-                .Include(p => p.Types)
-                .Include(p => p.CarbonCredits)
-                .ToListAsync();
-
-            if (projects == null || projects.Count == 0)
+            try
             {
-                return NotFound(); // Return 404 if no projects are found
-            }
+                var projects = await _context.Projects
+                    .Where(p => p.OwnerId == userId)
+                    .Include(p => p.Types)
+                    .Include(p => p.CarbonCredits)
+                    .ToListAsync();
 
-            return Ok(projects); // Return 200 with the list of projects
+                if (projects == null || projects.Count == 0)
+                {
+                    return NotFound("No projects found for this user."); // Provide a clearer message
+                }
+
+                return Ok(projects);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal Server Error: {ex.Message}");
+            }
         }
 
-        [HttpGet("forSale/{id}")]
-        public async Task<IActionResult> UpdateProjectState(int id)
-        {
-            var project = await _context.Projects.FindAsync(id);
-            if (project == null)
-            {
-                return NotFound();
-            }
-
-            // Update the project state
-            project.IsForSale = !project.IsForSale;
-
-            await _context.SaveChangesAsync();
-
-            return Ok(); // Return 204 No Content on success
-        }
 
         [HttpPatch("forSale/{id}")]
         public async Task<IActionResult> UpdateProjectSale(int id)

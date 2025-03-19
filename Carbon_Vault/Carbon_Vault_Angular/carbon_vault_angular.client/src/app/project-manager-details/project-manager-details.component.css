@@ -268,7 +268,7 @@
   }
 
   .primary {
-    background-color: limegreen;
+    background-color: var(--main-color);
     color: white;
   }
   
