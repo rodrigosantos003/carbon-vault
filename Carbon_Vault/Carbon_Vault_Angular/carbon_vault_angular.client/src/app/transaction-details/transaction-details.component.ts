@@ -37,19 +37,11 @@ export class TransactionDetailsComponent {
 
     var url = environment.apiUrl + "/transactions/details/" + this.transactionId;
 
-    var token = localStorage.getItem('token');
-
     var userId = this.auth.getUserId();
 
-    console.log("Token:", token);
-    console.log("UserID:", userId);
+    var headers = this.auth.getHeaders();
 
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'userID': userId
-    });
-
-    this.http.get(url, { headers }).subscribe((data: any) => {
+    this.http.get(url, { headers: this.auth.getHeaders()}).subscribe((data: any) => {
       console.log("Dados da transação:", data);
 
       var type;

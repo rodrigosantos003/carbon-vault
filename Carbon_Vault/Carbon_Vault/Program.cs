@@ -16,6 +16,8 @@ builder.Services.AddDbContext<Carbon_VaultContext>(options =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<TokenValidationFilter>();
+builder.Services.AddScoped<AdminFilter>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigins", policy =>

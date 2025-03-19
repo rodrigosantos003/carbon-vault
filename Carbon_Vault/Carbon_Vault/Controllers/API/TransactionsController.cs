@@ -138,15 +138,9 @@ namespace Carbon_Vault.Controllers.API
         }
 
         [HttpGet("details/{id}")]
-        public async Task<ActionResult<Transaction>> GetTransactionDetails(int id, [FromHeader] string Authorization, [FromHeader] int userID)
+        [ServiceFilter(typeof(TokenValidationFilter))]
+        public async Task<ActionResult<Transaction>> GetTransactionDetails(int id, [FromHeader] int userID)
         {
-            Console.WriteLine(Authorization);
-            Console.WriteLine(userID);
-            if (!AuthHelper.IsTokenValid(Authorization, userID))
-            {
-                return Unauthorized("JWT inválido");
-            }
-
             var account = await _context.Account.FindAsync(userID);
             
             var transaction = await _context.Transactions.Select(t => new
