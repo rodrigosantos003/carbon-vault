@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Router } from '@angular/router';
+import { HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -30,4 +31,17 @@ export class AuthService {
 
     return decodedToken['nameid'];
   }
+
+  getHeaders() {
+    const token = localStorage.getItem('token');
+    const userId = this.getUserId();
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'userID': userId
+    });
+
+    return headers;
+  }
+
 }
