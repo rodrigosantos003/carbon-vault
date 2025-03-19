@@ -1,0 +1,221 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    color: black;
+    margin: 0px !important;
+    display: flex;
+    height: 100vh;
+}
+
+
+/***** EMISSIONS FORM ******/
+
+main {
+    flex: 1;
+    padding: 40px;
+}
+
+.content {
+    max-width: 700px;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+}
+
+.content h1 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #333;
+    padding-bottom: 10px;
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    width: 300px;
+    font-size: 16px;
+}
+
+.form-group input {
+    width: 150px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.form-group span {
+    margin-left: 10px;
+    font-size: 14px;
+}
+
+.total {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: left;
+    margin-top: 20px;
+}
+
+#form-total {
+    font-weight: bold;
+}
+
+#form-total input {
+    border: none;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.save-button {
+    display: block;
+    width: 100%;
+    background: var(--main-color);
+    color: white;
+    padding: 12px;
+    text-align: center;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.save-button:hover {
+    background: #236927;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    /*pointer-events: none;*/
+    display: none;
+    z-index: 999;
+}
+
+.delete {
+    width: 600px;
+    height: fit-content;
+    background: rgb(255, 255, 255);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 30px;
+    position: relative;
+    box-shadow: 20px 20px 30px rgba(0, 0, 0, 0.15);
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -60%);
+    z-index: 1000;
+    display: none;
+}
+
+.popup-content {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.popup-content img {
+    width: 60px;
+    height: 60px;
+}
+
+.delete-heading {
+    font-size: 20px;
+    font-weight: 700;
+    color: rgb(27, 27, 27);
+}
+
+.delete-description {
+    font-weight: 300;
+    color: rgb(102, 102, 102);
+}
+
+.delete-button-wrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.delete-button {
+    width: 50%;
+    height: 35px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.primary {
+    background-color: rgb(255, 114, 109);
+    color: white;
+}
+
+.primary:hover {
+    background-color: rgb(255, 73, 66);
+}
+
+.secondary {
+    background-color: #ddd;
+}
+
+.secondary:hover {
+    background-color: rgb(197, 197, 197);
+}
+
+.exit-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background-color: transparent;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.exit-button:hover svg {
+    fill: black;
+}
+
+.exit-button svg {
+    fill: rgb(175, 175, 175);
+}
+
+.settings-buttons {
+    display: flex;
+    padding-left: 14.7vw;
+    gap: 15px;
+}
+
+.settings-buttons button {
+    width: 200px;
+    height: 30px;
+    border-radius: 4px;
+    border: 0;
+    background-color: rgb(175, 175, 175);
+    cursor: pointer;
+}
+
+#open-delete-btn {
+    background-color: rgb(255, 105, 100);
+    color: #fff;
+}

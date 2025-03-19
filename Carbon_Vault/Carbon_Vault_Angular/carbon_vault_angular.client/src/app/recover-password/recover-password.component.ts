@@ -71,7 +71,7 @@ export class RecoverPasswordComponent {
   // Aramzenar nova palavra-passe
   resetPassword(password: string, passwordConfirmation: string) {
     const token = this.route.snapshot.queryParamMap.get('token');
-    const apiUrl = `${environment.apiUrl}/Accounts/ResetPassword?token=${token}`;
+    const apiUrl = `${environment.apiUrl}/Accounts/SetPassword?token=${token}`;
 
     this.http.post(apiUrl, { "newPassword": password, "passwordConfirmation": passwordConfirmation }).subscribe({
       next: (response) => {
