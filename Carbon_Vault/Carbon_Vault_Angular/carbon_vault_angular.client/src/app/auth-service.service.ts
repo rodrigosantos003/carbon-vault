@@ -18,7 +18,7 @@ export class AuthService {
   // Log out by removing the token
   logout(): void {
     localStorage.removeItem('token');
-    this.router.navigate(['/login']);
+    this.router.navigate(['/']);
   }
 
   // Get the user's ID

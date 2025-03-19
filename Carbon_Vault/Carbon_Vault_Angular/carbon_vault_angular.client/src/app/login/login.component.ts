@@ -31,10 +31,9 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.alerts.closePopup();
-    console.log(this.authService.isAuthenticated())
+
     // Check if user is already authenticated
     if (this.authService.isAuthenticated()) {
-
       this.router.navigate(['/dashboard']);
     }
   }
@@ -48,8 +47,6 @@ export class LoginComponent implements OnInit {
       this.alerts.enableLoading("A verificar as credenciais...");
 
       const formData = this.loginForm.value;
-
-      console.log('Form Data:', formData);
 
       this.http.post(`${environment.apiUrl}/Accounts/login`, formData).subscribe(
         (response: any) => {

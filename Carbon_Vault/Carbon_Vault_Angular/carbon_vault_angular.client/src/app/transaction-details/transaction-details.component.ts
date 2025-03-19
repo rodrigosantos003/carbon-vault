@@ -8,7 +8,7 @@ import { AlertsService } from '../alerts.service';
 @Component({
   selector: 'app-transaction-details',
   standalone: false,
-  
+
   templateUrl: './transaction-details.component.html',
   styleUrl: './transaction-details.component.css'
 })
@@ -39,11 +39,9 @@ export class TransactionDetailsComponent {
 
     var userId = this.auth.getUserId();
 
-    var headers = this.auth.getHeaders();
+
 
     this.http.get(url, { headers: this.auth.getHeaders()}).subscribe((data: any) => {
-      console.log("Dados da transação:", data);
-
       var type;
 
       switch (userId) {

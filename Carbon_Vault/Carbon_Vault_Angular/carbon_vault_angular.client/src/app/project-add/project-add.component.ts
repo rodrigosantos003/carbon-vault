@@ -24,6 +24,7 @@ export class ProjectAddComponent {
   urlProjeto: string = '';
   urlImagem: string = '';
   preco: number | null = null;
+  benefits: string = '';
   documentos: File[] = [];
   categoriasSelecionadas: number[] = [];
   private apiURL = `${environment.apiUrl}/Projects`;
@@ -134,8 +135,6 @@ export class ProjectAddComponent {
   }
   errors: any = {};
 
-
-
   async uploadImage(projectId: number): Promise<string> {
     if (!this.imagem) return '';
     const formData = new FormData();
@@ -145,7 +144,7 @@ export class ProjectAddComponent {
       const response: any = await this.http.post(`${this.apiURL}/${projectId}/uploadImage`, formData).toPromise();
       return response.filePath;
     } catch (error) {
-      console.error('Erro ao enviar imagem:', error);
+      this.alerts.enableError("Erro ao enviar imagem");
       return '';
     }
   }
@@ -175,7 +174,6 @@ export class ProjectAddComponent {
 
       this.documentos = [...this.documentos, ...newFiles];
     }
-    console.log(this.documentos);
   }
 
   onDragLeave(event: DragEvent) {
@@ -206,6 +204,7 @@ export class ProjectAddComponent {
       projectUrl: this.urlProjeto,
       imageUrl: this.urlImagem,
       ownerId: Number(this.userId),
+      benefits : this.benefits,
       types: this.categoriasSelecionadas.map(id => ({ id }))
     };
 
@@ -226,7 +225,6 @@ export class ProjectAddComponent {
       this.goBack()
     } catch (error) {
       this.alerts.enableError('Erro ao criar o projeto:');
-      console.log(error)
     }
   }
 }

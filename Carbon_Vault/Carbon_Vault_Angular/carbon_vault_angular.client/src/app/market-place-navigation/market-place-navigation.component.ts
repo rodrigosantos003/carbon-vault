@@ -8,21 +8,21 @@ import { environment } from '../../environments/environment';
 @Component({
   selector: 'app-market-place-navigation',
   standalone: false,
-  
+
   templateUrl: './market-place-navigation.component.html',
   styleUrl: './market-place-navigation.component.css'
 })
 export class MarketPlaceNavigationComponent {
   @ViewChild('loginBtn', { static: true }) loginBtn!: ElementRef<HTMLButtonElement>;
   isUserLoggedIn: boolean = false;
-  
+
   userId: string;
-  userInitial : string;
+  userInitial: string;
   constructor(
     private http: HttpClient,
     private router: Router,
     private authService: AuthService // Inject AuthService
-  ){    
+  ) {
     this.userInitial = ''
     this.userId = this.authService.getUserId();
   }
@@ -32,19 +32,19 @@ export class MarketPlaceNavigationComponent {
     this.http.get(url).subscribe(
       (data: any) => {
         // Se a requisição for bem-sucedida, preenche o formulário com os dados recebidos
-       
+
         this.userInitial = data.name[0]
       },
       error => {
-          // Caso contrário, exibe o erro no console
-          console.error("Erro na requisição:", error);
-        
+        // Caso contrário, exibe o erro no console
+        console.error("Erro na requisição:", error);
+
       }
     );
     this.changeLoginBtnText();
-    
+
   }
-  
+
   changeLoginBtnText(): void {
     this.isUserLoggedIn = this.authService.isAuthenticated();
     if (this.isUserLoggedIn) {
@@ -52,7 +52,6 @@ export class MarketPlaceNavigationComponent {
       this.loginBtn.nativeElement.innerHTML = "Terminar Sessão";
       this.loginBtn.nativeElement.onclick = () => {
         this.authService.logout();
-        this.router.navigate(['/']);
       }
     }
     else {
@@ -62,16 +61,16 @@ export class MarketPlaceNavigationComponent {
       }
     }
   }
-  navigateToDashboard():void{
-    this.router.navigate(['/dashboard']); 
+  navigateToDashboard(): void {
+    this.router.navigate(['/dashboard']);
 
   }
-  navigateToLanding():void{
-    this.router.navigate(['/']); 
+  navigateToLanding(): void {
+    this.router.navigate(['/']);
 
   }
-  navigateToMarketPlace():void{
-    this.router.navigate(['/marketplace']); 
+  navigateToMarketPlace(): void {
+    this.router.navigate(['/marketplace']);
 
   }
 }

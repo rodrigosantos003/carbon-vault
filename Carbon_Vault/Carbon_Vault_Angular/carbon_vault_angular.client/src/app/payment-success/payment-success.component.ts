@@ -21,8 +21,6 @@ export class PaymentSuccessComponent {
     this.cartService.clearCart();
     const checkoutSession = sessionStorage.getItem("checkoutSession");
 
-    console.log("Session ID = " + checkoutSession);
-
     if (checkoutSession) {
       this.getSessionInfo(checkoutSession);
     }

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../auth-service.service';
 import { environment } from '../../environments/environment';
+import { AlertsService } from '../alerts.service';
 
 
 @Component({
@@ -19,7 +20,7 @@ export class UserEmissionsComponent {
 
   userId: string;
 
-  constructor(private fb: FormBuilder, private http: HttpClient, private authService: AuthService) {
+  constructor(private fb: FormBuilder, private http: HttpClient, private authService: AuthService, private alerts: AlertsService) {
 
     this.emissionsForm = this.fb.group({
       electricity: ['', [Validators.required]],
@@ -62,10 +63,10 @@ export class UserEmissionsComponent {
 
           this.http.post(`${environment.apiUrl}/UserEmissions`, emissionData).subscribe(
             () => {
-              console.log('Emissões adicionadas com sucesso');
+              this.alerts.enableSuccess("Emissões adicionadas com sucesso");
             },
             (error) => {
-              console.error('Erro ao adicionar as emissões:', error);
+              this.alerts.enableError("Erro ao adicionar emissões");
             }
           );
         }
@@ -99,18 +100,19 @@ export class UserEmissionsComponent {
       (data: any) => {
         if (data) {
           // Caso a emissão já exista, faz o PUT (atualização)
-          this.http.put(url, emissionData).subscribe(
-            () => {
-              console.log('Emissões atualizadas com sucesso');
+          this.http.put(url, emissionData).subscribe({
+            next: () => {
+              this.alerts.enableSuccess("Emissões atualizadas com sucesso");
             },
-            (error) => {
-              console.error('Erro ao atualizar as emissões:', error);
+            error: (error) => {
+              this.alerts.enableError("Erro ao atualizar emissões");
             }
+          }
           );
         }
       },
       (error) => {
-        console.error('Erro ao verificar se as emissões existem:', error);
+        this.alerts.enableError("Erro ao obter emissões");
       }
     );
   }
@@ -121,7 +123,7 @@ export class UserEmissionsComponent {
     const petrolEquivalent = formData.petrol * 0.00231;
     const dieselEquivalent = formData.diesel * 0.00268;
 
-    const sumTotal = electricityEquivalent + petrolEquivalent + dieselEquivalent; 
+    const sumTotal = electricityEquivalent + petrolEquivalent + dieselEquivalent;
 
     const total = Math.round(sumTotal * 100) / 100;
 

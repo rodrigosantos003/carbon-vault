@@ -42,6 +42,13 @@
                 <textarea [(ngModel)]="descricao" name="descricao"></textarea>
               </div>    
             </div>
+            <div class="form-item">
+              <div class="form-item">
+                <label>Beneficios e Impacto do Projeto<span class="mandatory"> *</span></label><br>
+                <span class="tooltip">Descreva um pouco sobre o impacto e o Beneficios do seu projeto</span>
+                <textarea [(ngModel)]="benefits" name="benefits"></textarea>
+              </div>    
+            </div>
             
             <div class="form-item">
               <label>Data de Início<span class="mandatory"> *</span></label><br>
@@ -100,11 +107,12 @@
           <div class="form-item-image">
             <h2>Imagem do Projeto</h2>
             <div class="form-item-image-wrap">
-              <input type="file" (change)="onImageChange($event)" accept="image/*" id="imageInput"/>
+              <input type="file" (change)="onImageChange($event)" accept="image/*" id="imageInput"/>   
               <div *ngIf="imagePreviewUrl" class="imagePreview">
                 <img [src]="imagePreviewUrl" alt="Preview da Imagem" />
               </div>
             </div>
+            <span class="tooltip"><b>Formatos permitidos:</b>.png,.jpg</span>
           </div>
           <div class="form-item">
             <h2>Documentos</h2>
@@ -123,12 +131,15 @@
               multiple
               style="display:none"
             />
+
   
             <!-- Display uploaded files -->
             <ul *ngIf="documentos.length > 0" class="file-list">
               <li *ngFor="let documento of documentos; let i = index">{{ documento.name }}<button type="button" class="remove" (click)="removeFile(i)">Remover</button></li>
             </ul>
           </div>
+          <span class="tooltip"><b>Formatos permitidos:</b>.docx,.pdf,.csv</span>
+
           </div>
 
         </div>
