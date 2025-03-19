@@ -22,33 +22,16 @@ export class UsersManagerComponent {
   private growthPercentageMonthlyURL = `${environment.apiUrl}/Accounts/UserStatistics`;
   growthData: any = {};
 
+  userName: string = '';
+  userEmail: string = '';
+  userNIF: string = '';
+  userRole: number = 0;
+
   constructor(private http: HttpClient, private alerts: AlertsService, private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
     this.getAccounts();
     this.getPastMonthGrowthPercentage();
-  }
-
-  openPopup(account_id: number) {
-    this.selectedAccountId = account_id;
-    const overlay = document.getElementById('modalOverlay');
-    const delPopup = document.getElementById('delete');
-
-    if (overlay && delPopup) {
-      overlay.style.display = 'flex';
-      delPopup.style.display = 'block';
-    }
-  }
-
-  closePopup() {
-    this.selectedAccountId = null;
-    const overlay = document.getElementById('modalOverlay');
-    const delPopup = document.getElementById('delete');
-
-    if (overlay && delPopup) {
-      overlay.style.display = 'none';
-      delPopup.style.display = 'none';
-    }
   }
 
   viewAccount(account: any) {
@@ -89,6 +72,70 @@ export class UsersManagerComponent {
     });
   }
 
+  openAddAccount() {
+    const overlay = document.getElementById('addAccountPopup');
+    const addPopup = document.getElementById('user-form');
+
+    if (overlay && addPopup) {
+      overlay.style.display = 'flex';
+      addPopup.style.display = 'block';
+    }
+  }
+
+  closeAddAccount() {
+    this.selectedAccountId = null;
+    const overlay = document.getElementById('addAccountPopup');
+    const addPopup = document.getElementById('user-form');
+
+    if (overlay && addPopup) {
+      overlay.style.display = 'none';
+      addPopup.style.display = 'none';
+    }
+  }
+
+  addAccount() {
+    const addURL = `${environment.apiUrl}/Accounts`;
+
+    const newAccount = {
+      name: this.userName,
+      email: this.userEmail,
+      password: 'Admin@123',
+      nif: this.userNIF,
+      role: Number(this.userRole)
+    };
+    this.http.post(addURL, newAccount).subscribe({
+      next: () => {
+        this.closeAddAccount();
+        this.alerts.enableSuccess("Utilizador adicionado com sucesso");
+      },
+      error: () => {
+        this.closeDeleteAccount();
+        this.alerts.enableError("Erro ao adicionar utilizador");
+      }
+    })
+  }
+
+  openDeleteAccount(account_id: number) {
+    this.selectedAccountId = account_id;
+    const overlay = document.getElementById('deleteAccountPopup');
+    const delPopup = document.getElementById('delete');
+
+    if (overlay && delPopup) {
+      overlay.style.display = 'flex';
+      delPopup.style.display = 'block';
+    }
+  }
+
+  closeDeleteAccount() {
+    this.selectedAccountId = null;
+    const overlay = document.getElementById('deleteAccountPopup');
+    const delPopup = document.getElementById('delete');
+
+    if (overlay && delPopup) {
+      overlay.style.display = 'none';
+      delPopup.style.display = 'none';
+    }
+  }
 
   deleteAccount() {
     if (this.selectedAccountId !== null) {
@@ -108,7 +155,7 @@ export class UsersManagerComponent {
           headers: { 'Authorization': `Bearer ${jwtToken}` }
         }).subscribe(() => {
           this.accounts = this.accounts.filter(acc => acc.id !== this.selectedAccountId);
-          this.closePopup();
+          this.closeDeleteAccount();
         }, error => {
           console.error("Erro ao eliminar conta:", error);
         });

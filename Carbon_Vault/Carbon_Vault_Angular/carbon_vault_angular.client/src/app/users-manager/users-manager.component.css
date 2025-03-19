@@ -29,18 +29,18 @@ body {
 }
 
 .card p {
-    margin: 0;
+  margin: 0;
 }
 
 .card div {
-    display: flex;
-    align-items: center;
-    gap: 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
 .card img {
-    width: 40px;
-    height: 40px;
+  width: 40px;
+  height: 40px;
 }
 
 .blue {
@@ -62,14 +62,15 @@ table {
   border-collapse: collapse;
 }
 
-th, td {
+th,
+td {
   border: 1px solid #ddd;
   padding: 10px;
   text-align: left;
 }
 
 thead {
-    background: var(--main-faded);
+  background: var(--main-faded);
 }
 
 .view-btn {
@@ -110,6 +111,105 @@ thead {
   z-index: 999;
 }
 
+.user-form {
+  width: 600px;
+  height: fit-content;
+  background: rgb(255, 255, 255);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 30px;
+  position: relative;
+  box-shadow: 20px 20px 30px rgba(0, 0, 0, 0.15);
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -60%);
+  z-index: 1000;
+  display: block;
+}
+
+.user-form-content {
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.user-form-content img {
+  width: 60px;
+  height: 60px;
+}
+
+.user-form-heading {
+  font-size: 20px;
+  font-weight: 700;
+  color: rgb(27, 27, 27);
+}
+
+.user-form-field {
+  margin: 5px;
+  padding: 0;
+  font-weight: 300;
+  width: 50%;
+  color: rgb(102, 102, 102);
+}
+
+.user-form-button-wrapper {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.user-form-button {
+  width: 50%;
+  height: 35px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.form-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.form-group label {
+  flex: 1;
+  /* Ocupa o espaço necessário */
+  text-align: left;
+  font-weight: 500;
+}
+
+.form-group input {
+  flex: 2;
+  /* Ocupa mais espaço */
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.form-group select {
+  flex: 2;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background: white;
+  cursor: pointer;
+}
+
 .delete {
   width: 600px;
   height: fit-content;
@@ -132,7 +232,7 @@ thead {
   display: none;
 }
 
-.delete-content {
+.popup-content {
   width: 100%;
   height: fit-content;
   display: flex;
@@ -141,9 +241,9 @@ thead {
   gap: 5px;
 }
 
-.delete-content img {
-    width: 60px;
-    height: 60px;
+.popup-content img {
+  width: 60px;
+  height: 60px;
 }
 
 .delete-heading {
@@ -179,17 +279,26 @@ thead {
   color: white;
 }
 
-  .primary:hover {
-    background-color: rgb(255, 73, 66);
-  }
+.primary:hover {
+  background-color: rgb(255, 73, 66);
+}
 
 .secondary {
   background-color: #ddd;
 }
 
-  .secondary:hover {
-    background-color: rgb(197, 197, 197);
-  }
+.secondary:hover {
+  background-color: rgb(197, 197, 197);
+}
+
+.save {
+  background-color: limegreen;
+  color: white;
+}
+
+.save:hover {
+  background-color: green
+}
 
 .exit-button {
   display: flex;
@@ -203,10 +312,10 @@ thead {
   cursor: pointer;
 }
 
-  .exit-button:hover svg {
-    fill: black;
-  }
+.exit-button:hover svg {
+  fill: black;
+}
 
-  .exit-button svg {
-    fill: rgb(175, 175, 175);
-  }
+.exit-button svg {
+  fill: rgb(175, 175, 175);
+}
