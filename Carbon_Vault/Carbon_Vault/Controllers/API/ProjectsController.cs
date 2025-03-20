@@ -669,12 +669,27 @@ namespace Carbon_Vault.Controllers.API
                 return NotFound();
             }
 
+            if(newInfo.PricePerCredit <= 0)
+            {
+                return BadRequest("Price per credit must be greater than 0.");
+            }
+
+            if(newInfo.CreditsForSale < 0)
+            {
+                return BadRequest("Credits for sale must be greater than or equal to 0.");
+            }
+
             project.PricePerCredit = newInfo.PricePerCredit;
             project.CreditsForSale = newInfo.CreditsForSale;
 
             var credits = _context.CarbonCredits
                 .Where(c => c.ProjectId == projectId && c.IsSold == false)
                 .ToList();
+
+            if (credits.Count < newInfo.CreditsForSale)
+            {
+                return BadRequest("Not enough credits to list for sale.");
+            }
 
             foreach (var credit in credits)
             {
