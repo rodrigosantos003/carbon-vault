@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Carbon_Vault.Models
 {
@@ -32,6 +33,7 @@ namespace Carbon_Vault.Models
 
         [Required]
         [DataType(DataType.Password)]
+        [JsonIgnore]
         public string Password { get; set; }
 
         [Required]
@@ -45,5 +47,9 @@ namespace Carbon_Vault.Models
 
         // Relationship with Projects
         public ICollection<Project> Projects { get; set; } = new List<Project>();
+
+        // Relationship with Tickets
+        [JsonIgnore]
+        public ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
     }
 }

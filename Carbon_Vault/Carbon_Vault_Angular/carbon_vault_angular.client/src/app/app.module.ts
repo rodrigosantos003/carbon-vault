@@ -38,6 +38,9 @@ import { TransactionDetailsComponent } from './transaction-details/transaction-d
 import { ProjectManagerDetailsAdminComponent } from './project-manager-details-admin/project-manager-details-admin.component';
 import { AdminTransactionsComponent } from './admin-transactions/admin-transactions.component';
 import { UserSettingsComponent } from './user-settings/user-settings.component';
+import { SupportChatComponent } from './support-chat/support-chat.component';
+import { SupportManagerAdminComponent } from './support-manager-admin/support-manager-admin.component';
+import { ChatCardComponent } from './chat-card/chat-card.component';
 
 @NgModule({
   declarations: [
@@ -72,6 +75,9 @@ import { UserSettingsComponent } from './user-settings/user-settings.component';
     AdminTransactionsComponent,
     TransactionDetailsComponent,
     UserSettingsComponent,
+    SupportChatComponent,
+    SupportManagerAdminComponent,
+    ChatCardComponent,
   ],
   imports: [
     BrowserModule,

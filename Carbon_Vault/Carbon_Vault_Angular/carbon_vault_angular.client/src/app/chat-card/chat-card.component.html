@@ -1,0 +1,13 @@
+
+<div class="card" [ngClass]="{ ' reverse': isAuthor }">
+    <div class="icon">{{name[0]}}</div>
+    <div class="message-wrapper">
+        <div class="message-header">
+            <span class="username"><b>{{name}}</b>- Adicionado a </span>
+            <span class="addedAt">{{addedAt | date: 'short' }}</span>
+        </div>
+        <div class="message-content"><p>{{content}}</p></div>
+    </div>
+</div>
+<br>
+  

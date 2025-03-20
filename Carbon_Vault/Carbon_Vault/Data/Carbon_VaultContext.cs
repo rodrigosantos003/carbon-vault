@@ -20,6 +20,8 @@ namespace Carbon_Vault.Data
         public DbSet<UserEmissions> UserEmissions { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<ProjectFiles> ProjectFiles { get; set; }
+        public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<TicketMessage> TickeMessages { get; set; }
 
         public Carbon_VaultContext(DbContextOptions<Carbon_VaultContext> options)
             : base(options)
@@ -48,7 +50,20 @@ namespace Carbon_Vault.Data
                .HasOne(cc => cc.Owner)
                .WithMany(p => p.Projects)
                .HasForeignKey(cc => cc.OwnerId);
-               
+
+            // Configurar o relacionamento entre Tickets e as mensagens
+            modelBuilder.Entity<TicketMessage>()
+                .HasOne(tm => tm.Ticket)
+                .WithMany(t => t.Messages)
+                .HasForeignKey(tm => tm.TicketId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            // Configurar o relacionamento entre Tickets e Accounts
+            modelBuilder.Entity<Ticket>()
+                .HasOne(t => t.Author)
+                .WithMany(a => a.Tickets)
+                .HasForeignKey(t => t.AuthorId);
+
             populateAccounts(modelBuilder);
 
             populateProjectTypes(modelBuilder);
@@ -222,5 +237,7 @@ namespace Carbon_Vault.Data
                 }
             );
         }
+        public DbSet<Carbon_Vault.Models.Ticket> Ticket { get; set; } = default!;
+        public DbSet<Carbon_Vault.Models.TicketMessage> TicketMessage { get; set; } = default!;
     }
 }

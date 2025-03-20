@@ -1,0 +1,50 @@
+<body>
+    <app-user-menu></app-user-menu>
+    <div class="main-content">
+        <div class="header">
+          <!-- <a href="#" class="back-button">&larr; Voltar</a> -->
+          <button class="close-button">Fechar pedido</button>
+        </div>
+      
+        <h1>{{ticket?.title}}</h1>
+        <hr>
+        <div class="info-section">
+          <div class="ticket-info">
+            <h2>Informação do Ticket</h2>
+            <div class="ticket-info-content">
+              <p><strong>Estado do pedido :</strong> {{getTicketState(ticket?.state)}}</p>
+              <p><strong>Data do Pedido :</strong> {{ ticket?.createdAt  | date: 'short'}}</p>
+            </div>
+           
+          </div>
+      
+          <div class="user-info">
+            <h2>Informação do Utilizador</h2>
+            <div class="ticket-info-content">
+              <p><strong>Nome :</strong> {{ ticket?.messages?.[0]?.autor?.name }}</p>
+              <p><strong>Email :</strong> {{ ticket?.messages?.[0]?.autor?.email }}</p>
+            </div>
+          
+          </div>
+        </div>
+        <br>
+        <br>
+         <div class="messages">
+         
+          <app-chat-card *ngFor="let message of ticket?.messages"
+          [name]="message.autor.name"
+          [content]="message.content"
+          [addedAt]="message.sendDate"
+          [isAuthor]="isTheAuthor(ticket , message)"
+          ></app-chat-card>
+       
+          
+          
+        </div>
+      
+       <div class="reply-section">
+          <textarea placeholder="Responder"></textarea>
+          <button>Enviar</button>
+        </div>  
+    </div>
+</body>

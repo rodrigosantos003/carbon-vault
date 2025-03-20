@@ -28,6 +28,8 @@ import { TransactionDetailsComponent } from './transaction-details/transaction-d
 import { ProjectManagerDetailsAdminComponent } from './project-manager-details-admin/project-manager-details-admin.component';
 import { AdminTransactionsComponent } from './admin-transactions/admin-transactions.component'
 import { UserSettingsComponent } from './user-settings/user-settings.component';
+import { SupportManagerAdminComponent } from './support-manager-admin/support-manager-admin.component';
+import { SupportChatComponent } from './support-chat/support-chat.component';
 /*import { EditProjectComponent } from './edit-project/edit-project.component';*/
 
 const routes: Routes = [
@@ -57,7 +59,10 @@ const routes: Routes = [
   { path: 'payment-success', component: PaymentSuccessComponent },
   { path: 'transaction-details/:id', component: TransactionDetailsComponent },
   { path: 'admin-transactions', component: AdminTransactionsComponent },
-  { path: 'settings', component: UserSettingsComponent }
+  { path: 'settings', component: UserSettingsComponent },
+  { path: 'support-manager', component: SupportManagerAdminComponent,canActivate: [AuthGuard]  },
+  { path: 'support-manager/:id', component: SupportChatComponent,canActivate: [AuthGuard]  }
+
 ];
 
 @NgModule({

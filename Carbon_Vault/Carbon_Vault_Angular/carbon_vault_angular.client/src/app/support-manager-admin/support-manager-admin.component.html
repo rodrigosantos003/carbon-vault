@@ -1,0 +1,39 @@
+<body>
+    <app-user-menu></app-user-menu>
+  
+
+  
+    <div class="main-content">
+      <h1>Suporte</h1>
+     
+      <div class="ticket-table">
+        <div class="table-header">
+          <h2>Tickets</h2>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Categoria</th>
+              <th>Estado</th>
+              <th>Data de criação</th>
+              <th>Responder</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let ticket of tickets">
+              <td>{{ ticket.id }}</td>
+              <td>{{ ticket.category}}</td>
+              <td>{{getTicketState(ticket.state)}}</td>
+              <td>{{ticket.createdAt}}</td>
+              <td><button class="view-btn" >Responder</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  
+    <app-alerts></app-alerts>
+  
+  </body>
+  
