@@ -52,11 +52,11 @@ export class ProjectManagerDetailsAdminComponent {
   constructor(private http: HttpClient, private route: ActivatedRoute, private authService: AuthService, private alerts: AlertsService, private location: Location) { }
 
   ngOnInit() {
+    this.alerts.enableLoading("A carregar informação do projeto...");
     const projectId = this.route.snapshot.params['id'];
 
-    this.alerts.enableLoading("A carregar informação do projeto...");
-
     Promise.all([this.fetchProjectDetails(projectId), this.loadProjectFiles(projectId)]);
+    this.alerts.disableLoading();
   }
 
   getProjectStatus(state: number): string {

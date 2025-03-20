@@ -58,15 +58,16 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let projet of projects">
-              <td>{{ projet.id }}</td>
-              <td>{{ projet.name }}</td>
-              <td>{{projet.pricePerCredit}}</td>
-              <td>{{projet.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}</td>
-              <td>{{getProjectStatus(projet.status)}}</td>
-               
-              <td><button class="view-btn" >Alterar</button></td>
-              <td><button class="delete-btn" >Eliminar</button></td>
+            <tr *ngFor="let project of projects"
+                (click)="viewProject(project.id)">
+              <td>{{ project.id }}</td>
+              <td>{{ project.name }}</td>
+              <td>{{project.pricePerCredit}}</td>
+              <td>{{project.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}</td>
+              <td>{{getProjectStatus(project.status)}}</td>
+
+              <td><button class="view-btn" (click)="$event.stopPropagation()">Alterar</button></td>
+              <td><button class="delete-btn" (click)="$event.stopPropagation()">Eliminar</button></td>
             </tr>
           </tbody>
         </table>
@@ -76,4 +77,3 @@
     <app-alerts></app-alerts>
   
   </body>
-  
