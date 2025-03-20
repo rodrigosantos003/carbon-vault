@@ -23,13 +23,9 @@ namespace Carbon_Vault.Controllers.API
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Transaction>>> GetTransactions([FromHeader] string Authorization, int accountID)
+        [ServiceFilter(typeof(TokenValidationFilter))]
+        public async Task<ActionResult<IEnumerable<Transaction>>> GetTransactions()
         {
-            if (!AuthHelper.IsTokenValid(Authorization, accountID))
-            {
-                return Unauthorized();
-            }
-
             return await _context.Transactions.ToListAsync();
         }
 
@@ -112,13 +108,9 @@ namespace Carbon_Vault.Controllers.API
         }
 
         [HttpGet("type/{type}/user/{userID}")]
-        public async Task<ActionResult<IEnumerable<Transaction>>> GetTransactionsByType(int type, int userID, [FromHeader] string Authorization)
+        [ServiceFilter(typeof(TokenValidationFilter))]
+        public async Task<ActionResult<IEnumerable<Transaction>>> GetTransactionsByType(int type, int userID)
         {
-            if (!AuthHelper.IsTokenValid(Authorization, userID))
-            {
-                return Unauthorized("JWT inválido");
-            }
-
             var transactions = await _context.Transactions.Select(t => new
             {
                 t.Id,
