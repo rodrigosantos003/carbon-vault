@@ -3,7 +3,7 @@ body {
     color: black;
     margin: 0px !important;
     display: flex;
-    height: 100vh;
+    height: 100%;
   }
   
   
@@ -285,3 +285,7 @@ body {
     .reply-section button:hover {
         background-color: #ffffffa4;
     }
+
+  .last-message {
+    margin-bottom:700px;
+  }

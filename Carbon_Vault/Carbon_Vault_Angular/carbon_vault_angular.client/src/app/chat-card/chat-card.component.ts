@@ -12,4 +12,5 @@ export class ChatCardComponent {
     @Input() name!: string;
     @Input() content!: string;
     @Input() isAuthor!: boolean;
+    @Input() isLast!: boolean;
 }

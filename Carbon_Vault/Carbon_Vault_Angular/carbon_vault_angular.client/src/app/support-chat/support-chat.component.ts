@@ -5,6 +5,7 @@ import { AuthService } from '../auth-service.service';  // Importa o AuthService
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { ActivatedRoute } from '@angular/router';
+import { AfterViewChecked, ElementRef, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-support-chat',
@@ -16,6 +17,10 @@ import { ActivatedRoute } from '@angular/router';
 export class SupportChatComponent {
   ticket: Ticket | null = null;
   private ticketsURL = `${environment.apiUrl}/Tickets`;
+  private ticketsMessagesURL = `${environment.apiUrl}/TicketMessages`;
+  messageContent: string  = ""
+
+  
   
   constructor(private http: HttpClient, private alerts: AlertsService, private authService: AuthService, private router: Router, private route: ActivatedRoute) { }
   ngOnInit(): void {
@@ -43,6 +48,45 @@ export class SupportChatComponent {
     if(ticket  == null|| message == null) return false
     return ticket.authorId === message.autor.id;
   }
+
+  sendMessage() {
+    if (!this.messageContent.trim()) {
+      alert('A mensagem não pode estar vazia!');
+      return;
+    }
+    var token = localStorage.getItem('token');
+    var userId = this.authService.getUserId();
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'userID': userId
+    });
+
+    const data = {
+     TicketId: this.ticket?.id,
+      Content: this.messageContent,
+      AutorId: Number(userId)
+    };
+
+
+    this.http.post(this.ticketsMessagesURL,data,{headers}).subscribe(
+      (response) => {
+        console.log('Mensagem enviada com sucesso:', response);
+        this.messageContent = '';
+        this.refreshMessages();
+      },
+      (error) => {
+        console.error('Erro ao enviar a mensagem:', error);
+        alert('Ocorreu um erro ao enviar a mensagem. Por favor, tente novamente.');
+      }
+    );
+  }
+
+  refreshMessages() {
+     this.getTicket(this.route.snapshot.params['id'])
+  }
+
+
 }
 export interface TicketMessage {
   id: number;

@@ -40,3 +40,6 @@
 .card.reverse {
     flex-direction: row-reverse;
 }
+.card.last , .card.reverse.last{
+   margin-bottom: 100px;
+}

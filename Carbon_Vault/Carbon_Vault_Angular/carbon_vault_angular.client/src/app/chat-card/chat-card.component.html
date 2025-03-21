@@ -1,5 +1,5 @@
 
-<div class="card" [ngClass]="{ ' reverse': isAuthor }">
+<div class="card" [ngClass]="{ 'reverse last': isAuthor && isLast, 'reverse': isAuthor, 'last': isLast }">
     <div class="icon">{{name[0]}}</div>
     <div class="message-wrapper">
         <div class="message-header">

@@ -29,22 +29,22 @@
         </div>
         <br>
         <br>
-         <div class="messages">
+         <div class="messages" #messageContainer  >
          
-          <app-chat-card *ngFor="let message of ticket?.messages"
+          <app-chat-card *ngFor="let message of ticket?.messages; let last = last"
           [name]="message.autor.name"
           [content]="message.content"
           [addedAt]="message.sendDate"
           [isAuthor]="isTheAuthor(ticket , message)"
+          [isLast]="last">
           ></app-chat-card>
-       
-          
           
         </div>
-      
+        <br>
+        <br>
        <div class="reply-section">
-          <textarea placeholder="Responder"></textarea>
-          <button>Enviar</button>
+          <textarea placeholder="Responder" [(ngModel)]="messageContent" ></textarea>
+          <button (click)="sendMessage()">Enviar</button>
         </div>  
     </div>
 </body>
