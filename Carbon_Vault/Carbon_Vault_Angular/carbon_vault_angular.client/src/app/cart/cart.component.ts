@@ -19,6 +19,17 @@ export class CartComponent implements OnInit {
 
   ngOnInit() {
     this.updateCart();
+
+    this.makePayout();
+  }
+
+  makePayout() {
+    //var sellerId = this.sessionData.sellerId;
+    let myUrl: string = `${environment.apiUrl}/Accounts/stripeAcc/2`;
+    this.http.post(`${environment.apiUrl}/Accounts/transfer`, {})
+      .subscribe(res => {
+        console.log("Stripe Account ID = " + res);
+      });
   }
 
   addItem(item: any) {

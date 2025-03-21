@@ -12,6 +12,10 @@ using System.Security.Cryptography;
 using Carbon_Vault.Services;
 using Microsoft.IdentityModel.Tokens;
 using System.Globalization;
+using Stripe;
+using Microsoft.Identity.Client;
+using Stripe.FinancialConnections;
+using System.Diagnostics.Tracing;
 
 namespace Carbon_Vault.Controllers.API
 {
@@ -39,12 +43,12 @@ namespace Carbon_Vault.Controllers.API
 
         private bool AccountExists(int id)
         {
-            return _context.Account.Any(a =>a.Id == id);
+            return _context.Account.Any(a => a.Id == id);
         }
 
         // GET: api/Accounts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Account>>> GetAccounts([FromHeader] string Authorization, int userID)
+        public async Task<ActionResult<IEnumerable<Models.Account>>> GetAccounts([FromHeader] string Authorization, int userID)
         {
             if (!AuthHelper.IsTokenValid(Authorization, userID))
             {
@@ -56,7 +60,7 @@ namespace Carbon_Vault.Controllers.API
 
         // GET: api/Accounts/users
         [HttpGet("users")]
-        public async Task<ActionResult<IEnumerable<Account>>> GetUserAccounts()
+        public async Task<ActionResult<IEnumerable<Models.Account>>> GetUserAccounts()
         {
             var accounts = await _context.Account
                                  .Select(a => new
@@ -79,10 +83,10 @@ namespace Carbon_Vault.Controllers.API
 
         // GET: api/Accounts/admins
         [HttpGet("admins")]
-        public async Task<ActionResult<IEnumerable<Account>>> GetAdminAccounts()
+        public async Task<ActionResult<IEnumerable<Models.Account>>> GetAdminAccounts()
         {
             var accounts = await _context.Account
-                                         .Where(a => a.Role == AccountType.Admin)
+                                         .Where(a => a.Role == Models.AccountType.Admin)
                                          .ToListAsync();
 
             if (!accounts.Any())
@@ -96,13 +100,13 @@ namespace Carbon_Vault.Controllers.API
 
         // GET: api/Accounts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Account>> GetAccount(int id)
+        public async Task<ActionResult<Models.Account>> GetAccount(int id)
         {
             var account = await _context.Account.FindAsync(id);
 
             if (account == null)
             {
-                return NotFound(new {message = "Conta não encontrada."});
+                return NotFound(new { message = "Conta não encontrada." });
             }
 
             return account;
@@ -111,17 +115,19 @@ namespace Carbon_Vault.Controllers.API
         // PUT: api/Accounts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAccount(int id, Account account, [FromHeader] string Authorization)
+        public async Task<IActionResult> PutAccount(int id, Models.Account account, [FromHeader] string Authorization)
         {
             if (!AuthHelper.IsTokenValid(Authorization, id))
             {
-                return Unauthorized(new {message = "JWT inválido."});
+                return Unauthorized(new { message = "JWT inválido." });
             }
 
             if (id != account.Id)
             {
-                return BadRequest(new {message = "Pedido inválido."});
+                return BadRequest(new { message = "Pedido inválido." });
             }
+
+            account.State = AccountState.Active;
 
             _context.Entry(account).State = EntityState.Modified;
 
@@ -133,7 +139,7 @@ namespace Carbon_Vault.Controllers.API
             {
                 if (!AccountExists(id))
                 {
-                    return NotFound(new {message = "Conta não encontrada."});
+                    return NotFound(new { message = "Conta não encontrada." });
                 }
                 else
                 {
@@ -141,16 +147,16 @@ namespace Carbon_Vault.Controllers.API
                 }
             }
 
-            return Ok(new {message = "Conta atualizada com sucesso."});
+            return Ok(new { message = "Conta atualizada com sucesso." });
         }
 
         // POST: api/Accounts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Account>> PostAccount(Account account)
+        public async Task<ActionResult<Models.Account>> PostAccount(Models.Account account)
         {
-            if(AccountExists(account.Email))
-                return BadRequest(new {message = "Já existe uma conta com o e-mail fornecido."});
+            if (AccountExists(account.Email))
+                return BadRequest(new { message = "Já existe uma conta com o e-mail fornecido." });
 
             account.State = AccountState.Pending;
             account.Password = AuthHelper.HashPassword(account.Password);
@@ -165,8 +171,8 @@ namespace Carbon_Vault.Controllers.API
 
 
             // Send confirmation link via email
-            await _emailService.SendEmail(account.Email, 
-                "Carbon Vault - Confirmar conta", 
+            await _emailService.SendEmail(account.Email,
+                "Carbon Vault - Confirmar conta",
                 $"Por favor confirme a sua conta clicando neste link: {confirmationLink}",
                 null);
 
@@ -178,7 +184,7 @@ namespace Carbon_Vault.Controllers.API
         {
             if (!AuthHelper.IsTokenValid(Authorization, userID))
             {
-                return Unauthorized(new {message = "JWT inválido."});
+                return Unauthorized(new { message = "JWT inválido." });
             }
 
             var account = await _context.Account.FindAsync(id);
@@ -190,7 +196,7 @@ namespace Carbon_Vault.Controllers.API
             _context.Account.Remove(account);
             await _context.SaveChangesAsync();
 
-            return Ok(new {message = "Conta eliminada com sucesso."});
+            return Ok(new { message = "Conta eliminada com sucesso." });
         }
 
 
@@ -229,9 +235,9 @@ namespace Carbon_Vault.Controllers.API
             });
         }
 
-        // GET: api/Account/ForgotPassword?email=:
-        [HttpGet("ForgotPassword")]
-        public async Task<IActionResult> ForgotPassword([FromQuery] string email)
+        // GET: api/Account/NewPassword?email=:
+        [HttpGet("NewPassword")]
+        public async Task<IActionResult> NewPassword([FromQuery] string email)
         {
             var account = await _context.Account.FirstOrDefaultAsync(a => a.Email == email);
 
@@ -247,12 +253,13 @@ namespace Carbon_Vault.Controllers.API
             var confirmationLink = $"{_frontendBaseUrl}recover-password?token={token}";
 
             // Send confirmation link via email
-            await _emailService.SendEmail(account.Email, 
-                "Carbon Vault - Recuperar Palavra-Passe", 
+            await _emailService.SendEmail(account.Email,
+                "Carbon Vault - Nova Palavra-Passe",
                 $"Por favor recupere a sua palavra-passe clicando neste link: {confirmationLink}",
                 null);
 
-            return Ok(new {
+            return Ok(new
+            {
                 message = "Link de recuperação enviado com sucesso"
             });
         }
@@ -399,9 +406,9 @@ namespace Carbon_Vault.Controllers.API
             return Ok(new { message = "Account confirmed successfully." });
         }
 
-        // POST: api/Accounts/ResetPassword
-        [HttpPost("ResetPassword")]
-        public async Task<IActionResult> ResetAccountPassword([FromQuery] string token, [FromBody] ResetPasswordModel model)
+        // POST: api/Accounts/SetPassword
+        [HttpPost("SetPassword")]
+        public async Task<IActionResult> SetPassword([FromQuery] string token, [FromBody] ResetPasswordModel model)
         {
             if (string.IsNullOrEmpty(token))
             {
@@ -442,15 +449,15 @@ namespace Carbon_Vault.Controllers.API
                 return BadRequest(new { message = "NIF is required." });
             }
 
-           
-            var apiKey = Environment.GetEnvironmentVariable("NIF_KEY"); 
+
+            var apiKey = Environment.GetEnvironmentVariable("NIF_KEY");
             var apiUrl = $"https://www.nif.pt/?json=1&q={nif}&key={apiKey}";
 
             using (var httpClient = new HttpClient())
             {
                 try
                 {
-                 
+
                     var response = await httpClient.GetAsync(apiUrl);
 
                     if (!response.IsSuccessStatusCode)
@@ -458,13 +465,13 @@ namespace Carbon_Vault.Controllers.API
                         return StatusCode((int)response.StatusCode, new { message = "Error communicating with the NIF API." });
                     }
 
-                   
+
                     var responseContent = await response.Content.ReadAsStringAsync();
-                    return Ok(responseContent); 
+                    return Ok(responseContent);
                 }
                 catch (Exception ex)
                 {
-                    
+
                     return StatusCode(500, new { message = "An error occurred while validating the NIF.", error = ex.Message });
                 }
             }
@@ -478,15 +485,15 @@ namespace Carbon_Vault.Controllers.API
                 return BadRequest(new { message = "Invalid date range: startDate must be earlier than endDate." });
             }
 
-           
+
             int totalUsers = await _context.Account.CountAsync();
 
-           
+
             int usersInPeriod = await _context.Account
                 .Where(a => a.CreatedAt >= startDate && a.CreatedAt <= endDate)
                 .CountAsync();
 
-    
+
             double growthPercentage = usersInPeriod > 0
                 ? ((double)(totalUsers - usersInPeriod) / usersInPeriod) * 100
                 : 100;
@@ -515,7 +522,7 @@ namespace Carbon_Vault.Controllers.API
             int afternoonUsers = usersLoggedInPeriod.Count(a => a.LastLogin.TimeOfDay >= TimeSpan.FromHours(12) && a.LastLogin.TimeOfDay < TimeSpan.FromHours(18));
             int nightUsers = usersLoggedInPeriod.Count(a => a.LastLogin.TimeOfDay >= TimeSpan.FromHours(18) || a.LastLogin.TimeOfDay < TimeSpan.FromHours(5));
 
-          
+
 
             return Ok(new
             {
@@ -525,9 +532,262 @@ namespace Carbon_Vault.Controllers.API
             });
         }
 
-        public async Task<ActionResult<IEnumerable<Account>>> GetAccountsTest()
+        public async Task<ActionResult<IEnumerable<Models.Account>>> GetAccountsTest()
         {
             return await _context.Account.ToListAsync();
+        }
+
+
+
+        /*** STRIPE CONNECT ACCOUNT ***/
+        [HttpPatch("stripe/{accountId}")]
+        public async Task<IActionResult> UpdateStripeAccountId(int accountId)
+        {
+            var account = await _context.Account.FindAsync(accountId);
+
+            if (account == null)
+            {
+                return NotFound();
+            }
+
+
+
+            return NoContent(); // 204 No Content on success
+        }
+
+        private async Task CreateStripeAccount(Models.Account acc)
+        {
+            var options = new AccountCreateOptions
+            {
+                Country = "PT",
+                Email = acc.Email,
+                Controller = new AccountControllerOptions
+                {
+                    Fees = new AccountControllerFeesOptions { Payer = "application" },
+                    Losses = new AccountControllerLossesOptions { Payments = "application" },
+                    StripeDashboard = new AccountControllerStripeDashboardOptions
+                    {
+                        Type = "express",
+                    },
+                },
+                Capabilities = new AccountCapabilitiesOptions
+                {
+                    CardPayments = new AccountCapabilitiesCardPaymentsOptions { Requested = true },
+                    Transfers = new AccountCapabilitiesTransfersOptions { Requested = true }
+                },
+                ExternalAccount = new AccountBankAccountOptions
+                {
+                    Country = "PT",
+                    Currency = "eur",
+                    AccountNumber = "PT50000201231234567890154",
+                }
+            };
+
+            var accountService = new Stripe.AccountService();
+            Stripe.Account connectedAccount = accountService.Create(options);
+
+            acc.StripeAccountId = connectedAccount.Id;
+
+            await _context.SaveChangesAsync();
+        }
+
+        [HttpPost("transfer")]
+        public Task<IActionResult> MakeTransfer()
+        {
+            // The connected account's Stripe account ID (replace with the actual account ID)
+            string connectedAccountId = "acct_1R57s5Q8h21W01mg";
+
+            // Create the transfer
+            var transferOptions = new TransferCreateOptions
+            {
+                Amount = 1000, // Amount in cents (e.g., $10.00)
+                Currency = "eur", // Currency of the transfer
+                Destination = connectedAccountId, // The connected account ID
+            };
+
+            var transferService = new TransferService();
+            try
+            {
+                Console.WriteLine("Entrou!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                // Create the transfer to the connected account
+                Transfer transfer = transferService.Create(transferOptions);
+                Console.WriteLine($"Transfer created successfully! Transfer ID: {transfer.Id}");
+            }
+            catch (StripeException e)
+            {
+                // Handle Stripe errors
+                Console.WriteLine($"Stripe error: {e.Message}");
+            }
+
+            return Task.FromResult<IActionResult>(Ok());
+        }
+
+        [HttpGet("stripeAccV1/{id}")]
+        public async Task<IActionResult> GetUserStripeAccount(int id)
+        {
+            var account = await _context.Account.FindAsync(id);
+
+            if (account == null)
+            {
+                return NotFound();
+            }
+
+            if (account.StripeAccountId == "Undefined")
+            {
+                await CreateStripeAccount(account);
+            }
+            //else
+            //{
+            //    var accountServiceAux = new Stripe.AccountService();
+            //    var stripeAccountAux = accountServiceAux.Get(account.StripeAccountId);
+            //    accountServiceAux.Delete(stripeAccountAux.Id);
+
+            //    await CreateStripeAccount(account);
+            //}
+
+            var accountUpdateOptions = new AccountUpdateOptions
+            {
+                BusinessType = "individual", // Change to "company" if it's a business
+
+                Individual = new AccountIndividualOptions
+                {
+                    FirstName = "Jane",
+                    LastName = "Doe",
+                    Email = "jane.doe@example.com",
+                    Address = new AddressOptions
+                    {
+                        Line1 = "123 Residential St",
+                        City = "Home City",
+                        Country = "PT",
+                        PostalCode = "2839-001"
+                    },
+                    Dob = new DobOptions
+                    {
+                        Day = 1,
+                        Month = 1,
+                        Year = 1980
+                    }
+                },
+
+                BusinessProfile = new AccountBusinessProfileOptions
+                {
+                    Mcc = "5734",
+                    Url = "https://www.yourbusiness.com"
+                },
+
+                TosAcceptance = new AccountTosAcceptanceOptions
+                {
+                    Date = DateTime.UtcNow,
+                    Ip = "192.168.1.1"
+                }
+            };
+
+            var accountService = new Stripe.AccountService();
+            var stripeAccount = accountService.Get(account.StripeAccountId);
+
+            var updatedAccount = accountService.Update(stripeAccount.Id, accountUpdateOptions);
+
+            //accountService.Delete(stripeAccount.Id);
+            //MakePayout(stripeAccount.Id);
+
+            return Ok();
+        }
+
+        [HttpGet("stripeAcc/{id}")]
+        public async Task<IActionResult> UserStripeAccount(int id)
+        {
+            var account = await _context.Account.FindAsync(id);
+
+            if (account == null)
+            {
+                return NotFound();
+            }
+
+            var accountService = new Stripe.AccountService();
+
+            // If the user doesn't have a Stripe account, create one
+            if (string.IsNullOrEmpty(account.StripeAccountId) || account.StripeAccountId == "Undefined")
+            {
+                var accountCreateOptions = new AccountCreateOptions
+                {
+                    Type = "express", // Use "custom" if using Custom Connect accounts
+                    Country = "PT", // User's country
+                    Email = "jane.doe@example.com", // Change dynamically based on user
+                    Capabilities = new AccountCapabilitiesOptions
+                    {
+                        CardPayments = new AccountCapabilitiesCardPaymentsOptions { Requested = true },
+                        Transfers = new AccountCapabilitiesTransfersOptions { Requested = true }
+                    }
+                };
+
+                var stripeAccount = accountService.Create(accountCreateOptions);
+                account.StripeAccountId = stripeAccount.Id;
+                await _context.SaveChangesAsync();
+            }
+
+            // Generate Stripe onboarding link
+            var accountLinkService = new AccountLinkService();
+            var accountLinkOptions = new AccountLinkCreateOptions
+            {
+                Account = account.StripeAccountId, // The user's Stripe account ID
+                RefreshUrl = "https://google.com", // If the user session expires
+                ReturnUrl = "https://google.pt", // Where to send user after onboarding
+                Type = "account_onboarding"
+            };
+
+            var accountLink = accountLinkService.Create(accountLinkOptions);
+
+            // Return onboarding link so frontend can redirect the user
+            return Ok(new { onboardingUrl = accountLink.Url });
+        }
+
+
+        public void MakePayout(string accountId)
+        {
+            var payoutService = new PayoutService();
+            var payoutOptions = new PayoutCreateOptions
+            {
+                Amount = 5000, // Amount in cents (e.g., €50.00)
+                Currency = "EUR",
+            };
+
+            var payout = payoutService.Create(payoutOptions, new RequestOptions
+            {
+                StripeAccount = accountId, // Specify the connected account ID
+            });
+        }
+
+        [HttpGet("stripeTransaction/{id}")]
+        public async Task<IActionResult> GetUserStripeTransaction(int id)
+        {
+            var result = await GetUserStripeAccount(id);
+
+            if (result is NotFoundResult)
+            {
+                return NotFound();
+            }
+
+            if (result is OkObjectResult okResult)
+            {
+                var stripeAccount = okResult.Value as Stripe.Account;
+
+                if (stripeAccount != null)
+                {
+                    var transferService = new TransferService();
+                    var transferOptions = new TransferCreateOptions
+                    {
+                        Amount = 5000,
+                        Currency = "eur",
+                        Destination = stripeAccount.Id,
+                    };
+
+                    var transfer = transferService.Create(transferOptions);
+
+                    return Ok(new { Message = "Stripe account retrieved successfully", transfer });
+                }
+            }
+
+            return BadRequest("Unable to retrieve Stripe account");
         }
     }
 }

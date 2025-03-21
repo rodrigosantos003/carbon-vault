@@ -28,11 +28,20 @@ export class PaymentSuccessComponent {
     //if (checkoutSession) this.sendInvoice(checkoutSession);
   }
 
+  makePayout() {
+    var sellerId = this.sessionData.sellerId;
+    this.http.get(`${environment.apiUrl}/Accounts/stripeAcc/${sellerId}`)
+      .subscribe(res => {
+        console.log("Stripe Account ID = " + res);
+      });
+  }
+
   getSessionInfo(sessionId: string) {
     this.http.get<any>(`${environment.apiUrl}/UserPayments/session/${sessionId}`)
       .subscribe(response => {
         this.sessionData = response;
         console.log("Payment Metadata:", this.sessionData);
+        this.makePayout();
       }, error => {
         console.error("Error fetching payment details:", error);
       });

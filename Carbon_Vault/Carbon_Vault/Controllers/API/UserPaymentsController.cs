@@ -120,12 +120,16 @@ namespace Carbon_Vault.Controllers.API
                 var userId = session.Metadata.ContainsKey("userId") ? session.Metadata["userId"] : "N/A";
                 var itemId = session.Metadata.ContainsKey("itemID") ? session.Metadata["itemID"] : "N/A";
 
+                var proj = await _context.Projects.FindAsync(Int32.Parse(itemId));
+                var sellerId = proj.OwnerId;
+
                 var result = new
                 {
                     AmountTotal = (double)(session.AmountTotal / 100.0), // Convert from cents to currency
                     Currency = session.Currency,
                     PaymentMethod = paymentIntent.PaymentMethodTypes.FirstOrDefault(),
                     UserId = int.Parse(userId),
+                    SellerId = sellerId,
                     FirstItemId = int.Parse(itemId),
                     FirstItemQuantity = Convert.ToInt32(lineItems.Data.FirstOrDefault()?.Quantity ?? 0),
                     Products = lineItems.Data.Select(item => new
