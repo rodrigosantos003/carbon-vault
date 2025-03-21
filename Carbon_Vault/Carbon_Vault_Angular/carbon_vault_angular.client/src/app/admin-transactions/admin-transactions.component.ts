@@ -34,7 +34,7 @@ export class AdminTransactionsComponent {
     return "Unknown";
   }
 
-  getTransactions(accountID: string) {
+  getTransactions() {
     const jwtToken = localStorage.getItem('token');
 
     if (!jwtToken) {
@@ -42,10 +42,7 @@ export class AdminTransactionsComponent {
       return;
     }
 
-    const headers = { 'Authorization': `Bearer ${jwtToken}` };
-    const params = { accountID: accountID };
-
-    this.http.get<any[]>(`${environment.apiUrl}/Transactions`, { headers, params }).subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/Transactions`, { headers: this.authService.getHeaders() }).subscribe({
       next: (data) => {
         this.accountTransactions = data;
       },
