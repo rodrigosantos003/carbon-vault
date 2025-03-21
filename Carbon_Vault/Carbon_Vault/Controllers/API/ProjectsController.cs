@@ -581,7 +581,7 @@ namespace Carbon_Vault.Controllers.API
 
 
         [HttpPut("list-credits/{projectId}")]
-        public async Task<IActionResult> SellCredits([FromHeader] string Authorization, [FromHeader] int userId, int projectId, int credits)
+        public async Task<IActionResult> ListCredits([FromHeader] string Authorization, [FromHeader] int userId, int projectId, int credits)
         {
             if (!AuthHelper.IsTokenValid(Authorization, userId))
             {
@@ -611,7 +611,7 @@ namespace Carbon_Vault.Controllers.API
         }
 
         [HttpPut("sell-credits/{projectId}")]
-        public async Task<IActionResult> SellCredits([FromHeader] string Authorization, int userId, int projectId, int credits, int buyerId)
+        public async Task<IActionResult> SellCredits([FromHeader] string Authorization, int userId, int projectId, int credits)
         {
             if (!AuthHelper.IsTokenValid(Authorization, userId))
             {
@@ -642,7 +642,7 @@ namespace Carbon_Vault.Controllers.API
             foreach (var credit in creditsToSell)
             {
                 credit.IsSold = true;
-                //credit.Buyer = buyerId;
+                credit.BuyerId = userId;
             }
 
             project.CreditsForSale -= credits;

@@ -65,8 +65,6 @@ export class CartComponent implements OnInit {
       userId: this.authService.getUserId(),
     };
 
-    this
-
     this.http.post<{ message: string; checkout_session: string; payment_url: string }>(apiUrl, paymentData).subscribe({
       next: (data) => {
         window.open(data.payment_url, "_self");
