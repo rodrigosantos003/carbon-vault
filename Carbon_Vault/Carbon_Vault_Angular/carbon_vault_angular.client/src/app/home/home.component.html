@@ -86,22 +86,21 @@
 
   <section class="faq-section">
     <div class="faq-title">
-      <h2>FAQ?</h2>
-      <img src="/images/faq.png" />
+      <h2>FAQ</h2>
+      <img src="/images/faq.png" alt="FAQ">
     </div>
-    <div class="faq-item">
-      <p>Como posso comprar?</p>
-      <span>x</span>
-    </div>
-    <div class="faq-item">
-      <p>Como posso vender?</p>
-      <span>x</span>
-    </div>
-    <div class="faq-item">
-      <p>Como posso contactar-vos?</p>
-      <span>x</span>
+
+    <div *ngFor="let faq of faqs; let i = index" class="faq-item" (click)="toggleFAQ(i)">
+      <p class="question">{{ faq.question }}</p>
+      <span>{{ faq.open ? '−' : '+' }}</span>
+
+      <div *ngIf="faq.open" class="faq-answer">
+        <p>{{ faq.answer }}</p>
+      </div>
     </div>
   </section>
+
+
 
   <footer class="footer-section">
     <div class="footer-title">
