@@ -122,8 +122,8 @@
         <p class="credits-form-heading">Critérios de Venda dos Créditos</p>
         <p class="credits-form-field" style="text-align: center; font-weight: 500;">Créditos totais do Projeto:
           {{project.carbonCredits.length}}</p>
-        <p class="credits-form-field">Créditos para venda: <input type="text" [(ngModel)]="newCreditsForSale"></p>
-        <p class="credits-form-field">Preço por Crédito: <input type="text" [(ngModel)]="newPricePerCredit"></p>
+        <p class="credits-form-field">Créditos para venda: <input type="text" type="number" [(ngModel)]="newCreditsForSale"></p>
+        <p class="credits-form-field">Preço por Crédito: <input type="text" type="number" [(ngModel)]="newPricePerCredit"></p>
       </div>
       <div class="credits-form-button-wrapper">
         <button class="credits-form-button secondary" (click)="closePopup()">Cancelar</button>
