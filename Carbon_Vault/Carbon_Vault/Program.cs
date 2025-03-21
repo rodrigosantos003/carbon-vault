@@ -8,6 +8,7 @@ using System.Text;
 using Stripe;
 using Carbon_Vault.Controllers;
 
+DotNetEnv.Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<Carbon_VaultContext>(options =>
@@ -28,7 +29,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-var key = Encoding.ASCII.GetBytes("SuaChaveSecretaMuitoSeguraComPeloMenos32Caracteres");
+var key = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY"));
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -46,8 +47,6 @@ builder.Services.AddAuthentication(x =>
         ValidateAudience = false
     };
 });
-
-DotNetEnv.Env.Load();
 
 var app = builder.Build();
 

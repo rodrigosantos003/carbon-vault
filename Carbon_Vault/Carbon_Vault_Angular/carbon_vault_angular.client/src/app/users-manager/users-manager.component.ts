@@ -95,6 +95,7 @@ export class UsersManagerComponent {
 
   addAccount() {
     const addURL = `${environment.apiUrl}/Accounts`;
+    const newPasswordURL = `${environment.apiUrl}/Accounts/NewPassword?email=${this.userEmail}`;
 
     const newAccount = {
       name: this.userName,
@@ -103,10 +104,14 @@ export class UsersManagerComponent {
       nif: this.userNIF,
       role: Number(this.userRole)
     };
+
+
     this.http.post(addURL, newAccount).subscribe({
       next: () => {
         this.closeAddAccount();
         this.alerts.enableSuccess("Utilizador adicionado com sucesso");
+
+        this.http.get<{ message: string }>(newPasswordURL);
       },
       error: () => {
         this.closeDeleteAccount();

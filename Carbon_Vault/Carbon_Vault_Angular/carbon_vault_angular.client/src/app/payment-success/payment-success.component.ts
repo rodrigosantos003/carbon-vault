@@ -5,6 +5,7 @@ import { CartService } from '../cart.service';
 import { Route, Router } from '@angular/router';
 import { loadStripe, Stripe } from '@stripe/stripe-js';
 import { AlertsService } from '../alerts.service';
+import { AuthService } from '../auth-service.service';
 
 @Component({
   selector: 'app-payment-success',
@@ -15,27 +16,16 @@ import { AlertsService } from '../alerts.service';
 })
 export class PaymentSuccessComponent {
   sessionData: any;
-  constructor(private http: HttpClient, private cartService: CartService, public router: Router, private alerts: AlertsService) { }
+  constructor(private http: HttpClient, private cartService: CartService, public router: Router, private alerts: AlertsService, private authService: AuthService) { }
 
   ngOnInit() {
     this.cartService.clearCart();
     const checkoutSession = sessionStorage.getItem("checkoutSession");
 
     if (checkoutSession) {
-      this.getSessionInfo(checkoutSession);
+      this.http.get<any>(`${environment.apiUrl}/UserPayments/session/${checkoutSession}`, { headers: this.authService.getHeaders() });
+      this.sendInvoice(checkoutSession);
     }
-
-    //if (checkoutSession) this.sendInvoice(checkoutSession);
-  }
-
-  getSessionInfo(sessionId: string) {
-    this.http.get<any>(`${environment.apiUrl}/UserPayments/session/${sessionId}`)
-      .subscribe(response => {
-        this.sessionData = response;
-        console.log("Payment Metadata:", this.sessionData);
-      }, error => {
-        console.error("Error fetching payment details:", error);
-      });
   }
 
   sendInvoice(checkoutSessionId: string) {
@@ -51,17 +41,5 @@ export class PaymentSuccessComponent {
         sessionStorage.clear();
       }
     })
-  }
-
-  getPaymentDetails(sessionId: string) {
-    this.http.get<any>(`${environment.apiUrl}/UserPayments/GetPaymentDetails/${sessionId}`)
-      .subscribe(response => {
-        console.log("Payment Metadata:", response);
-        console.log("User ID:", response.userId);
-        console.log("Item ID:", response.itemId);
-        console.log("Quantity:", response.quantity);
-      }, error => {
-        console.error("Error fetching payment details:", error);
-      });
   }
 }
