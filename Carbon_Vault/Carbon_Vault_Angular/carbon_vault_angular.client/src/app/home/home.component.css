@@ -21,7 +21,8 @@ body {
 }
 
 .logo {
-  width: 30px; /* Tamanho do ícone */
+  width: 30px;
+  /* Tamanho do ícone */
   height: 30px;
   margin-right: 8px;
 }
@@ -33,7 +34,8 @@ body {
 }
 
 .navbar-button {
-  background-color: var(--main-color); /* Cor do botão */
+  background-color: var(--main-color);
+  /* Cor do botão */
   color: white;
   border: none;
   padding: 8px 16px;
@@ -44,9 +46,10 @@ body {
   text-decoration: none;
 }
 
-  .navbar-button:hover {
-    background-color: #45a049; /* Cor no hover */
-  }
+.navbar-button:hover {
+  background-color: #45a049;
+  /* Cor no hover */
+}
 
 /******* WELCOME-SECTION *********/
 
@@ -54,7 +57,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-/*  padding: 2rem;*/
+  /*  padding: 2rem;*/
 }
 
 .hero-content {
@@ -66,20 +69,20 @@ body {
   align-items: flex-start;
 }
 
-  .hero-content h1 {
-    font-size: 40px;
-    color: #5F5F5F;
-    margin-bottom: 0 !important;
-  }
+.hero-content h1 {
+  font-size: 40px;
+  color: #5F5F5F;
+  margin-bottom: 0 !important;
+}
 
-  .hero-content p {
-    font-size: 24px;
-    margin-top: 0 !important;
-  }
+.hero-content p {
+  font-size: 24px;
+  margin-top: 0 !important;
+}
 
-  .hero-content span {
-    color: var(--main-color);
-  }
+.hero-content span {
+  color: var(--main-color);
+}
 
 .hero-buttons {
   margin-top: 1rem;
@@ -87,26 +90,26 @@ body {
   gap: 20px;
 }
 
-  .hero-buttons .primary-button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 11px 30px;
-    border: none;
-    margin-right: 0.5rem;
-    cursor: pointer;
-    border-radius: 4px;
-    font-size: 18px;
-  }
+.hero-buttons .primary-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 11px 30px;
+  border: none;
+  margin-right: 0.5rem;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 18px;
+}
 
-  .hero-buttons .secondary-button {
-    background-color: #b9d4c2;
-    color: white;
-    padding: 11px 30px;
-    border: none;
-    cursor: pointer;
-    border-radius: 4px;
-    font-size: 18px;
-  }
+.hero-buttons .secondary-button {
+  background-color: #b9d4c2;
+  color: white;
+  padding: 11px 30px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 18px;
+}
 
 .hero-image img {
   max-width: 100%;
@@ -120,13 +123,13 @@ body {
   margin-right: 10%;
 }
 
-  .info-section h2 {
-    color: #5F5F5F;
-  }
+.info-section h2 {
+  color: #5F5F5F;
+}
 
-  .info-section span {
-    color: var(--main-color);
-  }
+.info-section span {
+  color: var(--main-color);
+}
 
 .info-cards {
   display: flex;
@@ -152,19 +155,19 @@ body {
 }
 
 .how-to {
-    display: flex;
-    gap: 10%;
+  display: flex;
+  gap: 10%;
 }
 
 .how-to h2 {
-    font-size: 50px;
-    margin-bottom: 0 !important;
+  font-size: 50px;
+  margin-bottom: 0 !important;
 }
 
-  .how-to p {
-    font-size: 30px;
-    margin-top: 0 !important;
-  }
+.how-to p {
+  font-size: 30px;
+  margin-top: 0 !important;
+}
 
 .how-to-txt {
   display: flex;
@@ -174,11 +177,11 @@ body {
   width: 40%;
 }
 
-  .steps-section ol {
-    list-style: none;
-    padding: 0;
-    margin-top: 1rem;
-  }
+.steps-section ol {
+  list-style: none;
+  padding: 0;
+  margin-top: 1rem;
+}
 
 .steps-section li {
   margin-bottom: 0.5rem;
@@ -188,31 +191,45 @@ body {
 
 .steps-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Creates 2 equal columns */
-  gap: 1rem; /* Space between the grid items */
-  list-style-position: inside; /* Keeps numbers aligned properly */
-  padding: 0; /* Removes default padding from <ol> */
-  margin: 0; /* Removes default margin from <ol> */
+  grid-template-columns: repeat(2, 1fr);
+  /* Creates 2 equal columns */
+  gap: 1rem;
+  /* Space between the grid items */
+  list-style-position: inside;
+  /* Keeps numbers aligned properly */
+  padding: 0;
+  /* Removes default padding from <ol> */
+  margin: 0;
+  /* Removes default margin from <ol> */
   width: 50%;
 }
 
 .steps-grid li {
-  margin: 0; /* Removes default margin from <li> */
+  margin: 0;
+  /* Removes default margin from <li> */
   width: 50%;
-  padding: 0; /* Removes unnecessary padding */
-  line-height: 1.4; /* Adjusts line spacing for tighter text */
-  font-size: 1rem; /* Ensure a readable font size */
-  color: white; /* Matches the color from the image */
-  font-family: "Arial", sans-serif; /* Choose a clean font */
+  padding: 0;
+  /* Removes unnecessary padding */
+  line-height: 1.4;
+  /* Adjusts line spacing for tighter text */
+  font-size: 1rem;
+  /* Ensure a readable font size */
+  color: white;
+  /* Matches the color from the image */
+  font-family: "Arial", sans-serif;
+  /* Choose a clean font */
 }
 
 .steps-grid li strong {
-  color: #ffffff; /* Keeps strong elements visible */
-  font-weight: bold; /* Highlights important text */
+  color: #ffffff;
+  /* Keeps strong elements visible */
+  font-weight: bold;
+  /* Highlights important text */
 }
 
 .steps-section img {
-  width: 150px; /* Tamanho do ícone */
+  width: 150px;
+  /* Tamanho do ícone */
   height: 150px;
 }
 
@@ -228,19 +245,19 @@ body {
   width: 30%;
 }
 
-  .evaluation-section img {
-      position: absolute;
-      left: 0;
-  }
+.evaluation-section img {
+  position: absolute;
+  left: 0;
+}
 
-  .evaluation-section h2 {
-    font-size: 40px;
-    color: var(--main-color);
-  }
+.evaluation-section h2 {
+  font-size: 40px;
+  color: var(--main-color);
+}
 
-  .evaluation-section p {
-    font-size: 22px;
-  }
+.evaluation-section p {
+  font-size: 22px;
+}
 
 .evaluation-section-btn {
   background-color: var(--main-color);
@@ -254,50 +271,53 @@ body {
 }
 
 
-  /******* FAQ-SECTION *********/
-  .faq-title {
-      display:flex;
-      align-items: baseline;
-      margin-left: auto;
-  }
-
-    .faq-title h2 {
-        margin: 0 !important;
-        color: var(--main-color);
-        font-size: 35px;
-    }
-
-    .faq-section {
-      display: flex;
-      flex-direction: column;
-      gap: 25px;
-      width: 40%;
-      padding: 2rem;
-      text-align: right;
-      margin-left: auto;
-    }
-
-.faq-item {
+/* Evaluation Section */
+.faq-section {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  border: none;
-  color: var(--main-color);
-  font-size: 18px;
-  border-radius: 4px;
-  background-color: #D8ECD5;
+  flex-direction: column;
+  gap: 25px;
+  width: 40%;
+  padding: 2rem;
+  text-align: right;
+  margin-left: auto;
 }
 
-  .faq-item span {
-      color: var(--main-color);
-      font-size: 40px;
-      margin-right: 20px;
-  }
+/******* FAQ-SECTION *********/
+.faq-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 15px 20px;
+  background-color: #D8ECD5;
+  border-radius: 4px;
+  color: var(--main-color);
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  text-align: justify;
+}
+
+.faq-item:hover {
+  background-color: #C5E6C2;
+}
+
+.faq-question {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
+
+.faq-answer {
+  margin-top: 10px;
+  display: block;
+  text-align: justify;
+}
 
 
-  /******* FOOTER-SECTION *********/
-  /*.footer-section {
+
+/******* FOOTER-SECTION *********/
+/*.footer-section {
     background-color: #f1f8e9;
     padding: 2rem;
     display: flex;
@@ -311,8 +331,8 @@ body {
 }
 
 .footer-title {
-    padding: 30px;
-    margin-left: 23%;
+  padding: 30px;
+  margin-left: 23%;
 }
 
 .footer-helper {
@@ -325,5 +345,5 @@ body {
 }
 
 .footer-column h3 {
-    color: var(--main-color);
+  color: var(--main-color);
 }
