@@ -18,7 +18,7 @@ export async function testLogin(driver, email, password) {
         console.log("Alerta encontrado:", await alert.getText());
         await alert.accept();
     } catch (e) {
-        console.log("Nenhum alerta encontrado.");
+        //console.log("Nenhum alerta encontrado.");
     }
 
     // Esperar pelo redirecionamento

@@ -56,6 +56,8 @@ namespace Carbon_Vault.Data
             populateProjects(modelBuilder);
 
             populateTransactions(modelBuilder);
+
+            populateCredits(modelBuilder);
         }
 
         private void populateAccounts(ModelBuilder modelBuilder)
@@ -219,6 +221,57 @@ namespace Carbon_Vault.Data
                     State = TransactionState.Approved,
                     PaymentMethod = "SEPA",
                     CheckoutSession = "cs_987456321"
+                }
+            );
+        }
+
+        private void populateCredits(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<CarbonCredit>().HasData(
+                new CarbonCredit
+                {
+                    Id = 1,
+                    ProjectId = 2,
+                    IsSold = false,
+                    Price = 15.75M,
+                    Certification = "ISO 14001",
+                    SerialNumber = "123456789",
+                },
+                new CarbonCredit
+                {
+                    Id = 2,
+                    ProjectId = 2,
+                    IsSold = false,
+                    Price = 15.75M,
+                    Certification = "ISO 14001",
+                    SerialNumber = "123456789",
+                },
+                new CarbonCredit
+                {
+                    Id = 3,
+                    ProjectId = 2,
+                    IsSold = false,
+                    Price = 15.75M,
+                    Certification = "ISO 14001",
+                    SerialNumber = "123456789",
+                },
+                new CarbonCredit
+                {
+                    Id = 4,
+                    ProjectId = 2,
+                    IsSold = false,
+                    Price = 15.75M,
+                    Certification = "ISO 14001",
+                    SerialNumber = "123456789",
+                },
+                new CarbonCredit
+                {
+                    Id = 5,
+                    ProjectId = 2,
+                    IsSold = false,
+                    Price = 15.75M,
+                    Certification = "ISO 14001",
+                    SerialNumber = "123456789",
                 }
             );
         }
