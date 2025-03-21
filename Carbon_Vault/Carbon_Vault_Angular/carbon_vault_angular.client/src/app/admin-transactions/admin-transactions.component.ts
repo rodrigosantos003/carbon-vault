@@ -23,7 +23,7 @@ export class AdminTransactionsComponent {
   ngOnInit(): void {
     this.accountId = this.authService.getUserId();
     this.getAccounts();
-    this.getTransactions(this.accountId);
+    this.getTransactions();
   }
 
   getAccountName(id: number): string | undefined {
