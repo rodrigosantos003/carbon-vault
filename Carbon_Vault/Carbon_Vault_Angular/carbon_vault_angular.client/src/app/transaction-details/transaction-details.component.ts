@@ -4,6 +4,7 @@ import { environment } from '../../environments/environment';
 import { AuthService } from '../auth-service.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AlertsService } from '../alerts.service';
+import { downloadPDF } from '../services/certificate-generator';
 
 @Component({
   selector: 'app-transaction-details',
@@ -25,6 +26,10 @@ export class TransactionDetailsComponent {
   @Input() transactionSession: string = ''; // Sessão de pagamento
   @Input() transactionMethod: string = ''; // Processador de pagamento
 
+  projectLocation: string = ''; // Localização do projeto
+  projectCertifier: string = ''; // Certificador do projeto
+  projectDescription: string = ''; // Descrição do projeto
+
   constructor(private route: ActivatedRoute, private http: HttpClient, private auth: AuthService, private alerts: AlertsService) { }
 
   ngOnInit() {
@@ -38,8 +43,6 @@ export class TransactionDetailsComponent {
     var url = environment.apiUrl + "/transactions/details/" + this.transactionId;
 
     var userId = this.auth.getUserId();
-
-
 
     this.http.get(url, { headers: this.auth.getHeaders()}).subscribe((data: any) => {
       var type;
@@ -55,6 +58,7 @@ export class TransactionDetailsComponent {
           type = "Admin";
       }
 
+      console.log(data);
       this.transactionType = type;
       this.transactionBuyer = data.buyerName;
       this.transactionSeller = data.sellerName;
@@ -64,6 +68,10 @@ export class TransactionDetailsComponent {
       this.transactionTotal = data.totalPrice;
       this.transactionSession = data.checkoutSession;
       this.transactionMethod = data.paymentMethod;
+      this.projectCertifier = data.projectCertifier;
+      this.projectLocation = data.projectLocation;
+      this.projectDescription = data.projectDescription;
+
     }, error => {
       console.error("Erro na requisição:", error);
       this.alerts.enableError("Erro ao obter transação");
@@ -85,5 +93,18 @@ export class TransactionDetailsComponent {
         this.alerts.enableError("Erro ao obter fatura");
       }
     })
+  }
+
+  downloadCertificate() {
+    const info = {
+      nomeAdquirente: this.transactionBuyer,
+      dataAquisicao: this.transactionDate,
+      quantidadeCreditos: parseInt(this.transactionQuantity),
+      nomeProjeto: this.transactionProject,
+      localizacaoProjeto: this.projectLocation,
+      certificador: this.projectCertifier,
+      descricaoProjeto: this.projectDescription
+    }
+    downloadPDF(info);
   }
 }
