@@ -26,6 +26,7 @@
     "@stripe/stripe-js": "^5.7.0",
     "chart.js": "^4.4.7",
     "jest-editor-support": "*",
+    "jspdf": "^3.0.1",
     "ngx-cookie-service": "^19.1.2",
     "ngx-papaparse": "^8.0.0",
     "ngx-stripe": "^19.0.0",

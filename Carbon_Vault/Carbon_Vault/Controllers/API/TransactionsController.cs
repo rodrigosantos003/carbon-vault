@@ -147,7 +147,10 @@ namespace Carbon_Vault.Controllers.API
                 sellerName = _context.Account.Where(a => a.Id == t.SellerId).Select(a => a.Name).FirstOrDefault(),
                 t.Quantity,
                 t.CheckoutSession,
-                t.PaymentMethod
+                t.PaymentMethod,
+                projectDescription = _context.Projects.Where(p => p.Id == t.ProjectId).Select(p => p.Description).FirstOrDefault(),
+                projectCertifier = _context.Projects.Where(p => p.Id == t.ProjectId).Select(p => p.Certification).FirstOrDefault(),
+                projectLocation = _context.Projects.Where(p => p.Id == t.ProjectId).Select(p => p.Location).FirstOrDefault(),
             }).Where(t => t.Id == id && t.BuyerId == userID || t.SellerId == userID || account.Role == AccountType.Admin).FirstOrDefaultAsync();
 
             if (transaction == null)

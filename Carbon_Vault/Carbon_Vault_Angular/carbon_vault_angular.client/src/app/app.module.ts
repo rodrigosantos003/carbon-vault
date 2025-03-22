@@ -73,7 +73,7 @@ import { UserSupportComponent } from './user-support/user-support.component';
     AdminTransactionsComponent,
     TransactionDetailsComponent,
     UserSettingsComponent,
-    UserSupportComponent,
+    UserSupportComponent
   ],
   imports: [
     BrowserModule,
