@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 using Moq;
 using Xunit;
 
@@ -17,13 +16,11 @@ namespace Carbon_Vault_Tests_AccountsManager
         private readonly Mock<IEmailService> _mockEmailService;
         private readonly Carbon_VaultContext _mockContext;
         private readonly Mock<IConfiguration> _mockConfiguration;
-        private readonly Mock<AuthHelper> _mockAuthHelper;
 
         public AccountsManagerTests()
         {
             _mockEmailService = new Mock<IEmailService>();
             _mockConfiguration = new Mock<IConfiguration>();
-            _mockAuthHelper = new Mock<AuthHelper>();
             _mockConfiguration.Setup(c => c["AppSettings:FrontendBaseUrl"]).Returns("http://localhost:59115/");
             _mockConfiguration.Setup(c => c["AppSettings:TokenSecretKey"]).Returns("jEJQ#5Hxuh*#[ra7k98J=cBRLj]n6ZP1w*2S.M-Pwgr1D;ZQ.C*WgN&HnCG");
 

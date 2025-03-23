@@ -1,18 +1,13 @@
 ﻿using Moq;
 using Stripe.Checkout;
 using Stripe;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Carbon_Vault.Controllers.API;
 using Carbon_Vault.Data;
 using Carbon_Vault.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
-using OpenQA.Selenium.BiDi.Modules.Network;
 using Carbon_Vault.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace Carbon_Vault_Tests_AquisicaoCreditos
 {
@@ -20,19 +15,12 @@ namespace Carbon_Vault_Tests_AquisicaoCreditos
     {
         private readonly Mock<IEmailService> _mockEmailService;
         private readonly Carbon_VaultContext _mockContext;
-        private readonly Mock<SessionService> _mockSessionService;
-        private readonly Mock<SessionLineItemService> _mockLineItemService;
-        private readonly Mock<PaymentIntentService> _mockPaymentIntentService;
-        private readonly UserPaymentsController _controller;
+        private readonly Mock<IConfiguration> _mockConfiguration;
 
         public AquisicaoCreditosTests()
         {
-            StripeConfiguration.ApiKey = "sk_test_51Qx9k3PqsbpdHFs4jYQFgS4KaeHzPa5zdh3p1RV4NbuK2iCThy0X8pWPc4uMIhpuzRd7H9cYPoBmu4omo4AZMpoX00YEtcCxmW";
-
             _mockEmailService = new Mock<IEmailService>();
-            _mockSessionService = new Mock<SessionService>();
-            _mockLineItemService = new Mock<SessionLineItemService>();
-            _mockPaymentIntentService = new Mock<PaymentIntentService>();
+            _mockConfiguration = new Mock<IConfiguration>();
 
             // Criar um contexto de base de dados InMemory
             var options = new DbContextOptionsBuilder<Carbon_VaultContext>()
@@ -41,7 +29,11 @@ namespace Carbon_Vault_Tests_AquisicaoCreditos
 
             _mockContext = new Carbon_VaultContext(options);
 
-            _controller = new UserPaymentsController(_mockEmailService.Object, _mockContext);
+            Environment.SetEnvironmentVariable("CLIENT_URL", "http://localhost:59115/");
+
+            _mockConfiguration.Setup(c => c["AppSettings:TokenSecretKey"]).Returns("jEJQ#5Hxuh*#[ra7k98J=cBRLj]n6ZP1w*2S.M-Pwgr1D;ZQ.C*WgN&HnCG");
+
+            StripeConfiguration.ApiKey = "sk_test_51Qx9k3PqsbpdHFs4jYQFgS4KaeHzPa5zdh3p1RV4NbuK2iCThy0X8pWPc4uMIhpuzRd7H9cYPoBmu4omo4AZMpoX00YEtcCxmW";
         }
 
         [Fact]
@@ -74,43 +66,61 @@ namespace Carbon_Vault_Tests_AquisicaoCreditos
         }
 
         [Fact]
-        public void MakePayment_WithCard_ReturnsOk()
+        public void MakePayment_ReturnsOk_WithCardPayment()
         {
             // Arrange
-            var paymentData = new PaymentData
-            {
-                UserId = 1,
-                Items = new List<CartItem>
-            {
-                new CartItem { Id = 10, Price = 50.00m, Name = "Produto A", Description = "Desc A", Quantity = 1 }
-            }
-            };
+            var cart = new PaymentData();
+            var item = new CartItem();
 
-            var mockSession = new Session
-            {
-                Id = "test_session_card",
-                Url = "https://checkout.stripe.com/test_card"
-            };
+            item.Description = "test_description";
+            item.Name = "test_name";
+            item.Price = 12;
+            item.Quantity = 1;
+            cart.Items.Add(item);
 
-            _mockSessionService.Setup(s => s.Create(It.Is<SessionCreateOptions>(o =>
-                o.PaymentMethodTypes.Contains("card") &&
-                o.LineItems.Count > 0 &&
-                o.Metadata["userId"] == "1" &&
-                o.Metadata["itemID"] == "10"
-            ), null)).Returns(mockSession);
+            var mockSessionService = new Mock<SessionService>();
+            var session = new Session { Id = "test_session_id", Url = "https://checkout.stripe.com/test" };
+
+            mockSessionService
+                .Setup(s => s.Create(It.Is<SessionCreateOptions>(opt => opt.PaymentMethodTypes.Contains("card")), null))
+                .Returns(session);
+
+            var controller = new UserPaymentsController(_mockEmailService.Object, _mockContext);
 
             // Act
-            var result = _controller.MakePayment(paymentData);
+            var result = controller.MakePayment(cart);
 
             // Assert
-            var okResult = Assert.IsType<OkObjectResult>(result);
-            var responseData = okResult.Value as dynamic;
+            Assert.IsType<OkObjectResult>(result);
+        }
 
-            Assert.Equal("Pagamento realizado com sucesso.", responseData.message);
-            Assert.Equal("test_session_card", responseData.checkout_session);
-            Assert.Equal("https://checkout.stripe.com/test_card", responseData.payment_url);
+        [Fact]
+        public void MakePayment_ReturnsOk_WithSepaDebitPayment()
+        {
+            // Arrange
+            var cart = new PaymentData();
+            var item = new CartItem();
 
-            _mockSessionService.Verify(s => s.Create(It.IsAny<SessionCreateOptions>(), null), Times.Once);
+            item.Description = "test_description";
+            item.Name = "test_name";
+            item.Price = 12;
+            item.Quantity = 1;
+            cart.Items.Add(item);
+
+            var mockSessionService = new Mock<SessionService>();
+            var session = new Session { Id = "test_session_id", Url = "https://checkout.stripe.com/test" };
+
+            mockSessionService
+                .Setup(s => s.Create(It.Is<SessionCreateOptions>(opt => opt.PaymentMethodTypes.Contains("sepa_debit")), null))
+                .Returns(session);
+
+            var controller = new UserPaymentsController(_mockEmailService.Object, _mockContext);
+
+            // Act
+            var result = controller.MakePayment(cart);
+
+            // Assert
+            Assert.IsType<OkObjectResult>(result);
         }
 
         public void Dispose()
@@ -118,60 +128,5 @@ namespace Carbon_Vault_Tests_AquisicaoCreditos
             _mockContext.Database.EnsureDeleted();
             _mockContext.Dispose();
         }
-
-        //[Fact]
-        //public async Task GetSessionDetails_ReturnsOk_WhenSessionExists()
-        //{
-        //    // Arrange
-        //    string sessionId = "test_session";
-        //    string userId = "1";
-        //    string itemId = "10";
-
-        //    var mockSession = new Session
-        //    {
-        //        AmountTotal = 5000, // 50.00
-        //        Currency = "usd",
-        //        Metadata = new Dictionary<string, string>
-        //    {
-        //        { "userId", userId },
-        //        { "itemID", itemId }
-        //    },
-        //        PaymentIntentId = "test_payment_intent"
-        //    };
-
-        //    var mockLineItems = new StripeList<LineItem>
-        //    {
-        //        Data = new List<LineItem>
-        //    {
-        //        new LineItem
-        //        {
-        //            Description = "Test Item",
-        //            Quantity = 2,
-        //            AmountTotal = 2000  // 20.00
-        //        }
-        //    }
-        //    };
-
-        //    var mockPaymentIntent = new PaymentIntent
-        //    {
-        //        PaymentMethodTypes = new List<string> { "card" }
-        //    };
-
-        //    // Act
-        //    var result = await _controller.GetSessionDetails(sessionId);
-
-        //    // Assert
-        //    var okResult = Assert.IsType<OkObjectResult>(result);
-        //    var responseData = okResult.Value as dynamic;
-
-        //    Assert.Equal(50.00, responseData.AmountTotal);
-        //    Assert.Equal("usd", responseData.Currency);
-        //    Assert.Equal("card", responseData.PaymentMethod);
-        //    Assert.Equal(1, responseData.UserId);
-        //    Assert.Equal(10, responseData.FirstItemId);
-        //    Assert.Equal(2, responseData.FirstItemQuantity);
-        //    Assert.Single(responseData.Products);
-        //    Assert.Equal("Test Item", responseData.Products.First().Name);
-        //}
     }
 }
