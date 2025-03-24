@@ -68,7 +68,7 @@ namespace Carbon_Vault_Tests_payments
             var controller = new UserPaymentsController(_mockEmailService.Object, _mockContext, _mockEnvironment.Object);
 
             // Act
-            var result = controller.MakePayment(cart);
+            var result = controller.MakePayment(cart, "project");
 
             // Assert
             Assert.IsType<OkObjectResult>(result);

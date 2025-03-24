@@ -49,9 +49,9 @@ namespace Carbon_Vault.Controllers.API
         }
 
         [HttpPost]
-        public IActionResult MakePayment(PaymentData data)
+        public IActionResult MakePayment(PaymentData data, string paymentType)
         {
-            var success_url = Environment.GetEnvironmentVariable("CLIENT_URL") + "payment-success";
+            var success_url = Environment.GetEnvironmentVariable("CLIENT_URL") + "payment-success?paymentType=" + paymentType;
             var cancel_url = Environment.GetEnvironmentVariable("CLIENT_URL") + "dashboard";
 
             var account = _context.Account.FindAsync(data.UserId);
