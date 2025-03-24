@@ -15,7 +15,7 @@ export class AlertsService {
     });
   }
 
-  enableSuccess(message: string) {
+  enableSuccess(message: string, enableTime: number = 3) {
     const successPopup = document.getElementById('success-popup');
     if (successPopup) {
       const textSpan = successPopup.querySelector('#success-message');
@@ -26,7 +26,7 @@ export class AlertsService {
 
       setTimeout(() => {
         this.disableSuccess();
-      }, 3000);
+      }, enableTime);
     }
   }
 
@@ -56,7 +56,7 @@ export class AlertsService {
   }
 
 
-  enableError(message: string) {
+  enableError(message: string, enableTime: number = 3) {
     const errorPopup = document.getElementById('error-popup');
     if (errorPopup) {
       const textSpan = errorPopup.querySelector('#error-message');
@@ -67,7 +67,7 @@ export class AlertsService {
 
       setTimeout(() => {
         this.disableError();
-      }, 3000);
+      }, enableTime*1000);
     }
   }
 

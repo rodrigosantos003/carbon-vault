@@ -34,6 +34,11 @@ export class ProjectManagerComponent {
       }
     });
   }
+
+  viewProject(id: number) {
+    console.log(id);
+    this.router.navigate([`project-manager/${id}`]);
+  }
   getProjectStatus(state: number): string {
     const states = ["Ativo", "Pendente", "inátivo"];
     return states[state] ?? "Unknown"

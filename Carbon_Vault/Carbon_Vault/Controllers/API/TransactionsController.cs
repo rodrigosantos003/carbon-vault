@@ -23,13 +23,9 @@ namespace Carbon_Vault.Controllers.API
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Transaction>>> GetTransactions([FromHeader] string Authorization, int accountID)
+        [ServiceFilter(typeof(TokenValidationFilter))]
+        public async Task<ActionResult<IEnumerable<Transaction>>> GetTransactions()
         {
-            if (!AuthHelper.IsTokenValid(Authorization, accountID))
-            {
-                return Unauthorized();
-            }
-
             return await _context.Transactions.ToListAsync();
         }
 
@@ -112,13 +108,9 @@ namespace Carbon_Vault.Controllers.API
         }
 
         [HttpGet("type/{type}/user/{userID}")]
-        public async Task<ActionResult<IEnumerable<Transaction>>> GetTransactionsByType(int type, int userID, [FromHeader] string Authorization)
+        [ServiceFilter(typeof(TokenValidationFilter))]
+        public async Task<ActionResult<IEnumerable<Transaction>>> GetTransactionsByType(int type, int userID)
         {
-            if (!AuthHelper.IsTokenValid(Authorization, userID))
-            {
-                return Unauthorized("JWT inválido");
-            }
-
             var transactions = await _context.Transactions.Select(t => new
             {
                 t.Id,
@@ -138,15 +130,9 @@ namespace Carbon_Vault.Controllers.API
         }
 
         [HttpGet("details/{id}")]
-        public async Task<ActionResult<Transaction>> GetTransactionDetails(int id, [FromHeader] string Authorization, [FromHeader] int userID)
+        [ServiceFilter(typeof(TokenValidationFilter))]
+        public async Task<ActionResult<Transaction>> GetTransactionDetails(int id, [FromHeader] int userID)
         {
-            Console.WriteLine(Authorization);
-            Console.WriteLine(userID);
-            if (!AuthHelper.IsTokenValid(Authorization, userID))
-            {
-                return Unauthorized("JWT inválido");
-            }
-
             var account = await _context.Account.FindAsync(userID);
             
             var transaction = await _context.Transactions.Select(t => new
@@ -161,7 +147,10 @@ namespace Carbon_Vault.Controllers.API
                 sellerName = _context.Account.Where(a => a.Id == t.SellerId).Select(a => a.Name).FirstOrDefault(),
                 t.Quantity,
                 t.CheckoutSession,
-                t.PaymentMethod
+                t.PaymentMethod,
+                projectDescription = _context.Projects.Where(p => p.Id == t.ProjectId).Select(p => p.Description).FirstOrDefault(),
+                projectCertifier = _context.Projects.Where(p => p.Id == t.ProjectId).Select(p => p.Certification).FirstOrDefault(),
+                projectLocation = _context.Projects.Where(p => p.Id == t.ProjectId).Select(p => p.Location).FirstOrDefault(),
             }).Where(t => t.Id == id && t.BuyerId == userID || t.SellerId == userID || account.Role == AccountType.Admin).FirstOrDefaultAsync();
 
             if (transaction == null)

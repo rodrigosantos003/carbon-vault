@@ -16,7 +16,7 @@ export class ProjectCardComponent {
   @Input() projectID!: number;
   @Input() quantity: number = 1; // Valor padrão de 1
 
-  constructor(private cartService: CartService, private alerts: AlertsService) {}
+  constructor(private cartService: CartService, private alerts: AlertsService) { }
 
   ngOnInit() {
     this.quantity = 1;
@@ -35,10 +35,6 @@ export class ProjectCardComponent {
     this.cartService.addItem(item);
 
     this.alerts.enableSuccess("Item adicionado ao carrinho!");
-    //alert('Item adicionado ao carrinho!');
-    //setTimeout(() => {
-    //  this.alerts.disableSuccess();
-    //}, 3000);
 
     this.quantity = 1;
   }

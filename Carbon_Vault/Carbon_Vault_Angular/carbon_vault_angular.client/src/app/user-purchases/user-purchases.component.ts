@@ -27,11 +27,7 @@ export class UserPurchasesComponent {
   getPurchases(): void {
     this.alerts.enableLoading("A carregar compras...");
 
-    const jwtToken = localStorage.getItem('token');
-
-    this.http.get<Purchase[]>(this.purchasesURL, {
-      headers: { 'Authorization': `Bearer ${jwtToken}` }
-    }).subscribe({
+    this.http.get<Purchase[]>(this.purchasesURL, { headers: this.authService.getHeaders() }).subscribe({
       next: (data) => {
         this.purchases = data;
         this.alerts.disableLoading();

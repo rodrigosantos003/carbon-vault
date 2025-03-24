@@ -22,6 +22,8 @@ namespace Carbon_Vault.Data
         public DbSet<ProjectFiles> ProjectFiles { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<TicketMessage> TickeMessages { get; set; }
+        public DbSet<Carbon_Vault.Models.Ticket> Ticket { get; set; } = default!;
+        public DbSet<Carbon_Vault.Models.TicketMessage> TicketMessage { get; set; } = default!;
 
         public Carbon_VaultContext(DbContextOptions<Carbon_VaultContext> options)
             : base(options)
@@ -71,6 +73,8 @@ namespace Carbon_Vault.Data
             populateProjects(modelBuilder);
 
             populateTransactions(modelBuilder);
+
+            populateCredits(modelBuilder);
         }
 
         private void populateAccounts(ModelBuilder modelBuilder)
@@ -237,7 +241,57 @@ namespace Carbon_Vault.Data
                 }
             );
         }
-        public DbSet<Carbon_Vault.Models.Ticket> Ticket { get; set; } = default!;
-        public DbSet<Carbon_Vault.Models.TicketMessage> TicketMessage { get; set; } = default!;
+    
+
+        private void populateCredits(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<CarbonCredit>().HasData(
+                new CarbonCredit
+                {
+                    Id = 1,
+                    ProjectId = 2,
+                    IsSold = false,
+                    Price = 15.75M,
+                    Certification = "ISO 14001",
+                    SerialNumber = "123456789",
+                },
+                new CarbonCredit
+                {
+                    Id = 2,
+                    ProjectId = 2,
+                    IsSold = false,
+                    Price = 15.75M,
+                    Certification = "ISO 14001",
+                    SerialNumber = "123456789",
+                },
+                new CarbonCredit
+                {
+                    Id = 3,
+                    ProjectId = 2,
+                    IsSold = false,
+                    Price = 15.75M,
+                    Certification = "ISO 14001",
+                    SerialNumber = "123456789",
+                },
+                new CarbonCredit
+                {
+                    Id = 4,
+                    ProjectId = 2,
+                    IsSold = false,
+                    Price = 15.75M,
+                    Certification = "ISO 14001",
+                    SerialNumber = "123456789",
+                },
+                new CarbonCredit
+                {
+                    Id = 5,
+                    ProjectId = 2,
+                    IsSold = false,
+                    Price = 15.75M,
+                    Certification = "ISO 14001",
+                    SerialNumber = "123456789",
+                }
+            );
+        }
     }
 }

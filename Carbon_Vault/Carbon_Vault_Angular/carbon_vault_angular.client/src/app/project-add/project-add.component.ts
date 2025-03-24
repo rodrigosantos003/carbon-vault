@@ -64,8 +64,8 @@ export class ProjectAddComponent {
       this.alerts.enableError('O nome é obrigatório.');
       return false;
     }
-    if (this.preco !== null && this.preco < 0) {
-      this.alerts.enableError('O preço não pode ser negativo.');
+    if (this.preco == null || this.preco <= 0) {
+      this.alerts.enableError('O preço tem que ser maior que 0.');
       return false;
     }
     if (!this.localizacao.trim()) {
@@ -75,8 +75,11 @@ export class ProjectAddComponent {
     if (!this.descricao.trim()) {
       this.alerts.enableError('A descrição é obrigatória.');
       return false;
+    }    
+    if (!this.benefits.trim()) {
+      this.alerts.enableError('Os benefícios são obrigatórios.');
+      return false;
     }
-
     if (!this.dataInicio) {
       this.alerts.enableError('A data de início é obrigatória.');
       return false;
@@ -104,7 +107,7 @@ export class ProjectAddComponent {
       }
     }
     if (this.categoriasSelecionadas.length === 0) {
-      alert('Deve selecionar pelo menos uma categoria .');
+      this.alerts.enableError('Deve selecionar pelo menos uma categoria.');
       return false;
     }
 

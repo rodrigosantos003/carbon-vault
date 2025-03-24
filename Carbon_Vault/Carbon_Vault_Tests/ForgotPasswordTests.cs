@@ -28,7 +28,7 @@ namespace Carbon_Vault_Tests_Auth
 
             // Criar um contexto de base de dados InMemory
             var options = new DbContextOptionsBuilder<Carbon_VaultContext>()
-                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()) // Usa um GUID para criar uma BD única por teste
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()) // Usa um GUID para criar uma BD ï¿½nica por teste
                 .Options;
 
             _mockContext = new Carbon_VaultContext(options);
@@ -64,7 +64,7 @@ namespace Carbon_Vault_Tests_Auth
             // Assert
             _mockEmailService.Verify(e => e.SendEmail(
                 email,
-                "Carbon Vault - Recuperar Palavra-Passe",
+                "Carbon Vault - Nova Palavra-Passe",
                 It.Is<string>(body => body.Contains("recover-password")), null), Times.Once);
 
             Assert.IsType<OkObjectResult>(result);
@@ -72,7 +72,7 @@ namespace Carbon_Vault_Tests_Auth
 
         public void Dispose()
         {
-            _mockContext.Database.EnsureDeleted(); // Apaga a BD InMemory após os testes
+            _mockContext.Database.EnsureDeleted(); // Apaga a BD InMemory apï¿½s os testes
             _mockContext.Dispose();
         }
     }

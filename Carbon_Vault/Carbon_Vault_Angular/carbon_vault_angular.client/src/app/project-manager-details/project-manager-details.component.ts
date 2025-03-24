@@ -118,11 +118,21 @@ export class ProjectManagerDetailsComponent {
   }
 
   saveCarbonInfo() {
-    var creditsForSaleValid = this.newCreditsForSale > 0 && this.newCreditsForSale <= this.project.carbonCredits.length;
-    var pricePerCreditValid = this.newPricePerCredit > 0;
+    if(this.newCreditsForSale < 0)
+    {
+      alert("A quantidade de créditos para venda não pode ser negativa");
+      return;
+    }
 
-    if (!creditsForSaleValid || !pricePerCreditValid) {
-      alert('Por favor, preencha todos os campos corretamente');
+    if(this.newPricePerCredit <= 0)
+    {
+      alert("O preço por crédito tem que ser positivo");
+      return;
+    }
+
+    if(this.newCreditsForSale > this.project.carbonCredits.length)
+    {
+      alert("Não pode vender mais créditos do que os que tem disponíveis");
       return;
     }
 
