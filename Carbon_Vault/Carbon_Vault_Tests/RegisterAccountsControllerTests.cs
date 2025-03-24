@@ -26,6 +26,8 @@ namespace Carbon_Vault_Tests_Auth
             _mockConfiguration.Setup(c => c["AppSettings:FrontendBaseUrl"]).Returns("http://localhost:59115/");
             _mockConfiguration.Setup(c => c["AppSettings:TokenSecretKey"]).Returns("jEJQ#5Hxuh*#[ra7k98J=cBRLj]n6ZP1w*2S.M-Pwgr1D;ZQ.C*WgN&HnCG");
 
+            Environment.SetEnvironmentVariable("JWT_KEY", "K1o+fi[9&-{F=y+}w:#6%30kCFM<FEo~");
+
             // Criar um contexto de base de dados InMemory
             var options = new DbContextOptionsBuilder<Carbon_VaultContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()) // Usa um GUID para criar uma BD única por teste
@@ -102,7 +104,6 @@ namespace Carbon_Vault_Tests_Auth
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
-            var response = okResult.Value as dynamic;
 
             Assert.Equal(200, okResult.StatusCode);
         }

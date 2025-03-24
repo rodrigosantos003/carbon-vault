@@ -25,7 +25,7 @@ export class DashboardComponent {
   purchases: Transaction[];
   sales: Transaction[];
 
-  constructor(private authService: AuthService, private http: HttpClient, private router: Router) {
+  constructor(private authService: AuthService, private http: HttpClient, private router: Router, private auth: AuthService) {
 
     this.userId = this.authService.getUserId();
     this.emissions = 0;
@@ -70,7 +70,7 @@ export class DashboardComponent {
     const jwtToken = localStorage.getItem('token');
 
     this.http.get<Transaction[]>(purchasesURL, {
-      headers: { 'Authorization': `Bearer ${jwtToken}` }
+      headers: this.auth.getHeaders()
     }).subscribe({
       next: (data) => {
         this.purchases = data;
@@ -81,7 +81,7 @@ export class DashboardComponent {
     });
 
     this.http.get<Transaction[]>(salesURL, {
-      headers: { 'Authorization': `Bearer ${jwtToken}` }
+      headers: this.auth.getHeaders()
     }).subscribe({
       next: (data) => {
         this.sales = data;

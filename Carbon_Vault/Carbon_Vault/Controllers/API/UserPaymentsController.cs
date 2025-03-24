@@ -92,7 +92,7 @@ namespace Carbon_Vault.Controllers.API
                 InvoiceCreation = new SessionInvoiceCreationOptions
                 {
                     Enabled = true,
-                    InvoiceData =
+                    InvoiceData = new SessionInvoiceCreationInvoiceDataOptions
                     {
                         Description = account.Result.Nif
                     }

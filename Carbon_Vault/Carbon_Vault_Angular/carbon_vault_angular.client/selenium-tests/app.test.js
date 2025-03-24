@@ -5,6 +5,9 @@ import { testRegister } from './tests/register.js'
 import { testTransactionsPreview, testTransactionDetailsPreview } from './tests/view_transactions.js';
 import { testCreditsSellCriterion } from './tests/credits-criterion.js';
 import { testAddProject } from './tests/add-project.js';
+import { testBuyCredits } from './tests/buy_credits.js';
+import { testCart } from './tests/cart.js';
+import { testUserManager } from './tests/user-manager.js';
 
 (async function appTest() {
   let driver = await new Builder().forBrowser('chrome').build();
@@ -12,7 +15,7 @@ import { testAddProject } from './tests/add-project.js';
 
   try {
     // Testar o registo com credenciais validas
-    await testRegister(driver, "selenium user", "Selenium@123", "testing@example.com", "987654321");
+    //await testRegister(driver, "selenium user", "Selenium@123", "testing@example.com", "987654321");
 
     // Fazer login e obter o token
     let token = await testLogin(driver, 'user@carbonvault.com', 'User@111');
@@ -25,6 +28,12 @@ import { testAddProject } from './tests/add-project.js';
 
     // Testar inserção de projeto
     await testAddProject(driver);
+
+    // Testar a aquisição de créditos
+    await testBuyCredits(driver);
+
+    // Testar Carrinho
+    await testCart(driver);
 
     // Testar form de emissões
     await testEmissionsForm(driver);
@@ -74,7 +83,10 @@ import { testAddProject } from './tests/add-project.js';
     // Testar a visualização de detalhes de uma transação
     await testTransactionDetailsPreview(driver);
 
-    console.log("Testes concluído com sucesso!");
+    // Testar gestão de utilizadores
+    await testUserManager(driver);
+
+    console.log("Testes concluídos com sucesso!");
 
   } catch (error) {
     console.error("Erro nos testes:", error);
