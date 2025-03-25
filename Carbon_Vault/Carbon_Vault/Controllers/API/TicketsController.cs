@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Carbon_Vault.Data;
 using Carbon_Vault.Models;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace Carbon_Vault.Controllers.API
 {
@@ -31,11 +32,9 @@ namespace Carbon_Vault.Controllers.API
             }
             //Check if is an Admin or a support user
             var account = await _context.Account.FindAsync(userID);
-            if (account.Role != AccountType.Admin && account.Role != AccountType.Support)
-            {
-                return Unauthorized();
-            }   
-            return await _context.Ticket.ToListAsync();
+            return account.Role is not AccountType.Admin and not AccountType.Support
+                ? (ActionResult<IEnumerable<Ticket>>)Unauthorized()
+                : (ActionResult<IEnumerable<Ticket>>)await _context.Tickets.ToListAsync();
         }
 
         // GET: api/Tickets/user/5
@@ -48,19 +47,19 @@ namespace Carbon_Vault.Controllers.API
             }
             var account = await _context.Account.FindAsync(userID);
             //Check if is an Admin or a support user or the user itself
-            if ((account.Role != AccountType.Admin && account.Role != AccountType.Support) && userID != RequestedUserId)
+            if (account.Role == AccountType.Admin || account.Role == AccountType.Support || userID == RequestedUserId)
             {
-                return Unauthorized();
+                return await _context.Tickets.Where(t => t.AuthorId == RequestedUserId).ToListAsync();
             }
 
-            return await _context.Ticket.Where(t => t.AuthorId == RequestedUserId).ToListAsync();
+            return Unauthorized();
         }
 
         // GET: api/Tickets/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Ticket>> GetTicket(int id)
         {
-            var ticket = await _context.Ticket
+            var ticket = await _context.Tickets
         .Include(t => t.Messages)
         .ThenInclude(m => m.Autor) 
         .FirstOrDefaultAsync(t => t.Id == id);
@@ -115,7 +114,7 @@ namespace Carbon_Vault.Controllers.API
                 return BadRequest("Invalid AuthorId");
             }
 
-            _context.Ticket.Add(ticket);
+            _context.Tickets.Add(ticket);
             await _context.SaveChangesAsync();
 
             // Add a new ticket message to the ticket as the issue of the user submitted ticket
@@ -127,7 +126,7 @@ namespace Carbon_Vault.Controllers.API
                 Autor = author
             };
 
-            _context.TicketMessage.Add(ticketMessage);
+            _context.TicketMessages.Add(ticketMessage);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetTicket", new { id = ticket.Id }, ticket);
@@ -137,21 +136,55 @@ namespace Carbon_Vault.Controllers.API
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTicket(int id)
         {
-            var ticket = await _context.Ticket.FindAsync(id);
+            var ticket = await _context.Tickets.FindAsync(id);
             if (ticket == null)
             {
                 return NotFound();
             }
 
-            _context.Ticket.Remove(ticket);
+            _context.Tickets.Remove(ticket);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
+        [HttpGet("ticket/reference/{reference}")]
+        public async Task<ActionResult<Ticket>> GetTicketByReference(string reference, [FromHeader] string Authorization, [FromHeader] int userID)
+        {
+            if (!AuthHelper.IsTokenValid(Authorization, userID))
+            {
+                return Unauthorized();
+            }
+
+            var ticket = await _context.Tickets
+                .Include(t => t.Messages)
+                .ThenInclude(m => m.Autor)
+                .FirstOrDefaultAsync(t => t.Reference == reference);
+
+            if (ticket == null)
+            {
+                return NotFound();
+            }
+
+            var account = await _context.Account.FindAsync(userID);
+            if (account == null)
+            {
+                return Unauthorized();
+            }
+
+            // Check if user is the ticket author or has admin/support role
+            if (ticket.AuthorId != userID && account.Role is not AccountType.Admin and not AccountType.Support)
+            {
+                return Forbid();
+            }
+
+            return ticket;
+        }
+
+
         private bool TicketExists(int id)
         {
-            return _context.Ticket.Any(e => e.Id == id);
+            return _context.Tickets.Any(e => e.Id == id);
         }
     }
 }

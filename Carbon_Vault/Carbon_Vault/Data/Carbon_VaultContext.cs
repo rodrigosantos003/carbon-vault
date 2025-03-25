@@ -20,10 +20,9 @@ namespace Carbon_Vault.Data
         public DbSet<UserEmissions> UserEmissions { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<ProjectFiles> ProjectFiles { get; set; }
-        public DbSet<Ticket> Tickets { get; set; }
-        public DbSet<TicketMessage> TickeMessages { get; set; }
-        public DbSet<Carbon_Vault.Models.Ticket> Ticket { get; set; } = default!;
-        public DbSet<Carbon_Vault.Models.TicketMessage> TicketMessage { get; set; } = default!;
+        public DbSet<Ticket> Tickets { get; set; } = default!;
+        public DbSet<TicketMessage> TicketMessages { get; set; } = default!;
+
 
         public Carbon_VaultContext(DbContextOptions<Carbon_VaultContext> options)
             : base(options)
@@ -293,5 +292,7 @@ namespace Carbon_Vault.Data
                 }
             );
         }
+      
     }
+
 }

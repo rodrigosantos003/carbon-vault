@@ -25,14 +25,14 @@ namespace Carbon_Vault.Controllers.API
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TicketMessage>>> GetTicketMessage()
         {
-            return await _context.TicketMessage.ToListAsync();
+            return await _context.TicketMessages.ToListAsync();
         }
 
         // GET: api/TicketMessages/5
         [HttpGet("{id}")]
         public async Task<ActionResult<TicketMessage>> GetTicketMessage(int id)
         {
-            var ticketMessage = await _context.TicketMessage.FindAsync(id);
+            var ticketMessage = await _context.TicketMessages.FindAsync(id);
 
             if (ticketMessage == null)
             {
@@ -85,7 +85,7 @@ namespace Carbon_Vault.Controllers.API
             var account = await _context.Account.FindAsync(userID);
 
 
-            _context.TicketMessage.Add(ticketMessage);
+            _context.TicketMessages.Add(ticketMessage);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetTicketMessage", new { id = ticketMessage.Id }, ticketMessage);
@@ -95,13 +95,13 @@ namespace Carbon_Vault.Controllers.API
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTicketMessage(int id)
         {
-            var ticketMessage = await _context.TicketMessage.FindAsync(id);
+            var ticketMessage = await _context.TicketMessages.FindAsync(id);
             if (ticketMessage == null)
             {
                 return NotFound();
             }
 
-            _context.TicketMessage.Remove(ticketMessage);
+            _context.TicketMessages.Remove(ticketMessage);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -109,7 +109,7 @@ namespace Carbon_Vault.Controllers.API
 
         private bool TicketMessageExists(int id)
         {
-            return _context.TicketMessage.Any(e => e.Id == id);
+            return _context.TicketMessages.Any(e => e.Id == id);
         }
     }
 }
