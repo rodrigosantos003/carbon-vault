@@ -62,6 +62,8 @@ body {
   display: flex;
   gap: 100px;
   padding-top: 50px;
+  overflow: hidden;
+  height: 500px;
 }
 
 .table {
@@ -71,15 +73,18 @@ body {
   padding: 20px;
 }
 
-.table thead {
-  background-color: #D3E2D0;
-}
+  .table thead,
+  .table tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed; /* Keeps columns aligned */
+  }
 
 .table h2 {
   margin-bottom: 20px;
 }
 
-table {
+.table table {
   width: 100%;
   border-collapse: collapse;
 }
@@ -91,14 +96,20 @@ table td {
   border-bottom: 1px solid #ddd;
 }
 
-.details-button {
-  padding: 5px 10px;
-  background-color: var(--main-color);
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+.table tbody {
+    display: block;
+    max-height: 450px;
+    overflow-y: auto;
 }
+
+  .details-button {
+    padding: 5px 10px;
+    background-color: var(--main-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
 
 .details-button:hover {
   background-color: #45a049;

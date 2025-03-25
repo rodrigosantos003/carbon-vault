@@ -3,27 +3,31 @@
     <app-alerts></app-alerts>
 
     <main>
-        <form [formGroup]="settingsForm" (ngSubmit)="onSubmit()" class="content">
-            <h1>As minhas definições</h1>
-            <div class="form-group">
-                <label>Nome</label>
-                <input type="text" id="name" formControlName="name">
-            </div>
-            <div class="form-group">
-                <label>Email</label>
-                <input type="text" id="email" formControlName="email">
-            </div>
-            <div class="form-group">
-                <label>Número de Identificação Fiscal</label>
-                <input type="text" id="nif" formControlName="nif">
-            </div>
-            <button class="save-button" type="submit">Guardar</button>
-        </form>
+      <form [formGroup]="settingsForm" (ngSubmit)="onSubmit()" class="content">
+        <h1>As minhas definições</h1>
 
-        <div class="settings-buttons">
-            <button id="open-delete-btn" (click)="openDeleteAccount()">Apagar conta</button>
-            <button (click)="changePassword()">Alterar palavra-passe</button>
+        <div class="form-group" *ngFor="let field of ['name', 'email', 'nif']">
+          <label [for]="field">{{ field | titlecase }}</label>
+          <div class="input-container">
+            <div class="edit-input">
+              <input type="text" [id]="field" [formControlName]="field"/>
+              <!--<button type="button" class="edit-icon" (click)="toggleEdit(field)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M2 17.25V21H5.75L17.81 8.94L14.06 5.19L2 17.25Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M18.37 3.63C18.86 3.14 19.53 2.86 20.24 2.86C20.95 2.86 21.62 3.14 22.11 3.63C22.6 4.12 22.88 4.79 22.88 5.5C22.88 6.21 22.6 6.88 22.11 7.37L20.12 9.36L16.62 5.86L18.37 3.63Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>-->
+            </div>
+          </div>
         </div>
+
+        <button class="save-button" type="submit">Guardar</button>
+      </form>
+
+      <div class="settings-buttons">
+        <button id="open-delete-btn" (click)="openDeleteAccount()">Apagar conta</button>
+        <button (click)="changePassword()">Alterar palavra-passe</button>
+      </div>
     </main>
 
     <!-- Confirm Delet Popup -->
