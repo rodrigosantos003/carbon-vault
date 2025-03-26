@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { AuthService } from '../auth-service.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-
+import { AlertsService } from '../alerts.service';
 import { Chart, registerables } from 'chart.js';
 import { Router } from '@angular/router';
 Chart.register(...registerables);
@@ -25,7 +25,7 @@ export class DashboardComponent {
   purchases: Transaction[];
   sales: Transaction[];
 
-  constructor(private authService: AuthService, private http: HttpClient, private router: Router, private auth: AuthService) {
+  constructor(private authService: AuthService, private http: HttpClient, private router: Router, private auth: AuthService, private alerts: AlertsService) {
 
     this.userId = this.authService.getUserId();
     this.emissions = 0;
@@ -66,6 +66,7 @@ export class DashboardComponent {
   }
 
   getTransactions() {
+    this.alerts.enableLoading("A carregar dados");
     const purchasesURL = `${environment.apiUrl}/Transactions/type/0/user/${this.userId}`;
     const salesURL = `${environment.apiUrl}/Transactions/type/1/user/${this.userId}`;
 
@@ -87,9 +88,12 @@ export class DashboardComponent {
     }).subscribe({
       next: (data) => {
         this.sales = data;
+        this.alerts.disableLoading();
       },
       error: (error) => {
         console.error("Erro ao obter compras: ", error);
+        this.alerts.disableLoading();
+        this.alerts.enableError("Erro ao carregar os dados");
       }
     });
   }

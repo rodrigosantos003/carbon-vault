@@ -1,51 +1,81 @@
 body {
-    font-family: 'Poppins', sans-serif;
-    color: black;
-    margin: 0px !important;
-    display: flex;
-    height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  color: black;
+  margin: 0px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f4f4f4;
 }
 
 
-/***** EMISSIONS FORM ******/
-
 main {
-    flex: 1;
-    padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 }
 
 .content {
-    max-width: 700px;
-    margin: 0 auto;
-    background: white;
-    padding: 20px;
+  max-width: 700px;
+  width: 100%;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
-.content h1 {
+  .content h1 {
     font-size: 20px;
     margin-bottom: 20px;
     border-bottom: 2px solid #333;
     padding-bottom: 10px;
+  }
+
+  .edit-input {
+      display: flex;
+  }
+
+.edit-icon {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
 }
+
+  .edit-icon svg {
+    width: 18px;
+    height: 18px;
+    color: #333; /* Adjust color as needed */
+  }
+
 
 .form-group {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-.form-group label {
-    width: 300px;
+  .form-group label {
     font-size: 16px;
-}
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
 
-.form-group input {
-    width: 150px;
+  .form-group input {
+    width: 80%;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
-}
+    text-align: center;
+  }
 
 .form-group span {
     margin-left: 10px;
@@ -70,22 +100,22 @@ main {
 }
 
 .save-button {
-    display: block;
-    width: 100%;
-    background: var(--main-color);
-    color: white;
-    padding: 12px;
-    text-align: center;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
-    margin-top: 20px;
+  display: block;
+  width: 100%;
+  background: #28a745;
+  color: white;
+  padding: 12px;
+  text-align: center;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 20px;
 }
 
-.save-button:hover {
+  .save-button:hover {
     background: #236927;
-}
+  }
 
 .modal-overlay {
     position: fixed;
@@ -217,6 +247,10 @@ main {
 }
 
 #open-delete-btn {
-    background-color: rgb(255, 105, 100);
-    color: #fff;
+  background-color: rgb(255, 105, 100);
+  color: #fff;
 }
+
+  #open-delete-btn:hover {
+    background-color: rgb(255, 73, 66);
+  }
