@@ -22,7 +22,7 @@
                         <td colspan="4" class="text-center" id="nothingToShow">Nada a mostrar!</td>
                     </tr>
                     <tr *ngFor="let report of reports">
-                        <td>{{report.lastUpdate}}</td>
+                        <td>{{report.lastUpdate | date:'dd/MM/yyyy HH:mm:ss'}}</td>
                         <td>{{report.stateText}}</td>
                         <td *ngIf="report.reportState == 0"><button class="details-button"
                                 (click)="payReport(report.id)">Pagar Relatório</button></td>

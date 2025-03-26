@@ -114,6 +114,7 @@ export class RequestReportComponent {
       next: () => {
         window.open(paymentData.payment_url, "_self");
         sessionStorage.setItem("checkoutSession", paymentData.checkout_session);
+        sessionStorage.setItem("reportID", id.toString());
       }
     });
   }

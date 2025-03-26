@@ -41,6 +41,7 @@ import { UserSettingsComponent } from './user-settings/user-settings.component';
 import { UserSupportComponent } from './user-support/user-support.component';
 import { UserReportsComponent } from './user-reports/user-reports.component';
 import { RequestReportComponent } from './request-report/request-report.component';
+import { AdminReportsComponent } from './admin-reports/admin-reports.component';
 
 @NgModule({
   declarations: [
@@ -77,7 +78,8 @@ import { RequestReportComponent } from './request-report/request-report.componen
     UserSettingsComponent,
     UserSupportComponent,
     UserReportsComponent,
-    RequestReportComponent
+    RequestReportComponent,
+    AdminReportsComponent
   ],
   imports: [
     BrowserModule,

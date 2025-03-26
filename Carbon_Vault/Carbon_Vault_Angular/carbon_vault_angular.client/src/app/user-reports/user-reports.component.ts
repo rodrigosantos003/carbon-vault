@@ -21,6 +21,15 @@ export class UserReportsComponent {
 
   ngOnInit() {
     this.fetchReports();
+    this.getClientName();
+  }
+
+  getClientName() {
+    const url = `${environment.apiUrl}/Accounts/${this.auth.getUserId()}`;
+
+    this.http.get(url).subscribe({
+      next: (account: any) => this.clientName = account.name
+    })
   }
 
   fetchReports() {

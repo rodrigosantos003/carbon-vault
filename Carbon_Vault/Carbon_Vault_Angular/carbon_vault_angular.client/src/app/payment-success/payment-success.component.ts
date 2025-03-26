@@ -33,11 +33,28 @@ export class PaymentSuccessComponent {
           this.http.get<any>(`${environment.apiUrl}/UserPayments/session/${checkoutSession}`, { headers: this.authService.getHeaders() });
         }
         else if (type == "report") {
-          //TODO: Update report state
+          this.updateReport();
         }
       });
 
       this.sendInvoice(checkoutSession);
+    }
+  }
+
+  updateReport() {
+    const id = sessionStorage.getItem("reportID")
+
+    if (id) {
+      const reportURL = `${environment.apiUrl}/Reports/${id}`;
+
+      const report = {
+        id: parseInt(id),
+        userID: this.authService.getUserId(),
+        reportState: 1,
+        text: ""
+      };
+
+      this.http.put(reportURL, report, { headers: this.authService.getHeaders() });
     }
   }
 

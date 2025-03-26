@@ -84,7 +84,7 @@ namespace Carbon_Vault.Controllers.API
         [HttpPut("{id}")]
         [ServiceFilter(typeof(TokenValidationFilter))]
         public async Task<IActionResult> UpdateReport(int id, Report report)
-        {
+        {   
             if (id != report.Id)
             {
                 return BadRequest();
