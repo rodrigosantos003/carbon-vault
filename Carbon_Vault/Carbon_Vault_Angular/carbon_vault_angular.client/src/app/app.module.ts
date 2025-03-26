@@ -39,6 +39,8 @@ import { ProjectManagerDetailsAdminComponent } from './project-manager-details-a
 import { AdminTransactionsComponent } from './admin-transactions/admin-transactions.component';
 import { UserSettingsComponent } from './user-settings/user-settings.component';
 import { UserSupportComponent } from './user-support/user-support.component';
+import { UserReportsComponent } from './user-reports/user-reports.component';
+import { RequestReportComponent } from './request-report/request-report.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +75,9 @@ import { UserSupportComponent } from './user-support/user-support.component';
     AdminTransactionsComponent,
     TransactionDetailsComponent,
     UserSettingsComponent,
-    UserSupportComponent
+    UserSupportComponent,
+    UserReportsComponent,
+    RequestReportComponent
   ],
   imports: [
     BrowserModule,

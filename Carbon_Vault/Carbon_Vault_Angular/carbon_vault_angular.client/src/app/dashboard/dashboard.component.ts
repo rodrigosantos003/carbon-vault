@@ -36,6 +36,8 @@ export class DashboardComponent {
   }
 
   ngOnInit() {
+    sessionStorage.clear();
+
     const url = `${environment.apiUrl}/accounts/${this.userId}`;
     this.http.get(url).subscribe(
       (data: any) => {

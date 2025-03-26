@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { CartService } from '../cart.service';
-import { Route, Router } from '@angular/router';
+import { ActivatedRoute, Route, Router } from '@angular/router';
 import { loadStripe, Stripe } from '@stripe/stripe-js';
 import { AlertsService } from '../alerts.service';
 import { AuthService } from '../auth-service.service';
@@ -16,14 +16,27 @@ import { AuthService } from '../auth-service.service';
 })
 export class PaymentSuccessComponent {
   sessionData: any;
-  constructor(private http: HttpClient, private cartService: CartService, public router: Router, private alerts: AlertsService, private authService: AuthService) { }
+  constructor(private http: HttpClient, private cartService: CartService, public router: Router, private alerts: AlertsService, private authService: AuthService, private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.cartService.clearCart();
     const checkoutSession = sessionStorage.getItem("checkoutSession");
 
+
+
     if (checkoutSession) {
-      this.http.get<any>(`${environment.apiUrl}/UserPayments/session/${checkoutSession}`, { headers: this.authService.getHeaders() });
+
+      this.route.params.subscribe((params: any) => {
+        const type = params["type"];
+
+        if (type == "credits") {
+          this.http.get<any>(`${environment.apiUrl}/UserPayments/session/${checkoutSession}`, { headers: this.authService.getHeaders() });
+        }
+        else if (type == "report") {
+          //TODO: Update report state
+        }
+      });
+
       this.sendInvoice(checkoutSession);
     }
   }

@@ -48,7 +48,7 @@ namespace Carbon_Vault.Controllers.API
             return Ok(report);
         }
 
-        [HttpGet("/user/{userID}")]
+        [HttpGet("User/{userID}")]
         [ServiceFilter(typeof(TokenValidationFilter))]
         public async Task<ActionResult<IEnumerable<Report>>> GetUserReports(int userID)
         {
@@ -70,16 +70,13 @@ namespace Carbon_Vault.Controllers.API
         }
 
         [HttpPost]
-        public async Task<ActionResult<Report>> RequestReport(Report report)
+        public async Task<ActionResult<Report>> CreateReport(Report report)
         {
-            if(report.UserID == 0)
-            {
-                return BadRequest("O campo UserID é obrigatório");
-            }
-
-            report.ReportState = ReportState.Requested;
+            report.LastUpdate = DateTime.Now;
+            report.ReportState = ReportState.Pending;
 
             _context.Reports.Add(report);
+            await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetReport", new { id = report.Id }, report);
         }
@@ -92,6 +89,8 @@ namespace Carbon_Vault.Controllers.API
             {
                 return BadRequest();
             }
+
+            report.LastUpdate = DateTime.Now;
 
             _context.Entry(report).State = EntityState.Modified;
 

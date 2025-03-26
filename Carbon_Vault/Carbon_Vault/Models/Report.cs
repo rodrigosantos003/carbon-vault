@@ -5,6 +5,7 @@ namespace Carbon_Vault.Models
 {
     public enum ReportState
     {
+        Pending,
         Requested,
         Created
     }
@@ -20,9 +21,13 @@ namespace Carbon_Vault.Models
         [Required]
         public int UserID { get; set; }
 
+        public DateTime LastUpdate { get; set; }
+
         public ReportState ReportState { get; set; }
 
         public string? Text { get; set; }
+
+        public string? CheckoutSession { get; set; }
 
         // Relationship with documents
         public ICollection<ReportFiles> Files { get; set; } = new List<ReportFiles>();

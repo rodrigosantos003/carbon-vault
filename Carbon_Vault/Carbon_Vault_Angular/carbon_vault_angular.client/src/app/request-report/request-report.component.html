@@ -1,0 +1,41 @@
+<body class="request-body">
+
+    <div class="request-container">
+        <div class="request-box">
+            <h1>Solicitar relatório</h1>
+            <form [formGroup]="requestForm" (ngSubmit)="onSubmit()">
+                <label for="drop-area">Selecione os documentos para análise</label>
+                <div class="file-drop-area" id="drop-area">
+                    <p>Arrastar e largar ficheiros aqui</p>
+                    <p>ou</p>
+                    <label for="file-input" class="file-label">Procurar Ficheiros</label>
+                    <input type="file" id="file-input" formControlName="files" (change)="onFileSelected($event)" hidden
+                        multiple>
+                </div>
+                <span *ngIf="documents.length > 0">
+                    Documentos carregados: <span *ngIf="documents.length > 0">{{ fileNames }}</span>
+                </span>
+
+                <button type="submit" class="request-button">Realizar pagamento</button>
+            </form>
+        </div>
+        <div class="info-box">
+            <div class="logo-title">
+                <div class="logo">
+                    <img src="/images/CV_Logo.png" alt="Carbon Vault Logo" />
+                </div>
+                <h2>Carbon Vault</h2>
+            </div>
+            <p>Com o nosso <span>serviço de avaliação de emissões</span> podemos ajudá-lo a obter um relatório completo
+                com recomendações eficazes.</p>
+            <p>Preencha o formulário para solicitar um relatório de análise de emissões!</p>
+            <p>Por apenas <span>56€</span></p>
+            <div class="plant-icon">
+                <img src="/images/PlantIcon.png" alt="Planta" />
+            </div>
+        </div>
+    </div>
+
+    <app-alerts></app-alerts>
+
+</body>

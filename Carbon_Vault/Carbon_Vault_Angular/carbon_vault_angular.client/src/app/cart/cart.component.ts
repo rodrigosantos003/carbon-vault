@@ -59,7 +59,7 @@ export class CartComponent implements OnInit {
   }
 
   checkout() {
-    const apiUrl = `${environment.apiUrl}/UserPayments`;
+    const apiUrl = `${environment.apiUrl}/UserPayments?type=credits`;
     const paymentData = {
       items: this.cartService.getCart(),
       userId: this.authService.getUserId(),
