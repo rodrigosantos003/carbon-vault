@@ -11,7 +11,7 @@ using Xunit;
 
 namespace Carbon_Vault_Tests_Auth
 {
-    public class RegisterAccountsControllerTests
+    public class RegisterAccountsControllerTests: IDisposable
     {
         private readonly Mock<IEmailService> _mockEmailService;
         private readonly Mock<IConfiguration> _mockConfiguration;
