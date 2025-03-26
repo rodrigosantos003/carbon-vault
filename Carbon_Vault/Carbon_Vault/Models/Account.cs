@@ -45,5 +45,8 @@ namespace Carbon_Vault.Models
 
         // Relationship with Projects
         public ICollection<Project> Projects { get; set; } = new List<Project>();
+
+        // Relationship with Reports
+        public ICollection<Report> Reports { get; set; } = new List<Report>();
     }
 }

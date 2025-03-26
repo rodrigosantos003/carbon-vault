@@ -4,6 +4,10 @@
 # Ignore migrations
 [Mm]igrations/
 
+# Ignore AppData
+
+App_Data/
+
 # User-specific files
 *.rsuser
 *.suo

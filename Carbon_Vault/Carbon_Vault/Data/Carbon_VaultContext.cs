@@ -20,7 +20,8 @@ namespace Carbon_Vault.Data
         public DbSet<UserEmissions> UserEmissions { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<ProjectFiles> ProjectFiles { get; set; }
-
+        public DbSet<Report> Reports { get; set; }
+        public DbSet<ReportFiles> ReportFiles { get; set; }
         public Carbon_VaultContext(DbContextOptions<Carbon_VaultContext> options)
             : base(options)
         {
@@ -48,7 +49,18 @@ namespace Carbon_Vault.Data
                .HasOne(cc => cc.Owner)
                .WithMany(p => p.Projects)
                .HasForeignKey(cc => cc.OwnerId);
-               
+
+            // Configure relationship between Report and its User
+            modelBuilder.Entity<Report>()
+                .HasOne(r => r.User)
+                .WithMany(u => u.Reports)
+                .HasForeignKey(r => r.UserID);
+
+            modelBuilder.Entity<ReportFiles>()
+                .HasOne(rf => rf.Report)
+                .WithMany(r => r.Files)
+                .HasForeignKey(rf => rf.ReportId);
+
             populateAccounts(modelBuilder);
 
             populateProjectTypes(modelBuilder);
