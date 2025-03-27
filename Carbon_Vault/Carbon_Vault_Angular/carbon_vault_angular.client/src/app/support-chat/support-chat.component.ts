@@ -19,13 +19,14 @@ export class SupportChatComponent {
   private ticketsURL = `${environment.apiUrl}/Tickets`;
   private ticketsMessagesURL = `${environment.apiUrl}/TicketMessages`;
   messageContent: string  = ""
-
+  userRole : number = 0; 
   
   
   constructor(private http: HttpClient, private alerts: AlertsService, private authService: AuthService, private router: Router, private route: ActivatedRoute) { }
   ngOnInit(): void {
     const ticketId = this.route.snapshot.params['id'];
     this.getTicket(ticketId);
+    this.authService.getUserRole().then((role) =>  this.userRole = role); 
   }
 
   async getTicket(ticketId: number) {
@@ -49,27 +50,74 @@ export class SupportChatComponent {
     return ticket.authorId === message.autor.id;
   }
 
+  // sendMessage() {
+  //   if (!this.messageContent.trim()) {
+  //     alert('A mensagem não pode estar vazia!');
+  //     return;
+  //   }
+  //   var token = localStorage.getItem('token');
+  //   var userId = this.authService.getUserId();
+
+  //   const headers = new HttpHeaders({
+  //     'Authorization': `Bearer ${token}`,
+  //     'userID': userId
+  //   });
+
+  //   const data = {
+  //    TicketId: this.ticket?.id,
+  //     Content: this.messageContent,
+  //     AutorId: Number(userId)
+  //   };
+
+
+  //   this.http.post(this.ticketsMessagesURL,data,{headers}).subscribe(
+  //     (response) => {
+  //       console.log('Mensagem enviada com sucesso:', response);
+  //       this.messageContent = '';
+  //       this.refreshMessages();
+  //     },
+  //     (error) => {
+  //       console.error('Erro ao enviar a mensagem:', error);
+  //       alert('Ocorreu um erro ao enviar a mensagem. Por favor, tente novamente.');
+  //     }
+  //   );
+  // }
+
   sendMessage() {
     if (!this.messageContent.trim()) {
       alert('A mensagem não pode estar vazia!');
       return;
     }
-    var token = localStorage.getItem('token');
-    var userId = this.authService.getUserId();
-
+    
+    const token = localStorage.getItem('token');
+    const userId = this.authService.getUserId();
+  
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,
       'userID': userId
     });
-
+  
+     
+    if (this.ticket?.state === 1) {   
+      this.ticket.state = 0; 
+  
+      this.http.put(`${this.ticketsURL}/${this.ticket.id}`, { state: 0 }, { headers }).subscribe(
+        () => {
+          console.log('Ticket reaberto com sucesso.');
+        },
+        (error) => {
+          console.error('Erro ao reabrir o ticket:', error);
+        }
+      );
+    }
+  
     const data = {
-     TicketId: this.ticket?.id,
+      TicketId: this.ticket?.id,
       Content: this.messageContent,
       AutorId: Number(userId)
     };
-
-
-    this.http.post(this.ticketsMessagesURL,data,{headers}).subscribe(
+  
+    this.http.post(this.ticketsMessagesURL, data, { headers }).subscribe(
       (response) => {
         console.log('Mensagem enviada com sucesso:', response);
         this.messageContent = '';
@@ -81,6 +129,28 @@ export class SupportChatComponent {
       }
     );
   }
+  
+  closeTicket() {
+    const token = localStorage.getItem('token');
+    const userId = this.authService.getUserId();
+  
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'userID': userId
+    });
+  
+    this.http.put(`${this.ticketsURL}/${this.ticket?.id}`, { state: 1 }, { headers }).subscribe(
+      () => {
+        console.log('Ticket fechado com sucesso.');
+        this.ticket!.state = 1 
+      },
+      (error) => {
+        console.error('Erro ao fechar o ticket:', error);
+        alert('Ocorreu um erro ao fechar o ticket.');
+      }
+    );
+  }
+  
 
   refreshMessages() {
      this.getTicket(this.route.snapshot.params['id'])

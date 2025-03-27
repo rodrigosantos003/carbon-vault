@@ -84,6 +84,9 @@ namespace Carbon_Vault.Controllers.API
             }
             var account = await _context.Account.FindAsync(userID);
 
+            
+            
+            
 
             _context.TicketMessages.Add(ticketMessage);
             await _context.SaveChangesAsync();

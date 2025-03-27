@@ -33,7 +33,7 @@ namespace Carbon_Vault.Models
 
         [Required]
         [DataType(DataType.Password)]
-        [JsonIgnore]
+        
         public string Password { get; set; }
 
         [Required]
