@@ -289,3 +289,27 @@ body {
   .last-message {
     margin-bottom:700px;
   }
+
+  .header{
+    display: flex;
+  }
+
+  .header h1{
+    color: #4EA741;
+    margin: 0;
+  }
+  .close-button{
+    align-self: end;
+    font-size: 20px;
+    width: 150px;
+    margin-left: auto;
+    height: 50px;
+    padding: 10px;
+    border-radius: 7px;
+    border: none;
+    background-color: #4EA744;
+    color: white;}
+
+    .close-button :disabled{
+      opacity: 0.5;
+    }

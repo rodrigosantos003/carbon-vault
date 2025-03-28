@@ -220,3 +220,30 @@ body {
       background-color: #66bb666e;
       cursor: pointer;
     }
+
+    *:disabled {
+  
+      opacity: 0.5;
+    }
+    
+    .status-dot-sucess{
+      width: 10px;
+      height: 10px;
+      background-color: green;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 5px;
+  }
+   .status-dot{
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 5px;
+  }
+  .status-dot.sucess{
+    background-color: green;
+  }
+  .status-dot.insucess{
+    background-color: red;
+  }

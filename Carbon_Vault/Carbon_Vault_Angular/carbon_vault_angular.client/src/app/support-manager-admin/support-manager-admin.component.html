@@ -4,7 +4,7 @@
 
   
     <div class="main-content">
-      <h1>Suporte</h1>
+      <app-go-back-button/>
      
       <div class="ticket-table">
         <div class="table-header">
@@ -24,9 +24,9 @@
             <tr *ngFor="let ticket of tickets">
               <td>{{ ticket.id }}</td>
               <td>{{ ticket.category}}</td>
-              <td>{{getTicketState(ticket.state)}}</td>
+              <td><span class="status-dot" ></span>{{getTicketState(ticket.state)}}</td>
               <td>{{ticket.createdAt}}</td>
-              <td><button class="view-btn" >Responder</button></td>
+              <td><button class="view-btn" [disabled]="ticket.state == 1">Responder</button></td>
             </tr>
           </tbody>
         </table>

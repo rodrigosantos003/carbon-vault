@@ -24,7 +24,7 @@ export class UserMenuComponent {
     { icon: 'images/menu/PurchasesIcon.png', label: 'Gestão de Compras', route: '/admin-transactions' },
     { icon: 'images/menu/ProjectsIcon.png', label: 'Gestão de Projetos', route: '/project-manager' },
     { icon: 'images/menu/RelatoriosIcon.png', label: 'Relatórios', route: '/dashboard' },
-    { icon: 'images/menu/TicketsIcon.png', label: 'Tickets', route: '/dashboard' },
+    { icon: 'images/menu/TicketsIcon.png', label: 'Tickets', route: '/support-manager' },
     { icon: 'images/menu/MarketplaceIcon.png', label: 'Marketplace', route: '/marketplace' },
     { icon: 'images/menu/SettingsIcon.png', label: 'Definições', route: '/settings' },
   ];

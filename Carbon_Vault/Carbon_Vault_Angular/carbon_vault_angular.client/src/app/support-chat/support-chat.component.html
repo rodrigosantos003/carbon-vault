@@ -2,15 +2,15 @@
     <app-user-menu></app-user-menu>
     <div class="main-content">
         <div class="header">
-          <!-- <a href="#" class="back-button">&larr; Voltar</a> -->
+          <h1>{{ticket?.title}}</h1>
           <button *ngIf="ticket?.state === 0 && this.userRole != 0" 
                   (click)="closeTicket()" 
+                  [disabled]="ticket?.state !== 0" 
                   class="close-button">
             Fechar Ticket
           </button>
         </div>
-      
-        <h1>{{ticket?.title}}</h1>
+
         <hr>
         <div class="info-section">
           <div class="ticket-info">

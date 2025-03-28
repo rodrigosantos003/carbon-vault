@@ -1,8 +1,10 @@
 <body>
-    <app-alerts></app-alerts>
+   
     <app-user-menu></app-user-menu>
+    
     <main class="transaction-container">
-
+        <app-alerts></app-alerts>
+        <app-go-back-button></app-go-back-button>
         <span class="transaction-title"> Detalhes da {{ transactionType == 'Venda' ? 'Venda' : 'Compra' }} - #{{
             transactionId }} </span>
 

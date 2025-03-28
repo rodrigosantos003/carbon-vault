@@ -15,7 +15,7 @@ export class AlertsService {
     });
   }
 
-  enableSuccess(message: string, enableTime: number = 3) {
+  enableSuccess(message: string, enableTime: number = 6) {
     const successPopup = document.getElementById('success-popup');
     if (successPopup) {
       const textSpan = successPopup.querySelector('#success-message');
@@ -26,7 +26,7 @@ export class AlertsService {
 
       setTimeout(() => {
         this.disableSuccess();
-      }, enableTime);
+      }, enableTime*1000);
     }
   }
 

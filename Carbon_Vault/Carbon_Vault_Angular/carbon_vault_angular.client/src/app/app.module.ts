@@ -42,6 +42,7 @@ import { SupportChatComponent } from './support-chat/support-chat.component';
 import { SupportManagerAdminComponent } from './support-manager-admin/support-manager-admin.component';
 import { ChatCardComponent } from './chat-card/chat-card.component';
 import { UserSupportComponent } from './user-support/user-support.component';
+import { GoBackButtonComponent } from './go-back-button/go-back-button.component';
 
 @NgModule({
   declarations: [
@@ -79,7 +80,8 @@ import { UserSupportComponent } from './user-support/user-support.component';
     SupportChatComponent,
     SupportManagerAdminComponent,
     ChatCardComponent,
-    UserSupportComponent
+    UserSupportComponent,
+    GoBackButtonComponent
   ],
   imports: [
     BrowserModule,

@@ -17,7 +17,7 @@ import { AfterViewChecked, ElementRef, ViewChild } from '@angular/core';
 export class SupportChatComponent {
   ticket: Ticket | null = null;
   private ticketsURL = `${environment.apiUrl}/Tickets`;
-  private ticketsMessagesURL = `${environment.apiUrl}/TicketMessages`;
+  private ticketsMessagesURL = `${environment.apiUrl}/TicketMessages/send`;
   messageContent: string  = ""
   userRole : number = 0; 
   
@@ -97,8 +97,8 @@ export class SupportChatComponent {
       'userID': userId
     });
   
-     
-    if (this.ticket?.state === 1) {   
+   
+    if (this.ticket?.state === 1 && this.userRole == 0) {   
       this.ticket.state = 0; 
   
       this.http.put(`${this.ticketsURL}/${this.ticket.id}`, { state: 0 }, { headers }).subscribe(
@@ -139,7 +139,7 @@ export class SupportChatComponent {
       'userID': userId
     });
   
-    this.http.put(`${this.ticketsURL}/${this.ticket?.id}`, { state: 1 }, { headers }).subscribe(
+    this.http.put(`${this.ticketsURL}/${this.ticket?.id}`, { ...this.ticket, state: 1 }, { headers }).subscribe(
       () => {
         console.log('Ticket fechado com sucesso.');
         this.ticket!.state = 1 

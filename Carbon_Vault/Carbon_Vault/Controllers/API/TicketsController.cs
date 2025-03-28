@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Carbon_Vault.Data;
 using Carbon_Vault.Models;
 using Microsoft.AspNetCore.WebUtilities;
+using Carbon_Vault.Services;
 
 namespace Carbon_Vault.Controllers.API
 {
@@ -16,10 +17,15 @@ namespace Carbon_Vault.Controllers.API
     public class TicketsController : ControllerBase
     {
         private readonly Carbon_VaultContext _context;
+        private readonly IEmailService _emailService;
+        private readonly string _frontendBaseUrl;
 
-        public TicketsController(Carbon_VaultContext context)
+
+        public TicketsController(Carbon_VaultContext context, IEmailService emailService)
         {
             _context = context;
+            _emailService = emailService;
+            _frontendBaseUrl = Environment.GetEnvironmentVariable("CLIENT_URL");
         }
 
         // GET: api/Tickets
@@ -106,6 +112,7 @@ namespace Carbon_Vault.Controllers.API
         // POST: api/Tickets
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+     
         public async Task<ActionResult<Ticket>> PostTicket(Ticket ticket)
         {
             var author = await _context.Account.FindAsync(ticket.AuthorId);
@@ -115,9 +122,9 @@ namespace Carbon_Vault.Controllers.API
             }
 
             _context.Tickets.Add(ticket);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(); 
 
-            // Add a new ticket message to the ticket as the issue of the user submitted ticket
+            
             TicketMessage ticketMessage = new TicketMessage
             {
                 Content = ticket.Description,
@@ -129,7 +136,46 @@ namespace Carbon_Vault.Controllers.API
             _context.TicketMessages.Add(ticketMessage);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTicket", new { id = ticket.Id }, ticket);
+            
+            var savedTicket = await _context.Tickets.FindAsync(ticket.Id);
+
+            
+            var supportAccounts = await _context.Account
+                                   .Where(a => a.Role == AccountType.Support)
+                                   .ToListAsync();
+
+            foreach (var supportAdmin in supportAccounts)
+            {
+                await _emailService.SendEmail(
+                    supportAdmin.Email,
+                    "Novo Ticket Recebido",
+                    $"Olá,\n\nNovo ticket submetido.\n\n" +
+                    $" **Referência:** {savedTicket.Reference}\n" +
+                    $" **Título:** {savedTicket.Title}\n" +
+                    $" **Categoria:** {savedTicket.Category}\n" +
+                    $" **Descrição:** {savedTicket.Description}\n\n" +
+                    $" [Visualizar Ticket]({_frontendBaseUrl}/support-manager/{savedTicket.Id})\n\n" +
+                    $"Atenciosamente,\nEquipa de Suporte do Carbon Vault",
+                    null
+                );
+            }
+
+
+            await _emailService.SendEmail(
+                author.Email,
+                "O seu Ticket Foi Recebido",
+                $"Olá {author.Name},\n\n" +
+                $"O seu ticket foi recebido com sucesso!\n\n" +
+                $"**Referência:** {savedTicket.Reference}\n" +
+                $"**Título:** {savedTicket.Title}\n" +
+                $"**Categoria:** {savedTicket.Category}\n" +
+                $"**Descrição:** {savedTicket.Description}\n\n" +
+                $"Acompanhe o estado  do seu ticket aqui: {_frontendBaseUrl}/support-manager/{savedTicket.Id}\n\n" +
+                $"Atenciosamente,\nEquipa de Suporte do Carbon Vault",
+                null
+            );
+
+            return CreatedAtAction("GetTicket", new { id = savedTicket.Id }, savedTicket);
         }
 
         // DELETE: api/Tickets/5

@@ -188,7 +188,7 @@ namespace Carbon_Vault.Controllers.API
             //foreach (var admin in admins)
             //{
             //    var adminEmail = admin.Email; 
-               
+
             //    // Envio do e-mail para o administrador
             //    await _emailService.SendEmail(
             //        adminEmail, 
@@ -198,7 +198,7 @@ namespace Carbon_Vault.Controllers.API
             //    );
             //}
 
-            var userEmail = project.Owner.Email; 
+            var userEmail = project.Owner.Email;
             //await _emailService.SendEmail(
             //    userEmail, 
             //    "Projeto Enviado para Validação",

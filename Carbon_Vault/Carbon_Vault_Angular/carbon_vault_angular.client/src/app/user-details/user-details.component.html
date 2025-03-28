@@ -41,7 +41,7 @@
                     </thead>
                     <tbody>
                       <tr *ngIf="accountTransactions.length === 0">
-                        <td colspan="4" class="text-center">Nada a mostrar</td>
+                        <td colspan="5" class="text-center">Nada a mostrar</td>
                       </tr>
                       <tr *ngFor="let transaction of accountTransactions">
                         <td>{{ transaction.buyerId }}</td>
