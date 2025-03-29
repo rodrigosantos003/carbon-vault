@@ -83,8 +83,8 @@ export class ProjectManagerUserComponent {
     }
   }
 
-  openPopup(account_id: number) {
-    this.selectedProjectId = account_id;
+  openPopup(project_id: number) {
+    this.selectedProjectId = project_id;
     const overlay = document.getElementById('modalOverlayDelete');
     const delPopup = document.getElementById('delete');
 

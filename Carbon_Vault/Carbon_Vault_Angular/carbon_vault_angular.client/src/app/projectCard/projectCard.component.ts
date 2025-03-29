@@ -22,7 +22,18 @@ export class ProjectCardComponent {
     this.quantity = 1;
   }
 
+  validateQuantity() {
+    if (this.quantity < 1 || isNaN(this.quantity)) {
+      this.quantity = 1;
+    }
+  }
+
   addToCart() {
+    if (this.quantity < 1) {
+      this.alerts.enableError("A quantidade mínima é 1.");
+      return;
+    }
+
     const item = {
       id: this.projectID,
       image: this.imageUrl,
@@ -33,7 +44,6 @@ export class ProjectCardComponent {
     };
 
     this.cartService.addItem(item);
-
     this.alerts.enableSuccess("Item adicionado ao carrinho!");
 
     this.quantity = 1;

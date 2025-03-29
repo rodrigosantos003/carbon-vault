@@ -30,7 +30,7 @@ export class AlertsService {
     }
   }
 
-  disableSuccess() {
+  private disableSuccess() {
     const successPopup = document.getElementById('success-popup');
     if (successPopup) {
       successPopup.style.display = 'none';
@@ -71,7 +71,7 @@ export class AlertsService {
     }
   }
 
-  disableError() {
+  private disableError() {
     const errorPopup = document.getElementById('error-popup');
     if (errorPopup) {
       errorPopup.style.display = 'none';
