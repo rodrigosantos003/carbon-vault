@@ -60,16 +60,18 @@ export class UserSettingsComponent {
 
     const formValue = this.settingsForm.value;
 
-    const isIbanValid = this._validator.validatePortugueseIBAN(formValue.iban);
+    const _iban = formValue.iban.trim();
+
+    const isIbanValid = this._validator.validatePortugueseIBAN(_iban);
     console.log(isIbanValid);
 
-    if (isIbanValid) {
+    if (isIbanValid || _iban == "") {
       const settingsData = {
         id: this.userId,
         name: formValue.name,
         email: formValue.email,
         nif: formValue.nif,
-        iban: formValue.iban,
+        iban: _iban,
         password: formValue.password,
         role: formValue.role
       };
@@ -97,7 +99,6 @@ export class UserSettingsComponent {
   toggleEdit() {
     this.editMode = !this.editMode;
     if (!this.editMode) {
-      // Save the form when toggling off edit mode
       this.onSubmit();
     }
   }
