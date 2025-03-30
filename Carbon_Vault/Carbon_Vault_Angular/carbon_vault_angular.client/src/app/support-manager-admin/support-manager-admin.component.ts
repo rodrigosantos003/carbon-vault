@@ -52,11 +52,31 @@ export class SupportManagerAdminComponent {
     const states = ["Aberto", "Fechado"];
     return states[state] ?? "Unknown";
   }
-  getCategoryName(categoryValue: 'problema_tecnico' | 'transacoes' | 'relatorio' | 'outro'): string {
-    return this.categoryMap[categoryValue] || 'Categoria desconhecida';
+  getCategoryName(categoryValue: number): string {
+    switch (categoryValue) {
+      case TicketCategory.Compra:
+        return 'Ajuda com Compras';
+      case TicketCategory.Venda:
+        return 'Ajuda com Vendas';
+      case TicketCategory.Transacoes:
+        return 'Ajuda com Transações';
+      case TicketCategory.Relatorios:
+        return 'Ajuda com Relatórios';
+      case TicketCategory.Outros:
+        return 'Outros';
+      default:
+        return 'Desconhecido';
+    }
   }
   navigateToTicket(ticketId: string): void {
     
     this.router.navigate([`/support-manager/${ticketId}`]);
   }
+}
+enum TicketCategory {
+  Compra,
+  Venda,
+  Transacoes,
+  Relatorios,
+  Outros
 }

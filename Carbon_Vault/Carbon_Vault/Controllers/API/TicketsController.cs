@@ -143,7 +143,7 @@ namespace Carbon_Vault.Controllers.API
             _context.TicketMessages.Add(ticketMessage);
             await _context.SaveChangesAsync();
 
-            var savedTicket = await _context.Tickets.FindAsync(ticket.Id);
+            var savedTicket = await _context.Tickets.FindAsync(newTicket.Id);
 
 
             var supportAccounts = await _context.Account
