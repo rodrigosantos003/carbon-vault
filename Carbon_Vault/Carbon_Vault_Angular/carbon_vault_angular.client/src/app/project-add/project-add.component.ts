@@ -32,6 +32,9 @@ export class ProjectAddComponent {
   imagem: File | null = null;
   imagePreviewUrl: string | null = null;
 
+  allowedFileTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/csv'];
+  maxMb = 5;
+  maxFileSize = this.maxMb * 1024 * 1024; // 5MB in bytes
 
   categorias = [
     { id: 1, nome: 'Poverty', label: 'Erradicar a pobreza' },
@@ -115,10 +118,35 @@ export class ProjectAddComponent {
   }
 
   onFileChange(event: any) {
-    const newFiles = Array.from(event.target.files) as File[]; // Type cast here
+    const newFiles = Array.from(event.target.files) as File[];
 
     this.documentos = [...this.documentos, ...newFiles];
   }
+
+  //onFileChange(event: any) {
+  //  console.log("AQUI");
+  //  const files = event.target.files;
+
+  //  if (files.length > 0) {
+  //    for (let file of files) {
+
+  //      // Validate file type
+  //      if (!this.allowedFileTypes.includes(file.type)) {
+  //        this.alerts.enableError("Formato inválido. Ficheiros permitidos: .docx, .pdf, .csv");
+  //        return;
+  //      }
+
+  //      // Validate file size
+  //      if (file.size > this.maxFileSize) {
+  //        this.alerts.enableError("Ficheiro demasiado grande. O limite são " + this.maxFileSize + "MB.");
+  //        return;
+  //      }
+  //    }
+
+  //    const newFiles = Array.from(event.target.files) as File[];
+  //    this.documentos = [...this.documentos, ...newFiles];
+  //  }
+  //}
 
   removeFile(index: number) {
     this.documentos.splice(index, 1);
@@ -166,18 +194,47 @@ export class ProjectAddComponent {
   }
 
 
+  //onDrop(event: DragEvent) {
+  //  event.preventDefault();
+  //  event.stopPropagation();
+
+  //  const fileList: FileList = event.dataTransfer?.files!;
+  //  if (fileList && fileList.length > 0) {
+  //    const newFiles = Array.from(fileList);
+
+
+  //    this.documentos = [...this.documentos, ...newFiles];
+  //  }
+  //}
+
   onDrop(event: DragEvent) {
     event.preventDefault();
     event.stopPropagation();
 
-    const fileList: FileList = event.dataTransfer?.files!;
-    if (fileList && fileList.length > 0) {
-      const newFiles = Array.from(fileList);
+    console.log("ENTROU");
 
+    if (event.dataTransfer && event.dataTransfer.files.length > 0) {
+      const droppedFiles = Array.from(event.dataTransfer.files) as File[];
 
-      this.documentos = [...this.documentos, ...newFiles];
+      for (let file of droppedFiles) {
+        // Validate file type
+        if (!this.allowedFileTypes.includes(file.type)) {
+          this.alerts.enableError("Formato inválido. Ficheiros permitidos: .docx, .pdf, .csv");
+          return;
+        }
+
+        // Validate file size (10MB max)
+        if (file.size > this.maxFileSize) {
+          this.alerts.enableError("Ficheiro demasiado grande. O limite são " + this.maxMb + "MB.");
+          return;
+        }
+      }
+
+      // If all files are valid, add them
+      this.documentos = [...this.documentos, ...droppedFiles];
     }
   }
+
 
   onDragLeave(event: DragEvent) {
     event.preventDefault();

@@ -43,6 +43,9 @@ import { SupportManagerAdminComponent } from './support-manager-admin/support-ma
 import { ChatCardComponent } from './chat-card/chat-card.component';
 import { UserSupportComponent } from './user-support/user-support.component';
 import { GoBackButtonComponent } from './go-back-button/go-back-button.component';
+import { UserReportsComponent } from './user-reports/user-reports.component';
+import { RequestReportComponent } from './request-report/request-report.component';
+import { AdminReportsComponent } from './admin-reports/admin-reports.component';
 
 @NgModule({
   declarations: [
@@ -81,7 +84,11 @@ import { GoBackButtonComponent } from './go-back-button/go-back-button.component
     SupportManagerAdminComponent,
     ChatCardComponent,
     UserSupportComponent,
-    GoBackButtonComponent
+    GoBackButtonComponent,
+    UserSupportComponent,
+    UserReportsComponent,
+    RequestReportComponent,
+    AdminReportsComponent
   ],
   imports: [
     BrowserModule,

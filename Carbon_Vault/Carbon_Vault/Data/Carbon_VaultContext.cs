@@ -24,6 +24,8 @@ namespace Carbon_Vault.Data
         public DbSet<TicketMessage> TicketMessages { get; set; } = default!;
 
 
+        public DbSet<Report> Reports { get; set; }
+        public DbSet<ReportFiles> ReportFiles { get; set; }
         public Carbon_VaultContext(DbContextOptions<Carbon_VaultContext> options)
             : base(options)
         {
@@ -64,6 +66,16 @@ namespace Carbon_Vault.Data
                 .HasOne(t => t.Author)
                 .WithMany(a => a.Tickets)
                 .HasForeignKey(t => t.AuthorId);
+            // Configure relationship between Report and its User
+            modelBuilder.Entity<Report>()
+                .HasOne(r => r.User)
+                .WithMany(u => u.Reports)
+                .HasForeignKey(r => r.UserID);
+
+            modelBuilder.Entity<ReportFiles>()
+                .HasOne(rf => rf.Report)
+                .WithMany(r => r.Files)
+                .HasForeignKey(rf => rf.ReportId);
 
             populateAccounts(modelBuilder);
 

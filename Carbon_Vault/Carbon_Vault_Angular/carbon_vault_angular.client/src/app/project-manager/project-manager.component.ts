@@ -15,8 +15,12 @@ import { environment } from '../../environments/environment';
 export class ProjectManagerComponent {
   projects: any[] = [];
   private projectsURL = `${environment.apiUrl}/Projects`;
+  UserId: string = '';
+  selectedProjectId: any;
 
-  constructor(private http: HttpClient, private alerts: AlertsService, private authService: AuthService, private router: Router) { }
+  constructor(private http: HttpClient, private alerts: AlertsService, private authService: AuthService, private router: Router) {
+    this.UserId = this.authService.getUserId();
+  }
   ngOnInit(): void {
     this.getProjects();
   }
@@ -47,6 +51,45 @@ export class ProjectManagerComponent {
     return this.projects.filter(project => project.status == 0).length;
   }
 
+  openPopup(project_id: number) {
+    /*console.log("Clicou no projeto: " + project_id);*/
+    this.selectedProjectId = project_id;
+    const overlay = document.getElementById('modalOverlay');
+    const delPopup = document.getElementById('delete');
+
+    if (overlay && delPopup) {
+      overlay.style.display = 'flex';
+      delPopup.style.display = 'block';
+    }
+  }
+
+  closePopup() {
+    this.selectedProjectId = null;
+    const overlay = document.getElementById('modalOverlay');
+    const delPopup = document.getElementById('delete');
+
+    if (overlay && delPopup) {
+      overlay.style.display = 'none';
+      delPopup.style.display = 'none';
+    }
+  }
+
+  eliminar() {
+    if (this.selectedProjectId) {
+      console.log("ID projeto " + this.selectedProjectId);
+      this.http.delete(`${environment.apiUrl}/Projects/${this.selectedProjectId}`).subscribe({
+        next: () => {
+          console.log('Project deleted successfully');
+          this.alerts.enableSuccess("Projeto eliminado com sucesso");
+          this.getProjects();
+        },
+        error: (err) => {
+          console.error('Error deleting project:', err);
+          this.alerts.enableError("Erro ao apagar projeto com ID = " + this.selectedProjectId);
+        }
+      });
+    }
+  }
 }
 
 

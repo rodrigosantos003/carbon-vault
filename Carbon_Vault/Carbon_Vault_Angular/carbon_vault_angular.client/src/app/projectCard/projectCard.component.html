@@ -4,8 +4,9 @@
     <p>{{ name }}</p>
   </div>
   <div class="card-footer">
-    <input type="number" min="1" [(ngModel)]="quantity">
+    <input type="number" [(ngModel)]="quantity" min="1" (change)="validateQuantity()" required>
     <span>{{ pricePerCredit }}€</span>
-    <button class="buy-btn" (click)="addToCart()">Adicionar ao Carrinho</button>
+    <button class="buy-btn" (click)="addToCart()" [disabled]="quantity < 1">Adicionar ao Carrinho</button>
   </div>
+
 </div>

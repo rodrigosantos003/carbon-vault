@@ -31,6 +31,9 @@ import { UserSettingsComponent } from './user-settings/user-settings.component';
 import { SupportManagerAdminComponent } from './support-manager-admin/support-manager-admin.component';
 import { SupportChatComponent } from './support-chat/support-chat.component';
 import { UserSupportComponent } from './user-support/user-support.component';
+import { UserReportsComponent } from './user-reports/user-reports.component';
+import { RequestReportComponent } from './request-report/request-report.component';
+import { AdminReportsComponent } from './admin-reports/admin-reports.component';
 /*import { EditProjectComponent } from './edit-project/edit-project.component';*/
 
 const routes: Routes = [
@@ -63,7 +66,10 @@ const routes: Routes = [
   { path: 'settings', component: UserSettingsComponent },
   { path: 'support-manager', component: SupportManagerAdminComponent,canActivate: [AuthGuard]  },
   { path: 'support-manager/:id', component: SupportChatComponent,canActivate: [AuthGuard]  },
-  { path: 'user-support', component: UserSupportComponent }
+  { path: 'user-support', component: UserSupportComponent },
+  { path: 'user-reports', component: UserReportsComponent },
+  { path: 'request-report', component: RequestReportComponent },
+  { path: 'admin-reports', component: AdminReportsComponent }
 ];
 
 @NgModule({

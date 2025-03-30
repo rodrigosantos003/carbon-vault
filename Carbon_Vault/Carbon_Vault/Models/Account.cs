@@ -51,5 +51,7 @@ namespace Carbon_Vault.Models
         // Relationship with Tickets
         [JsonIgnore]
         public ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
+        // Relationship with Reports
+        public ICollection<Report> Reports { get; set; } = new List<Report>();
     }
 }

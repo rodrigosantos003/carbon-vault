@@ -59,17 +59,18 @@ export class CartService {
 
   decrementQuantity(itemId: number) {
     let cart = this.getCart();
-    const item = cart.find(i => i.id === itemId);
+    const itemIndex = cart.findIndex(i => i.id === itemId);
 
-    if (item) {
-      if (item.quantity > 1) {
-        item.quantity--;
+    if (itemIndex !== -1) {
+      if (cart[itemIndex].quantity > 1){
+        cart[itemIndex].quantity--;
       } else {
-        cart = cart.filter(i => i.id !== itemId);
+        /*cart.splice(itemIndex, 1); // Remove item from cart if quantity is 1*/
       }
       this.saveCart(cart);
     }
   }
+
 
   removeItem(itemId: number) {
     let cart = this.getCart();
