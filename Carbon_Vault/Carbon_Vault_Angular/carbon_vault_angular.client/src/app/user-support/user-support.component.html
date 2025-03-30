@@ -3,38 +3,37 @@
 
   <div style="display: flex; align-items: center;" class="main">
     <div>
-       <div class="container">
-      <form [formGroup]="supportForm" (ngSubmit)="onSubmit()">
-        <label for="titulo">Título</label>
-        <input type="text" id="titulo" name="titulo" formControlName="titulo" required>
+      <div class="container">
+        <form [formGroup]="supportForm" (ngSubmit)="onSubmit()">
+          <label for="titulo">Título</label>
+          <input type="text" id="titulo" name="titulo" formControlName="titulo" placeholder="Título do Ticket" required>
 
-        <label for="categoria">Categoria</label>
-        <select id="categoria" name="categoria" formControlName="categoria" required>
-          <option value="">Selecione uma categoria</option>
-          <option value="problema_tecnico">Ajuda com Compra e/ou Venda</option>
-          <option value="transacoes">Ajuda com Transações</option>
-          <option value="relatorio">Ajuda com Relatórios</option>
-          <option value="outro">Outro</option>
-        </select>
+          <label for="categoria">Categoria</label>
+          <select id="categoria" name="categoria" formControlName="categoria" required>
+            <option value="">Selecione uma categoria</option>
+            <option *ngFor="let categoria of ticketCategories" [value]="categoria">
+              {{ showCategory(categoria) }}
+            </option>
+          </select>
 
-        <label for="descricao">Como podemos ajudar?</label>
-        <textarea id="descricao" name="descricao" rows="4" formControlName="descricao" required></textarea>
+          <label for="descricao">Como podemos ajudar?</label>
+          <textarea id="descricao" name="descricao" rows="4" formControlName="descricao" placeholder="Explique aqui o problema para o podermos ajudar" required></textarea>
 
-        <button type="submit">Submeter</button>
-      </form>
+          <button type="submit">Submeter</button>
+        </form>
+      </div>
+      <BR>
+      <div class="container">
+        <form [formGroup]="SearchForm" (ngSubmit)="onSearch()">
+          <label for="reference">Referencia do ticket</label>
+          <input type="text" id="reference" name="reference" formControlName="reference" required>
+
+          <button type="submit">Procurar</button>
+        </form>
+      </div>
+
     </div>
-    <BR>
-    <div class="container">
-      <form [formGroup]="SearchForm" (ngSubmit)="onSearch()">
-        <label for="reference">Referencia do ticket</label>
-        <input type="text" id="reference" name="reference" formControlName="reference" required>
-  
-        <button type="submit">Procurar</button>
-      </form>
-    </div>
-    
-    </div>
-   
+
     <div class="side-text">
       <div class="title">
         <img src="images/CV_Logo.png" class="logo" />
@@ -43,7 +42,7 @@
       <p><em>Estamos <span class="highlight">sempre aqui para ajudar</span></em></p>
       <p>Preencha o formulário de suporte para que um dos nossos técnicos consiga resolver o seu problema mais rapidamente possível!</p>
       <p>Ou Procure um ticket aberto para aceder à sua conversa com os nossos técnicos</p>
- 
+
     </div>
   </div>
   <app-alerts></app-alerts>
