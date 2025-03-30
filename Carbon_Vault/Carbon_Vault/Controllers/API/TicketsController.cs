@@ -20,7 +20,6 @@ namespace Carbon_Vault.Controllers.API
         private readonly IEmailService _emailService;
         private readonly string _frontendBaseUrl;
 
-
         public TicketsController(Carbon_VaultContext context, IEmailService emailService)
         {
             _context = context;
@@ -67,7 +66,7 @@ namespace Carbon_Vault.Controllers.API
         {
             var ticket = await _context.Tickets
         .Include(t => t.Messages)
-        .ThenInclude(m => m.Autor) 
+        .ThenInclude(m => m.Autor)
         .FirstOrDefaultAsync(t => t.Id == id);
 
             if (ticket == null)
@@ -112,34 +111,41 @@ namespace Carbon_Vault.Controllers.API
         // POST: api/Tickets
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-     
-        public async Task<ActionResult<Ticket>> PostTicket(Ticket ticket)
+        public async Task<ActionResult<Ticket>> PostTicket(Ticket ticket, [FromHeader] string category)
         {
-            var author = await _context.Account.FindAsync(ticket.AuthorId);
+            var newTicket = new Ticket
+            {
+                Title = ticket.Title,
+                Description = ticket.Description,
+                AuthorId = ticket.AuthorId,
+                Category = GetTicketCategory(category),
+                Priority = GetTicketPriority(category),
+            };
+
+            var author = await _context.Account.FindAsync(newTicket.AuthorId);
             if (author == null)
             {
                 return BadRequest("Invalid AuthorId");
             }
 
-            _context.Tickets.Add(ticket);
-            await _context.SaveChangesAsync(); 
+            _context.Tickets.Add(newTicket);
+            await _context.SaveChangesAsync();
 
-            
+            // Add a new ticket message to the ticket as the issue of the user submitted ticket
             TicketMessage ticketMessage = new TicketMessage
             {
-                Content = ticket.Description,
-                SendDate = ticket.CreatedAt,
-                TicketId = ticket.Id,
+                Content = newTicket.Description,
+                SendDate = newTicket.CreatedAt,
+                TicketId = newTicket.Id,
                 Autor = author
             };
 
             _context.TicketMessages.Add(ticketMessage);
             await _context.SaveChangesAsync();
 
-            
             var savedTicket = await _context.Tickets.FindAsync(ticket.Id);
 
-            
+
             var supportAccounts = await _context.Account
                                    .Where(a => a.Role == AccountType.Support)
                                    .ToListAsync();
@@ -176,6 +182,27 @@ namespace Carbon_Vault.Controllers.API
             );
 
             return CreatedAtAction("GetTicket", new { id = savedTicket.Id }, savedTicket);
+        }
+
+        private TicketCategory GetTicketCategory(string cat)
+        {
+            if (Enum.TryParse(typeof(TicketCategory), cat, true, out var result))
+            {
+                return (TicketCategory)result;
+            }
+
+            return TicketCategory.Outros;
+        }
+
+        private TicketPriority GetTicketPriority(string category)
+        {
+            return category.ToLower() switch
+            {
+                "compra" or "venda" or "transacoes" => TicketPriority.Alta,
+                "relatorios" => TicketPriority.Media,
+                "outros" => TicketPriority.Baixa,
+                _ => TicketPriority.Baixa
+            };
         }
 
         // DELETE: api/Tickets/5

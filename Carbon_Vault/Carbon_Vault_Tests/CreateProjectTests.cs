@@ -8,7 +8,7 @@ using Moq;
 using Microsoft.AspNetCore.Hosting;
 using Carbon_Vault.Services;
 
-public class ProjectControllerTests
+public class ProjectControllerTests: IDisposable
 {
     private readonly Carbon_VaultContext _context;
     private readonly ProjectsController _controller;
@@ -110,5 +110,103 @@ public class ProjectControllerTests
         Assert.IsType<ActionResult<Project>>(result);
         var createdResult = Assert.IsType<CreatedAtActionResult>(result.Result);
         Assert.Equal("GetProject", createdResult.ActionName);
+    }
+
+    [Fact]
+    public async Task DeleteProject_Success_ReturnsNoContent()
+    {
+        // Arrange
+        var owner = new Account { Id = 123, Email = "owner@example.com", Name = "Owner", Nif = "123456789", Password = "password" };
+        await _context.Account.AddAsync(owner);
+
+        var projectType = new ProjectType { Id = 1 };
+        await _context.ProjectTypes.AddAsync(projectType);
+        await _context.SaveChangesAsync();
+
+        var project = new Project
+        {
+            OwnerId = 123,
+            Name = "New Project",
+            Certification = "Certified",
+            Description = "Valid Project Description",
+            Developer = "Valid Developer",
+            Location = "Valid Location",
+            benefits = "Environmental Benefits",
+            Types = new List<ProjectType> { projectType }
+        };
+
+        await _controller.PostProject(project);
+
+        // Act
+        var result = await _controller.DeleteProject(project.Id);
+
+        // Assert
+        Assert.IsType<NoContentResult>(result);
+    }
+
+    [Fact]
+    public async Task DeleteProject_NotFound_ReturnsNotFound()
+    {
+        // Arrange
+        int projectId = 777;
+
+        // Act
+        var result = await _controller.DeleteProject(projectId);
+
+        // Assert
+        Assert.IsType<NotFoundResult>(result);
+    }
+
+    [Fact]
+    public async Task GetProject_Success_ReturnsProject()
+    {
+        // Arrange
+        var owner = new Account { Id = 123, Email = "owner@example.com", Name = "Owner", Nif = "123456789", Password = "password" };
+        await _context.Account.AddAsync(owner);
+
+        var projectType = new ProjectType { Id = 1 };
+        await _context.ProjectTypes.AddAsync(projectType);
+        await _context.SaveChangesAsync();
+
+        var project = new Project
+        {
+            OwnerId = 123,
+            Name = "New Project",
+            Certification = "Certified",
+            Description = "Valid Project Description",
+            Developer = "Valid Developer",
+            Location = "Valid Location",
+            benefits = "Environmental Benefits",
+            Types = new List<ProjectType> { projectType }
+        };
+
+        await _controller.PostProject(project);
+
+        // Act
+        var result = await _controller.GetProject(project.Id);
+
+        // Assert
+        var actionResult = Assert.IsType<ActionResult<Project>>(result);
+        var returnValue = Assert.IsType<Project>(actionResult.Value);
+        Assert.Equal(project.Id, returnValue.Id);
+    }
+
+    [Fact]
+    public async Task GetProject_NotFound_ReturnsNotFound()
+    {
+        // Arrange
+        int projectId = 3;
+
+        // Act
+        var result = await _controller.GetProject(projectId);
+
+        // Assert
+        Assert.IsType<NotFoundResult>(result.Result);
+    }
+
+    public void Dispose()
+    {
+        _context.Database.EnsureDeleted();
+        _context.Dispose();
     }
 }
