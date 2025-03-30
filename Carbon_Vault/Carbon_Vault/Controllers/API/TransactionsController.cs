@@ -160,5 +160,64 @@ namespace Carbon_Vault.Controllers.API
 
             return Ok(transaction);
         }
+        [HttpGet("weekly")]
+        public IActionResult GetWeeklyTransactionData()
+        {
+            var now = DateTime.UtcNow;
+            var startOfThisWeek = now.AddDays(-(int)now.DayOfWeek).Date; // Start of current week (Sunday)
+            var startOfLastWeek = startOfThisWeek.AddDays(-7); // Start of previous week
+
+            // Fetch all transactions (be mindful of the size of the data)
+            var transactions = _context.Transactions
+                .Select(t => new
+                {
+                    t.Id,
+                    t.BuyerId,
+                    t.SellerId,
+                    t.ProjectId,
+                    t.Quantity,
+                    t.TotalPrice,
+                    t.Date,
+                    t.State,
+                    t.CheckoutSession,
+                    t.PaymentMethod
+                })
+                .ToList(); // Load all transactions in memory
+
+            // Filter transactions for this week
+            var transactionsThisWeek = transactions
+                .Where(t => DateTime.TryParse(t.Date, out DateTime transactionDate) &&
+                            transactionDate >= startOfThisWeek && transactionDate < startOfThisWeek.AddDays(7))
+                .GroupBy(t => t.Date.Substring(0, 10)) // Group by the date part (YYYY-MM-DD)
+                .Select(g => new
+                {
+                    Date = g.Key,
+                    TotalQuantity = g.Sum(t => t.Quantity),
+                    Transactions = g.ToList() // Include transactions for detailed export
+                })
+                .ToList();
+
+            // Filter transactions for last week
+            var transactionsLastWeek = transactions
+                .Where(t => DateTime.TryParse(t.Date, out DateTime transactionDate) &&
+                            transactionDate >= startOfLastWeek && transactionDate < startOfThisWeek)
+                .GroupBy(t => t.Date.Substring(0, 10)) // Group by the date part (YYYY-MM-DD)
+                .Select(g => new
+                {
+                    Date = g.Key,
+                    TotalQuantity = g.Sum(t => t.Quantity),
+                    Transactions = g.ToList() // Include transactions for detailed export
+                })
+                .ToList();
+
+            // Prepare the result
+            var result = new
+            {
+                thisWeek = transactionsThisWeek,
+                lastWeek = transactionsLastWeek
+            };
+
+            return Ok(result);
+        }
     }
 }

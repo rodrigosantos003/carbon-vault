@@ -9,35 +9,35 @@
         <h3>Número Diário de Visitas</h3>
         <div>
           <img src="images/ViewsIconB.png" class="icon" />
-          <span class="value">20</span>
+          <span class="value">{{dailyVisits}}</span>
         </div>
       </div>
       <div class="card blue">
         <h3>Número Total de Utilizadores</h3>
         <div>
           <img src="images/UserIconB.png" class="icon" />
-          <span class="value">50</span>
+          <span class="value">{{userCount}}</span>
         </div>
       </div>
       <div class="card yellow">
         <h3>Número Total de Projetos Disponíveis</h3>
         <div>
           <img src="images/OnGoingProjects.png" class="icon" />
-          <span class="value">25</span>
+          <span class="value">{{ProjectCount}}</span>
         </div>
       </div>
       <div class="card purple">
         <h3>Número de Transações Feitas</h3>
         <div>
           <img src="images/TransactionsIconB.png" class="icon" />
-          <span class="value">10</span>
+          <span class="value">{{TransactionCount}}</span>
         </div>
       </div>
       <div class="card green">
         <h3>Número Total de Créditos de Carbono Disponíveis</h3>
         <div>
           <img src="images/CO2-B.png" />
-          <span class="value"> 100</span>
+          <span class="value">{{CreditCount}}</span>
         </div>
       </div>
     </div>
@@ -49,16 +49,16 @@
         <span class="small-text">⬇ 2.1% semana anterior</span>
         <img src="images/OrderStatsIcon.png" class="chart" />
         <button class="export-btn">Exportar</button>-->
-        <canvas id="MyLineChart">{{ lineChart }}</canvas>
-        <button class="export-btn">Exportar</button>
+        <canvas id="MyLineChart"></canvas>
+        <button class="export-btn" (click)="downloadTransactionsCSV()">Exportar</button>
       </div>
 
       <div class="chart-box">
         <!--<h2>Período de Atividade</h2>
         <span class="small-text">De 1-6 Dez, 2025</span>
         <img src="images/OrderTimeIcon.png" class="chart" />-->
-        <canvas id="MyCircularChart">{{ circularChart }}</canvas>
-        <button class="export-btn">Exportar</button>
+        <canvas id="ActivityChart"></canvas>
+        <button class="export-btn" (click)="downloadActivityCSV()">Exportar</button>
       </div>
     </div>
 

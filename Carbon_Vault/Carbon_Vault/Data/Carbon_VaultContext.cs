@@ -20,6 +20,10 @@ namespace Carbon_Vault.Data
         public DbSet<UserEmissions> UserEmissions { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<ProjectFiles> ProjectFiles { get; set; }
+        public DbSet<Ticket> Tickets { get; set; } = default!;
+        public DbSet<TicketMessage> TicketMessages { get; set; } = default!;
+
+
         public DbSet<Report> Reports { get; set; }
         public DbSet<ReportFiles> ReportFiles { get; set; }
         public Carbon_VaultContext(DbContextOptions<Carbon_VaultContext> options)
@@ -50,6 +54,18 @@ namespace Carbon_Vault.Data
                .WithMany(p => p.Projects)
                .HasForeignKey(cc => cc.OwnerId);
 
+            // Configurar o relacionamento entre Tickets e as mensagens
+            modelBuilder.Entity<TicketMessage>()
+                .HasOne(tm => tm.Ticket)
+                .WithMany(t => t.Messages)
+                .HasForeignKey(tm => tm.TicketId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            // Configurar o relacionamento entre Tickets e Accounts
+            modelBuilder.Entity<Ticket>()
+                .HasOne(t => t.Author)
+                .WithMany(a => a.Tickets)
+                .HasForeignKey(t => t.AuthorId);
             // Configure relationship between Report and its User
             modelBuilder.Entity<Report>()
                 .HasOne(r => r.User)
@@ -236,6 +252,7 @@ namespace Carbon_Vault.Data
                 }
             );
         }
+    
 
         private void populateCredits(ModelBuilder modelBuilder)
         {
@@ -287,5 +304,7 @@ namespace Carbon_Vault.Data
                 }
             );
         }
+      
     }
+
 }

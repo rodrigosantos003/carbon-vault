@@ -1,0 +1,14 @@
+
+.back-button{
+    display: flex;
+        flex-direction: row;
+        align-content: space-around;
+        justify-content: flex-start;
+        cursor: pointer;
+  }
+  .back-button span{
+    color: #4ea741;
+    align-self: center;
+    font-weight: 700;
+    font-size: 25px;
+  }

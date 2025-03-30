@@ -165,12 +165,88 @@ namespace Carbon_Vault.Controllers.API
             var confirmationLinkBack = $"{Request.Scheme}://{Request.Host}/api/Accounts/Confirm?token={token}";
             var confirmationLink = $"{_frontendBaseUrl}confirm-account?token={token}";
 
-
+            //---- DEPRECATED VERSION
             // Send confirmation link via email
-            await _emailService.SendEmail(account.Email, 
-                "Carbon Vault - Confirmar conta", 
-                $"Por favor confirme a sua conta clicando neste link: {confirmationLink}",
+            string emailBody = $@"
+    <!DOCTYPE html>
+    <html lang='en'>
+    <head>
+        <meta charset='UTF-8'>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <title>Email Template</title>
+        <style>
+            body {{
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f4f4f4;
+            }}
+            .email-container {{
+                max-width: 600px;
+                margin: 20px auto;
+                background: #ffffff;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                overflow: hidden;
+            }}
+            .email-header {{
+                background: #4ea741;
+                color: #ffffff;
+                text-align: center;
+                padding: 20px;
+            }}
+            .email-body {{
+                padding: 20px;
+                color: #333333;
+                line-height: 1.6;
+            }}
+            .email-footer {{
+                background: #f4f4f4;
+                text-align: center;
+                padding: 10px;
+                font-size: 12px;
+                color: #777777;
+            }}
+            .button {{
+                display: inline-block;
+                padding: 10px 20px;
+                margin: 20px 0;
+                background: #4ea741;
+                color: #ffffff;
+                text-decoration: none;
+                border-radius: 5px;
+            }}
+            .button:hover {{
+                background: #356a2d;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class='email-container'>
+            <div class='email-header'>
+                <h1>Bem-vindo ao Carbon Vault</h1>
+            </div>
+            <div class='email-body'>
+                <p>Caro {account.Name},</p>
+                <p>Obrigado por se juntar a nós! Estamos entusiasmados em tornar o mundo um local mais sustentável. Por favor, clique no botão abaixo para confirmar a sua conta:</p>
+                <a href='{confirmationLink}' class='button'>Verificar Email</a>
+                <p>Em caso de dúvida, envie um email para: support@CarbonVault.pt</p>
+                <p>Cumprimentos,</p>
+                <p>Equipa do Carbon Vault</p>
+            </div>
+            <div class='email-footer'>
+                <p>&copy; 2025 Carbon Vault. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </body>
+    </html>";
+            await _emailService.SendEmail(account.Email,
+                "Carbon Vault - Confirmar conta",
+               emailBody,
                 null);
+
+            //await SendConfirmationEmail(account, confirmationLink);
+
 
             return CreatedAtAction("GetAccount", new { id = account.Id }, account);
         }
@@ -531,5 +607,135 @@ namespace Carbon_Vault.Controllers.API
         {
             return await _context.Account.ToListAsync();
         }
+        private async Task SendConfirmationEmail(Account account, string confirmationLink)
+        {
+            string emailBody = $@"
+    <!DOCTYPE html>
+    <html lang='en'>
+    <head>
+        <meta charset='UTF-8'>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <title>Email Template</title>
+        <style>
+            body {{
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f4f4f4;
+            }}
+            .email-container {{
+                max-width: 600px;
+                margin: 20px auto;
+                background: #ffffff;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                overflow: hidden;
+            }}
+            .email-header {{
+                background: #4ea741;
+                color: #ffffff;
+                text-align: center;
+                padding: 20px;
+            }}
+            .email-body {{
+                padding: 20px;
+                color: #333333;
+                line-height: 1.6;
+            }}
+            .email-footer {{
+                background: #f4f4f4;
+                text-align: center;
+                padding: 10px;
+                font-size: 12px;
+                color: #777777;
+            }}
+            .button {{
+                display: inline-block;
+                padding: 10px 20px;
+                margin: 20px 0;
+                background: #4ea741;
+                color: #ffffff;
+                text-decoration: none;
+                border-radius: 5px;
+            }}
+            .button:hover {{
+                background: #356a2d;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class='email-container'>
+            <div class='email-header'>
+                <h1>Bem-vindo ao Carbon Vault</h1>
+            </div>
+            <div class='email-body'>
+                <p>Caro {account.Name},</p>
+                <p>Obrigado por se juntar a nós! Estamos entusiasmados em tornar o mundo um local mais sustentável. Por favor, clique no botão abaixo para confirmar a sua conta:</p>
+                <a href='{confirmationLink}' class='button'>Verificar Email</a>
+                <p>Em caso de dúvida, envie um email para: support@CarbonVault.pt</p>
+                <p>Cumprimentos,</p>
+                <p>Equipa do Carbon Vault</p>
+            </div>
+            <div class='email-footer'>
+                <p>&copy; 2025 Carbon Vault. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </body>
+    </html>";
+
+            await _emailService.SendEmail(account.Email, "Carbon Vault - Confirmar conta", null, emailBody);
+        }
+
+        [HttpGet("DashboardStatistics")]
+        public async Task<IActionResult> GetDashboardStatistics([FromHeader] string Authorization, [FromHeader] int userID)
+        {
+            DateTime today = DateTime.UtcNow.Date;
+
+            var dailyVisits = await _context.Account.Where(a => a.LastLogin.Date == today).CountAsync();
+
+            var totalUsers = await _context.Account.CountAsync();
+
+            var totalProjects = await _context.Projects.CountAsync();
+
+            var totalTransactions = await _context.Transactions.CountAsync();
+
+            var totalCarbonCredits = await _context.CarbonCredits.CountAsync();
+
+            return Ok(new
+            {
+                NumeroDiarioDeVisitas = dailyVisits,
+                NumeroTotalDeUtilizadores = totalUsers,
+                NumeroTotalDeProjetosDisponiveis = totalProjects,
+                NumeroDeTransacoesFeitas = totalTransactions,
+                NumeroTotalDeCreditosDeCarbonoDisponiveis = totalCarbonCredits
+            });
+
+        }
+        [HttpGet("activity-periods")]
+        public IActionResult GetActivityPeriods()
+        {
+            var now = DateTime.UtcNow;
+            var data = _context.Account
+                .Select(a => new
+                {
+                    a.Id,
+                    a.Name,
+                    a.Email,
+                    a.LastLogin,
+                    ActivityPeriod = ClassifyActivityPeriod(a.LastLogin, now)
+                })
+                .ToList();
+
+            return Ok(data);
+        }
+
+        private static string ClassifyActivityPeriod(DateTime lastLogin, DateTime now)
+        {
+            var hour = lastLogin.ToUniversalTime().Hour;
+            if (hour >= 5 && hour < 12) return "Manhã";
+            if (hour >= 12 && hour < 18) return "Tarde";
+            return "Noite";
+        }
+
     }
 }

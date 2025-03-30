@@ -2,7 +2,8 @@
   <app-user-menu></app-user-menu>
 
   <div style="display: flex; align-items: center;" class="main">
-    <div class="container">
+    <div>
+       <div class="container">
       <form [formGroup]="supportForm" (ngSubmit)="onSubmit()">
         <label for="titulo">Título</label>
         <input type="text" id="titulo" name="titulo" formControlName="titulo" required>
@@ -22,6 +23,18 @@
         <button type="submit">Submeter</button>
       </form>
     </div>
+    <BR>
+    <div class="container">
+      <form [formGroup]="SearchForm" (ngSubmit)="onSearch()">
+        <label for="reference">Referencia do ticket</label>
+        <input type="text" id="reference" name="reference" formControlName="reference" required>
+  
+        <button type="submit">Procurar</button>
+      </form>
+    </div>
+    
+    </div>
+   
     <div class="side-text">
       <div class="title">
         <img src="images/CV_Logo.png" class="logo" />
@@ -29,6 +42,9 @@
       </div>
       <p><em>Estamos <span class="highlight">sempre aqui para ajudar</span></em></p>
       <p>Preencha o formulário de suporte para que um dos nossos técnicos consiga resolver o seu problema mais rapidamente possível!</p>
+      <p>Ou Procure um ticket aberto para aceder à sua conversa com os nossos técnicos</p>
+ 
     </div>
   </div>
+  <app-alerts></app-alerts>
 </body>

@@ -38,7 +38,11 @@ import { TransactionDetailsComponent } from './transaction-details/transaction-d
 import { ProjectManagerDetailsAdminComponent } from './project-manager-details-admin/project-manager-details-admin.component';
 import { AdminTransactionsComponent } from './admin-transactions/admin-transactions.component';
 import { UserSettingsComponent } from './user-settings/user-settings.component';
+import { SupportChatComponent } from './support-chat/support-chat.component';
+import { SupportManagerAdminComponent } from './support-manager-admin/support-manager-admin.component';
+import { ChatCardComponent } from './chat-card/chat-card.component';
 import { UserSupportComponent } from './user-support/user-support.component';
+import { GoBackButtonComponent } from './go-back-button/go-back-button.component';
 import { UserReportsComponent } from './user-reports/user-reports.component';
 import { RequestReportComponent } from './request-report/request-report.component';
 import { AdminReportsComponent } from './admin-reports/admin-reports.component';
@@ -76,6 +80,11 @@ import { AdminReportsComponent } from './admin-reports/admin-reports.component';
     AdminTransactionsComponent,
     TransactionDetailsComponent,
     UserSettingsComponent,
+    SupportChatComponent,
+    SupportManagerAdminComponent,
+    ChatCardComponent,
+    UserSupportComponent,
+    GoBackButtonComponent,
     UserSupportComponent,
     UserReportsComponent,
     RequestReportComponent,

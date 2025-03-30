@@ -1,0 +1,57 @@
+<body>
+    <app-user-menu></app-user-menu>
+    <div class="main-content">
+      <app-go-back-button></app-go-back-button>
+      <br>
+        <div class="header">
+         
+          <h1>{{ticket?.title}}</h1>
+          <button *ngIf="ticket?.state === 0 && this.userRole != 0" 
+                  (click)="closeTicket()" 
+                  [disabled]="ticket?.state !== 0" 
+                  class="close-button">
+            Fechar Ticket
+          </button>
+        </div>
+
+        <hr>
+        <div class="info-section">
+          <div class="ticket-info">
+            <h2>Informação do Ticket</h2>
+            <div class="ticket-info-content">
+              <p><strong>Estado do pedido :</strong> {{getTicketState(ticket?.state)}}</p>
+              <p><strong>Data do Pedido :</strong> {{ ticket?.createdAt  | date: 'short'}}</p>
+            </div>
+           
+          </div>
+      
+          <div class="user-info">
+            <h2>Informação do Utilizador</h2>
+            <div class="ticket-info-content">
+              <p><strong>Nome :</strong> {{ ticket?.messages?.[0]?.autor?.name }}</p>
+              <p><strong>Email :</strong> {{ ticket?.messages?.[0]?.autor?.email }}</p>
+            </div>
+          
+          </div>
+        </div>
+        <br>
+        <br>
+         <div class="messages" #messageContainer  >
+         
+          <app-chat-card *ngFor="let message of ticket?.messages; let last = last"
+          [name]="message.autor.name"
+          [content]="message.content"
+          [addedAt]="message.sendDate"
+          [isAuthor]="isTheAuthor(ticket , message)"
+          [isLast]="last">
+          ></app-chat-card>
+          
+        </div>
+        <br>
+        <br>
+       <div class="reply-section">
+          <textarea placeholder="Responder" [(ngModel)]="messageContent" ></textarea>
+          <button (click)="sendMessage()">Enviar</button>
+        </div>  
+    </div>
+</body>

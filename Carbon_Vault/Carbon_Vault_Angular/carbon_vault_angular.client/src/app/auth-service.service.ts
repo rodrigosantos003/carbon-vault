@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Router } from '@angular/router';
-import { HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../environments/environment';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private jwtHelper: JwtHelperService, private router: Router) { }
+  constructor(private jwtHelper: JwtHelperService, private router: Router,private http: HttpClient) { }
 
   // Check if the user is authenticated
   isAuthenticated(): boolean {
@@ -42,6 +44,27 @@ export class AuthService {
     });
 
     return headers;
+  }
+  getUserRole(): Promise<number> {
+    return new Promise((resolve, reject) => {
+      const userId = this.getUserId();
+      if (!userId) {
+        reject('User ID not found.');
+        return;
+      }
+
+      this.http.get<any>(`${environment.apiUrl}/accounts/${userId}`).subscribe(
+        (data) => resolve(data.role),
+        (error) => {
+          console.error('Error fetching user role:', error);
+          reject(error);
+        }
+      );
+    });
+  }
+
+  isSupportOrAdmin(): Promise<boolean> {
+    return this.getUserRole().then((role) => role === 1 || role === 3);  // 3 = Support, 1 = Admin
   }
 
 }

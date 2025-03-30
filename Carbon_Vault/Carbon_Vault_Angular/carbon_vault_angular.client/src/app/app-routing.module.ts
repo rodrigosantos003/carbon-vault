@@ -28,6 +28,8 @@ import { TransactionDetailsComponent } from './transaction-details/transaction-d
 import { ProjectManagerDetailsAdminComponent } from './project-manager-details-admin/project-manager-details-admin.component';
 import { AdminTransactionsComponent } from './admin-transactions/admin-transactions.component'
 import { UserSettingsComponent } from './user-settings/user-settings.component';
+import { SupportManagerAdminComponent } from './support-manager-admin/support-manager-admin.component';
+import { SupportChatComponent } from './support-chat/support-chat.component';
 import { UserSupportComponent } from './user-support/user-support.component';
 import { UserReportsComponent } from './user-reports/user-reports.component';
 import { RequestReportComponent } from './request-report/request-report.component';
@@ -62,6 +64,8 @@ const routes: Routes = [
   { path: 'transaction-details/:id', component: TransactionDetailsComponent },
   { path: 'admin-transactions', component: AdminTransactionsComponent },
   { path: 'settings', component: UserSettingsComponent },
+  { path: 'support-manager', component: SupportManagerAdminComponent,canActivate: [AuthGuard]  },
+  { path: 'support-manager/:id', component: SupportChatComponent,canActivate: [AuthGuard]  },
   { path: 'user-support', component: UserSupportComponent },
   { path: 'user-reports', component: UserReportsComponent },
   { path: 'request-report', component: RequestReportComponent },
