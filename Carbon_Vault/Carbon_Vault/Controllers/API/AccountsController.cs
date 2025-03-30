@@ -686,5 +686,56 @@ namespace Carbon_Vault.Controllers.API
             await _emailService.SendEmail(account.Email, "Carbon Vault - Confirmar conta", null, emailBody);
         }
 
+        [HttpGet("DashboardStatistics")]
+        public async Task<IActionResult> GetDashboardStatistics([FromHeader] string Authorization, [FromHeader] int userID)
+        {
+            DateTime today = DateTime.UtcNow.Date;
+
+            var dailyVisits = await _context.Account.Where(a => a.LastLogin.Date == today).CountAsync();
+
+            var totalUsers = await _context.Account.CountAsync();
+
+            var totalProjects = await _context.Projects.CountAsync();
+
+            var totalTransactions = await _context.Transactions.CountAsync();
+
+            var totalCarbonCredits = await _context.CarbonCredits.CountAsync();
+
+            return Ok(new
+            {
+                NumeroDiarioDeVisitas = dailyVisits,
+                NumeroTotalDeUtilizadores = totalUsers,
+                NumeroTotalDeProjetosDisponiveis = totalProjects,
+                NumeroDeTransacoesFeitas = totalTransactions,
+                NumeroTotalDeCreditosDeCarbonoDisponiveis = totalCarbonCredits
+            });
+
+        }
+        [HttpGet("activity-periods")]
+        public IActionResult GetActivityPeriods()
+        {
+            var now = DateTime.UtcNow;
+            var data = _context.Account
+                .Select(a => new
+                {
+                    a.Id,
+                    a.Name,
+                    a.Email,
+                    a.LastLogin,
+                    ActivityPeriod = ClassifyActivityPeriod(a.LastLogin, now)
+                })
+                .ToList();
+
+            return Ok(data);
+        }
+
+        private static string ClassifyActivityPeriod(DateTime lastLogin, DateTime now)
+        {
+            var hour = lastLogin.ToUniversalTime().Hour;
+            if (hour >= 5 && hour < 12) return "Manhã";
+            if (hour >= 12 && hour < 18) return "Tarde";
+            return "Noite";
+        }
+
     }
 }

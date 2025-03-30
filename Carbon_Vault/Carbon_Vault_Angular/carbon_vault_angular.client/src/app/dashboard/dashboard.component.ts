@@ -24,6 +24,11 @@ export class DashboardComponent {
   credits: number;
   purchases: Transaction[];
   sales: Transaction[];
+  dailyVisits:  number = 0;
+  userCount:  number = 0;
+  ProjectCount:  number = 0;
+  TransactionCount:  number = 0;
+  CreditCount:  number = 0;
 
   constructor(private authService: AuthService, private http: HttpClient, private router: Router, private auth: AuthService) {
 
@@ -33,6 +38,7 @@ export class DashboardComponent {
     this.credits = 0;
     this.purchases = [];
     this.sales = [];
+    
   }
 
   ngOnInit() {
@@ -40,8 +46,9 @@ export class DashboardComponent {
     this.http.get(url).subscribe(
       (data: any) => {
         // Se a requisição for bem-sucedida, preenche o formulário com os dados recebidos
+        if(data.role != 0) this.fetchDashboardStatistics();
         this.userRole = data.role
-        this.fetchDashboardData();
+       
       },
       error => {
         // Caso contrário, exibe o erro no console
@@ -52,9 +59,27 @@ export class DashboardComponent {
     if (this.userRole != 0) {
       this.createLineChart();
       this.createCircularChart();
+    
+     
     }
   }
+  fetchDashboardStatistics() {
+    const url = `${environment.apiUrl}/accounts/DashboardStatistics`;
+    const headers =this.authService.getHeaders();
+    this.http.get(url, { headers }).subscribe(
+      (data: any) => {
+        console.log(data)
+        this.userCount = data.numeroTotalDeUtilizadores;
+        this.ProjectCount = data.numeroTotalDeProjetosDisponiveis 
+        this.TransactionCount =  data.numeroDeTransacoesFeitas
+        this.CreditCount= data.numeroTotalDeCreditosDeCarbonoDisponiveis 
+        this.dailyVisits = data.numeroDiarioDeVisitas;
 
+        console.log(this.userCount)
+      },
+      error => console.error('Erro ao buscar estatísticas do dashboard:', error)
+    );
+  }
   fetchDashboardData() {
     Promise.all([
       this.getCredits(),

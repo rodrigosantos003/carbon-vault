@@ -9,14 +9,14 @@
         <h2>Número de créditos de carbono</h2>
         <div>
           <img src="images/CO2-W.png" />
-          <p> {{credits}}</p>
+          <p> {{CreditCount}}</p>
         </div>
       </div>
       <div class="card yellow">
         <h2>Projetos em curso</h2>
         <div>
           <img src="images/OnGoingProjects.png" />
-          <p> {{projects}}</p>
+          <p> {{ProjectCount}}</p>
         </div>
       </div>
       <div class="card blue">
@@ -128,5 +128,12 @@
       </div>
     </div>
   </main> -->
-  <app-admin-dashboard *ngIf="userRole == 1"></app-admin-dashboard>
+  <app-admin-dashboard *ngIf="userRole == 1"
+  [dailyVisits]="dailyVisits"
+  [userCount]="userCount"
+  [ProjectCount]="ProjectCount"
+  [TransactionCount]="TransactionCount"
+  [CreditCount]="CreditCount"
+ 
+  ></app-admin-dashboard>
 </body>

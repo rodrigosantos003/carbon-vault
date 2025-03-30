@@ -18,6 +18,8 @@ export class UserMenuComponent {
   userName: string;
   userInitial: string;
 
+
+
   adminMenu = [
     { icon: 'images/menu/DashboardIcon.png', label: 'Dashboard', route: '/dashboard' },
     { icon: 'images/menu/UserIconB.png', label: 'Gestão de Utilizadores', route: '/users-manager' },
@@ -46,6 +48,7 @@ export class UserMenuComponent {
     this.userId = this.authService.getUserId();
     this.userInitial = ''
     this.userName = ''
+  
   }
 
   ngOnInit() {
@@ -56,7 +59,8 @@ export class UserMenuComponent {
         // Se a requisição for bem-sucedida, preenche o formulário com os dados recebidos
         this.userName = data.name
         this.userInitial = data.name[0],
-          this.userRole = data.role
+        this.userRole = data.role
+       
       },
       error => {
         // Caso contrário, exibe o erro no console
@@ -64,7 +68,10 @@ export class UserMenuComponent {
 
       }
     );
+
   }
+
+ 
 
   onLogout() {
     this.authService.logout();

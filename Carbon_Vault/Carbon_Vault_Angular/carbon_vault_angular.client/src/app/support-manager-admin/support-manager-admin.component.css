@@ -241,7 +241,7 @@ body {
       display: inline-block;
       margin-right: 5px;
   }
-  .status-dot.sucess{
+  .status-dot.success{
     background-color: green;
   }
   .status-dot.insucess{

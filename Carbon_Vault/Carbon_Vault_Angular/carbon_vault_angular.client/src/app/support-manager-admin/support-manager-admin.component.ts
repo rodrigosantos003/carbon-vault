@@ -15,7 +15,14 @@ import { environment } from '../../environments/environment';
 export class SupportManagerAdminComponent {
   tickets: any[] = [];
   private ticketsURL = `${environment.apiUrl}/Tickets`;
-
+  categoryMap: { 
+    [key in 'problema_tecnico' | 'transacoes' | 'relatorio' | 'outro']: string; 
+  } = {
+    problema_tecnico: 'Ajuda com Compra e/ou Venda',
+    transacoes: 'Ajuda com Transações',
+    relatorio: 'Ajuda com Relatórios',
+    outro: 'Outro'
+  };
 
   constructor(private http: HttpClient, private alerts: AlertsService, private authService: AuthService, private router: Router) { }
   ngOnInit(): void {
@@ -42,7 +49,14 @@ export class SupportManagerAdminComponent {
     });
   }
   getTicketState(state: number): string {
-    const states = ["Aberto", "fechado"];
+    const states = ["Aberto", "Fechado"];
     return states[state] ?? "Unknown";
+  }
+  getCategoryName(categoryValue: 'problema_tecnico' | 'transacoes' | 'relatorio' | 'outro'): string {
+    return this.categoryMap[categoryValue] || 'Categoria desconhecida';
+  }
+  navigateToTicket(ticketId: string): void {
+    
+    this.router.navigate([`/support-manager/${ticketId}`]);
   }
 }

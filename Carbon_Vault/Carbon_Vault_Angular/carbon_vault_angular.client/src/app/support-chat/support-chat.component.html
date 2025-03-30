@@ -1,7 +1,10 @@
 <body>
     <app-user-menu></app-user-menu>
     <div class="main-content">
+      <app-go-back-button></app-go-back-button>
+      <br>
         <div class="header">
+         
           <h1>{{ticket?.title}}</h1>
           <button *ngIf="ticket?.state === 0 && this.userRole != 0" 
                   (click)="closeTicket()" 

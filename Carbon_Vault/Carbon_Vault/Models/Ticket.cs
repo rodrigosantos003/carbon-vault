@@ -23,6 +23,6 @@ namespace Carbon_Vault.Models
         public int AuthorId { get; set; }
 
         public ICollection<TicketMessage> Messages { get; set; } = new List<TicketMessage>();
-        public string Reference { get; private set; } = Guid.NewGuid().ToString();
+        public string Reference { get; set; } = Guid.NewGuid().ToString();
     }
 }

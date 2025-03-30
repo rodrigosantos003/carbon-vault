@@ -23,10 +23,10 @@
           <tbody>
             <tr *ngFor="let ticket of tickets">
               <td>{{ ticket.id }}</td>
-              <td>{{ ticket.category}}</td>
-              <td><span class="status-dot" ></span>{{getTicketState(ticket.state)}}</td>
-              <td>{{ticket.createdAt}}</td>
-              <td><button class="view-btn" [disabled]="ticket.state == 1">Responder</button></td>
+              <td>{{getCategoryName(ticket.category) }}</td>
+              <td><span class="status-dot"  [ngClass]="{'success': ticket.state === 0, 'insucess': ticket.state !== 0}"></span>{{getTicketState(ticket.state)}}</td>
+              <td>{{ticket.createdAt| date:'dd/MM/yyyy HH:mm:ss'}}</td>
+              <td><button class="view-btn" [disabled]="ticket.state == 1" (click)="navigateToTicket(ticket.id)">Responder</button></td>
             </tr>
           </tbody>
         </table>
