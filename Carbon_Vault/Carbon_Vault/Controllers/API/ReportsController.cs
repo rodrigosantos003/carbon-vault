@@ -72,6 +72,11 @@ namespace Carbon_Vault.Controllers.API
         [HttpPost]
         public async Task<ActionResult<Report>> CreateReport(Report report)
         {
+            if (report.UserID <= 0)
+            {
+                return BadRequest(); // Return 400 Bad Request if invalid
+            }
+
             report.LastUpdate = DateTime.Now;
             report.ReportState = ReportState.Pending;
 
