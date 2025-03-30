@@ -252,13 +252,9 @@ namespace Carbon_Vault.Controllers.API
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAccount(int id, [FromHeader] string Authorization, int userID)
+        [ServiceFilter(typeof(TokenValidationFilter))]
+        public async Task<IActionResult> DeleteAccount(int id)
         {
-            if (!AuthHelper.IsTokenValid(Authorization, userID))
-            {
-                return Unauthorized(new {message = "JWT inválido."});
-            }
-
             var account = await _context.Account.FindAsync(id);
             if (account == null)
             {
