@@ -1,4 +1,5 @@
 <app-market-place-navigation></app-market-place-navigation>
+<app-alerts></app-alerts>
 <main>
   <div class="project-details">
     <h1>{{ projectData.name }}</h1>
@@ -11,7 +12,7 @@
     <div class="benefits">
       <div class="type-images">
         <img class="typesIcon" *ngFor="let type of projectData.types" [src]="'/icons/Goal' + (type.type + 1) + '.png'"
-          [alt]="'Goal ' + (type.type + 1)">
+             [alt]="'Goal ' + (type.type + 1)">
       </div>
     </div>
     <div class="benefits">
@@ -26,9 +27,10 @@
       <p><strong>{{ projectData.pricePerCredit }}€ / Tonelada</strong></p>
 
       <div>
-        <p>{{ carbonCredits.length }} Créditos de Carbono em stock
+        <p>
+          {{ projectData.creditsForSale }} Créditos de Carbono em stock
           <svg style="width: 19px; cursor: pointer;" viewBox="0 0 24 24" fill="none" (mouseenter)="showMetadata = true"
-            (mouseleave)="showMetadata = false" xmlns="http://www.w3.org/2000/svg">
+               (mouseleave)="showMetadata = false" xmlns="http://www.w3.org/2000/svg">
             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
             <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
             <g id="SVGRepo_iconCarrier">
@@ -49,7 +51,7 @@
 
       <div class="cart-controls">
         <label for="quantity">Quantidade</label>
-        <input id="quantity" type="number" min="1" [(ngModel)]="quantity" [value]="quantity">
+        <input id="quantity" type="number" min="1" [(ngModel)]="quantity" [value]="quantity" (change)="validateQuantity()">
 
         <button class="add-to-cart" (click)="addToCart()" [ngClass]="{ 'disabled-btn': carbonCredits.length === 0 }">
           Adicionar ao Carrinho
