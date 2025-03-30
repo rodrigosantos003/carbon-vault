@@ -1,0 +1,113 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    color: black;
+    margin: 0px !important;
+    /* display: flex; */
+    height: 100vh;
+    /* overflow: hidden; */
+  }
+  
+  /* Dashboard */
+  .dashboard {
+    flex: 1;
+    padding: 20px 10px 20px 40px;
+  }
+  
+  .dashboard h1 {
+    margin-bottom: 50px;
+  }
+  
+  /* Cartões */
+  .cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 10px;
+  }
+  
+  .card {
+    flex: 1 1;
+    width: 210px;
+    padding: 20px;
+    border-radius: 10px;
+    color: black;
+    text-align: left;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  }
+  
+  .card div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+  }
+  
+  .card span {
+    font-weight: bold;
+    font-size: 30px;
+  }
+  
+  .orange {
+    background-color: #f28b50;
+  }
+  
+  .blue {
+    background-color: #77aadd;
+  }
+  
+  .yellow {
+    background-color: #ffcc66;
+  }
+  
+  .purple {
+    background-color: #aa88cc;
+  }
+  
+  .green {
+    background-color: #66bb66;
+  }
+  
+  .icon {
+    width: 40px;
+    margin-top: 10px;
+  }
+  
+  .value {
+    font-size: 24px;
+  }
+  
+  /* Gráficos */
+  .charts {
+    display: flex;
+    align-items: center;
+    margin-top: 30px;
+    gap: 20px;
+  }
+  
+  .chart-box {
+    width: 400px;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+  }
+  
+  .line {
+    width: 600px;
+  }
+  
+  .chart {
+    width: 100%;
+  }
+  
+  /* Botão Exportar */
+  .export-btn {
+    background-color: var(--main-color);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+    border-radius: 5px;
+  }

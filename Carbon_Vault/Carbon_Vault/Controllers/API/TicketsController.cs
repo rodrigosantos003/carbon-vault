@@ -232,5 +232,44 @@ namespace Carbon_Vault.Controllers.API
         {
             return _context.Tickets.Any(e => e.Id == id);
         }
+       
+        // GET: api/Tickets/support/stats
+        [HttpGet("support/stats")]
+        public async Task<ActionResult<SupportStats>> GetSupportStats([FromHeader] string Authorization, [FromHeader] int userID)
+        {
+            if (!AuthHelper.IsTokenValid(Authorization, userID))
+            {
+                return Unauthorized();
+            }
+
+            var account = await _context.Account.FindAsync(userID);
+            if (account.Role is not AccountType.Admin and not AccountType.Support)
+            {
+                return Unauthorized();
+            }
+
+            var totalTickets = await _context.Tickets.CountAsync();
+            var openTickets = await _context.Tickets.CountAsync(t => t.State == TicketState.Open);
+            var closedTickets = await _context.Tickets.CountAsync(t => t.State == TicketState.Closed);
+
+            var supportStats = new SupportStats
+            {
+                TotalTickets = totalTickets,
+                OpenTickets = openTickets,
+                ClosedTickets = closedTickets,
+            };
+
+            return supportStats;
+        }
+
+
+    }
+
+    public class SupportStats
+    {
+        public int TotalTickets { get; set; }
+        public int OpenTickets { get; set; }
+        public int ClosedTickets { get; set; }
+       
     }
 }

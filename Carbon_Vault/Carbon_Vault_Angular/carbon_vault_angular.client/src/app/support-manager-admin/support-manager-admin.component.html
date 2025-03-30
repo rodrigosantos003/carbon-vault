@@ -1,10 +1,5 @@
 <body>
-    <app-user-menu></app-user-menu>
-  
-
-  
     <div class="main-content">
-      <app-go-back-button/>
      
       <div class="ticket-table">
         <div class="table-header">
@@ -21,6 +16,9 @@
             </tr>
           </thead>
           <tbody>
+            <tr *ngIf="tickets.length === 0">
+              <td colspan="5" class="text-center">Nada a mostrar</td>
+            </tr>
             <tr *ngFor="let ticket of tickets">
               <td>{{ ticket.id }}</td>
               <td>{{getCategoryName(ticket.category) }}</td>

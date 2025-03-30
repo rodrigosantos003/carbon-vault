@@ -29,6 +29,10 @@ export class DashboardComponent {
   ProjectCount:  number = 0;
   TransactionCount:  number = 0;
   CreditCount:  number = 0;
+  TotalTickets: number = 0;
+  TotalOpenTickets: number = 0;
+  TotalClosedTickets: number = 0;
+  
 
   constructor(private authService: AuthService, private http: HttpClient, private router: Router, private auth: AuthService, private alerts: AlertsService) {
 
@@ -48,7 +52,8 @@ export class DashboardComponent {
     this.http.get(url).subscribe(
       (data: any) => {
         // Se a requisição for bem-sucedida, preenche o formulário com os dados recebidos
-        if(data.role != 0) this.fetchDashboardStatistics();
+        if(data.role == 1) this.fetchDashboardStatistics();
+        if(data.role == 3) this.fetchDashboardStatistics_support();
         this.userRole = data.role
        
       },
@@ -58,12 +63,24 @@ export class DashboardComponent {
 
       }
     );
-    if (this.userRole != 0) {
-      this.createLineChart();
-      this.createCircularChart();
-    
-     
-    }
+    // if (this.userRole != 0) {
+    //   this.createLineChart();
+    //   this.createCircularChart();
+    // }
+
+  }
+  fetchDashboardStatistics_support() {
+    const url = `${environment.apiUrl}/Tickets/support/stats`;
+    const headers =this.authService.getHeaders();
+    this.http.get(url, { headers }).subscribe(
+      (data: any) => {
+        console.log(data)
+        this.TotalTickets = data.totalTickets;
+        this.TotalOpenTickets = data.openTickets;
+        this.TotalClosedTickets = data.closedTickets;
+      },
+      error => console.error('Erro ao buscar estatísticas do dashboard:', error)
+    );
   }
   fetchDashboardStatistics() {
     const url = `${environment.apiUrl}/accounts/DashboardStatistics`;

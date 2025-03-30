@@ -32,10 +32,17 @@ export class SupportChatComponent {
   async getTicket(ticketId: number) {
     this.http.get<Ticket>(`${this.ticketsURL}/${ticketId}`).subscribe({
       next: (response: Ticket) => {
+        if (!response) {
+          this.router.navigate(['/NotFound']); 
+          return;
+        }
         this.ticket = response;
         console.log(this.ticket);
       },
       error: (error) => {
+        if (error.status === 400 || error.status === 404) {
+          this.router.navigate(['/NotFound']); // Navigate to NotFound page on 404 error
+        }
         console.error('Error fetching ticket:', error);
       }
     });

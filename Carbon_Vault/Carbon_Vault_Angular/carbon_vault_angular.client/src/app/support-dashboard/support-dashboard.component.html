@@ -1,0 +1,36 @@
+<body>
+
+
+    <!-- Conteúdo Principal -->
+    <main class="dashboard">
+      <h1>Support Dashboard</h1>
+      <div class="cards">
+        <div class="card orange">
+          <h3>Número Total de Tickets</h3>
+          <div>
+            <img src="images/TotalDeTickets.png" class="icon" />
+            <span class="value">{{TotalTickets}}</span>
+          </div>
+        </div>
+        <div class="card yellow">
+          <h3>Número Total de Tickets Abertos</h3>
+          <div>
+            <img src="images/TicketsAbertos.png" class="icon" />
+            <span class="value">{{TotalOpenTickets}}</span>
+          </div>
+        </div>
+        <div class="card green">
+          <h3>Número Total de Tickets Fechados</h3>
+          <div>
+            <img src="images/TicketsFechados.png" width="50px"/>
+            <span class="value">{{TotalClosedTickets}}</span>
+          </div>
+        </div>
+      </div>
+      
+      <app-support-manager-admin style="width: 100%;"></app-support-manager-admin>
+   
+    </main>
+  
+  </body>
+  

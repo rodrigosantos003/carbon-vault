@@ -2,7 +2,7 @@
   <app-user-menu></app-user-menu>
 
   <!-- Default User Content -->
-  <div class="main-content" *ngIf="userRole != 1">
+  <div class="main-content" *ngIf="userRole == 0">
     <h1>Dashboard</h1>
     <div class="dashboard-cards">
       <div class="card green">
@@ -134,6 +134,12 @@
   [ProjectCount]="ProjectCount"
   [TransactionCount]="TransactionCount"
   [CreditCount]="CreditCount"
- 
   ></app-admin-dashboard>
+
+  <!-- Support User Content -->
+  <app-support-dashboard *ngIf="userRole == 3"
+  [TotalTickets]="TotalTickets"
+  [TotalOpenTickets]="TotalOpenTickets"
+  [TotalClosedTickets]="TotalClosedTickets"
+  ></app-support-dashboard>
 </body>
