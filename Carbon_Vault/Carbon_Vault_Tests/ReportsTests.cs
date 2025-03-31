@@ -14,7 +14,7 @@ using Xunit;
 using Carbon_Vault.Controllers.API;
 using Microsoft.AspNetCore.Hosting;
 
-namespace Carbon_Vault_Tests
+namespace Carbon_Vault_Tests_Reports
 {
     public class ReportsTests
     {

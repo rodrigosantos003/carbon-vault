@@ -13,7 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Carbon_Vault_Tests
+namespace Carbon_Vault_Tests_Support
 {
     public class SupportTests : IDisposable
     {
