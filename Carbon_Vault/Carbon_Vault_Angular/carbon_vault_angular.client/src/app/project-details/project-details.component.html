@@ -21,16 +21,45 @@
     </div>
 
     <div class="benefits">
-
     </div>
+
+    <!-- Tabela de Creditos Disponiveis -->
+    <div *ngIf="showMetadata" class="metadata-popup">
+      <div class="popup-content">
+        <button style="cursor: pointer;" class="close-btn" (click)="showMetadata = false">&times;</button>
+        <p>Aqui pode ver os ({{ projectData.creditsForSale }}) Créditos disponiveis para este projeto</p>
+        <table>
+          <tr>
+            <th>Serial Number</th>
+            <th>Certificação</th>
+            <th>Válido Até</th>
+          </tr>
+          <tr *ngIf="getFilteredCredits().length === 0">
+            <td colspan="4" style="text-align: center;">Não existem Créditos disponiveis para mostrar</td>
+          </tr>
+          <tr *ngFor="let credit of getPagedCredits()">
+            <td>{{ credit.serialNumber }}</td>
+            <td>{{ credit.certification }}</td>
+            <td>{{ credit.expiryDate | date: 'shortDate' }}</td>
+          </tr>
+        </table>
+
+        <!-- Pagination Controls -->
+        <div class="pagination">
+          <button (click)="changePage(-1)" [disabled]="currentPage === 1">Anterior</button>
+          <span>Página {{ currentPage }} de {{ getTotalPages() }}</span>
+          <button (click)="changePage(1)" [disabled]="currentPage === getTotalPages()">Seguinte</button>
+        </div>
+      </div>
+    </div>
+
     <div class="price-section">
       <p><strong>{{ projectData.pricePerCredit }}€ / Tonelada</strong></p>
 
       <div>
         <p>
           {{ projectData.creditsForSale }} Créditos de Carbono em stock
-          <svg style="width: 19px; cursor: pointer;" viewBox="0 0 24 24" fill="none" (mouseenter)="showMetadata = true"
-               (mouseleave)="showMetadata = false" xmlns="http://www.w3.org/2000/svg">
+          <svg style="width: 19px; cursor: pointer;" viewBox="0 0 24 24" fill="none" (click)="showMetadata = true" xmlns="http://www.w3.org/2000/svg">
             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
             <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
             <g id="SVGRepo_iconCarrier">
@@ -39,14 +68,7 @@
               <circle cx="1" cy="1" r="1" transform="matrix(1 0 0 -1 11 9)" fill="#8f8f8f"></circle>
             </g>
           </svg>
-
-
         </p>
-        <div *ngIf="showMetadata" class="metadata-tooltip">
-          <p><strong>Serial Number:</strong> {{ carbonCredits[0]?.serialNumber }}</p>
-          <p><strong>Certificação:</strong> {{ carbonCredits[0]?.certification }}</p>
-          <p><strong>Data de Expiração:</strong> {{ carbonCredits[0]?.expiryDate | date: 'shortDate' }}</p>
-        </div>
       </div>
 
       <div class="cart-controls">

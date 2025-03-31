@@ -21,7 +21,10 @@ export class ProjectDetailsComponent {
   projectData: any = null
   quantity: number = 1;
   carbonCredits: any[] = [];
+
   showMetadata: boolean = false;
+  currentPage = 1;
+  itemsPerPage = 10;
 
   constructor(private route: ActivatedRoute, private http: HttpClient, private authService: AuthService, private router: Router, private alerts: AlertsService, private cartService: CartService) { }
 
@@ -33,6 +36,10 @@ export class ProjectDetailsComponent {
     }, error => {
       console.error("Erro na requisição:", error);
     });
+  }
+
+  getCreditSaleStatus(credit: any): boolean {
+    return this.projectData.carbonCredits.indexOf(credit) < this.projectData.creditsForSale;
   }
 
   changeLoginBtnText(): void {
@@ -85,5 +92,25 @@ export class ProjectDetailsComponent {
     this.alerts.enableSuccess("Item adicionado ao carrinho!");
 
     this.quantity = 1;
+  }
+
+  // PAGE SYSTEM
+  getFilteredCredits(): any[] {
+    return this.projectData.carbonCredits.filter((any: any) => this.getCreditSaleStatus(any));
+  }
+
+  getPagedCredits(): any[] {
+    const filtered = this.getFilteredCredits();
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    return filtered.slice(startIndex, startIndex + this.itemsPerPage);
+  }
+
+  getTotalPages(): number {
+    return Math.ceil(this.getFilteredCredits().length / this.itemsPerPage);
+  }
+
+  changePage(step: number): void {
+    const totalPages = this.getTotalPages();
+    this.currentPage = Math.min(Math.max(1, this.currentPage + step), totalPages);
   }
 }

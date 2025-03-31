@@ -28,6 +28,13 @@ export class ProjectManagerDetailsComponent {
   isAddingFiles: boolean = false;
   private apiURL = `${environment.apiUrl}/Projects`;
 
+  allowedFileTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/csv'];
+  maxMb = 5;
+  maxFileSize = this.maxMb * 1024 * 1024; // 5MB in bytes
+
+  allowedImageTypes = ['image/png', 'image/jpeg'];
+  maxImageSize = 2 * 1024 * 1024; // 2MB
+
   categorias = [
     { id: 1, nome: 'Poverty', label: 'Erradicar a pobreza' },
     { id: 2, nome: 'Hunger', label: 'Erradicar a fome' },
@@ -50,6 +57,10 @@ export class ProjectManagerDetailsComponent {
     const projectId = this.route.snapshot.params['id'];
     await this.fetchProjectDetails(projectId);
     await this.loadProjectFiles(projectId);
+  }
+
+  removeFile(index: number) {
+    this.documentos.splice(index, 1);
   }
 
   async fetchProjectDetails(projectId: number) {
@@ -102,6 +113,7 @@ export class ProjectManagerDetailsComponent {
 
   async toggleEditMode() {
     if (this.isEditable) {
+      // Save changes when exiting edit mode
       const updatedProject = {
         ...this.project,
         types: this.categoriasSelecionadas.map((id) => ({ id })),
@@ -113,26 +125,36 @@ export class ProjectManagerDetailsComponent {
       } catch (error) {
         console.error('Erro ao atualizar o projeto:', error);
       }
+    } else {
+      // Entering edit mode: Load existing documents into the drop area
+      this.documentos = this.documentosAtuais.map(doc => {
+        return new File([""], doc.fileName, { type: doc.fileType });
+      });
     }
+
     this.isEditable = !this.isEditable;
   }
+
 
   saveCarbonInfo() {
     if(this.newCreditsForSale < 0)
     {
-      alert("A quantidade de créditos para venda não pode ser negativa");
+      //alert("A quantidade de créditos para venda não pode ser negativa");
+      this.alerts.enableError("A quantidade de créditos para venda não pode ser negativa");
       return;
     }
 
     if(this.newPricePerCredit <= 0)
     {
-      alert("O preço por crédito tem que ser positivo");
+      //alert("O preço por crédito tem que ser positivo");
+      this.alerts.enableError("O preço por crédito tem que ser positivo");
       return;
     }
 
     if(this.newCreditsForSale > this.project.carbonCredits.length)
     {
-      alert("Não pode vender mais créditos do que os que tem disponíveis");
+      //alert("Não pode vender mais créditos do que os que tem disponíveis");
+      this.alerts.enableError("Não pode vender mais créditos do que os que tem disponíveis");
       return;
     }
 
@@ -161,12 +183,25 @@ export class ProjectManagerDetailsComponent {
     event.preventDefault();
     event.stopPropagation();
 
-    const fileList: FileList = event.dataTransfer?.files!;
-    if (fileList && fileList.length > 0) {
-      const newFiles = Array.from(fileList);
+    if (event.dataTransfer && event.dataTransfer.files.length > 0) {
+      const droppedFiles = Array.from(event.dataTransfer.files) as File[];
 
+      for (let file of droppedFiles) {
+        // Validate file type
+        if (!this.allowedFileTypes.includes(file.type)) {
+          this.alerts.enableError("Formato inválido. Ficheiros permitidos: .docx, .pdf, .csv");
+          return;
+        }
 
-      this.documentos = [...this.documentos, ...newFiles];
+        // Validate file size (10MB max)
+        if (file.size > this.maxFileSize) {
+          this.alerts.enableError("Ficheiro demasiado grande. O limite são " + this.maxMb + "MB.");
+          return;
+        }
+      }
+
+      // If all files are valid, add them
+      this.documentos = [...this.documentos, ...droppedFiles];
     }
   }
 
@@ -216,15 +251,29 @@ export class ProjectManagerDetailsComponent {
 
   onImageChange(event: any): void {
     const file = event.target.files[0];
-    if (file) {
-      this.imagem = file;
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.project.imageUrl = e.target.result;
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+
+    // Validate image type
+    if (!this.allowedImageTypes.includes(file.type)) {
+      this.alerts.enableError("Formato inválido. Apenas .png e .jpg são permitidos.");
+      return;
     }
+
+    // Validate image size
+    if (file.size > this.maxImageSize) {
+      this.alerts.enableError("Imagem demasiado grande. O limite são 5MB.");
+      return;
+    }
+
+    // If valid, update the preview
+    this.imagem = file;
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.imagePreviewUrl = e.target.result;
+    };
+    reader.readAsDataURL(file);
   }
+
   downloadFile(filePath: string, fileName: string) {
     const url = `${filePath}`;
     const a = document.createElement('a');
