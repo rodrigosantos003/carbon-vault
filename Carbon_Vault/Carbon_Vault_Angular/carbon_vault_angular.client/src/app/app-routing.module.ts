@@ -53,7 +53,7 @@ const routes: Routes = [
   { path: 'recover-password', component: RecoverPasswordComponent },
   { path: 'user-emissions', component: UserEmissionsComponent, canActivate: [AuthGuard] },
   { path: 'marketplace', component: MarketplaceComponent }, 
-  { path: 'marketplace/project/:id', component: ProjectDetailsComponent, canActivate: [ValidParamGuard]},
+  { path: 'marketplace/project/:id', component: ProjectDetailsComponent},
   { path: 'user-menu', component: UserMenuComponent },
   { path: 'admin-dashboard', component: AdminDashboardComponent },
   { path: 'users-manager', component: UsersManagerComponent, canActivate: [AuthGuard,PermissionGuard],data: { requiredRole: 1 } },
