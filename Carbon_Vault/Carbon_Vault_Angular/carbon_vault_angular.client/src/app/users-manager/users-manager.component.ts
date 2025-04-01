@@ -105,13 +105,15 @@ export class UsersManagerComponent {
       role: Number(this.userRole)
     };
 
-
     this.http.post(addURL, newAccount).subscribe({
       next: () => {
-        this.closeAddAccount();
-        this.alerts.enableSuccess("Utilizador adicionado com sucesso");
-
-        this.http.get<{ message: string }>(newPasswordURL);
+        this.http.get<{ message: string }>(newPasswordURL).subscribe({
+          next: () => {
+            this.closeAddAccount();
+            this.alerts.enableSuccess("Utilizador adicionado com sucesso");
+            window.location.reload();
+          }
+        });
       },
       error: () => {
         this.closeDeleteAccount();
@@ -146,8 +148,6 @@ export class UsersManagerComponent {
     if (this.selectedAccountId !== null) {
       const deleteURL = `${this.apiURL}/${this.selectedAccountId}`;
 
-      const jwtToken = localStorage.getItem('token');
-
       const userIdFromToken = this.authService.getUserId();
 
       if (userIdFromToken == this.selectedAccountId.toString()) {
@@ -155,18 +155,17 @@ export class UsersManagerComponent {
         return;
       }
 
-      if (jwtToken) {
-        this.http.delete(deleteURL, {
-          headers: { 'Authorization': `Bearer ${jwtToken}` }
-        }).subscribe(() => {
-          this.accounts = this.accounts.filter(acc => acc.id !== this.selectedAccountId);
+      this.http.delete(deleteURL, { headers: this.authService.getHeaders() }).subscribe({
+        next: (response) => {
           this.closeDeleteAccount();
-        }, error => {
-          console.error("Erro ao eliminar conta:", error);
-        });
-      } else {
-        console.error("JWT não encontrado");
-      }
+          this.alerts.enableSuccess("Conta eliminada com sucesso");
+          window.location.reload();
+        },
+        error: () => {
+          this.closeDeleteAccount();
+          this.alerts.enableError("Erro ao eliminar conta");
+        }
+      })
     } else {
       console.log("ID é null");
     }

@@ -1,4 +1,5 @@
 <app-market-place-navigation></app-market-place-navigation>
+<app-alerts></app-alerts>
 <main>
   <div class="project-details">
     <h1>{{ projectData.name }}</h1>
@@ -11,7 +12,7 @@
     <div class="benefits">
       <div class="type-images">
         <img class="typesIcon" *ngFor="let type of projectData.types" [src]="'/icons/Goal' + (type.type + 1) + '.png'"
-          [alt]="'Goal ' + (type.type + 1)">
+             [alt]="'Goal ' + (type.type + 1)">
       </div>
     </div>
     <div class="benefits">
@@ -20,15 +21,45 @@
     </div>
 
     <div class="benefits">
-
     </div>
+
+    <!-- Tabela de Creditos Disponiveis -->
+    <div *ngIf="showMetadata" class="metadata-popup">
+      <div class="popup-content">
+        <button style="cursor: pointer;" class="close-btn" (click)="showMetadata = false">&times;</button>
+        <p>Aqui pode ver os ({{ projectData.creditsForSale }}) Créditos disponiveis para este projeto</p>
+        <table>
+          <tr>
+            <th>Serial Number</th>
+            <th>Certificação</th>
+            <th>Válido Até</th>
+          </tr>
+          <tr *ngIf="getFilteredCredits().length === 0">
+            <td colspan="4" style="text-align: center;">Não existem Créditos disponiveis para mostrar</td>
+          </tr>
+          <tr *ngFor="let credit of getPagedCredits()">
+            <td>{{ credit.serialNumber }}</td>
+            <td>{{ credit.certification }}</td>
+            <td>{{ credit.expiryDate | date: 'shortDate' }}</td>
+          </tr>
+        </table>
+
+        <!-- Pagination Controls -->
+        <div class="pagination">
+          <button (click)="changePage(-1)" [disabled]="currentPage === 1">Anterior</button>
+          <span>Página {{ currentPage }} de {{ getTotalPages() }}</span>
+          <button (click)="changePage(1)" [disabled]="currentPage === getTotalPages()">Seguinte</button>
+        </div>
+      </div>
+    </div>
+
     <div class="price-section">
       <p><strong>{{ projectData.pricePerCredit }}€ / Tonelada</strong></p>
 
       <div>
-        <p>{{ carbonCredits.length }} Créditos de Carbono em stock
-          <svg style="width: 19px; cursor: pointer;" viewBox="0 0 24 24" fill="none" (mouseenter)="showMetadata = true"
-            (mouseleave)="showMetadata = false" xmlns="http://www.w3.org/2000/svg">
+        <p>
+          {{ projectData.creditsForSale }} Créditos de Carbono em stock
+          <svg style="width: 19px; cursor: pointer;" viewBox="0 0 24 24" fill="none" (click)="showMetadata = true" xmlns="http://www.w3.org/2000/svg">
             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
             <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
             <g id="SVGRepo_iconCarrier">
@@ -37,19 +68,12 @@
               <circle cx="1" cy="1" r="1" transform="matrix(1 0 0 -1 11 9)" fill="#8f8f8f"></circle>
             </g>
           </svg>
-
-
         </p>
-        <div *ngIf="showMetadata" class="metadata-tooltip">
-          <p><strong>Serial Number:</strong> {{ carbonCredits[0]?.serialNumber }}</p>
-          <p><strong>Certificação:</strong> {{ carbonCredits[0]?.certification }}</p>
-          <p><strong>Data de Expiração:</strong> {{ carbonCredits[0]?.expiryDate | date: 'shortDate' }}</p>
-        </div>
       </div>
 
       <div class="cart-controls">
         <label for="quantity">Quantidade</label>
-        <input id="quantity" type="number" min="1" [(ngModel)]="quantity" [value]="quantity">
+        <input id="quantity" type="number" min="1" [(ngModel)]="quantity" [value]="quantity" (change)="validateQuantity()">
 
         <button class="add-to-cart" (click)="addToCart()" [ngClass]="{ 'disabled-btn': carbonCredits.length === 0 }">
           Adicionar ao Carrinho

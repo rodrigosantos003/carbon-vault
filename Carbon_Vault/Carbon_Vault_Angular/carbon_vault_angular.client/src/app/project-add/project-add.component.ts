@@ -36,6 +36,9 @@ export class ProjectAddComponent {
   maxMb = 5;
   maxFileSize = this.maxMb * 1024 * 1024; // 5MB in bytes
 
+  allowedImageTypes = ['image/png', 'image/jpeg'];
+  maxImageSize = 2 * 1024 * 1024; // 2MB
+
   categorias = [
     { id: 1, nome: 'Poverty', label: 'Erradicar a pobreza' },
     { id: 2, nome: 'Hunger', label: 'Erradicar a fome' },
@@ -154,16 +157,29 @@ export class ProjectAddComponent {
 
   onImageChange(event: any): void {
     const file = event.target.files[0];
-    if (file) {
-      this.imagem = file;
+    if (!file) return;
 
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.imagePreviewUrl = e.target.result;
-      };
-      reader.readAsDataURL(file);
+    // Validate image type
+    if (!this.allowedImageTypes.includes(file.type)) {
+      this.alerts.enableError("Formato inválido. Apenas .png e .jpg são permitidos.");
+      return;
     }
+
+    // Validate image size
+    if (file.size > this.maxImageSize) {
+      this.alerts.enableError("Imagem demasiado grande. O limite são 5MB.");
+      return;
+    }
+
+    // If valid, update the preview
+    this.imagem = file;
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.imagePreviewUrl = e.target.result;
+    };
+    reader.readAsDataURL(file);
   }
+
   errors: any = {};
 
   async uploadImage(projectId: number): Promise<string> {
@@ -210,8 +226,6 @@ export class ProjectAddComponent {
   onDrop(event: DragEvent) {
     event.preventDefault();
     event.stopPropagation();
-
-    console.log("ENTROU");
 
     if (event.dataTransfer && event.dataTransfer.files.length > 0) {
       const droppedFiles = Array.from(event.dataTransfer.files) as File[];

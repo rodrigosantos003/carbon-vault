@@ -21,7 +21,10 @@ export class ProjectDetailsComponent {
   projectData: any = null
   quantity: number = 1;
   carbonCredits: any[] = [];
+
   showMetadata: boolean = false;
+  currentPage = 1;
+  itemsPerPage = 10;
 
   constructor(private route: ActivatedRoute, private http: HttpClient, private authService: AuthService, private router: Router, private alerts: AlertsService, private cartService: CartService) { }
 
@@ -33,6 +36,10 @@ export class ProjectDetailsComponent {
     }, error => {
       console.error("Erro na requisição:", error);
     });
+  }
+
+  getCreditSaleStatus(credit: any): boolean {
+    return this.projectData.carbonCredits.indexOf(credit) < this.projectData.creditsForSale;
   }
 
   changeLoginBtnText(): void {
@@ -53,24 +60,57 @@ export class ProjectDetailsComponent {
     }
   }
 
+  validateQuantity() {
+    if (this.quantity < 1 || isNaN(this.quantity)) {
+      this.quantity = 1;
+    }
+  }
+
   addToCart() {
+    console.log("CC = " + this.projectData.creditsForSale);
+    console.log("Quant = " + this.quantity);
+    if (this.projectData.creditsForSale < 1) {
+      this.alerts.enableError("Este projeto não tem créditos disponveis para venda, tente mais tarde.", 5);
+      return;
+    }
+
+    if (this.projectData.creditsForSale < this.quantity) {
+      this.alerts.enableError("Quantidade máxima de " + this.projectData.creditsForSale + " CC para este projeto", 5);
+      return;
+    }
+
     const item = {
       id: this.projectId,
       image: this.projectData.imageUrl,
       name: this.projectData.name,
       description: this.projectData.description,
       price: this.projectData.pricePerCredit,
-      quantity: this.projectData.quantity,
+      quantity: this.quantity,
     };
 
     this.cartService.addItem(item);
-
     this.alerts.enableSuccess("Item adicionado ao carrinho!");
-    //alert('Item adicionado ao carrinho!');
-    //setTimeout(() => {
-    //  this.alerts.disableSuccess();
-    //}, 3000);
 
     this.quantity = 1;
+  }
+
+  // PAGE SYSTEM
+  getFilteredCredits(): any[] {
+    return this.projectData.carbonCredits.filter((any: any) => this.getCreditSaleStatus(any));
+  }
+
+  getPagedCredits(): any[] {
+    const filtered = this.getFilteredCredits();
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    return filtered.slice(startIndex, startIndex + this.itemsPerPage);
+  }
+
+  getTotalPages(): number {
+    return Math.ceil(this.getFilteredCredits().length / this.itemsPerPage);
+  }
+
+  changePage(step: number): void {
+    const totalPages = this.getTotalPages();
+    this.currentPage = Math.min(Math.max(1, this.currentPage + step), totalPages);
   }
 }

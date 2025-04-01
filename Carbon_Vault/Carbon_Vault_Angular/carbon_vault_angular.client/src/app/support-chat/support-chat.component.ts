@@ -10,7 +10,7 @@ import { AfterViewChecked, ElementRef, ViewChild } from '@angular/core';
 @Component({
   selector: 'app-support-chat',
   standalone: false,
-  
+
   templateUrl: './support-chat.component.html',
   styleUrl: './support-chat.component.css'
 })
@@ -18,15 +18,15 @@ export class SupportChatComponent {
   ticket: Ticket | null = null;
   private ticketsURL = `${environment.apiUrl}/Tickets`;
   private ticketsMessagesURL = `${environment.apiUrl}/TicketMessages/send`;
-  messageContent: string  = ""
-  userRole : number = 0; 
-  
-  
+  messageContent: string = ""
+  userRole: number = 0;
+
+
   constructor(private http: HttpClient, private alerts: AlertsService, private authService: AuthService, private router: Router, private route: ActivatedRoute) { }
   ngOnInit(): void {
     const ticketId = this.route.snapshot.params['id'];
     this.getTicket(ticketId);
-    this.authService.getUserRole().then((role) =>  this.userRole = role); 
+    this.authService.getUserRole().then((role) => this.userRole = role);
   }
 
   async getTicket(ticketId: number) {
@@ -47,13 +47,13 @@ export class SupportChatComponent {
       }
     });
   }
-  getTicketState(state: number| undefined): string {
+  getTicketState(state: number | undefined): string {
     const states = ["Aberto", "fechado"];
-    if(state == undefined)return "Unknown"
+    if (state == undefined) return "Unknown"
     return states[state] ?? "Unknown";
   }
   isTheAuthor(ticket: Ticket | null, message: TicketMessage): boolean {
-    if(ticket  == null|| message == null) return false
+    if (ticket == null || message == null) return false
     return ticket.authorId === message.autor.id;
   }
 
@@ -123,7 +123,7 @@ export class SupportChatComponent {
       Content: this.messageContent,
       AutorId: Number(userId)
     };
-  
+
     this.http.post(this.ticketsMessagesURL, data, { headers }).subscribe(
       (response) => {
         console.log('Mensagem enviada com sucesso:', response);
@@ -160,7 +160,7 @@ export class SupportChatComponent {
   
 
   refreshMessages() {
-     this.getTicket(this.route.snapshot.params['id'])
+    this.getTicket(this.route.snapshot.params['id'])
   }
 
 
@@ -171,18 +171,27 @@ export interface TicketMessage {
   content: string;
   autorId: number;
   sendDate: string;
-  autor: {       
+  autor: {
     id: number;
     name: string;
     email: string;
   };
 }
 
+export enum TicketCategory {
+  Compra = "Compra",
+  Venda = "Venda",
+  Transacoes = "Transacoes",
+  Relatorios = "Relatorios",
+  Outros = "Outros",
+}
+
 export interface Ticket {
   id: number;
   title: string;
   description: string;
-  category: string;
+  category: TicketCategory;
+  priority: number,
   state: number;
   createdAt: string;
   reopenAt?: string;

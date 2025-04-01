@@ -13,7 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Carbon_Vault_Tests
+namespace Carbon_Vault_Tests_Support
 {
     public class SupportTests : IDisposable
     {
@@ -83,7 +83,7 @@ namespace Carbon_Vault_Tests
             var controller = new TicketsController(_mockContext, _mockEmailService.Object);
             var newTicket = new Ticket { Id = 3, Title = "New Ticket", AuthorId = 1, Reference = "REF125", Description = "Test Ticket" };
 
-            var result = await controller.PostTicket(newTicket);
+            var result = await controller.PostTicket(newTicket, "transacoes");
 
             var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result.Result);
             var returnedTicket = Assert.IsType<Ticket>(createdAtActionResult.Value);
