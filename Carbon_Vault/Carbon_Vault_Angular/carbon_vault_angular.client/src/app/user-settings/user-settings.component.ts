@@ -19,6 +19,11 @@ export class UserSettingsComponent {
   userId: string;
   _validator: IbanValidator = new IbanValidator();
 
+  // IBANS de Teste:
+  // ✅ PT50000201231234567890154
+  // ❌ ES7921000813610123456789
+  // ❌ PT50000201231234567890150 
+
   constructor(private fb: FormBuilder, private http: HttpClient, private authService: AuthService, private alerts: AlertsService, private router: Router) {
 
     this.settingsForm = this.fb.group({
