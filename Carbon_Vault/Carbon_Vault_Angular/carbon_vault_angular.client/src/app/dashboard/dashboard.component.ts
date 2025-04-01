@@ -20,7 +20,7 @@ export class DashboardComponent {
   lineChart: any;
   circularChart: any;
   emissions: number;
-  projects: number;
+  projects: any[];
   credits: number;
   purchases: Transaction[];
   sales: Transaction[];
@@ -34,7 +34,7 @@ export class DashboardComponent {
 
     this.userId = this.authService.getUserId();
     this.emissions = 0;
-    this.projects = 0;
+    this.projects = [];
     this.credits = 0;
     this.purchases = [];
     this.sales = [];
@@ -45,27 +45,28 @@ export class DashboardComponent {
     sessionStorage.clear();
 
     const url = `${environment.apiUrl}/accounts/${this.userId}`;
-    this.http.get(url).subscribe(
-      (data: any) => {
+    this.http.get(url).subscribe({
+      next: (data: any) => {
         // Se a requisição for bem-sucedida, preenche o formulário com os dados recebidos
-        if(data.role != 0) this.fetchDashboardStatistics();
+        console.log("Role: " + data.role);
+        if (data.role == 1) {
+          this.fetchAdminDashboardStatistics();
+        } else {
+          this.fetchUserDashboardData();
+        }
         this.userRole = data.role
-       
       },
-      error => {
-        // Caso contrário, exibe o erro no console
-        console.error("Erro na requisição:", error);
-
+      error: (e) => {
+        console.error("Erro na requisição:", e);
       }
-    );
-    if (this.userRole != 0) {
+    });
+    if (this.userRole == 1) {
       this.createLineChart();
       this.createCircularChart();
-    
-     
     }
   }
-  fetchDashboardStatistics() {
+
+  fetchAdminDashboardStatistics() {
     const url = `${environment.apiUrl}/accounts/DashboardStatistics`;
     const headers =this.authService.getHeaders();
     this.http.get(url, { headers }).subscribe(
@@ -82,9 +83,9 @@ export class DashboardComponent {
       error => console.error('Erro ao buscar estatísticas do dashboard:', error)
     );
   }
-  fetchDashboardData() {
+
+  fetchUserDashboardData() {
     Promise.all([
-      this.getCredits(),
       this.getProjects(),
       this.getEmissions(),
       this.getTransactions()]);
@@ -124,13 +125,18 @@ export class DashboardComponent {
   }
 
   getCredits() {
-    const url = `${environment.apiUrl}/CarbonCredits/user/${this.userId}`;
+    //const url = `${environment.apiUrl}/CarbonCredits/user/${this.userId}`;
 
-    this.http.get(url).subscribe({
-      next: (data: any) => {
-        this.projects = data.length;
-      }
-    });
+    //this.http.get(url).subscribe({
+    //  next: (data: any) => {
+    //    this.projects = data.length;
+    //    console.log("Data: " + data.length);
+    //  }
+    //});
+
+    for (let proj of this.projects) {
+      this.CreditCount += proj.carbonCredits.length;
+    }
   }
 
   getProjects() {
@@ -138,7 +144,10 @@ export class DashboardComponent {
 
     this.http.get(url).subscribe({
       next: (data: any) => {
-        this.projects = data.length;
+        this.projects = data;
+        this.ProjectCount = data.length;
+
+        this.getCredits();
       }
     });
   }
