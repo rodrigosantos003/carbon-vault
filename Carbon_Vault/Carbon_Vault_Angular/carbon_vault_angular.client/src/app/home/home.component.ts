@@ -64,6 +64,10 @@ export class HomeComponent {
 
   constructor(public router: Router) { }
 
+  goToFAQ() {
+    document.getElementById("faq")?.scrollIntoView();
+  }
+
   toggleFAQ(index: number) {
     this.faqs.forEach((faq, i) => {
       faq.open = i === index ? !faq.open : false; // Fecha os outros e abre apenas um

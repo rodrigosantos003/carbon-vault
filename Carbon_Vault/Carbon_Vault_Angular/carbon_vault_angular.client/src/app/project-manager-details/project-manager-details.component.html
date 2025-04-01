@@ -9,7 +9,7 @@
       <hr>
     </div>
 
-    <form (ngSubmit)="onSubmit()" class="add-project-form">
+    <form class="add-project-form">
       <div class="first-column">
         <div class="form-item">
           <label>Nome</label><br>
@@ -47,7 +47,7 @@
           <div *ngFor="let categoria of categorias">
             <label>
               <input type="checkbox" [checked]="categoriasSelecionadas.includes(categoria.id)"
-                     (change)="onCategoriaChange(categoria.id, $event)" class="custom-checkbox" [disabled]="!isEditable" />
+                (change)="onCategoriaChange(categoria.id, $event)" class="custom-checkbox" [disabled]="!isEditable" />
               {{ categoria.label }}
             </label>
           </div>
@@ -71,7 +71,8 @@
 
           <div class="form-item">
             <h2>Documentos</h2>
-            <div class="drag-area" (dragover)="onDragOver($event)" (drop)="onDrop($event)" (dragleave)="onDragLeave($event)" (click)="fileInput.click()">
+            <div class="drag-area" (dragover)="onDragOver($event)" (drop)="onDrop($event)"
+              (dragleave)="onDragLeave($event)" (click)="fileInput.click()">
               <p>Arraste e solte arquivos aqui ou clique para selecionar</p>
               <input #fileInput type="file" (change)="onFileChange($event)" multiple style="display:none" />
               <ul *ngIf="documentos.length > 0" class="file-list">
@@ -156,8 +157,10 @@
         <p class="credits-form-heading">Critérios de Venda dos Créditos</p>
         <p class="credits-form-field" style="text-align: center; font-weight: 500;">Créditos totais do Projeto:
           {{project.carbonCredits.length}}</p>
-        <p class="credits-form-field">Créditos para venda: <input type="text" type="number" [(ngModel)]="newCreditsForSale"></p>
-        <p class="credits-form-field">Preço por Crédito: <input type="text" type="number" [(ngModel)]="newPricePerCredit"></p>
+        <p class="credits-form-field">Créditos para venda: <input type="text" type="number"
+            [(ngModel)]="newCreditsForSale"></p>
+        <p class="credits-form-field">Preço por Crédito: <input type="text" type="number"
+            [(ngModel)]="newPricePerCredit"></p>
       </div>
       <div class="credits-form-button-wrapper">
         <button class="credits-form-button secondary" (click)="closePopup()">Cancelar</button>

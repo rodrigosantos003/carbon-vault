@@ -114,19 +114,9 @@ export class ProjectManagerDetailsComponent {
   async toggleEditMode() {
     if (this.isEditable) {
       // Save changes when exiting edit mode
-      const updatedProject = {
-        ...this.project,
-        types: this.categoriasSelecionadas.map((id) => ({ id })),
-      };
-
-      try {
-        await this.http.put(`${this.apiURL}/${this.project.id}`, updatedProject).toPromise();
-        this.alerts.enableSuccess('Projeto atualizado com sucesso!');
-      } catch (error) {
-        console.error('Erro ao atualizar o projeto:', error);
-      }
+      this.submitChanges();
     } else {
-      // Entering edit mode: Load existing documents into the drop area
+      //Entering edit mode: Load existing documents into the drop area
       this.documentos = this.documentosAtuais.map(doc => {
         return new File([""], doc.fileName, { type: doc.fileType });
       });
@@ -135,24 +125,20 @@ export class ProjectManagerDetailsComponent {
     this.isEditable = !this.isEditable;
   }
 
-
   saveCarbonInfo() {
-    if(this.newCreditsForSale < 0)
-    {
+    if (this.newCreditsForSale < 0) {
       //alert("A quantidade de créditos para venda não pode ser negativa");
       this.alerts.enableError("A quantidade de créditos para venda não pode ser negativa");
       return;
     }
 
-    if(this.newPricePerCredit <= 0)
-    {
+    if (this.newPricePerCredit <= 0) {
       //alert("O preço por crédito tem que ser positivo");
       this.alerts.enableError("O preço por crédito tem que ser positivo");
       return;
     }
 
-    if(this.newCreditsForSale > this.project.carbonCredits.length)
-    {
+    if (this.newCreditsForSale > this.project.carbonCredits.length) {
       //alert("Não pode vender mais créditos do que os que tem disponíveis");
       this.alerts.enableError("Não pode vender mais créditos do que os que tem disponíveis");
       return;
@@ -177,7 +163,6 @@ export class ProjectManagerDetailsComponent {
     event.stopPropagation();
     event.dataTransfer!.dropEffect = 'copy';
   }
-
 
   onDrop(event: DragEvent) {
     event.preventDefault();
@@ -209,6 +194,7 @@ export class ProjectManagerDetailsComponent {
     event.preventDefault();
     event.stopPropagation();
   }
+
   onCategoriaChange(categoriaId: number, event: any) {
     if (event.target.checked) {
       this.categoriasSelecionadas.push(categoriaId);
@@ -218,36 +204,14 @@ export class ProjectManagerDetailsComponent {
   }
   async loadProjectFiles(projectId: number): Promise<void> {
     this.http.get<any[]>(`${this.apiURL}/${projectId}/files`).subscribe((files) => {
-      this.documentosAtuais = files.filter(file => file.filePath != this.project.ImageUrl);
+      this.documentosAtuais = files.filter(file => file.filePath != this.project.imageUrl);
     });
   }
+
   onFileChange(event: any) {
     const newFiles = Array.from(event.target.files) as File[];
     this.documentos = [...this.documentos, ...newFiles];
   }
-
-  deleteFile(fileId: number): void {
-    var token = localStorage.getItem('token');
-    var userId = this.authService.getUserId();
-
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'userID': userId
-    });
-
-    const projectId = this.project.id;
-    this.http.delete<void>(`${this.apiURL}/${projectId}/files/${fileId}`, { headers }).subscribe(() => {
-
-      this.fetchProjectDetails(projectId);
-      this.loadProjectFiles(projectId);
-      this.alerts.enableSuccess('Ficheiro Eliminado com sucesso do projeto');
-    }, error => {
-
-      this.alerts.enableError('Um erro aconteceu tente novamente mais tarde');
-      console.error('Error deleting file:', error);
-    });
-  }
-
 
   onImageChange(event: any): void {
     const file = event.target.files[0];
@@ -289,38 +253,51 @@ export class ProjectManagerDetailsComponent {
   changeToEditMode() {
     this.isAddingFiles = true;
   }
+
   RevertToEditMode() {
     this.isAddingFiles = false;
     this.documentos = [];
   }
-  async onSubmit(): Promise<void> {
+
+  submitChanges() {
+    // Update image
     if (this.imagem) {
       const projectId = this.project.id;
       const formData = new FormData();
+      this.imagem.name.trim();
       formData.append('file', this.imagem);
 
-      try {
-        const response: any = await this.http.post(`${this.apiURL}/${projectId}/uploadImage`, formData).toPromise();
-        this.project.imageUrl = response.filePath;
-      } catch (error) {
-        this.alerts.enableError("Erro ao enviar imagem");
-        console.error('Erro ao enviar imagem:', error);
-      }
+      this.http.post(`${this.apiURL}/${projectId}/uploadImage`, formData).subscribe({
+        next: (response: any) => this.project.imageUrl = response.filePath,
+        error: () => this.alerts.enableError("Erro ao enviar imagem")
+      });
     }
 
-    const updatedProject = {
-      ...this.project,
-      types: this.categoriasSelecionadas.map((id) => ({ id })),
-    };
+    // Update files
+    const documentsFormData = new FormData();
+    this.documentos.forEach(doc => documentsFormData.append('files', doc));
 
-    try {
-      await this.http.put(`${this.apiURL}/${this.project.id}`, updatedProject).toPromise();
-      this.alerts.enableSuccess('Projeto atualizado com sucesso!');
-    } catch (error) {
-      console.error('Erro ao atualizar o projeto:', error);
-    }
+    // Update project info
+    this.http.post(`${this.apiURL}/${this.project.id}/files/update`, documentsFormData).subscribe({
+      next: () => {
+        const updatedProject = {
+          ...this.project,
+          types: this.categoriasSelecionadas.map((id) => ({ id })),
+        };
+
+        this.http.put(`${this.apiURL}/${this.project.id}`, updatedProject).subscribe({
+          next: () => {
+            this.alerts.enableSuccess("Projeto atualizado com sucesso");
+            location.reload();
+          },
+          error: () => this.alerts.enableError("Erro ao atualizar projeto")
+        });
+      },
+      error: () => this.alerts.enableError("Erro ao enviar documentos")
+    });
   }
 }
+
 interface Documento {
   id: number;
   fileName: string;
