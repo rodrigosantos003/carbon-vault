@@ -150,36 +150,36 @@ namespace Carbon_Vault.Controllers.API
                                    .Where(a => a.Role == AccountType.Support)
                                    .ToListAsync();
 
-            foreach (var supportAdmin in supportAccounts)
-            {
-                await _emailService.SendEmail(
-                    supportAdmin.Email,
-                    "Novo Ticket Recebido",
-                    $"Olá,\n\nNovo ticket submetido.\n\n" +
-                    $" **Referência:** {savedTicket.Reference}\n" +
-                    $" **Título:** {savedTicket.Title}\n" +
-                    $" **Categoria:** {savedTicket.Category}\n" +
-                    $" **Descrição:** {savedTicket.Description}\n\n" +
-                    $" [Visualizar Ticket]({_frontendBaseUrl}/support-manager/{savedTicket.Id})\n\n" +
-                    $"Atenciosamente,\nEquipa de Suporte do Carbon Vault",
-                    null
-                );
-            }
+            //foreach (var supportAdmin in supportAccounts)
+            //{
+            //    await _emailService.SendEmail(
+            //        supportAdmin.Email,
+            //        "Novo Ticket Recebido",
+            //        $"Olá,\n\nNovo ticket submetido.\n\n" +
+            //        $" **Referência:** {savedTicket.Reference}\n" +
+            //        $" **Título:** {savedTicket.Title}\n" +
+            //        $" **Categoria:** {savedTicket.Category}\n" +
+            //        $" **Descrição:** {savedTicket.Description}\n\n" +
+            //        $" [Visualizar Ticket]({_frontendBaseUrl}/support-manager/{savedTicket.Id})\n\n" +
+            //        $"Atenciosamente,\nEquipa de Suporte do Carbon Vault",
+            //        null
+            //    );
+            //}
 
 
-            await _emailService.SendEmail(
-                author.Email,
-                "O seu Ticket Foi Recebido",
-                $"Olá {author.Name},\n\n" +
-                $"O seu ticket foi recebido com sucesso!\n\n" +
-                $"**Referência:** {savedTicket.Reference}\n" +
-                $"**Título:** {savedTicket.Title}\n" +
-                $"**Categoria:** {savedTicket.Category}\n" +
-                $"**Descrição:** {savedTicket.Description}\n\n" +
-                $"Acompanhe o estado  do seu ticket aqui: {_frontendBaseUrl}/support-manager/{savedTicket.Id}\n\n" +
-                $"Atenciosamente,\nEquipa de Suporte do Carbon Vault",
-                null
-            );
+            //await _emailService.SendEmail(
+            //    author.Email,
+            //    "O seu Ticket Foi Recebido",
+            //    $"Olá {author.Name},\n\n" +
+            //    $"O seu ticket foi recebido com sucesso!\n\n" +
+            //    $"**Referência:** {savedTicket.Reference}\n" +
+            //    $"**Título:** {savedTicket.Title}\n" +
+            //    $"**Categoria:** {savedTicket.Category}\n" +
+            //    $"**Descrição:** {savedTicket.Description}\n\n" +
+            //    $"Acompanhe o estado  do seu ticket aqui: {_frontendBaseUrl}/support-manager/{savedTicket.Id}\n\n" +
+            //    $"Atenciosamente,\nEquipa de Suporte do Carbon Vault",
+            //    null
+            //);
 
             return CreatedAtAction("GetTicket", new { id = savedTicket.Id }, savedTicket);
         }

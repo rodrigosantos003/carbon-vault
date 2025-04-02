@@ -157,14 +157,14 @@ namespace Carbon_Vault.Controllers.API
             // Send email notification if a recipient exists
             if (recipient != null)
             {
-                string subject = (account.Role == AccountType.User) ? "Novo Resposta no Ticket" : "Nova Atualização no Seu Ticket";
-                string emailBody = $"Olá {recipient.Name},\n\n" +
-                                   $"{(account.Role == AccountType.User ? "O utilizador" : "O suporte")} {account.Name} respondeu ao ticket \"{ticket.Title}\".\n\n" +
-                                   $"Mensagem: \"{ticketMessage.Content}\"\n\n" +
-                                   $"Acompanhe o ticket aqui: {_frontendBaseUrl}/support-manager/{ticket.Id}\n\n" +
-                                   $"Atenciosamente,\nEquipa de Suporte do Carbon Vault";
+                //string subject = (account.Role == AccountType.User) ? "Novo Resposta no Ticket" : "Nova Atualização no Seu Ticket";
+                //string emailBody = $"Olá {recipient.Name},\n\n" +
+                //                   $"{(account.Role == AccountType.User ? "O utilizador" : "O suporte")} {account.Name} respondeu ao ticket \"{ticket.Title}\".\n\n" +
+                //                   $"Mensagem: \"{ticketMessage.Content}\"\n\n" +
+                //                   $"Acompanhe o ticket aqui: {_frontendBaseUrl}/support-manager/{ticket.Id}\n\n" +
+                //                   $"Atenciosamente,\nEquipa de Suporte do Carbon Vault";
 
-                await _emailService.SendEmail(recipient.Email, subject, emailBody, null);
+                //await _emailService.SendEmail(recipient.Email, subject, emailBody, null);
             }
 
             return CreatedAtAction("GetTicketMessage", new { id = ticketMessage.Id }, ticketMessage);

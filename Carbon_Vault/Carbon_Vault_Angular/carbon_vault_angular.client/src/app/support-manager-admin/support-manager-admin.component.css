@@ -247,3 +247,13 @@ body {
   .status-dot.insucess{
     background-color: red;
   }
+
+  .high-priority{
+    color: red;
+  }
+  .medium-priority{
+    color: #ffcc66;
+  }
+  .low-priority{
+    color: #66bb66;
+  }
