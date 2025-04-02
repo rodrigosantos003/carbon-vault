@@ -25,19 +25,19 @@ export class UserSalesComponent {
   }
 
   getSales(): void {
-    this.alerts.enableLoading("A carregar compras...");
+    this.alerts.enableLoading("A carregar vendas...");
 
     const jwtToken = localStorage.getItem('token');
 
     this.http.get<Sale[]>(this.salesURL, {
-      headers: { 'Authorization': `Bearer ${jwtToken}` }
+      headers: this.authService.getHeaders()
     }).subscribe({
       next: (data) => {
         this.sales = data;
         this.alerts.disableLoading();
       },
       error: (error) => {
-        console.error("Erro ao obter compras: ", error);
+        console.error("Erro ao obter vendas: ", error);
         this.alerts.disableLoading();
       }
     })

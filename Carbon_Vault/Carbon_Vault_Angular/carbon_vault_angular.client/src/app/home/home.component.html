@@ -18,7 +18,7 @@
       <h1>Bem-vindo ao <span>Carbon Vault</span></h1>
       <p>A solução <span>SUSTENTÁVEL</span> para a sua empresa</p>
       <div class="hero-buttons">
-        <button class="secondary-button">Como funciona?</button>
+        <button class="secondary-button" (click)="goToFAQ()">Como funciona?</button>
         <button class="primary-button" (click)="router.navigate(['/marketplace'])">Começar a comprar</button>
       </div>
     </div>
@@ -84,7 +84,7 @@
     <button class="evaluation-section-btn">Pedir Avaliação</button>
   </section>
 
-  <section class="faq-section">
+  <section class="faq-section" id="faq">
     <div class="faq-title">
       <h2>FAQ</h2>
       <img src="/images/faq.png" alt="FAQ">

@@ -328,6 +328,80 @@ namespace Carbon_Vault.Controllers.API
             return Ok(projectFile);
         }
 
+        [HttpPost("{id}/files/update")]
+        public async Task<IActionResult> UpdateFiles(int id, List<IFormFile> files)
+        {
+            if (files == null)
+                files = new List<IFormFile>();
+
+            var project = _context.Projects.Find(id);
+            if (project == null)
+                return NotFound("Project not found");
+
+            var projectFiles = _context.ProjectFiles.Where(f => f.ProjectId == id).ToList();
+            var directoryPath = Path.Combine(_environment.ContentRootPath, "App_Data", "files");
+            Directory.CreateDirectory(directoryPath);
+
+            // Lista de ficheiros recebidos
+            var receivedFileNames = new List<string>();
+
+            var uploadedFiles = new List<ProjectFiles>();
+
+            foreach (var file in files)
+            {
+                if (file.Length == 0) continue;
+
+                var originalFileName = Path.GetFileName(file.FileName);
+                var existingFile = projectFiles.Find(f => f.FileName.Contains(originalFileName));
+                string fileName;
+
+                if (existingFile != null)
+                {
+                    fileName = existingFile.FileName;
+                    projectFiles.Remove(existingFile);
+                }
+                else
+                {
+                    fileName = Guid.NewGuid().ToString() + "_" + originalFileName;
+                }
+
+                var filePath = Path.Combine(directoryPath, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                var projectFile = new ProjectFiles
+                {
+                    FileName = fileName,
+                    FilePath = $"{Request.Scheme}://{Request.Host}/files/{fileName}",
+                    FileType = Path.GetExtension(fileName).ToLower(),
+                    UploadedAt = DateTime.Now,
+                    ProjectId = id
+                };
+
+                _context.ProjectFiles.Add(projectFile);
+                uploadedFiles.Add(projectFile);
+                receivedFileNames.Add(fileName);
+            }
+
+            // Remover ficheiros que não foram enviados
+            foreach (var existingFile in projectFiles)
+            {
+                var existingFilePath = Path.Combine(directoryPath, existingFile.FileName);
+                if (System.IO.File.Exists(existingFilePath) && !project.ImageUrl.Contains(existingFilePath))
+                {
+                    System.IO.File.Delete(existingFilePath);
+                }
+
+                _context.ProjectFiles.Remove(existingFile);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Ok(receivedFileNames);
+        }
 
 
         [HttpDelete("{projectId}/files/{fileId}")]

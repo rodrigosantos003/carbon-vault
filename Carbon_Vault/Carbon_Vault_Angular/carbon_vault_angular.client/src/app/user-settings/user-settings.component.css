@@ -20,6 +20,7 @@ main {
 }
 
 .content {
+  margin-top: 100px;
   max-width: 700px;
   width: 100%;
   background: white;
@@ -70,7 +71,8 @@ main {
   }
 
   .form-group input {
-    width: 80%;
+    width: 100% !important;
+    max-width: 300px !important;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -244,6 +246,7 @@ main {
     border: 0;
     background-color: rgb(175, 175, 175);
     cursor: pointer;
+    padding: 15px;
 }
 
 #open-delete-btn {
