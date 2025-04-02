@@ -46,6 +46,11 @@ import { GoBackButtonComponent } from './go-back-button/go-back-button.component
 import { UserReportsComponent } from './user-reports/user-reports.component';
 import { RequestReportComponent } from './request-report/request-report.component';
 import { AdminReportsComponent } from './admin-reports/admin-reports.component';
+import { SupportDashboardComponent } from './support-dashboard/support-dashboard.component';
+import { TicketManagerComponent } from './ticket-manager/ticket-manager.component';
+import { UnauthorizedPageComponent } from './unauthorized-page/unauthorized-page.component';
+import { NotFoundPageComponent } from './not-found-page/not-found-page.component';
+import { TermsAndConditionsComponent } from './terms-and-conditions/terms-and-conditions.component';
 
 @NgModule({
   declarations: [
@@ -88,7 +93,12 @@ import { AdminReportsComponent } from './admin-reports/admin-reports.component';
     UserSupportComponent,
     UserReportsComponent,
     RequestReportComponent,
-    AdminReportsComponent
+    AdminReportsComponent,
+    SupportDashboardComponent,
+    TicketManagerComponent,
+    UnauthorizedPageComponent,
+    NotFoundPageComponent,
+    TermsAndConditionsComponent
   ],
   imports: [
     BrowserModule,

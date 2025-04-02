@@ -31,6 +31,12 @@ export class UserMenuComponent {
     { icon: 'images/menu/SettingsIcon.png', label: 'Definições', route: '/settings' },
   ];
 
+  supportMenu = [
+    { icon: 'images/menu/DashboardIcon.png', label: 'Dashboard', route: '/dashboard' },
+    { icon: 'images/menu/TicketsIcon.png', label: 'Tickets', route: '/support-manager' },
+    { icon: 'images/menu/SettingsIcon.png', label: 'Definições', route: '/settings' },
+  ];
+
   userMenu = [
     { icon: 'images/menu/DashboardIcon.png', label: 'Dashboard', route: '/dashboard' },
     { icon: 'images/menu/EmissionsIcon.png', label: 'As minhas Emissões', route: '/user-emissions' },

@@ -1,39 +1,46 @@
 <body>
-    <app-user-menu></app-user-menu>
-  
-
-  
-    <div class="main-content">
-      <app-go-back-button/>
-     
-      <div class="ticket-table">
-        <div class="table-header">
-          <h2>Tickets</h2>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Categoria</th>
-              <th>Estado</th>
-              <th>Data de criação</th>
-              <th>Responder</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let ticket of tickets">
-              <td>{{ ticket.id }}</td>
-              <td>{{getCategoryName(ticket.category) }}</td>
-              <td><span class="status-dot"  [ngClass]="{'success': ticket.state === 0, 'insucess': ticket.state !== 0}"></span>{{getTicketState(ticket.state)}}</td>
-              <td>{{ticket.createdAt| date:'dd/MM/yyyy HH:mm:ss'}}</td>
-              <td><button class="view-btn" [disabled]="ticket.state == 1" (click)="navigateToTicket(ticket.id)">Responder</button></td>
-            </tr>
-          </tbody>
-        </table>
+  <div class="main-content">
+    <div class="ticket-table">
+      <div class="table-header">
+        <h2>Tickets</h2>
       </div>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Categoria</th>
+            <th>Prioridade</th>
+            <th>Estado</th>
+            <th>Data de criação</th>
+            <th>Responder</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="tickets.length === 0">
+            <td colspan="6" class="text-center">Nada a mostrar</td>
+          </tr>
+          <tr *ngFor="let ticket of tickets">
+            <td>{{ ticket.id }}</td>
+            <td>{{ getCategoryName(ticket.category) }}</td>
+            <td>
+              <span [ngClass]="getPriorityClass(ticket.priority)">
+                {{ getPriorityLabel(ticket.priority) }}
+              </span>
+            </td>
+            <td>
+              <span class="status-dot" [ngClass]="{'success': ticket.state === 0, 'insucess': ticket.state !== 0}">
+              </span>
+              {{ getTicketState(ticket.state) }}
+            </td>
+            <td>{{ ticket.createdAt | date: 'dd/MM/yyyy HH:mm:ss' }}</td>
+            <td>
+              <button class="view-btn" [disabled]="ticket.state == 1" (click)="navigateToTicket(ticket.id)">Responder</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-  
-    <app-alerts></app-alerts>
-  
-  </body>
-  
+  </div>
+
+  <app-alerts></app-alerts>
+</body>

@@ -15,7 +15,7 @@
     <h2 class="menu-title">MENU</h2>
 
     <ul class="menu">
-      <li *ngFor="let item of (userRole === 1 ? adminMenu : userMenu)">
+      <li *ngFor="let item of (userRole === 1 ? adminMenu : (userRole === 3 ? supportMenu : userMenu))">
 
         <img [src]="item.icon" class="menu-icon" />
         <a [routerLink]="item.route">{{ item.label }}</a>

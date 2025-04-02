@@ -16,6 +16,7 @@ import { UsersManagerComponent } from './users-manager/users-manager.component';
 import { UserPaymentComponent } from './user-payment/user-payment.component';
 import { CartComponent } from './cart/cart.component';
 import { AuthGuard } from './auth.guard';
+import { PermissionGuard } from './permission-guard.guard';
 import { UserPurchasesComponent } from './user-purchases/user-purchases.component';
 import { UserSalesComponent } from './user-sales/user-sales.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
@@ -34,6 +35,12 @@ import { UserSupportComponent } from './user-support/user-support.component';
 import { UserReportsComponent } from './user-reports/user-reports.component';
 import { RequestReportComponent } from './request-report/request-report.component';
 import { AdminReportsComponent } from './admin-reports/admin-reports.component';
+import { TicketManagerComponent } from './ticket-manager/ticket-manager.component';
+import { UnauthorizedPageComponent } from './unauthorized-page/unauthorized-page.component';
+import { NotFoundError } from 'rxjs';
+import { NotFoundPageComponent } from './not-found-page/not-found-page.component';
+import { ValidParamGuard } from './valid-param-guard.guard';
+import { TermsAndConditionsComponent } from './terms-and-conditions/terms-and-conditions.component';
 /*import { EditProjectComponent } from './edit-project/edit-project.component';*/
 
 const routes: Routes = [
@@ -45,11 +52,11 @@ const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'recover-password', component: RecoverPasswordComponent },
   { path: 'user-emissions', component: UserEmissionsComponent, canActivate: [AuthGuard] },
-  { path: 'marketplace', component: MarketplaceComponent },
-  { path: 'marketplace/project/:id', component: ProjectDetailsComponent },
+  { path: 'marketplace', component: MarketplaceComponent }, 
+  { path: 'marketplace/project/:id', component: ProjectDetailsComponent},
   { path: 'user-menu', component: UserMenuComponent },
   { path: 'admin-dashboard', component: AdminDashboardComponent },
-  { path: 'users-manager', component: UsersManagerComponent, canActivate: [AuthGuard] },
+  { path: 'users-manager', component: UsersManagerComponent, canActivate: [AuthGuard,PermissionGuard],data: { requiredRole: 1 } },
   { path: 'user-payment', component: UserPaymentComponent },
   { path: 'cart', component: CartComponent },
   { path: 'purchases', component: UserPurchasesComponent },
@@ -64,12 +71,16 @@ const routes: Routes = [
   { path: 'transaction-details/:id', component: TransactionDetailsComponent },
   { path: 'admin-transactions', component: AdminTransactionsComponent },
   { path: 'settings', component: UserSettingsComponent },
-  { path: 'support-manager', component: SupportManagerAdminComponent,canActivate: [AuthGuard]  },
+  { path: 'support-manager', component: TicketManagerComponent,canActivate: [AuthGuard]  },
   { path: 'support-manager/:id', component: SupportChatComponent,canActivate: [AuthGuard]  },
   { path: 'user-support', component: UserSupportComponent },
   { path: 'user-reports', component: UserReportsComponent },
   { path: 'request-report', component: RequestReportComponent },
-  { path: 'admin-reports', component: AdminReportsComponent }
+  { path: 'admin-reports', component: AdminReportsComponent },
+  { path: 'Unauthorized', component: UnauthorizedPageComponent },
+  { path: 'NotFound', component: NotFoundPageComponent },
+  { path: 'terms', component: TermsAndConditionsComponent },
+
 ];
 
 @NgModule({

@@ -39,7 +39,9 @@ export class SupportManagerAdminComponent {
 
     this.http.get<any[]>(this.ticketsURL,{ headers }).subscribe({
       next: (data) => {
-        this.tickets = data;
+        
+        this.tickets = data.sort((a, b) => this.comparePriority(a.priority, b.priority)); 
+
         this.alerts.disableLoading();
       },
       error: (error) => {
@@ -52,6 +54,32 @@ export class SupportManagerAdminComponent {
     const states = ["Aberto", "Fechado"];
     return states[state] ?? "Unknown";
   }
+  getTicketPriority(state: number): string {
+    const states = ["Alta", "Media", "Baixa"];
+    return states[state] ?? "Unknown";
+  }
+  
+  comparePriority(a: number, b: number): number {
+    const priorityOrder = { 0:'Alta' , 1: 'Media', 2: 'Baixa'};
+    return a - b;
+  }
+
+  getPriorityClass(priority: number): string {
+    return {
+      0: 'high-priority',
+      1: 'medium-priority',
+      2: 'low-priority'
+    }[priority] || 'unknown-priority';
+  }
+  
+  getPriorityLabel(priority: number): string {
+    return {
+      0: '↑ Alta',
+      1: '- Média',
+      2: '↓ Baixa'
+    }[priority] || 'Desconhecida';
+  }
+  
   getCategoryName(categoryValue: number): string {
     switch (categoryValue) {
       case TicketCategory.Compra:

@@ -150,36 +150,36 @@ namespace Carbon_Vault.Controllers.API
                                    .Where(a => a.Role == AccountType.Support)
                                    .ToListAsync();
 
-            foreach (var supportAdmin in supportAccounts)
-            {
-                await _emailService.SendEmail(
-                    supportAdmin.Email,
-                    "Novo Ticket Recebido",
-                    $"Olá,\n\nNovo ticket submetido.\n\n" +
-                    $" **Referência:** {savedTicket.Reference}\n" +
-                    $" **Título:** {savedTicket.Title}\n" +
-                    $" **Categoria:** {savedTicket.Category}\n" +
-                    $" **Descrição:** {savedTicket.Description}\n\n" +
-                    $" [Visualizar Ticket]({_frontendBaseUrl}/support-manager/{savedTicket.Id})\n\n" +
-                    $"Atenciosamente,\nEquipa de Suporte do Carbon Vault",
-                    null
-                );
-            }
+            //foreach (var supportAdmin in supportAccounts)
+            //{
+            //    await _emailService.SendEmail(
+            //        supportAdmin.Email,
+            //        "Novo Ticket Recebido",
+            //        $"Olá,\n\nNovo ticket submetido.\n\n" +
+            //        $" **Referência:** {savedTicket.Reference}\n" +
+            //        $" **Título:** {savedTicket.Title}\n" +
+            //        $" **Categoria:** {savedTicket.Category}\n" +
+            //        $" **Descrição:** {savedTicket.Description}\n\n" +
+            //        $" [Visualizar Ticket]({_frontendBaseUrl}/support-manager/{savedTicket.Id})\n\n" +
+            //        $"Atenciosamente,\nEquipa de Suporte do Carbon Vault",
+            //        null
+            //    );
+            //}
 
 
-            await _emailService.SendEmail(
-                author.Email,
-                "O seu Ticket Foi Recebido",
-                $"Olá {author.Name},\n\n" +
-                $"O seu ticket foi recebido com sucesso!\n\n" +
-                $"**Referência:** {savedTicket.Reference}\n" +
-                $"**Título:** {savedTicket.Title}\n" +
-                $"**Categoria:** {savedTicket.Category}\n" +
-                $"**Descrição:** {savedTicket.Description}\n\n" +
-                $"Acompanhe o estado  do seu ticket aqui: {_frontendBaseUrl}/support-manager/{savedTicket.Id}\n\n" +
-                $"Atenciosamente,\nEquipa de Suporte do Carbon Vault",
-                null
-            );
+            //await _emailService.SendEmail(
+            //    author.Email,
+            //    "O seu Ticket Foi Recebido",
+            //    $"Olá {author.Name},\n\n" +
+            //    $"O seu ticket foi recebido com sucesso!\n\n" +
+            //    $"**Referência:** {savedTicket.Reference}\n" +
+            //    $"**Título:** {savedTicket.Title}\n" +
+            //    $"**Categoria:** {savedTicket.Category}\n" +
+            //    $"**Descrição:** {savedTicket.Description}\n\n" +
+            //    $"Acompanhe o estado  do seu ticket aqui: {_frontendBaseUrl}/support-manager/{savedTicket.Id}\n\n" +
+            //    $"Atenciosamente,\nEquipa de Suporte do Carbon Vault",
+            //    null
+            //);
 
             return CreatedAtAction("GetTicket", new { id = savedTicket.Id }, savedTicket);
         }
@@ -259,5 +259,44 @@ namespace Carbon_Vault.Controllers.API
         {
             return _context.Tickets.Any(e => e.Id == id);
         }
+       
+        // GET: api/Tickets/support/stats
+        [HttpGet("support/stats")]
+        public async Task<ActionResult<SupportStats>> GetSupportStats([FromHeader] string Authorization, [FromHeader] int userID)
+        {
+            if (!AuthHelper.IsTokenValid(Authorization, userID))
+            {
+                return Unauthorized();
+            }
+
+            var account = await _context.Account.FindAsync(userID);
+            if (account.Role is not AccountType.Admin and not AccountType.Support)
+            {
+                return Unauthorized();
+            }
+
+            var totalTickets = await _context.Tickets.CountAsync();
+            var openTickets = await _context.Tickets.CountAsync(t => t.State == TicketState.Open);
+            var closedTickets = await _context.Tickets.CountAsync(t => t.State == TicketState.Closed);
+
+            var supportStats = new SupportStats
+            {
+                TotalTickets = totalTickets,
+                OpenTickets = openTickets,
+                ClosedTickets = closedTickets,
+            };
+
+            return supportStats;
+        }
+
+
+    }
+
+    public class SupportStats
+    {
+        public int TotalTickets { get; set; }
+        public int OpenTickets { get; set; }
+        public int ClosedTickets { get; set; }
+       
     }
 }
