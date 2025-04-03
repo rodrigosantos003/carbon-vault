@@ -34,8 +34,8 @@ export class UserEmissionsComponent {
   ngOnInit() {
     const url = `${environment.apiUrl}/UserEmissions/${this.userId}`;
 
-    this.http.get(url).subscribe(
-      (data: any) => {
+    this.http.get(url).subscribe({
+      next: (data: any) => {
         // Se a requisição for bem-sucedida, preenche o formulário com os dados recebidos
         this.emissionsForm.setValue({
           electricity: data.electricity,
@@ -43,7 +43,7 @@ export class UserEmissionsComponent {
           diesel: data.diesel
         });
       },
-      error => {
+      error: (error) => {
         // Caso ocorra um erro, e o status seja 404, define os valores como 0
         if (error.status === 404) {
           this.emissionsForm.setValue({
@@ -62,11 +62,13 @@ export class UserEmissionsComponent {
           };
 
           this.http.post(`${environment.apiUrl}/UserEmissions`, emissionData).subscribe(
-            () => {
-              this.alerts.enableSuccess("Emissões adicionadas com sucesso");
-            },
-            (error) => {
-              this.alerts.enableError("Erro ao adicionar emissões");
+            {
+              next: () => {
+                this.alerts.enableSuccess("Emissões adicionadas com sucesso");
+              },
+              error: () => {
+                this.alerts.enableError("Erro ao adicionar emissões");
+              }
             }
           );
         }
@@ -75,13 +77,12 @@ export class UserEmissionsComponent {
           console.error("Erro na requisição:", error);
         }
       }
-    );
+    });
 
     this.emissionsForm.valueChanges.subscribe((changes) => {
       this.totalEmissions = this.calculateEmissions(changes);
     });
   }
-
 
   onSubmit() {
     const formValue = this.emissionsForm.value;
@@ -96,8 +97,8 @@ export class UserEmissionsComponent {
     const url = `${environment.apiUrl}/UserEmissions/${this.userId}`;
 
     // Verifica se a emissão já existe
-    this.http.get(url).subscribe(
-      (data: any) => {
+    this.http.get(url).subscribe({
+      next: (data: any) => {
         if (data) {
           // Caso a emissão já exista, faz o PUT (atualização)
           this.http.put(url, emissionData).subscribe({
@@ -111,22 +112,21 @@ export class UserEmissionsComponent {
           );
         }
       },
-      (error) => {
+      error: () => {
         this.alerts.enableError("Erro ao obter emissões");
       }
-    );
+    });
   }
 
+  calculateEmissions(formData: { electricity: string, petrol: string, diesel: string }) {
+    const electricity = parseFloat(formData.electricity) || 0;
+    const petrol = parseFloat(formData.petrol) || 0;
+    const diesel = parseFloat(formData.diesel) || 0;
 
-  calculateEmissions(formData: { electricity: number, petrol: number, diesel: number }) {
-    const electricityEquivalent = formData.electricity * 0.189;
-    const petrolEquivalent = formData.petrol * 0.00231;
-    const dieselEquivalent = formData.diesel * 0.00268;
+    const electricityEquivalent = electricity * 0.189;
+    const petrolEquivalent = petrol * 0.00231;
+    const dieselEquivalent = diesel * 0.00268;
 
-    const sumTotal = electricityEquivalent + petrolEquivalent + dieselEquivalent;
-
-    const total = Math.round(sumTotal * 100) / 100;
-
-    return total;
+    return electricityEquivalent + petrolEquivalent + dieselEquivalent;
   }
 }

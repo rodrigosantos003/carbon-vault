@@ -55,35 +55,38 @@ export class ProjectManagerDetailsComponent {
 
   async ngOnInit() {
     const projectId = this.route.snapshot.params['id'];
-    await this.fetchProjectDetails(projectId);
-    await this.loadProjectFiles(projectId);
+    this.fetchProjectDetails(projectId);
   }
 
   removeFile(index: number) {
     this.documentos.splice(index, 1);
   }
 
-  async fetchProjectDetails(projectId: number) {
-    this.http.get(`${this.apiURL}/${projectId}`).subscribe((response: any) => {
-      this.project = response;
-      if (this.project.status === 0) {
-        this.isEditable = false;
+  fetchProjectDetails(projectId: number) {
+    this.http.get(`${this.apiURL}/${projectId}`).subscribe({
+      next: (response: any) => {
+        this.project = response;
+        if (this.project.status === 0) {
+          this.isEditable = false;
+        }
+        if (this.project.endDate && this.project.startDate) {
+          const dateObj_start = new Date(this.project.startDate);
+          const dateObj_end = new Date(this.project.endDate);
+          const formattedDate_start = dateObj_start.toISOString().split('T')[0];
+          const formattedDate_end = dateObj_end.toISOString().split('T')[0];
+
+          this.project.endDate = formattedDate_end;
+          this.project.startDate = formattedDate_start;
+        }
+
+        this.categoriasSelecionadas = response.types.map((type: any) => type.id);
+
+        this.project.carbonCredits.sort((a: any, b: any) => {
+          return new Date(a.date).getTime() - new Date(b.date).getTime();
+        });
+
+        this.loadProjectFiles(projectId);
       }
-      if (this.project.endDate && this.project.startDate) {
-        const dateObj_start = new Date(this.project.startDate);
-        const dateObj_end = new Date(this.project.endDate);
-        const formattedDate_start = dateObj_start.toISOString().split('T')[0];
-        const formattedDate_end = dateObj_end.toISOString().split('T')[0];
-
-        this.project.endDate = formattedDate_end;
-        this.project.startDate = formattedDate_start;
-      }
-
-      this.categoriasSelecionadas = response.types.map((type: any) => type.id);
-
-      this.project.carbonCredits.sort((a: any, b: any) => {
-        return new Date(a.date).getTime() - new Date(b.date).getTime();
-      });
     });
   }
 
@@ -202,9 +205,12 @@ export class ProjectManagerDetailsComponent {
       this.categoriasSelecionadas = this.categoriasSelecionadas.filter(id => id !== categoriaId);
     }
   }
-  async loadProjectFiles(projectId: number): Promise<void> {
-    this.http.get<any[]>(`${this.apiURL}/${projectId}/files`).subscribe((files) => {
-      this.documentosAtuais = files.filter(file => file.filePath != this.project.imageUrl);
+  loadProjectFiles(projectId: number) {
+    this.http.get<any[]>(`${this.apiURL}/${projectId}/files`).subscribe({
+      next: (files) => {
+        this.documentosAtuais = files.filter(file => file.filePath != this.project.imageUrl);
+      },
+      error: () => this.alerts.enableError("Erro ao carregar documentos")
     });
   }
 
