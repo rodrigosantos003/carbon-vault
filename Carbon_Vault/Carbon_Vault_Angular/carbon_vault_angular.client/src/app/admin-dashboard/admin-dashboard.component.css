@@ -2,9 +2,6 @@ body {
   font-family: 'Poppins', sans-serif;
   color: black;
   margin: 0px !important;
-  /* display: flex; */
-  height: 100vh;
-  /* overflow: hidden; */
 }
 
 /* Dashboard */

@@ -101,12 +101,12 @@ export class UserSettingsComponent {
     }
   }
 
-  toggleEdit() {
-    this.editMode = !this.editMode;
-    if (!this.editMode) {
-      this.onSubmit();
-    }
-  }
+  // toggleEdit() {
+  //   this.editMode = !this.editMode;
+  //   if (!this.editMode) {
+  //     this.onSubmit();
+  //   }
+  // }
 
   deleteAccount() {
     const deleteAccountURL = `${environment.apiUrl}/Accounts/${this.userId}`;
@@ -183,17 +183,17 @@ export class IbanValidator {
   }
 
   validatePortugueseIBAN(iban: string): boolean {
-  // Remove spaces and convert to uppercase
-  iban = iban.replace(/\s+/g, '').toUpperCase();
+    // Remove spaces and convert to uppercase
+    iban = iban.replace(/\s+/g, '').toUpperCase();
 
-  // Check length and country code
-  if (!/^PT\d{23}$/.test(iban)) {
-    return false;
+    // Check length and country code
+    if (!/^PT\d{23}$/.test(iban)) {
+      return false;
+    }
+
+    // IBAN checksum validation
+    return this.validateIBANChecksum(iban);
   }
-
-  // IBAN checksum validation
-  return this.validateIBANChecksum(iban);
-}
 
   // Function to validate IBAN checksum
   validateIBANChecksum(iban: string): boolean {

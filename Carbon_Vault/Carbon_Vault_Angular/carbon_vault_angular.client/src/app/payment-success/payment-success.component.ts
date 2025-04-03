@@ -22,26 +22,24 @@ export class PaymentSuccessComponent {
     this.cartService.clearCart();
     const checkoutSession = sessionStorage.getItem("checkoutSession");
 
-
-
     if (checkoutSession) {
+      const type = this.route.snapshot.paramMap.get('type');
+      console.log(type);
 
-      this.route.params.subscribe((params: any) => {
-        const type = params["type"];
-
-        if (type == "credits") {
-          this.http.get<any>(`${environment.apiUrl}/UserPayments/session/${checkoutSession}`, { headers: this.authService.getHeaders() });
-        }
-        else if (type == "report") {
-          this.updateReport();
-        }
-      });
-
-      this.sendInvoice(checkoutSession);
+      if (type == "credits") {
+        console.log("CREDITOS");
+        this.http.get(`${environment.apiUrl}/UserPayments/session/${checkoutSession}`, { headers: this.authService.getHeaders() }).subscribe({
+          next: () => this.sendInvoice(checkoutSession),
+          error: () => this.alerts.enableError("Erro ao processar")
+        });
+      }
+      else if (type == "report") {
+        this.updateReport(checkoutSession);
+      }
     }
   }
 
-  updateReport() {
+  updateReport(checkoutSession: string) {
     const id = sessionStorage.getItem("reportID")
 
     if (id) {
@@ -54,7 +52,10 @@ export class PaymentSuccessComponent {
         text: ""
       };
 
-      this.http.put(reportURL, report, { headers: this.authService.getHeaders() });
+      this.http.put(reportURL, report, { headers: this.authService.getHeaders() }).subscribe({
+        next: () => this.sendInvoice(checkoutSession),
+        error: () => this.alerts.enableError("Erro ao processar")
+      });
     }
   }
 

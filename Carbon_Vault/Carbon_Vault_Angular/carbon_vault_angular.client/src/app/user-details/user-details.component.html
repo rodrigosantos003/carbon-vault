@@ -1,89 +1,89 @@
+<body>
+  <app-user-menu></app-user-menu>
 
-    <body>
-        <app-user-menu></app-user-menu>
-    
-        <div class="main-content">
-            <!-- Client Details -->
-            <div class="client-details">
-              <div class="user-details-header">
-              
-                <h3>Dados do Cliente</h3>
-                <button class="delete-button-top" (click)="openDeletePopup()">Eliminar</button>
-              </div>
-              <hr>
-              <h2 class="client-name">{{accountData?.name }}</h2>
-             
+  <div class="main-content">
+    <!-- Client Details -->
+    <div class="client-details">
+      <div class="user-details-header">
 
-              <div class="client-details-container">
-                <diV class="user-info">
-                  <div class="info">
-                    <strong>E-mail</strong>
-                    <p>{{ accountData?.email }}</p>
-                  </div>
-                  <div class="info">
-                    <strong>Número de Identificação fiscal</strong>
-                    <p>{{ accountData?.nif }}</p>
-                  </div>
-                </diV>
-                <!-- Purchase History -->
-                <div class="purchase-history">
-                  <h3 class="table-header">Compras efectuadas</h3>
-                  
-                  <table class="purchase-history-table">
-                    <thead>
-                      <tr>
-                        <th>ID Comprador</th>
-                        <th>ID Vendedor</th>
-                        <th>Data</th>
-                        <th>Estado de Pagamento</th>
-                        <th>Estado</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngIf="accountTransactions.length === 0">
-                        <td colspan="5" class="text-center">Nada a mostrar</td>
-                      </tr>
-                      <tr *ngFor="let transaction of accountTransactions">
-                        <td>{{ transaction.buyerId }}</td>
-                        <td>{{ transaction.sellerId }}</td>
-                        <td>{{ transaction.date | date:'dd/MM/yyyy' }}</td>
-                        <td>
-                          <span class="payment-status">{{getTransactionState( transaction.state) }}</span>
-                        </td>
-                        <td>
-                          <span class="status">
-                            <span class="status-dot"></span> {{ getTransactionPaymentState(transaction.state) }}
-                          </span>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            
-            </div>
-            <div class="modal-overlay" id="modalOverlay">
-              <div class="delete" id="delete">
-                <div class="delete-content">
-                  <p class="delete-heading">Deseja mesmo eliminar este utilizador?</p>
-                  <img src="images/DeleteBin.png" />
-                  <p class="delete-description">Esta ação irá eliminar permanentemente o utilizador e toda a informação associada.</p>
-                </div>
-                <div class="delete-button-wrapper">
-                  <button class="delete-button secondary" (click)="closePopup()">Cancelar</button>
-                  <button class="delete-button primary" (click)="deleteAccount()">Eliminar</button>
-                </div>
-                <button class="exit-button" (click)="closePopup()">
-                  <svg height="20px" viewBox="0 0 384 512">
-                    <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"></path>
-                  </svg>
-                </button>
-              </div>
-            </div>
-            
-          
-           
+        <h3>Dados do {{accountData.role === 0 ? "Cliente" : "Administrador"}}</h3>
+        <button class="delete-button-top" (click)="openDeletePopup()">Eliminar</button>
+      </div>
+      <hr>
+      <h2 class="client-name">{{accountData?.name }}</h2>
+
+
+      <div class="client-details-container">
+        <diV class="user-info">
+          <div class="info">
+            <strong>E-mail</strong>
+            <p>{{ accountData?.email }}</p>
+          </div>
+          <div class="info">
+            <strong>Número de Identificação fiscal</strong>
+            <p>{{ accountData?.nif }}</p>
+          </div>
+        </diV>
+        <!-- Purchase History -->
+        <div class="purchase-history" *ngIf="accountData.role===0">
+          <h3 class="table-header">Compras efectuadas</h3>
+
+          <table class="purchase-history-table">
+            <thead>
+              <tr>
+                <th>ID Comprador</th>
+                <th>ID Vendedor</th>
+                <th>Data</th>
+                <th>Estado de Pagamento</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngIf="accountTransactions.length === 0">
+                <td colspan="5" class="text-center">Nada a mostrar</td>
+              </tr>
+              <tr *ngFor="let transaction of accountTransactions">
+                <td>{{ transaction.buyerId }}</td>
+                <td>{{ transaction.sellerId }}</td>
+                <td>{{ transaction.date | date:'dd/MM/yyyy' }}</td>
+                <td>
+                  <span class="payment-status">{{getTransactionState( transaction.state) }}</span>
+                </td>
+                <td>
+                  <span class="status">
+                    <span class="status-dot"></span> {{ getTransactionPaymentState(transaction.state) }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-    </body>
-   
-      
+      </div>
+
+    </div>
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="delete" id="delete">
+        <div class="delete-content">
+          <p class="delete-heading">Deseja mesmo eliminar este utilizador?</p>
+          <img src="images/DeleteBin.png" />
+          <p class="delete-description">Esta ação irá eliminar permanentemente o utilizador e toda a informação
+            associada.</p>
+        </div>
+        <div class="delete-button-wrapper">
+          <button class="delete-button secondary" (click)="closePopup()">Cancelar</button>
+          <button class="delete-button primary" (click)="deleteAccount()">Eliminar</button>
+        </div>
+        <button class="exit-button" (click)="closePopup()">
+          <svg height="20px" viewBox="0 0 384 512">
+            <path
+              d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z">
+            </path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+
+
+  </div>
+</body>

@@ -3,7 +3,6 @@ using Carbon_Vault.Models;
 using Carbon_Vault.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Sprache;
 using Stripe;
 using Stripe.Checkout;
 using System.ComponentModel.DataAnnotations;
@@ -17,13 +16,11 @@ namespace Carbon_Vault.Controllers.API
         private readonly IEmailService _emailService;
         private static string CURRENCY = "EUR";
         private readonly Carbon_VaultContext _context;
-        private readonly IWebHostEnvironment _environment;
 
-        public UserPaymentsController(IEmailService emailService, Carbon_VaultContext context, IWebHostEnvironment environment)
+        public UserPaymentsController(IEmailService emailService, Carbon_VaultContext context)
         {
             _emailService = emailService;
             _context = context;
-            _environment = environment;
         }
 
         private async Task AddPurchaseTransactionAsync(int userId, int projectId, int quantity, double total, string paymentMethod, string checkoutSession)
@@ -38,7 +35,7 @@ namespace Carbon_Vault.Controllers.API
                 ProjectId = projectId,
                 Quantity = quantity,
                 Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                State = TransactionState.Pending,
+                State = TransactionState.Approved,
                 PaymentMethod = paymentMethod,
                 CheckoutSession = checkoutSession,
                 TotalPrice = total,
@@ -51,7 +48,7 @@ namespace Carbon_Vault.Controllers.API
         [HttpPost]
         public IActionResult MakePayment(PaymentData data, string type)
         {
-            var success_url = Environment.GetEnvironmentVariable("CLIENT_URL") + "payment-success?type=" + type;
+            var success_url = Environment.GetEnvironmentVariable("CLIENT_URL") + "payment-success/" + type;
             var cancel_url = Environment.GetEnvironmentVariable("CLIENT_URL") + "dashboard";
 
             var account = _context.Account.FindAsync(data.UserId);
@@ -87,14 +84,14 @@ namespace Carbon_Vault.Controllers.API
                 Metadata = new Dictionary<string, string>
                 {
                     { "userId", data.UserId.ToString() },
-                    //{ "itemID", data.Items.First().Id.ToString() }
+                    { "itemID", data.Items.First().Id.ToString() }
                 },
                 InvoiceCreation = new SessionInvoiceCreationOptions
                 {
                     Enabled = true,
                     InvoiceData = new SessionInvoiceCreationInvoiceDataOptions
                     {
-                        Description = account.Result.Nif
+                        Description = "NIF: " + account.Result.Nif
                     }
                 }
             };
@@ -102,11 +99,17 @@ namespace Carbon_Vault.Controllers.API
             var service = new SessionService();
             var session = service.Create(options);
 
-            return Ok(new { message = "Pagamento realizado com sucesso.", checkout_session = session.Id, payment_url = session.Url});
+            //Console.WriteLine("Session ID: " + session.Id);
+            //Console.WriteLine("Session URL: " + session.Url);
+
+            var lineItems = GetLineItems(data);
+            //var firstItem = lineItems.FirstOrDefault();
+
+            return Ok(new { message = "Pagamento realizado com sucesso.", checkout_session = session.Id, payment_url = session.Url });
         }
 
         [HttpGet("session/{sessionId}")]
-        public async Task<IActionResult> GetSessionDetails([FromHeader] string Authorization, string sessionId)
+        public async Task<IActionResult> GetSessionDetails(string sessionId)
         {
             try
             {
@@ -121,7 +124,7 @@ namespace Carbon_Vault.Controllers.API
 
                 // Retrieve metadata safely
                 var userId = session.Metadata.ContainsKey("userId") ? session.Metadata["userId"] : "N/A";
-                //var itemId = session.Metadata.ContainsKey("itemID") ? session.Metadata["itemID"] : "N/A";
+                var itemId = session.Metadata.ContainsKey("itemID") ? session.Metadata["itemID"] : "N/A";
 
                 var result = new
                 {
@@ -129,7 +132,7 @@ namespace Carbon_Vault.Controllers.API
                     Currency = session.Currency,
                     PaymentMethod = paymentIntent.PaymentMethodTypes.FirstOrDefault(),
                     UserId = int.Parse(userId),
-                    //FirstItemId = int.Parse(itemId),
+                    FirstItemId = int.Parse(itemId),
                     FirstItemQuantity = Convert.ToInt32(lineItems.Data.FirstOrDefault()?.Quantity ?? 0),
                     Products = lineItems.Data.Select(item => new
                     {
@@ -139,7 +142,7 @@ namespace Carbon_Vault.Controllers.API
                     })
                 };
 
-                CreateTransactions(Authorization, lineItems.Data, Convert.ToInt32(userId), result.PaymentMethod, sessionId);
+                await AddPurchaseTransactionAsync(result.UserId, result.FirstItemId, result.FirstItemQuantity, result.AmountTotal, result.PaymentMethod, sessionId);
 
                 return Ok(result);
             }
@@ -149,30 +152,19 @@ namespace Carbon_Vault.Controllers.API
             }
         }
 
-        private async void CreateTransactions(string Authorization, List<LineItem> items, int userID, string paymentMethod, string session)
-        {
-            ProjectsController projectsController = new ProjectsController(_context, _environment, _emailService);
-            foreach (var item in items)
-            {
-                var productId = item.Price.Product.Metadata["id"];
-                await AddPurchaseTransactionAsync(userID, Convert.ToInt32(productId), Convert.ToInt32(item.Quantity), (item.AmountTotal / 100.0), paymentMethod, session);
-                await projectsController.SellCredits(Authorization, userID, Convert.ToInt32(productId), Convert.ToInt32(item.Quantity));
-            }
-        }
-
         private List<SessionLineItemOptions> GetLineItems(PaymentData data)
         {
             List<SessionLineItemOptions> my_list = new List<SessionLineItemOptions>();
 
             foreach (var item in data.Items)
             {
-                my_list.Add(AddItem(item.Price, item.Id ,item.Name, item.Description, item.Quantity));
+                my_list.Add(AddItem(item.Price, item.Name, item.Description, item.Quantity));
             }
 
             return my_list;
         }
 
-        private SessionLineItemOptions AddItem(decimal amount, int product_id, string product_name, string product_description, int quantity)
+        private SessionLineItemOptions AddItem(decimal amount, string product_name, string product_description, int quantity)
         {
             return new SessionLineItemOptions
             {
@@ -184,10 +176,6 @@ namespace Carbon_Vault.Controllers.API
                     {
                         Name = product_name,
                         Description = product_description,
-                        Metadata = new Dictionary<string, string>
-                        {
-                            {"id", product_id.ToString() }
-                        }
                     }
                 },
                 Quantity = quantity,
@@ -197,22 +185,15 @@ namespace Carbon_Vault.Controllers.API
         [HttpGet("invoice/{sessionId}")]
         public IActionResult GetInvoicePdf(string sessionId)
         {
-            try
-            {
-                var sessionService = new SessionService();
-                var session = sessionService.Get(sessionId);
+            var sessionService = new SessionService();
+            var session = sessionService.Get(sessionId);
 
-                if (session.InvoiceId != null)
-                {
-                    var invoiceService = new InvoiceService();
-                    var invoice = invoiceService.Get(session.InvoiceId);
-
-                    return Ok(new { message = "Fatura enviada com sucesso.", file = invoice.InvoicePdf });
-                }
-            }
-            catch (Exception ex)
+            if (session.InvoiceId != null)
             {
-                return Problem("Erro ao obter fatura");
+                var invoiceService = new InvoiceService();
+                var invoice = invoiceService.Get(session.InvoiceId);
+
+                return Ok(new { message = "Fatura enviada com sucesso.", file = invoice.InvoicePdf });
             }
 
             return NotFound(new { message = "Fatura não encontrada." });
@@ -221,30 +202,25 @@ namespace Carbon_Vault.Controllers.API
         [HttpGet("invoice/{sessionId}/send")]
         public IActionResult SendInvoice(string sessionId)
         {
-            try
+            var sessionService = new SessionService();
+            var session = sessionService.Get(sessionId);
+
+            if (session.InvoiceId != null)
             {
-                var sessionService = new SessionService();
-                var session = sessionService.Get(sessionId);
+                var invoiceService = new InvoiceService();
+                var invoice = invoiceService.Get(session.InvoiceId);
 
-                if (session.InvoiceId != null)
-                {
-                    var invoiceService = new InvoiceService();
-                    var invoice = invoiceService.Get(session.InvoiceId);
+                _emailService.SendEmail(invoice.CustomerEmail,
+                    $"Carbon Vault - Fatura {invoice.Id}",
+                    $"Junto enviamos a fatura {invoice.Id}, referente ao apgamento efetuado no dia {invoice.DueDate}.",
+                    invoice.InvoicePdf);
 
-                    _emailService.SendEmail(invoice.CustomerEmail,
-                        $"Carbon Vault - Fatura {invoice.Id}",
-                        $"Junto enviamos a fatura {invoice.Id}, referente ao apgamento efetuado no dia {invoice.DueDate}.",
-                        invoice.InvoicePdf);
-
-                    return Ok(new { message = "Fatura enviada com sucesso." });
-                }
-            } catch(Exception ex)
-            {
-                return Problem("Erro ao obter fatura");
+                return Ok(new { message = "Fatura enviada com sucesso." });
             }
 
             return NotFound(new { message = "Fatura não encontrada." });
         }
+
     }
 
     public class PaymentData

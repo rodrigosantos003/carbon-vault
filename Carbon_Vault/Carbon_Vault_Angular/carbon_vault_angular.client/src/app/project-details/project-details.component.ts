@@ -17,7 +17,7 @@ export class ProjectDetailsComponent {
   @ViewChild('loginBtn', { static: true }) loginBtn!: ElementRef<HTMLButtonElement>;
   isFiltersWindowVisible: boolean = false;
   isUserLoggedIn: boolean = false;
-  projectId: string | null = null;
+  projectId: any = "";
   projectData: any = null
   quantity: number = 1;
   carbonCredits: any[] = [];
@@ -80,7 +80,7 @@ export class ProjectDetailsComponent {
     }
 
     const item = {
-      id: this.projectId,
+      id: parseInt(this.projectId),
       image: this.projectData.imageUrl,
       name: this.projectData.name,
       description: this.projectData.description,

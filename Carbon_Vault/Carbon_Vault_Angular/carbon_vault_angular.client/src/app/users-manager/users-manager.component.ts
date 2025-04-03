@@ -151,6 +151,7 @@ export class UsersManagerComponent {
       const userIdFromToken = this.authService.getUserId();
 
       if (userIdFromToken == this.selectedAccountId.toString()) {
+        this.closeDeleteAccount();
         this.alerts.enableError("Não pode excluir a sua conta.");
         return;
       }

@@ -78,4 +78,5 @@ table td {
     margin-left: auto;
     cursor: pointer;
     margin-bottom: 16px;
+    border: 0;
 }

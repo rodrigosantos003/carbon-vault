@@ -387,16 +387,16 @@ namespace Carbon_Vault.Controllers.API
             }
 
             // Remover ficheiros que não foram enviados
-            foreach (var existingFile in projectFiles)
-            {
-                var existingFilePath = Path.Combine(directoryPath, existingFile.FileName);
-                if (System.IO.File.Exists(existingFilePath) && !project.ImageUrl.Contains(existingFilePath))
-                {
-                    System.IO.File.Delete(existingFilePath);
-                }
+            //foreach (var existingFile in projectFiles)
+            //{
+            //    var existingFilePath = Path.Combine(directoryPath, existingFile.FileName);
+            //    if (System.IO.File.Exists(existingFilePath) && !project.ImageUrl.Contains(existingFilePath))
+            //    {
+            //        System.IO.File.Delete(existingFilePath);
+            //    }
 
-                _context.ProjectFiles.Remove(existingFile);
-            }
+            //    _context.ProjectFiles.Remove(existingFile);
+            //}
 
             await _context.SaveChangesAsync();
 
