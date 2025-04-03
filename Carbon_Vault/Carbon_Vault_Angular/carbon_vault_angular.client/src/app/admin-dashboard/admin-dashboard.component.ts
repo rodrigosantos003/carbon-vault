@@ -197,21 +197,21 @@ export class AdminDashboardComponent implements OnInit {
   }
   downloadTransactionsCSV() {
     const allTransactions = [
-      ...this.transactionsThisWeek.flatMap((t: any) => t.Transactions),
-      ...this.transactionsLastWeek.flatMap((t: any) => t.Transactions)
+      ...this.transactionsThisWeek.flatMap((t: any) => t.transactions),
+      ...this.transactionsLastWeek.flatMap((t: any) => t.transactions)
     ];
-  
+
     const dataToExport = allTransactions.map((transaction: any) => ({
-      'Transaction ID': transaction.Id,
-      'Buyer ID': transaction.BuyerId,
-      'Seller ID': transaction.SellerId,
-      'Project ID': transaction.ProjectId,
-      'Quantity': transaction.Quantity,
-      'Total Price': transaction.TotalPrice,
-      'Date': transaction.Date,
-      'State': transaction.State,
-      'Checkout Session': transaction.CheckoutSession,
-      'Payment Method': transaction.PaymentMethod
+      'Transaction ID': transaction.id,
+      'Buyer ID': transaction.buyerId,
+      'Seller ID': transaction.sellerId,
+      'Project ID': transaction.projectId,
+      'Quantity': transaction.quantity,
+      'Total Price': transaction.totalPrice,
+      'Date': transaction.date,
+      'State': transaction.state,
+      'Checkout Session': transaction.checkoutSession,
+      'Payment Method': transaction.paymentMethod
     }));
     
   
