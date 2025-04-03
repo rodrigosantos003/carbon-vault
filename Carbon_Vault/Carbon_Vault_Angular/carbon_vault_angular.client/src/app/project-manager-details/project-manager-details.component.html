@@ -118,8 +118,12 @@
 
 
     <br>
-    <h2 style="color: #4ea741;"> Créditos Disponiveis </h2>
+    <div style="display: flex; justify-content: space-between; align-items: center;"> 
+      <h2 style="color: #4ea741; margin-bottom: 0;"> Créditos Disponiveis </h2>
+      <button class="credits-button" (click)="openPopup()"> Editar critérios de Venda</button>
+    </div>
 
+    
     <div style="max-height: 295px; overflow-y: scroll; position: relative;">
       <table>
         <thead>
@@ -146,7 +150,6 @@
     <div class="credits-info">
       O projeto tem <b>{{project.carbonCredits.length}}</b> créditos disponiveis dos quais
       <b>{{project.creditsForSale}}</b> estão à venda por <b>{{project.pricePerCredit}}€</b> cada.
-      <button class="credits-button" (click)="openPopup()"> Editar critérios de Venda</button>
     </div>
 
 
