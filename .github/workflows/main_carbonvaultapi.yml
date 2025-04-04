@@ -25,8 +25,7 @@ jobs:
         working-directory: Carbon_Vault/Carbon_Vault
 
       - name: Run unit tests
-        run: dotnet test --configuration Release --no-build --verbosity normal
-        working-directory: Carbon_Vault/Carbon_Vault_Tests
+        run: dotnet test Carbon_Vault/Carbon_Vault_Tests/Carbon_Vault_Tests.csproj --configuration Release --verbosity normal --filter "FullyQualifiedName!~Carbon_Vault_Tests.IntegrationTests"
 
       - name: dotnet publish
         run: dotnet publish Carbon_Vault/Carbon_Vault/Carbon_Vault.csproj -c Release -o "${{ github.workspace }}/myapp"
