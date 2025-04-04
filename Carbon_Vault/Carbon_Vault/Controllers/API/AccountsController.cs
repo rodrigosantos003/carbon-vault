@@ -15,6 +15,9 @@ using System.Globalization;
 
 namespace Carbon_Vault.Controllers.API
 {
+    /// <summary>
+    /// Controlador responsável por criar e gestão de contas na API.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class AccountsController : ControllerBase
