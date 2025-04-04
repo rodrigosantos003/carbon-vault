@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http.HttpResults;
 
-public class AdminFilter : IAsyncActionFilter // Usando IAsyncActionFilter para suporte ass�ncrono
+public class AdminFilter : IAsyncActionFilter // Usando IAsyncActionFilter para suporte assincrono
 {
     private readonly Carbon_VaultContext _context;
 
@@ -16,9 +16,14 @@ public class AdminFilter : IAsyncActionFilter // Usando IAsyncActionFilter para 
         _context = context;
     }
 
-    // Método assíncrono chamado antes da execução da ação, para verificar se o utilizador tem privilégios de admin.
-    // Se o utilizador não for um administrador ou se o ID do utilizador for inválido, a requisição será negada.
-    public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next) // Alterado para Task
+    /// <summary>
+    /// Método assíncrono chamado antes da execução da ação, para verificar se o utilizador tem privilégios de admin.
+    /// Se o utilizador não for um administrador ou se o ID do utilizador for inválido, a requisição será negada.
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="next"></param>
+    /// <returns></returns>
+    public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
         var userIdHeader = context.HttpContext.Request.Headers["userId"].FirstOrDefault();
 

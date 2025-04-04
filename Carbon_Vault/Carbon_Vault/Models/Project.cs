@@ -2,7 +2,9 @@
 
 namespace Carbon_Vault.Models
 {
-    // Enumerado que define os diferentes estados de um projeto no sistema.
+    /// <summary>
+    /// Enumerado que define os diferentes estados de um projeto no sistema.
+    /// </summary>
     public enum ProjectStatus
     {
         Confirmed,
@@ -10,8 +12,10 @@ namespace Carbon_Vault.Models
         Denied
     }
 
-    // A classe Project representa um projeto de carbono dentro do sistema.
-    // Contém informações sobre o projeto, como nome, descrição, localização, entre outros.
+    /// <summary>
+    /// A classe Project representa um projeto de carbono dentro do sistema.
+    /// Contém informações sobre o projeto, como nome, descrição, localização, entre outros.
+    /// </summary>
     public class Project
     {
         public int Id { get; set; }

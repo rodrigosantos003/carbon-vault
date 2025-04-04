@@ -2,7 +2,9 @@
 
 namespace Carbon_Vault.Models
 {
-    // Enumerado que define os diferentes estados de uma transação no sistema.
+    /// <summary>
+    /// Enumerado que define os diferentes estados de uma transação no sistema.
+    /// </summary>
     public enum TransactionState
     {
         Approved, //Concluido
@@ -10,8 +12,10 @@ namespace Carbon_Vault.Models
         Pending   //Pendente
     }
 
-    // A classe Transaction representa uma transação entre um comprador e um vendedor no sistema.
-    // Contém informações sobre o comprador, vendedor, quantidade, preço total, estado da transação, e detalhes de pagamento.
+    /// <summary>
+    /// A classe Transaction representa uma transação entre um comprador e um vendedor no sistema.
+    /// Contém informações sobre o comprador, vendedor, quantidade, preço total, estado da transação, e detalhes de pagamento.
+    /// </summary>
     public class Transaction
     {
         [Key]

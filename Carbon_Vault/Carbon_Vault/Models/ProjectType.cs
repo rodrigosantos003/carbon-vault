@@ -2,7 +2,9 @@
 
 namespace Carbon_Vault.Models
 {
-    // A classe ProjectType representa o tipo de um projeto de carbono dentro do sistema.
+    /// <summary>
+    /// A classe ProjectType representa o tipo de um projeto de carbono dentro do sistema.
+    /// </summary>
     public class ProjectType
     {
         public int Id { get; set; }

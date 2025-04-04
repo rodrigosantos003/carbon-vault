@@ -2,7 +2,9 @@
 {
     using System.Text.Json.Serialization;
 
-    // Enumerado que define os diferentes estados de um crédito de carbono.
+    /// <summary>
+    /// Enumerado que define os diferentes estados de um crédito de carbono.
+    /// </summary>
     public enum CreditStatus
     {
         Available, // Crédito disponível para venda.
@@ -10,8 +12,10 @@
         Expired // Crédito expirado e não pode mais ser utilizado.
     }
 
-    // A classe CarbonCredit representa um crédito de carbono dentro do sistema.
-    // Contém informações sobre sua origem, status e comprador.
+    /// <summary>
+    /// A classe CarbonCredit representa um crédito de carbono dentro do sistema.
+    /// Contém informações sobre sua origem, status e comprador.
+    /// </summary>
     public class CarbonCredit
     {
         public int Id { get; set; }
@@ -28,5 +32,4 @@
         public int? BuyerId { get; set; }
         public CreditStatus Status { get; set; }
     }
-
 }

@@ -2,15 +2,17 @@
 
 namespace Carbon_Vault.Models
 {
-    // A classe TicketMessage representa uma mensagem associada a um ticket no sistema.
-    // Contém informações sobre o conteúdo da mensagem, o autor, e a data de envio.
+    /// <summary>
+    /// A classe TicketMessage representa uma mensagem associada a um ticket no sistema.
+    /// Contém informações sobre o conteúdo da mensagem, o autor, e a data de envio.
+    /// </summary>
     public class TicketMessage
     {
         public int Id { get; set; }
         public int TicketId { get; set; }
 
         // Relacionamento com o ticket associado à mensagem.
-        [JsonIgnore] 
+        [JsonIgnore]
         public Ticket? Ticket { get; set; }
 
         public string Content { get; set; }

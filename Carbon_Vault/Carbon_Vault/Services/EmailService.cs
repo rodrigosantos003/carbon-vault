@@ -9,8 +9,10 @@ using System.Threading.Tasks;
 
 namespace Carbon_Vault.Services
 {
-    // A classe EmailService é responsável por enviar emails através do SendGrid e SMTP.
-    // Permite o envio de emails com ou sem anexos, através de um SendGrid client configurado.
+    /// <summary>
+    /// A classe EmailService é responsável por enviar emails através do SendGrid e SMTP.
+    /// Permite o envio de emails com ou sem anexos, através de um SendGrid client configurado.
+    /// </summary>
     public class EmailService : IEmailService
     {
         // Endereço de email de envio (Carbon Vault).
@@ -33,7 +35,6 @@ namespace Carbon_Vault.Services
             }
         }
 
-        // Método assíncrono para enviar um email.
         public async Task SendEmail(string receiver, string subject, string message, string? attachmentURL)
         {
             var client = new SendGridClient(_SMTP_PASSWORD);

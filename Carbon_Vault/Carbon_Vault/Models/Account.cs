@@ -4,27 +4,59 @@ using System.Text.Json.Serialization;
 
 namespace Carbon_Vault.Models
 {
-    // Enumerado que define os diferentes estados de uma conta no sistema.
+    /// <summary>
+    /// Enumerado que define os diferentes estados de uma conta no sistema.
+    /// </summary>
     public enum AccountState
     {
-        Pending = 0, // A conta foi criada, mas ainda está pendente de ativação.
-        Active = 1, // A conta está ativa e pode ser utilizada normalmente.
-        Inactive = 2, // A conta está inativa e não pode ser utilizada até ser reativada.
+        /// <summary>
+        /// A conta foi criada, mas ainda está pendente de ativação.
+        /// </summary>
+        Pending = 0,
+
+        /// <summary>
+        /// A conta está ativa e pode ser utilizada normalmente.
+        /// </summary>
+        Active = 1,
+
+        /// <summary>
+        /// A conta está inativa e não pode ser utilizada até ser reativada.
+        /// </summary>
+        Inactive = 2,
     }
 
-    // Enumerado que define os diferentes tipos de conta existentes no sistema.
+    /// <summary>
+    /// Enumerado que define os diferentes tipos de conta existentes no sistema.
+    /// </summary>
     public enum AccountType
     {
-        User = 0, // Conta padrão para utilizadores comuns.
-        Admin = 1, // Conta com permissões administrativas para gerir o sistema.
-        Evaluator = 2, // Conta de um avaliador, responsável por verificar e validar projetos.
-        Support = 3, // Conta de suporte técnico para auxiliar os utilizadores.
+        /// <summary>
+        /// Conta padrão para utilizadores comuns.
+        /// </summary>
+        User = 0,
+
+        /// <summary>
+        /// Conta com permissões administrativas para gerir o sistema.
+        /// </summary>
+        Admin = 1,
+
+        /// <summary>
+        /// Conta de um avaliador, responsável por verificar e validar projetos.
+        /// </summary>
+        Evaluator = 2,
+
+        /// <summary>
+        /// Conta de suporte técnico para auxiliar os utilizadores.
+        /// </summary>
+        Support = 3,
 
     }
 
-    // A classe Account representa um utilizador dentro do sistema Carbon Vault.Contém informações 
-    //essenciais como nome, email, password, e dados financeiros, além de relacionamentos com 
-    //outras entidades do sistema.
+    /// <summary>
+    /// A classe Account representa um utilizador dentro do sistema Carbon Vault.Contém informações 
+    /// essenciais como nome, email, password, e dados financeiros, além de relacionamentos com 
+    /// outras entidades do sistema.
+    /// </summary>
     public class Account
     {
         [Key]
