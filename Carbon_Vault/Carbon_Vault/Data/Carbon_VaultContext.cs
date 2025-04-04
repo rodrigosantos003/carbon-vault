@@ -35,47 +35,54 @@ namespace Carbon_Vault.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Configurar o relacionamento entre Project e CarbonCredit
+            // Relação entre Account e Projects
+            modelBuilder.Entity<Project>()
+                .HasOne(p => p.Owner)
+                .WithMany(a => a.Projects)
+                .HasForeignKey(p => p.OwnerId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Relação entre Account e Transactions
+            modelBuilder.Entity<Ticket>()
+                .HasOne(t => t.Author)
+                .WithMany(a => a.Tickets)
+                .HasForeignKey(t => t.AuthorId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            //Relação entre Account e Tickets
+            modelBuilder.Entity<Report>()
+                .HasOne(r => r.User)
+                .WithMany(u => u.Reports)
+                .HasForeignKey(r => r.UserID)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Relação entre Project e ProjectType
             modelBuilder.Entity<CarbonCredit>()
                 .HasOne(cc => cc.Project)
                 .WithMany(p => p.CarbonCredits)
-                .HasForeignKey(cc => cc.ProjectId).OnDelete(DeleteBehavior.NoAction);
+                .HasForeignKey(cc => cc.ProjectId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            // Configurar o relacionamento entre Project e Ficheiros deste
+            // Relação entre Project e ProjectType
             modelBuilder.Entity<ProjectFiles>()
-               .HasOne(cc => cc.Project)
-               .WithMany(p => p.Files)
-               .HasForeignKey(cc => cc.ProjectId)
-               .OnDelete(DeleteBehavior.Cascade);
+                .HasOne(pf => pf.Project)
+                .WithMany(p => p.Files)
+                .HasForeignKey(pf => pf.ProjectId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            // Configurar o relacionamento entre Project e o seu dono
-            modelBuilder.Entity<Project>()
-               .HasOne(cc => cc.Owner)
-               .WithMany(p => p.Projects)
-               .HasForeignKey(cc => cc.OwnerId);
+            // Relação entre ProjectType e Project
+            modelBuilder.Entity<ReportFiles>()
+                .HasOne(rf => rf.Report)
+                .WithMany(r => r.Files)
+                .HasForeignKey(rf => rf.ReportId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            // Configurar o relacionamento entre Tickets e as mensagens
+            // Relação entre ProjectType e Project
             modelBuilder.Entity<TicketMessage>()
                 .HasOne(tm => tm.Ticket)
                 .WithMany(t => t.Messages)
                 .HasForeignKey(tm => tm.TicketId)
-                .OnDelete(DeleteBehavior.NoAction);
-
-            // Configurar o relacionamento entre Tickets e Accounts
-            modelBuilder.Entity<Ticket>()
-                .HasOne(t => t.Author)
-                .WithMany(a => a.Tickets)
-                .HasForeignKey(t => t.AuthorId);
-            // Configure relationship between Report and its User
-            modelBuilder.Entity<Report>()
-                .HasOne(r => r.User)
-                .WithMany(u => u.Reports)
-                .HasForeignKey(r => r.UserID);
-
-            modelBuilder.Entity<ReportFiles>()
-                .HasOne(rf => rf.Report)
-                .WithMany(r => r.Files)
-                .HasForeignKey(rf => rf.ReportId);
+                 .OnDelete(DeleteBehavior.NoAction);
 
             populateAccounts(modelBuilder);
 
@@ -146,11 +153,11 @@ namespace Carbon_Vault.Data
                 {
                     Id = 5,
                     Name = "Jane Doe",
-                    Email = "user3@carbonvault.com",
+                    Email = "Evaluator@carbonvault.com",
                     Password = user3_hashed,
                     Nif = "555555555",
                     State = AccountState.Active,
-                    Role = Models.AccountType.User,
+                    Role = Models.AccountType.Evaluator,
                     CreatedAt = DateTime.UtcNow
                 }
             );

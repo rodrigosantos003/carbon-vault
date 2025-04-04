@@ -248,7 +248,8 @@ export class ProjectManagerDetailsAdminComponent {
 
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,
-      'userID': userId
+      'userID': userId,
+      'feedback': this.rejectionFeedback
     });
 
     this.http.post(url, {}, { headers }).subscribe(
