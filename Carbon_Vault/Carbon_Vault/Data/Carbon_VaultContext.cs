@@ -88,6 +88,7 @@ namespace Carbon_Vault.Data
             populateCredits(modelBuilder);
         }
 
+        // Método que faz a população de Contas
         private void populateAccounts(ModelBuilder modelBuilder)
         {
             string admin_hashed = AuthHelper.HashPassword("Admin@123");
@@ -107,7 +108,7 @@ namespace Carbon_Vault.Data
                     State = AccountState.Active,
                     Role = Models.AccountType.Admin,
                     CreatedAt = DateTime.UtcNow,
-                    
+
                 },
                 new Models.Account
                 {
@@ -156,12 +157,13 @@ namespace Carbon_Vault.Data
             );
         }
 
+        // Método que faz a população dos tipos de projetos
         private void populateProjectTypes(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ProjectType>().HasData(
-               new ProjectType{Id = 1, Type = ProjectTypeEnum.Poverty},
-               new ProjectType{Id = 2, Type = ProjectTypeEnum.Hunger},
-               new ProjectType{Id = 3, Type = ProjectTypeEnum.Health},
+               new ProjectType { Id = 1, Type = ProjectTypeEnum.Poverty },
+               new ProjectType { Id = 2, Type = ProjectTypeEnum.Hunger },
+               new ProjectType { Id = 3, Type = ProjectTypeEnum.Health },
                new ProjectType { Id = 4, Type = ProjectTypeEnum.Education },
                new ProjectType { Id = 5, Type = ProjectTypeEnum.Gender },
                new ProjectType { Id = 6, Type = ProjectTypeEnum.Water },
@@ -175,6 +177,7 @@ namespace Carbon_Vault.Data
            );
         }
 
+        // Método que faz a população dos Projetos
         private void populateProjects(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Project>().HasData(
@@ -221,6 +224,7 @@ namespace Carbon_Vault.Data
            );
         }
 
+        // Método que faz a população das Transações
         private void populateTransactions(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Transaction>().HasData(
@@ -252,8 +256,8 @@ namespace Carbon_Vault.Data
                 }
             );
         }
-    
 
+        // Método que faz a população de Créditos de Carbono
         private void populateCredits(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<CarbonCredit>().HasData(
@@ -304,7 +308,5 @@ namespace Carbon_Vault.Data
                 }
             );
         }
-      
     }
-
 }

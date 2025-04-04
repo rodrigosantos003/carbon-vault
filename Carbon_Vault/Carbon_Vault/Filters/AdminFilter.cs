@@ -16,6 +16,8 @@ public class AdminFilter : IAsyncActionFilter // Usando IAsyncActionFilter para 
         _context = context;
     }
 
+    // Método assíncrono chamado antes da execução da ação, para verificar se o utilizador tem privilégios de admin.
+    // Se o utilizador não for um administrador ou se o ID do utilizador for inválido, a requisição será negada.
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next) // Alterado para Task
     {
         var userIdHeader = context.HttpContext.Request.Headers["userId"].FirstOrDefault();

@@ -4,6 +4,9 @@ using Carbon_Vault.Models;
 
 public class TokenValidationFilter : IActionFilter
 {
+    // Este método é chamado antes da execução de uma ação no controlador.
+    // Ele valida o token de autorização e o ID do usuário presentes nos cabeçalhos da requisição.
+    // Se os cabeçalhos estiverem ausentes ou inválidos, a requisição é negada com um resultado "Unauthorized".
     public void OnActionExecuting(ActionExecutingContext context)
     {
         var authorizationHeader = context.HttpContext.Request.Headers["Authorization"].FirstOrDefault();
