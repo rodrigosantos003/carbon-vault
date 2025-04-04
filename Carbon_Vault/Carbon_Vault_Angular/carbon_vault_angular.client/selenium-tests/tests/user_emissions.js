@@ -1,11 +1,11 @@
-import { Builder, By, until, WebDriver } from 'selenium-webdriver';
-import assert from 'assert';
+const { By, until } = require('selenium-webdriver');
+const assert = require('assert');
 
-export async function testEmissionsForm(driver) {
-    // 4️⃣ Aceder à página de emissões
+async function testEmissionsForm(driver) {
+    // Aceder à página de emissões
     await driver.get('http://localhost:59115/user-emissions');
 
-    // 5️⃣ Preencher o formulário de emissões
+    // Preencher o formulário de emissões
     let electricityInput = await driver.wait(until.elementLocated(By.id('electricity')), 5000);
     let petrolInput = await driver.wait(until.elementLocated(By.id('petrol')), 5000);
     let dieselInput = await driver.wait(until.elementLocated(By.id('diesel')), 5000);
@@ -22,11 +22,11 @@ export async function testEmissionsForm(driver) {
 
     console.log("✅ Formulário preenchido!");
 
-    // 6️⃣ Submeter o formulário
+    // Submeter o formulário
     let saveButton = await driver.wait(until.elementLocated(By.css('.save-button')), 5000);
     await saveButton.click();
 
-    // 7️⃣ Capturar e validar o total de emissões
+    // Capturar e validar o total de emissões
     let totalEmissions = await driver.wait(until.elementLocated(By.id('form-total')), 5000);
     let emissionsText = await totalEmissions.getText();
     console.log("Total de Emissões:", emissionsText);
@@ -34,5 +34,9 @@ export async function testEmissionsForm(driver) {
     // Validar que o total de emissões não é 0
     assert.notStrictEqual(emissionsText, "0 tCO2e", "❌ Erro: Total de emissões não foi atualizado!");
 
-    console.log("✅ Teste de emissóes concluído!");
+    console.log("✅ Teste de emissões concluído!");
 }
+
+module.exports = {
+    testEmissionsForm
+};

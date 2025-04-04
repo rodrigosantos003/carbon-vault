@@ -1,5 +1,5 @@
 <body>
-  <app-user-menu></app-user-menu>
+  <app-user-menu  *ngIf="userRole != 2"></app-user-menu>
 
   <!-- Default User Content -->
   <div class="main-content" *ngIf="userRole == 0">
@@ -135,6 +135,9 @@
   [TransactionCount]="TransactionCount"
   [CreditCount]="CreditCount"
   ></app-admin-dashboard>
+  <app-evaluator-dashboard *ngIf="userRole == 2"
+
+  ></app-evaluator-dashboard>
 
   <!-- Support User Content -->
   <app-support-dashboard *ngIf="userRole == 3"

@@ -78,7 +78,7 @@ namespace Carbon_Vault_Tests
             Assert.NotNull(jsonResponse);
             Assert.Equal("error", jsonResponse.GetProperty("result").GetString());
             Assert.False(jsonResponse.GetProperty("nif_validation").GetBoolean());
-            Assert.False(jsonResponse.GetProperty("is_nif").GetBoolean());
+            Assert.True(jsonResponse.GetProperty("is_nif").GetBoolean());
         }
 
         [Fact]

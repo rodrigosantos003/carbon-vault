@@ -41,6 +41,7 @@ export class UserSalesComponent {
   }
 
   transactionDetails(transaction_id: number) {
+    console.log("ID = " + transaction_id);
     this.router.navigate([`transaction-details/${transaction_id}`]);
   }
 }

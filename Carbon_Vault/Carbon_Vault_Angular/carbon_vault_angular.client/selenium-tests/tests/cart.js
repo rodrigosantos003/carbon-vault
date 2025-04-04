@@ -1,11 +1,10 @@
-import { By, until, WebDriver } from 'selenium-webdriver';
+const { By, until } = require('selenium-webdriver');
 
-export async function testCart(driver) {
+async function testCart(driver) {
     console.log("A iniciar teste carrinho...");
     await driver.get('http://localhost:59115/cart');
 
     let increment = await driver.wait(until.elementLocated(By.id("increment-btn")), 5000);
-
     await increment.click();
     console.log("Incrementou item");
 
@@ -19,3 +18,7 @@ export async function testCart(driver) {
 
     console.log("✅ Gestão do carrinho bem sucedida");
 }
+
+module.exports = {
+    testCart
+};
