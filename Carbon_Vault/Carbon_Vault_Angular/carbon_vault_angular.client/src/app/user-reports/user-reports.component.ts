@@ -47,9 +47,16 @@ export class UserReportsComponent {
         });
         this.alerts.disableLoading();
       },
-      error: () => {
+      error: (e) => {
         this.alerts.disableLoading();
-        this.alerts.enableError("Erro ao carregar relatórios");
+
+        if (e.status === 404) {
+          this.alerts.enableInfo("Não existem relatórios para apresentar");
+        } else if (e.status === 500) {
+          this.alerts.enableError("Erro ao carregar relatórios");
+        } else {
+          this.alerts.enableError("Ocorreu um erro inesperado.");
+        }
       }
     });
   }

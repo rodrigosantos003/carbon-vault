@@ -46,6 +46,8 @@ namespace Carbon_Vault.Controllers.API
                 .Where(p => p.IsForSale)
                 .Include(p => p.Types)// Ensure project types are loaded
                 .Include(p => p.CarbonCredits)   // Ensure carbon credits are loaded
+                .Where(p => p.Status == ProjectStatus.Confirmed)
+                .Where(p => p.CreditsForSale > 0)
                 .ToListAsync();
         }
 

@@ -28,6 +28,8 @@ namespace Carbon_Vault.Controllers.API
             var project = await _context.Projects.FindAsync(projectId);
             int sellerId = project.OwnerId;
 
+            string payMethod = GetPaymentMethod(paymentMethod);
+
             Transaction t = new Transaction
             {
                 SellerId = sellerId,
@@ -36,13 +38,21 @@ namespace Carbon_Vault.Controllers.API
                 Quantity = quantity,
                 Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
                 State = TransactionState.Approved,
-                PaymentMethod = paymentMethod,
+                PaymentMethod = payMethod,
                 CheckoutSession = checkoutSession,
                 TotalPrice = total,
             };
 
             _context.Transactions.Add(t);
             await _context.SaveChangesAsync();
+        }
+
+        private static string GetPaymentMethod(string paymentMethod)
+        {
+            if (paymentMethod == "card")
+                return "Cartão";
+
+            return "Transferência Bancária";
         }
 
         [HttpPost]

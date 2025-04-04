@@ -83,16 +83,16 @@ export class ProjectManagerDetailsAdminComponent {
       'CreditsGenerated': creditsGenerated.toString()
     });
 
-    this.http.post(url, {}, { headers }).subscribe(
-      (response) => {
+    this.http.post(url, {}, { headers }).subscribe({
+      next: () => {
         this.alerts.enableSuccess('Projeto aprovado e créditos gerados com sucesso!');
         this.showAprovedFeedback = true;
-        this.goBack()
+        //this.goBack();
       },
-      (error) => {
+      error: () => {
         this.alerts.enableError('Ocorreu um erro ao aprovar o projeto. Tente novamente mais tarde.');
       }
-    );
+    });
   }
 
   addCredits() {
@@ -114,17 +114,18 @@ export class ProjectManagerDetailsAdminComponent {
       'NumberOfCredits': creditsGenerated.toString()
     });
 
-    this.http.post(url, {}, { headers }).subscribe(
-      (response) => {
-        this.alerts.enableSuccess('créditos gerados com sucesso!');
+    this.http.post(url, {}, { headers }).subscribe({
+      next: () => {
+        this.alerts.enableSuccess(this.additionalCredits + ' Créditos gerados com sucesso!');
         this.fetchProjectDetails(this.route.snapshot.params['id']);
       },
-      (error) => {
-        console.error('Erro ao aprovar o projeto:', error);
+      error: (e) => {
+        console.error('Erro ao aprovar o projeto:', e);
         this.alerts.enableError('Ocorreu um erro ao aprovar o projeto. Tente novamente mais tarde.');
       }
-    );
+    });
   }
+
   async fetchProjectDetails(projectId: number) {
     this.http.get(`${this.apiURL}/${projectId}`).subscribe((response: any) => {
       this.project = response;
