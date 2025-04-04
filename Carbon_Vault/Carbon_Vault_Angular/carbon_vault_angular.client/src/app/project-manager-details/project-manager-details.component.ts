@@ -130,19 +130,16 @@ export class ProjectManagerDetailsComponent {
 
   saveCarbonInfo() {
     if (this.newCreditsForSale < 0) {
-      //alert("A quantidade de créditos para venda não pode ser negativa");
       this.alerts.enableError("A quantidade de créditos para venda não pode ser negativa");
       return;
     }
 
     if (this.newPricePerCredit <= 0) {
-      //alert("O preço por crédito tem que ser positivo");
       this.alerts.enableError("O preço por crédito tem que ser positivo");
       return;
     }
 
     if (this.newCreditsForSale > this.project.carbonCredits.length) {
-      //alert("Não pode vender mais créditos do que os que tem disponíveis");
       this.alerts.enableError("Não pode vender mais créditos do que os que tem disponíveis");
       return;
     }
@@ -153,9 +150,11 @@ export class ProjectManagerDetailsComponent {
     };
 
     this.http.put(`${this.apiURL}/credits-info/${this.project.id}`, body).subscribe(() => {
-      alert("Informações de créditos atualizadas com sucesso!");
+      this.alerts.enableSuccess("Informações de créditos atualizadas com sucesso!");
+
       this.newCreditsForSale = 0;
       this.newPricePerCredit = 0;
+
       this.closePopup();
       this.fetchProjectDetails(this.project.id);
     });
@@ -181,7 +180,7 @@ export class ProjectManagerDetailsComponent {
           return;
         }
 
-        // Validate file size (10MB max)
+        // Validate file size
         if (file.size > this.maxFileSize) {
           this.alerts.enableError("Ficheiro demasiado grande. O limite são " + this.maxMb + "MB.");
           return;
@@ -235,7 +234,6 @@ export class ProjectManagerDetailsComponent {
       return;
     }
 
-    // If valid, update the preview
     this.imagem = file;
     const reader = new FileReader();
     reader.onload = (e: any) => {

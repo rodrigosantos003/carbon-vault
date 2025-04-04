@@ -70,6 +70,10 @@ export class AdminReportsComponent {
     Promise.all(filePromises).then(() => {
       zip.generateAsync({ type: 'blob' }).then(blob => {
         saveAs(blob, `ficheiros_${Date.now().toLocaleString()}.zip`);
+
+        setTimeout(() => {
+          this.alerts.disableLoading();
+        }, 3000);
       });
     }).catch(() => {
       this.alerts.enableError("Erro ao criar o ficheiro ZIP.");

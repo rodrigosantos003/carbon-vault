@@ -40,7 +40,7 @@ export class TransactionDetailsComponent {
       return;
     }
 
-    var url = environment.apiUrl + "/transactions/details/" + this.transactionId;
+    var url = environment.apiUrl + "/Transactions/details/" + this.transactionId;
 
     var userId = this.auth.getUserId();
 

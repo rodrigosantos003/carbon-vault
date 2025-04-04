@@ -77,4 +77,26 @@ export class AlertsService {
       errorPopup.style.display = 'none';
     }
   }
+
+  enableInfo(message: string, enableTime: number = 4) {
+    const infoPopup = document.getElementById('info-popup');
+    if (infoPopup) {
+      const textSpan = infoPopup.querySelector('#info-message');
+      if (textSpan) {
+        textSpan.textContent = message;
+      }
+      infoPopup.style.display = 'inline-flex';
+
+      setTimeout(() => {
+        this.disableInfo();
+      }, enableTime * 1000);
+    }
+  }
+
+  private disableInfo() {
+    const infoPopup = document.getElementById('info-popup');
+    if (infoPopup) {
+      infoPopup.style.display = 'none';
+    }
+  }
 }
