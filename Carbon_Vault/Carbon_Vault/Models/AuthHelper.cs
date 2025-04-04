@@ -6,6 +6,8 @@
     using System.Security.Cryptography;
     using System.Text;
 
+    // A classe AuthHelper fornece funcionalidades para hashing de senhas, 
+    // verificação de credenciais e geração/validação de tokens JWT.
     public class AuthHelper
     {
         private const int SaltSize = 16; // Tamanho do salt em bytes
@@ -62,6 +64,8 @@
             return tokenHandler.WriteToken(token);
         }
 
+        // Valida um token JWT enviado no cabeçalho Authorization.
+        // Verifica se o token é válido e se pertence ao utilizador correspondente.
         public static bool IsTokenValid(string Authorization, int userID)
         {
             if (string.IsNullOrEmpty(Authorization) || !Authorization.StartsWith("Bearer "))
@@ -77,6 +81,8 @@
             return claimerID == userID.ToString();
         }
 
+        // Valida a assinatura do token e retorna os claims do utilizador autenticado.
+        // Retorna null se o token for inválido.
         private static ClaimsPrincipal ValidateToken(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();

@@ -3,6 +3,8 @@ using System.Text.Json.Serialization;
 
 namespace Carbon_Vault.Models
 {
+    // A classe ReportFiles representa um ficheiro associado a um relatório dentro do sistema.
+    // Contém informações como nome, caminho, tipo e data de upload.
     public class ReportFiles
     {
         [Key]

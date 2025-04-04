@@ -2,12 +2,14 @@
 
 namespace Carbon_Vault.Models
 {
+    // Enumerado que define os diferentes estados de um ticket no sistema.
     public enum TicketState
     {
         Open,
         Closed
     }
 
+    // Enumerado que define as prioridades de um ticket.
     public enum TicketPriority
     {
         Alta,
@@ -15,6 +17,7 @@ namespace Carbon_Vault.Models
         Baixa
     }
 
+    // Enumerado que define as categorias de um ticket.
     public enum TicketCategory
     {
         Compra,
@@ -24,6 +27,8 @@ namespace Carbon_Vault.Models
         Outros
     }
 
+    // Classe que representa um ticket de suporte ou solicitação de ajuda dentro do sistema.
+    // Contém informações sobre o título, descrição, categoria, prioridade, estado e mensagens associadas.
     public class Ticket
     {
         public int Id { get; set; }
@@ -35,6 +40,7 @@ namespace Carbon_Vault.Models
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime? ReopenAt { get; set; } = DateTime.Now;
 
+        // Relacionamento com o autor do ticket (utilizador que abriu o ticket).
         [JsonIgnore]
         public Account? Author { get; set; }
         public int AuthorId { get; set; }
