@@ -1,6 +1,6 @@
-import { By, until, WebDriver } from 'selenium-webdriver';
+const { By, until } = require('selenium-webdriver');
 
-export async function testRegister(driver, username, password, email, nif) {
+async function testRegister(driver, username, password, email, nif) {
   await driver.get('http://localhost:59115/register');
 
   // Esperar pelos elementos do formulário
@@ -23,7 +23,6 @@ export async function testRegister(driver, username, password, email, nif) {
   if (errors.length === 0) throw new Error("Erro: Nenhuma mensagem de campo obrigatório exibida.");
   console.log("✅ Campos obrigatórios testados corretamente!");
 
-
   console.log("A testar o formato de e-mail...");
   let emailInput = await driver.findElement(By.id('email'));
   await emailInput.clear();
@@ -36,8 +35,6 @@ export async function testRegister(driver, username, password, email, nif) {
   await emailInput.clear();
   await emailInput.sendKeys(email);
   console.log("✅ Formato de e-mail validado!");
-
-
 
   console.log("A testar critérios de password...");
   let passwordInput = await driver.findElement(By.id('password'));
@@ -60,8 +57,6 @@ export async function testRegister(driver, username, password, email, nif) {
   await passwordInput.clear();
   await passwordInput.sendKeys(password);
   console.log("✅ Critérios de password validados!");
-
-
 
   console.log("Testando NIF...");
   let nifInput = await driver.findElement(By.id('nif'));
@@ -94,3 +89,7 @@ export async function testRegister(driver, username, password, email, nif) {
   await driver.wait(until.urlContains('/login'), 10000);
   console.log("Registro realizado com sucesso e redirecionado para login!");
 }
+
+module.exports = {
+  testRegister
+};

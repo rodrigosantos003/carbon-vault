@@ -1,6 +1,6 @@
-import { By, until, WebDriver, Select } from 'selenium-webdriver';
+const { By, until } = require('selenium-webdriver');
 
-export async function testUserManager(driver) {
+async function testUserManager(driver) {
     console.log("A iniciar gestão de utilizadores...");
     await driver.get('http://localhost:59115/users-manager');
 
@@ -33,8 +33,7 @@ export async function testUserManager(driver) {
     await nif.sendKeys("123456789");
 
     let type = await driver.findElement(By.id("userRole"));
-    const select = new Select(type);
-    await select.selectByVisibleText("Admin");
+    await type.findElement(By.css("option[value='admin']")).click(); // Substitui o uso de Select
 
     let saveBtn = await driver.findElement(By.css(".save"));
     await saveBtn.click();
@@ -42,3 +41,7 @@ export async function testUserManager(driver) {
 
     console.log("✅ Gestão bem sucedida");
 }
+
+module.exports = {
+    testUserManager
+};
