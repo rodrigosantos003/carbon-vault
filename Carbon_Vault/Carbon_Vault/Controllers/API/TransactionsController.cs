@@ -6,6 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Carbon_Vault.Controllers.API
 {
+    /// <summary>
+    /// Controller para gerenciar transações no sistema Carbon Vault.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class TransactionsController : ControllerBase
@@ -17,11 +20,20 @@ namespace Carbon_Vault.Controllers.API
             _context = context;
         }
 
+        /// <summary>
+        /// Verifica se uma transação existe com base no ID fornecido.
+        /// </summary>
+        /// <param name="id">ID da transação.</param>
+        /// <returns>Verdadeiro se a transação existir, falso caso contrário.</returns>
         private bool TransactionExists(int id)
         {
             return _context.Transactions.Any(t => t.Id == id);
         }
 
+        /// <summary>
+        /// Obtém todas as transações.
+        /// </summary>
+        /// <returns>Lista de todas as transações.</returns>
         [HttpGet]
         [ServiceFilter(typeof(TokenValidationFilter))]
         public async Task<ActionResult<IEnumerable<Transaction>>> GetTransactions()
@@ -29,6 +41,11 @@ namespace Carbon_Vault.Controllers.API
             return await _context.Transactions.ToListAsync();
         }
 
+        /// <summary>
+        /// Obtém uma transação pelo ID.
+        /// </summary>
+        /// <param name="id">ID da transação.</param>
+        /// <returns>A transação correspondente ou erro 404 se não encontrada.</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<Transaction>> GetTransaction(int id)
         {
@@ -42,6 +59,11 @@ namespace Carbon_Vault.Controllers.API
             return Ok(transaction);
         }
 
+        /// <summary>
+        /// Cria uma nova transação.
+        /// </summary>
+        /// <param name="transaction">Objeto da transação.</param>
+        /// <returns>A transação criada.</returns>
         [HttpPost]
         public async Task<IActionResult> PostTransaction(Transaction transaction)
         {
@@ -53,6 +75,14 @@ namespace Carbon_Vault.Controllers.API
             return CreatedAtAction("GetTransaction", transaction);
         }
 
+        /// <summary>
+        /// Atualiza uma transação existente.
+        /// </summary>
+        /// <param name="id">ID da transação.</param>
+        /// <param name="transaction">Dados da transação atualizados.</param>
+        /// <param name="Authorization">Token de autenticação.</param>
+        /// <param name="accountID">ID da conta autenticada.</param>
+        /// <returns>Resposta de sucesso ou erro correspondente.</returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTransaction(int id, Transaction transaction, [FromHeader] string Authorization, int accountID)
         {
@@ -87,6 +117,13 @@ namespace Carbon_Vault.Controllers.API
             return Ok();
         }
 
+        /// <summary>
+        /// Exclui uma transação pelo ID.
+        /// </summary>
+        /// <param name="id">ID da transação.</param>
+        /// <param name="Authorization">Token de autenticação.</param>
+        /// <param name="userID">ID do utilizador autenticado.</param>
+        /// <returns>Resposta de sucesso ou erro correspondente.</returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTransaction(int id, [FromHeader] string Authorization, int userID)
         {
@@ -107,6 +144,12 @@ namespace Carbon_Vault.Controllers.API
             return Ok();
         }
 
+        /// <summary>
+        /// Obtém todas as transações de um determinado tipo associadas a um utilizador.
+        /// </summary>
+        /// <param name="type">Tipo da transação (0 para compras, 1 para vendas).</param>
+        /// <param name="userID">ID do utilizador.</param>
+        /// <returns>Lista de transações filtradas pelo tipo especificado.</returns>
         [HttpGet("type/{type}/user/{userID}")]
         [ServiceFilter(typeof(TokenValidationFilter))]
         public async Task<ActionResult<IEnumerable<Transaction>>> GetTransactionsByType(int type, int userID)
@@ -117,18 +160,25 @@ namespace Carbon_Vault.Controllers.API
                 State = t.State.ToString(),
                 Project = _context.Projects.Where(p => p.Id == t.ProjectId).Select(p => p.Name).FirstOrDefault(),
                 t.Date,
-                t.BuyerId, t.SellerId
+                t.BuyerId,
+                t.SellerId
             }).Where(t => type == 0 ? t.BuyerId == userID : t.SellerId == userID)
             .ToListAsync();
 
             if (!transactions.Any())
             {
-                return NotFound(new {message = "Nenhuma transação encontrada para este tipo."});
+                return NotFound(new { message = "Nenhuma transação encontrada para este tipo." });
             }
 
             return Ok(transactions);
         }
 
+        /// <summary>
+        /// Obtém os detalhes de uma transação específica.
+        /// </summary>
+        /// <param name="id">ID da transação.</param>
+        /// <param name="userID">ID do utilizador autenticado.</param>
+        /// <returns>Detalhes da transação ou erro caso não seja encontrada.</returns>
         [HttpGet("details/{id}")]
         [ServiceFilter(typeof(TokenValidationFilter))]
         public async Task<ActionResult<Transaction>> GetTransactionDetails(int id, [FromHeader] int userID)
@@ -168,6 +218,11 @@ namespace Carbon_Vault.Controllers.API
 
             return Ok(transaction);
         }
+
+        /// <summary>
+        /// Obtém os dados de transações realizadas na semana atual e na semana anterior.
+        /// </summary>
+        /// <returns>Dados agregados das transações por semana.</returns>
         [HttpGet("weekly")]
         public IActionResult GetWeeklyTransactionData()
         {
