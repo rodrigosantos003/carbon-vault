@@ -69,8 +69,7 @@ export class DashboardComponent {
   }
   fetchDashboardStatistics_support() {
     const url = `${environment.apiUrl}/Tickets/support/stats`;
-    const headers = this.authService.getHeaders();
-    this.http.get(url, { headers }).subscribe(
+    this.http.get(url, { headers: this.authService.getHeaders() }).subscribe(
       (data: any) => {
         console.log(data)
         this.TotalTickets = data.totalTickets;
@@ -83,8 +82,7 @@ export class DashboardComponent {
 
   fetchAdminDashboardStatistics() {
     const url = `${environment.apiUrl}/accounts/DashboardStatistics`;
-    const headers = this.authService.getHeaders();
-    this.http.get(url, { headers }).subscribe(
+    this.http.get(url, { headers: this.authService.getHeaders() }).subscribe(
       (data: any) => {
         console.log(data)
         this.userCount = data.numeroTotalDeUtilizadores;

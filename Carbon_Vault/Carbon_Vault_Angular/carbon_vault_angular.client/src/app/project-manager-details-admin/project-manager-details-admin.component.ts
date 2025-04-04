@@ -74,14 +74,9 @@ export class ProjectManagerDetailsAdminComponent {
       return;
     }
 
-    const token = localStorage.getItem('token');
-    const userId = this.authService.getUserId();
 
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'userID': userId.toString(),
-      'CreditsGenerated': creditsGenerated.toString()
-    });
+    const headers = this.authService.getHeaders();
+    headers.append('CreditsGenerated', creditsGenerated.toString());
 
     this.http.post(url, {}, { headers }).subscribe({
       next: () => {
@@ -105,14 +100,8 @@ export class ProjectManagerDetailsAdminComponent {
       return;
     }
 
-    const token = localStorage.getItem('token');
-    const userId = this.authService.getUserId();
-
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'userID': userId.toString(),
-      'NumberOfCredits': creditsGenerated.toString()
-    });
+    const headers = this.authService.getHeaders();
+    headers.append('NumberOfCredits', creditsGenerated.toString());
 
     this.http.post(url, {}, { headers }).subscribe({
       next: () => {
@@ -186,16 +175,8 @@ export class ProjectManagerDetailsAdminComponent {
     this.documentos = [...this.documentos, ...newFiles];
   }
   deleteFile(fileId: number): void {
-    var token = localStorage.getItem('token');
-    var userId = this.authService.getUserId();
-
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'userID': userId
-    });
-
     const projectId = this.project.id;
-    this.http.delete<void>(`${this.apiURL}/${projectId}/files/${fileId}`, { headers }).subscribe(() => {
+    this.http.delete<void>(`${this.apiURL}/${projectId}/files/${fileId}`, { headers: this.authService.getHeaders() }).subscribe(() => {
 
       this.fetchProjectDetails(projectId);
       this.loadProjectFiles(projectId);
@@ -209,14 +190,9 @@ export class ProjectManagerDetailsAdminComponent {
   changeProjectStatus(newStatus: number) {
     const projectId = this.project.id;
     const url = `${this.apiURL}/${projectId}/ChangeStatus`;
-    const token = localStorage.getItem('token');
-    const userId = this.authService.getUserId();
 
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'userID': userId.toString(),
-      'Content-Type': 'application/json'
-    });
+    const headers = this.authService.getHeaders();
+    headers.append('Content-Type', 'application/json');
 
     const body = JSON.stringify(newStatus);
 
@@ -244,14 +220,8 @@ export class ProjectManagerDetailsAdminComponent {
     const projectId = this.project.id;
     const url = `${this.apiURL}/${projectId}/reject`;
 
-    const token = localStorage.getItem('token');
-    const userId = this.authService.getUserId();
-
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'userID': userId,
-      'feedback': this.rejectionFeedback
-    });
+    const headers = this.authService.getHeaders();
+    headers.append('feedback', this.rejectionFeedback);
 
     this.http.post(url, {}, { headers }).subscribe(
       () => {

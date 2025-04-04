@@ -44,13 +44,9 @@ namespace Carbon_Vault.Controllers.API
 
         // GET: api/Accounts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Account>>> GetAccounts([FromHeader] string Authorization, int userID)
+        [ServiceFilter(typeof(TokenValidationFilter))]
+        public async Task<ActionResult<IEnumerable<Account>>> GetAccounts()
         {
-            if (!AuthHelper.IsTokenValid(Authorization, userID))
-            {
-                return Unauthorized(new { message = "JWT inválido." });
-            }
-
             return await _context.Account.ToListAsync();
         }
 
@@ -111,13 +107,9 @@ namespace Carbon_Vault.Controllers.API
         // PUT: api/Accounts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAccount(int id, Account account, [FromHeader] string Authorization)
+        [ServiceFilter(typeof(TokenValidationFilter))]
+        public async Task<IActionResult> PutAccount(int id, Account account)
         {
-            if (!AuthHelper.IsTokenValid(Authorization, id))
-            {
-                return Unauthorized(new {message = "JWT inválido."});
-            }
-
             if (id != account.Id)
             {
                 return BadRequest(new {message = "Pedido inválido."});
@@ -251,6 +243,7 @@ namespace Carbon_Vault.Controllers.API
             return CreatedAtAction("GetAccount", new { id = account.Id }, account);
         }
 
+        // DELETE: api/Accounts/5
         [HttpDelete("{id}")]
         [ServiceFilter(typeof(TokenValidationFilter))]
         public async Task<IActionResult> DeleteAccount(int id)
@@ -683,7 +676,8 @@ namespace Carbon_Vault.Controllers.API
         }
 
         [HttpGet("DashboardStatistics")]
-        public async Task<IActionResult> GetDashboardStatistics([FromHeader] string Authorization, [FromHeader] int userID)
+        [ServiceFilter(typeof(TokenValidationFilter))]
+        public async Task<IActionResult> GetDashboardStatistics()
         {
             DateTime today = DateTime.UtcNow.Date;
 

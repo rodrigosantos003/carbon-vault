@@ -412,18 +412,11 @@ namespace Carbon_Vault.Controllers.API
 
 
         [HttpDelete("{projectId}/files/{fileId}")]
-        public async Task<IActionResult> DeleteFile(int projectId, int fileId, [FromHeader] string Authorization, [FromHeader] int userID)
+        [ServiceFilter(typeof(TokenValidationFilter))]
+        public async Task<IActionResult> DeleteFile(int projectId, int fileId, [FromHeader] int userID)
         {
-            Console.WriteLine(userID);
-            if (!AuthHelper.IsTokenValid(Authorization, userID))
-            {
-                return Unauthorized();
-            }
-
-           
             var project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == projectId);
             var account = await _context.Account.FindAsync(userID);
-
 
             if (project == null)
             {
@@ -454,14 +447,9 @@ namespace Carbon_Vault.Controllers.API
         }
 
         [HttpPost("{id}/approve")]
-        public async Task<IActionResult> ApproveProject(int id, [FromHeader] string Authorization, [FromHeader] int userID, [FromHeader] int CreditsGenerated)
+        [ServiceFilter(typeof(TokenValidationFilter))]
+        public async Task<IActionResult> ApproveProject(int id, [FromHeader] int userID, [FromHeader] int CreditsGenerated)
         {
-            Console.WriteLine($"Received creditsGenerated: {CreditsGenerated}");
-
-            if (!AuthHelper.IsTokenValid(Authorization, userID))
-            {
-                return Unauthorized();
-            }
             var account = await _context.Account.FindAsync(userID);
             if (account == null)
             {
@@ -521,13 +509,9 @@ namespace Carbon_Vault.Controllers.API
 
         }
         [HttpPost("{id}/reject")]
-        public async Task<IActionResult> RejectProject(int id, [FromHeader] string Authorization, [FromHeader] int userID, [FromHeader] string feedback)
+        [ServiceFilter(typeof(TokenValidationFilter))]
+        public async Task<IActionResult> RejectProject(int id, [FromHeader] int userID, [FromHeader] string feedback)
         {
-            if (!AuthHelper.IsTokenValid(Authorization, userID))
-            {
-                return Unauthorized();
-            }
-
             var account = await _context.Account.FindAsync(userID);
             if (account == null)
             {
@@ -570,14 +554,9 @@ namespace Carbon_Vault.Controllers.API
 
 
         [HttpPost("{id}/addCredits")]
-        public async Task<IActionResult> AddCredits(int id, [FromHeader] string Authorization, [FromHeader] int userID, [FromHeader] int NumberOfCredits)
+        [ServiceFilter(typeof(TokenValidationFilter))]
+        public async Task<IActionResult> AddCredits(int id, [FromHeader] int userID, [FromHeader] int NumberOfCredits)
         {
-            
-
-            if (!AuthHelper.IsTokenValid(Authorization, userID))
-            {
-                return Unauthorized();
-            }
             var account = await _context.Account.FindAsync(userID);
             if (account == null)
             {
@@ -629,13 +608,9 @@ namespace Carbon_Vault.Controllers.API
 
         // PUT: api/Projects/5/ChangeStatus
         [HttpPut("{id}/ChangeStatus")]
-        public async Task<IActionResult> ChangeProjectStatus(int id, [FromHeader] string Authorization, [FromHeader] int userID, [FromBody] int newStatus)
+        [ServiceFilter(typeof(TokenValidationFilter))]
+        public async Task<IActionResult> ChangeProjectStatus(int id, [FromHeader] int userID, [FromBody] int newStatus)
         {
-            if (!AuthHelper.IsTokenValid(Authorization, userID))
-            {
-                return Unauthorized();
-            }
-
             var account = await _context.Account.FindAsync(userID);
             if (account == null)
             {
@@ -662,13 +637,9 @@ namespace Carbon_Vault.Controllers.API
 
 
         [HttpPut("list-credits/{projectId}")]
-        public async Task<IActionResult> ListCredits([FromHeader] string Authorization, [FromHeader] int userId, int projectId, int credits)
+        [ServiceFilter(typeof(TokenValidationFilter))]
+        public async Task<IActionResult> ListCredits(int projectId, int credits)
         {
-            if (!AuthHelper.IsTokenValid(Authorization, userId))
-            {
-                return Unauthorized();
-            }
-
             var project = await _context.Projects.FindAsync(projectId);
 
             if (project == null)
@@ -692,13 +663,9 @@ namespace Carbon_Vault.Controllers.API
         }
 
         [HttpPut("sell-credits/{projectId}")]
+        [ServiceFilter(typeof(TokenValidationFilter))]
         public async Task<IActionResult> SellCredits([FromHeader] string Authorization, int userId, int projectId, int credits)
         {
-            if (!AuthHelper.IsTokenValid(Authorization, userId))
-            {
-                return Unauthorized();
-            }
-
             var project = await _context.Projects.FindAsync(projectId);
 
             if (project == null)

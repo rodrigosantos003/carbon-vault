@@ -41,9 +41,8 @@ export class UserSettingsComponent {
 
   ngOnInit() {
     const url = `${environment.apiUrl}/Accounts/${this.userId}`;
-    const headers = { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
 
-    this.http.get<Account>(url, { headers: headers }).subscribe({
+    this.http.get<Account>(url, { headers: this.authService.getHeaders() }).subscribe({
       next: (data) => {
         this.settingsForm.setValue({
           name: data.name,
@@ -82,9 +81,8 @@ export class UserSettingsComponent {
       };
 
       const url = `${environment.apiUrl}/Accounts/${this.userId}`;
-      const headers = { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
 
-      this.http.put(url, settingsData, { headers: headers }).subscribe({
+      this.http.put(url, settingsData, { headers: this.authService.getHeaders() }).subscribe({
         next: () => {
           this.alerts.disableLoading();
           this.alerts.enableSuccess("Definições atualizadas com sucesso");
@@ -110,9 +108,8 @@ export class UserSettingsComponent {
 
   deleteAccount() {
     const deleteAccountURL = `${environment.apiUrl}/Accounts/${this.userId}`;
-    const headers = { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
 
-    this.http.delete(deleteAccountURL, { headers: headers, params: { userID: this.userId } }).subscribe({
+    this.http.delete(deleteAccountURL, { headers: this.authService.getHeaders() }).subscribe({
       next: () => {
         this.alerts.enableSuccess("Conta eliminada com sucesso");
         this.authService.logout();

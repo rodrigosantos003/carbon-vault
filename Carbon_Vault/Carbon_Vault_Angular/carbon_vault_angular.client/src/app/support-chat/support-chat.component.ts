@@ -96,19 +96,12 @@ export class SupportChatComponent {
       return;
     }
     
-    const token = localStorage.getItem('token');
     const userId = this.authService.getUserId();
-  
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'userID': userId
-    });
-  
    
     if (this.ticket?.state === 1 && this.userRole == 0) {   
       this.ticket.state = 0; 
   
-      this.http.put(`${this.ticketsURL}/${this.ticket.id}`, { state: 0 }, { headers }).subscribe(
+      this.http.put(`${this.ticketsURL}/${this.ticket.id}`, { state: 0 }, { headers: this.authService.getHeaders() }).subscribe(
         () => {
           console.log('Ticket reaberto com sucesso.');
         },
@@ -124,7 +117,7 @@ export class SupportChatComponent {
       AutorId: Number(userId)
     };
 
-    this.http.post(this.ticketsMessagesURL, data, { headers }).subscribe(
+    this.http.post(this.ticketsMessagesURL, data, { headers: this.authService.getHeaders() }).subscribe(
       (response) => {
         console.log('Mensagem enviada com sucesso:', response);
         this.messageContent = '';
@@ -138,15 +131,7 @@ export class SupportChatComponent {
   }
   
   closeTicket() {
-    const token = localStorage.getItem('token');
-    const userId = this.authService.getUserId();
-  
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'userID': userId
-    });
-  
-    this.http.put(`${this.ticketsURL}/${this.ticket?.id}`, { ...this.ticket, state: 1 }, { headers }).subscribe(
+    this.http.put(`${this.ticketsURL}/${this.ticket?.id}`, { ...this.ticket, state: 1 }, { headers: this.authService.getHeaders() }).subscribe(
       () => {
         console.log('Ticket fechado com sucesso.');
         this.ticket!.state = 1 

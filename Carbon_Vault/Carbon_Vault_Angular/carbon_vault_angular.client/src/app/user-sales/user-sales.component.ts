@@ -26,9 +26,6 @@ export class UserSalesComponent {
 
   getSales(): void {
     this.alerts.enableLoading("A carregar vendas...");
-
-    const jwtToken = localStorage.getItem('token');
-
     this.http.get<Sale[]>(this.salesURL, {
       headers: this.authService.getHeaders()
     }).subscribe({
