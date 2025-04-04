@@ -81,7 +81,7 @@ export class ProjectAddComponent {
     if (!this.descricao.trim()) {
       this.alerts.enableError('A descrição é obrigatória.');
       return false;
-    }    
+    }
     if (!this.benefits.trim()) {
       this.alerts.enableError('Os benefícios são obrigatórios.');
       return false;
@@ -125,31 +125,6 @@ export class ProjectAddComponent {
 
     this.documentos = [...this.documentos, ...newFiles];
   }
-
-  //onFileChange(event: any) {
-  //  console.log("AQUI");
-  //  const files = event.target.files;
-
-  //  if (files.length > 0) {
-  //    for (let file of files) {
-
-  //      // Validate file type
-  //      if (!this.allowedFileTypes.includes(file.type)) {
-  //        this.alerts.enableError("Formato inválido. Ficheiros permitidos: .docx, .pdf, .csv");
-  //        return;
-  //      }
-
-  //      // Validate file size
-  //      if (file.size > this.maxFileSize) {
-  //        this.alerts.enableError("Ficheiro demasiado grande. O limite são " + this.maxFileSize + "MB.");
-  //        return;
-  //      }
-  //    }
-
-  //    const newFiles = Array.from(event.target.files) as File[];
-  //    this.documentos = [...this.documentos, ...newFiles];
-  //  }
-  //}
 
   removeFile(index: number) {
     this.documentos.splice(index, 1);
@@ -209,20 +184,6 @@ export class ProjectAddComponent {
     event.dataTransfer!.dropEffect = 'copy';
   }
 
-
-  //onDrop(event: DragEvent) {
-  //  event.preventDefault();
-  //  event.stopPropagation();
-
-  //  const fileList: FileList = event.dataTransfer?.files!;
-  //  if (fileList && fileList.length > 0) {
-  //    const newFiles = Array.from(fileList);
-
-
-  //    this.documentos = [...this.documentos, ...newFiles];
-  //  }
-  //}
-
   onDrop(event: DragEvent) {
     event.preventDefault();
     event.stopPropagation();
@@ -237,7 +198,7 @@ export class ProjectAddComponent {
           return;
         }
 
-        // Validate file size (10MB max)
+        // Validate file size
         if (file.size > this.maxFileSize) {
           this.alerts.enableError("Ficheiro demasiado grande. O limite são " + this.maxMb + "MB.");
           return;
@@ -248,7 +209,6 @@ export class ProjectAddComponent {
       this.documentos = [...this.documentos, ...droppedFiles];
     }
   }
-
 
   onDragLeave(event: DragEvent) {
     event.preventDefault();
@@ -278,7 +238,7 @@ export class ProjectAddComponent {
       projectUrl: this.urlProjeto,
       imageUrl: this.urlImagem,
       ownerId: Number(this.userId),
-      benefits : this.benefits,
+      benefits: this.benefits,
       types: this.categoriasSelecionadas.map(id => ({ id }))
     };
 
