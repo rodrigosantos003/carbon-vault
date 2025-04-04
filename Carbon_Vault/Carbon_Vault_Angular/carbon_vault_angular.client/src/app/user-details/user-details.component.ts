@@ -64,7 +64,7 @@ export class UserDetailsComponent {
 
       if (jwtToken) {
         this.http.delete(deleteURL, {
-          headers: { 'Authorization': `Bearer ${jwtToken}` }
+          headers: this.authService.getHeaders()
         }).subscribe(
           () => {
             this.router.navigate(['/users-manager']);
@@ -114,7 +114,4 @@ export class UserDetailsComponent {
     const types = ["Compra", "Venda"];
     return types[type] ?? "Unknown";
   }
-
-
-
 }

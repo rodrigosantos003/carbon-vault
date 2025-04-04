@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Carbon_Vault.Data;
 using Carbon_Vault.Models;
+using NuGet.Common;
 
 namespace Carbon_Vault.Controllers.API
 {
@@ -51,13 +52,9 @@ namespace Carbon_Vault.Controllers.API
         // PUT: api/CarbonCredits/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCarbonCredit(int id, CarbonCredit carbonCredit, int userID, [FromHeader] string Authorization)
+        [ServiceFilter(typeof(TokenValidationFilter))]
+        public async Task<IActionResult> PutCarbonCredit(int id, CarbonCredit carbonCredit)
         {
-            if (!AuthHelper.IsTokenValid(Authorization, userID))
-            {
-                return Unauthorized();
-            }
-
             if (id != carbonCredit.Id)
             {
                 return BadRequest();
@@ -87,13 +84,9 @@ namespace Carbon_Vault.Controllers.API
         // POST: api/CarbonCredits
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<CarbonCredit>> PostCarbonCredit(CarbonCredit carbonCredit, int userID, [FromHeader] string Authorization)
+        [ServiceFilter(typeof(TokenValidationFilter))]
+        public async Task<ActionResult<CarbonCredit>> PostCarbonCredit(CarbonCredit carbonCredit)
         {
-            if (!AuthHelper.IsTokenValid(Authorization, userID))
-            {
-                return Unauthorized();
-            }
-
             _context.CarbonCredits.Add(carbonCredit);
             await _context.SaveChangesAsync();
 
@@ -102,13 +95,9 @@ namespace Carbon_Vault.Controllers.API
 
         // DELETE: api/CarbonCredits/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCarbonCredit(int id, int userID, [FromHeader] string Authorization)
+        [ServiceFilter(typeof(TokenValidationFilter))]
+        public async Task<IActionResult> DeleteCarbonCredit(int id)
         {
-            if (!AuthHelper.IsTokenValid(Authorization, userID))
-            {
-                return Unauthorized();
-            }
-
             var carbonCredit = await _context.CarbonCredits.FindAsync(id);
             if (carbonCredit == null)
             {

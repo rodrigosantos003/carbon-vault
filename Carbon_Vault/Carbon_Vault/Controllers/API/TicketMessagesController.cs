@@ -81,14 +81,9 @@ namespace Carbon_Vault.Controllers.API
         // POST: api/TicketMessages
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<TicketMessage>> PostTicketMessage(TicketMessage ticketMessage , [FromHeader] string Authorization, [FromHeader] int userID)
+        [ServiceFilter(typeof(TokenValidationFilter))]
+        public async Task<ActionResult<TicketMessage>> PostTicketMessage(TicketMessage ticketMessage)
         {
-            if(!AuthHelper.IsTokenValid(Authorization, userID))
-            {
-                return Unauthorized();
-            }
-            var account = await _context.Account.FindAsync(userID);
-
             _context.TicketMessages.Add(ticketMessage);
             await _context.SaveChangesAsync();
 
@@ -97,13 +92,9 @@ namespace Carbon_Vault.Controllers.API
 
 
         [HttpPost("send")]
-        public async Task<ActionResult<TicketMessage>> SendMessage(TicketMessage ticketMessage, [FromHeader] string Authorization, [FromHeader] int userID)
+        [ServiceFilter(typeof(TokenValidationFilter))]
+        public async Task<ActionResult<TicketMessage>> SendMessage(TicketMessage ticketMessage, [FromHeader] int userID)
         {
-            if (!AuthHelper.IsTokenValid(Authorization, userID))
-            {
-                return Unauthorized();
-            }
-
             var account = await _context.Account.FindAsync(userID);
             if (account == null)
             {

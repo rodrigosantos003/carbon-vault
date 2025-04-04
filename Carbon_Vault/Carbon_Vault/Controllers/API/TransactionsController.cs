@@ -54,13 +54,9 @@ namespace Carbon_Vault.Controllers.API
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTransaction(int id, Transaction transaction, [FromHeader] string Authorization, int accountID)
+        [ServiceFilter(typeof(TokenValidationFilter))]
+        public async Task<IActionResult> PutTransaction(int id, Transaction transaction)
         {
-            if (!AuthHelper.IsTokenValid(Authorization, accountID))
-            {
-                return Unauthorized();
-            }
-
             if (id != transaction.Id)
             {
                 return BadRequest();
@@ -88,13 +84,9 @@ namespace Carbon_Vault.Controllers.API
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTransaction(int id, [FromHeader] string Authorization, int userID)
+        [ServiceFilter(typeof(TokenValidationFilter))]
+        public async Task<IActionResult> DeleteTransaction(int id)
         {
-            if (!AuthHelper.IsTokenValid(Authorization, userID))
-            {
-                return Unauthorized();
-            }
-
             var transaction = await _context.Transactions.FindAsync(id);
             if (transaction == null)
             {

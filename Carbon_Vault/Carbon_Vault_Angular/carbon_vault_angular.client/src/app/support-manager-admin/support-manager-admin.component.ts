@@ -30,14 +30,8 @@ export class SupportManagerAdminComponent {
   }
   getTickets(): void {
     this.alerts.enableLoading("A carregar Tickets..");
-    var token = localStorage.getItem('token');
-    var userId = this.authService.getUserId();
-      const headers = new HttpHeaders({
-          'Authorization': `Bearer ${token}`,
-          'userID': userId
-        })
 
-    this.http.get<any[]>(this.ticketsURL,{ headers }).subscribe({
+    this.http.get<any[]>(this.ticketsURL,{ headers: this.authService.getHeaders() }).subscribe({
       next: (data) => {
         
         this.tickets = data.sort((a, b) => this.comparePriority(a.priority, b.priority)); 

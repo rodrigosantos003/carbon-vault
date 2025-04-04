@@ -29,12 +29,9 @@ namespace Carbon_Vault.Controllers.API
 
         // GET: api/Tickets
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Ticket>>> GetTicket([FromHeader] string Authorization, [FromHeader] int userID)
+        [ServiceFilter(typeof(TokenValidationFilter))]
+        public async Task<ActionResult<IEnumerable<Ticket>>> GetTickets([FromHeader] int userID)
         {
-            if (!AuthHelper.IsTokenValid(Authorization, userID))
-            {
-                return Unauthorized();
-            }
             //Check if is an Admin or a support user
             var account = await _context.Account.FindAsync(userID);
             return account.Role is not AccountType.Admin and not AccountType.Support
@@ -44,12 +41,9 @@ namespace Carbon_Vault.Controllers.API
 
         // GET: api/Tickets/user/5
         [HttpGet("Tickets/user/{RequestedUserId}")]
-        public async Task<ActionResult<IEnumerable<Ticket>>> GetTicketUser([FromHeader] string Authorization, [FromHeader] int userID, [FromRoute] int RequestedUserId)
+        [ServiceFilter(typeof(TokenValidationFilter))]
+        public async Task<ActionResult<IEnumerable<Ticket>>> GetTicketUser([FromHeader] int userID, [FromRoute] int RequestedUserId)
         {
-            if (!AuthHelper.IsTokenValid(Authorization, userID))
-            {
-                return Unauthorized();
-            }
             var account = await _context.Account.FindAsync(userID);
             //Check if is an Admin or a support user or the user itself
             if (account.Role == AccountType.Admin || account.Role == AccountType.Support || userID == RequestedUserId)
@@ -222,13 +216,9 @@ namespace Carbon_Vault.Controllers.API
         }
 
         [HttpGet("ticket/reference/{reference}")]
-        public async Task<ActionResult<Ticket>> GetTicketByReference(string reference, [FromHeader] string Authorization, [FromHeader] int userID)
+        [ServiceFilter(typeof(TokenValidationFilter))]
+        public async Task<ActionResult<Ticket>> GetTicketByReference(string reference, [FromHeader] int userID)
         {
-            if (!AuthHelper.IsTokenValid(Authorization, userID))
-            {
-                return Unauthorized();
-            }
-
             var ticket = await _context.Tickets
                 .Include(t => t.Messages)
                 .ThenInclude(m => m.Autor)
@@ -262,13 +252,9 @@ namespace Carbon_Vault.Controllers.API
        
         // GET: api/Tickets/support/stats
         [HttpGet("support/stats")]
-        public async Task<ActionResult<SupportStats>> GetSupportStats([FromHeader] string Authorization, [FromHeader] int userID)
+        [ServiceFilter(typeof(TokenValidationFilter))]
+        public async Task<ActionResult<SupportStats>> GetSupportStats([FromHeader] int userID)
         {
-            if (!AuthHelper.IsTokenValid(Authorization, userID))
-            {
-                return Unauthorized();
-            }
-
             var account = await _context.Account.FindAsync(userID);
             if (account.Role is not AccountType.Admin and not AccountType.Support)
             {
