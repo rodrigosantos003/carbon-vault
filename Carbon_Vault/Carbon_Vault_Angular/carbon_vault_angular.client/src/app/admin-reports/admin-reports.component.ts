@@ -18,7 +18,8 @@ export class AdminReportsComponent {
   reports: Report[] = [];
   selectedReport: Report = { id: 0, lastUpdate: "", checkoutSession: "", text: "", reportState: 0, userID: 0 };
   reportText: string = "";
-
+  pendingReportsCount : number = 0;
+  doneReportsCount: number = 0;
   constructor(private http: HttpClient, private auth: AuthService, private alerts: AlertsService, public router: Router) { }
 
   ngOnInit() {
@@ -33,6 +34,9 @@ export class AdminReportsComponent {
     this.http.get<Report[]>(url, { headers: this.auth.getHeaders() }).subscribe({
       next: (data) => {
         this.reports = data.filter(r => r.reportState === 1);
+        this.pendingReportsCount = data.filter(r => r.reportState === 1).length;
+        this.doneReportsCount = data.filter(r => r.reportState === 2).length;
+
         this.alerts.disableLoading();
       },
       error: () => {

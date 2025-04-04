@@ -23,6 +23,23 @@
     </div>
 
     <main class="content">
+        <div class="stats">
+            <div class="card yellow">
+              <h3>Número Total de Relatorios Pendentes</h3>
+              <div>
+                <img src="images/Pending_reports.png" class="icon" width="50px"/>
+                <h2 class="value">{{pendingReportsCount}}</h2>
+              </div>
+            </div>
+            <div class="card green">
+              <h3>Número Total de Relatorios Concluidos</h3>
+              <div>
+                <img src="images/Done_REPORTS.png" width="50px"/>
+                <h2>{{  doneReportsCount}}</h2>
+              </div>
+      
+            </div>
+          </div>
         <h1>Relatórios Solicitados</h1>
 
         <div class="table">
@@ -32,6 +49,7 @@
                         <th>Data</th>
                         <th>Descarregar Ficheiros</th>
                         <th>Responder</th>
+                    </tr>
                 </thead>
                 <tbody>
                     <tr *ngIf="reports.length === 0">
@@ -39,8 +57,7 @@
                     </tr>
                     <tr *ngFor="let report of reports">
                         <td>{{report.lastUpdate}}</td>
-                        <td><button class="details-button" (click)="downloadFiles(report.id)">Descarregar</button>
-                        </td>
+                        <td><button class="details-button" (click)="downloadFiles(report.id)">Descarregar</button></td>
                         <td><button class="details-button" (click)="openAnswer(report)">Responder</button></td>
                     </tr>
                 </tbody>

@@ -51,6 +51,7 @@ import { TicketManagerComponent } from './ticket-manager/ticket-manager.componen
 import { UnauthorizedPageComponent } from './unauthorized-page/unauthorized-page.component';
 import { NotFoundPageComponent } from './not-found-page/not-found-page.component';
 import { TermsAndConditionsComponent } from './terms-and-conditions/terms-and-conditions.component';
+import { EvaluatorDashboardComponent } from './evaluator-dashboard/evaluator-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -98,7 +99,8 @@ import { TermsAndConditionsComponent } from './terms-and-conditions/terms-and-co
     TicketManagerComponent,
     UnauthorizedPageComponent,
     NotFoundPageComponent,
-    TermsAndConditionsComponent
+    TermsAndConditionsComponent,
+    EvaluatorDashboardComponent
   ],
   imports: [
     BrowserModule,

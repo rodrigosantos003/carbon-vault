@@ -9,7 +9,7 @@ body {
 .transaction-container {
     display: flex;
     flex-direction: column;
-    padding: 5% 10%;
+    padding: 2% 4%;
     width: 100%;
 }
 
