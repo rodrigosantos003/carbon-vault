@@ -12,6 +12,9 @@ using Carbon_Vault.Services;
 
 namespace Carbon_Vault.Controllers.API
 {
+    /// <summary>
+    /// Controlador responsável pela gestão de tickets de suporte no Carbon Vault.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class TicketsController : ControllerBase
@@ -20,6 +23,11 @@ namespace Carbon_Vault.Controllers.API
         private readonly IEmailService _emailService;
         private readonly string _frontendBaseUrl;
 
+        /// <summary>
+        /// Construtor do controlador de tickets.
+        /// </summary>
+        /// <param name="context">Contexto do banco de dados.</param>
+        /// <param name="emailService">Serviço de envio de e-mails.</param>
         public TicketsController(Carbon_VaultContext context, IEmailService emailService)
         {
             _context = context;
@@ -27,6 +35,12 @@ namespace Carbon_Vault.Controllers.API
             _frontendBaseUrl = Environment.GetEnvironmentVariable("CLIENT_URL");
         }
 
+        /// <summary>
+        /// Obtém todos os tickets de suporte.
+        /// </summary>
+        /// <param name="Authorization">Token de autenticação.</param>
+        /// <param name="userID">ID do utilizador autenticado.</param>
+        /// <returns>Lista de tickets ou erro 401 se o utilizador não tiver permissão.</returns>
         // GET: api/Tickets
         [HttpGet]
         [ServiceFilter(typeof(TokenValidationFilter))]
@@ -39,6 +53,13 @@ namespace Carbon_Vault.Controllers.API
                 : (ActionResult<IEnumerable<Ticket>>)await _context.Tickets.ToListAsync();
         }
 
+        /// <summary>
+        /// Obtém os tickets de um utilizador específico.
+        /// </summary>
+        /// <param name="Authorization">Token de autenticação.</param>
+        /// <param name="userID">ID do utilizador autenticado.</param>
+        /// <param name="RequestedUserId">ID do utilizador cujos tickets serão consultados.</param>
+        /// <returns>Lista de tickets do utilizador ou erro 401 se não autorizado.</returns>
         // GET: api/Tickets/user/5
         [HttpGet("Tickets/user/{RequestedUserId}")]
         [ServiceFilter(typeof(TokenValidationFilter))]
@@ -54,6 +75,11 @@ namespace Carbon_Vault.Controllers.API
             return Unauthorized();
         }
 
+        /// <summary>
+        /// Obtém um ticket específico pelo ID.
+        /// </summary>
+        /// <param name="id">ID do ticket.</param>
+        /// <returns>O ticket correspondente ou erro 404 se não encontrado.</returns>
         // GET: api/Tickets/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Ticket>> GetTicket(int id)
@@ -71,6 +97,12 @@ namespace Carbon_Vault.Controllers.API
             return ticket;
         }
 
+        /// <summary>
+        /// Atualiza um ticket existente.
+        /// </summary>
+        /// <param name="id">ID do ticket a ser atualizado.</param>
+        /// <param name="ticket">Objeto contendo os novos dados do ticket.</param>
+        /// <returns>NoContent se a atualização for bem-sucedida ou erro 404 se o ticket não existir.</returns>
         // PUT: api/Tickets/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -102,6 +134,12 @@ namespace Carbon_Vault.Controllers.API
             return NoContent();
         }
 
+        /// <summary>
+        /// Cria um novo ticket de suporte.
+        /// </summary>
+        /// <param name="ticket">Objeto contendo os detalhes do ticket.</param>
+        /// <param name="category">Categoria do ticket.</param>
+        /// <returns>O ticket criado ou erro 400 se o ID do autor for inválido.</returns>
         // POST: api/Tickets
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -199,6 +237,11 @@ namespace Carbon_Vault.Controllers.API
             };
         }
 
+        /// <summary>
+        /// Exclui um ticket pelo ID.
+        /// </summary>
+        /// <param name="id">ID do ticket a ser excluído.</param>
+        /// <returns>NoContent se a exclusão for bem-sucedida ou erro 404 se o ticket não existir.</returns>
         // DELETE: api/Tickets/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTicket(int id)
@@ -215,6 +258,13 @@ namespace Carbon_Vault.Controllers.API
             return NoContent();
         }
 
+        /// <summary>
+        /// Obtém um ticket com base em sua referência única.
+        /// </summary>
+        /// <param name="reference">Referência única do ticket.</param>
+        /// <param name="Authorization">Token de autenticação.</param>
+        /// <param name="userID">ID do utilizador autenticado.</param>
+        /// <returns>O ticket correspondente ou erro 403 se o utilizador não tiver permissão.</returns>
         [HttpGet("ticket/reference/{reference}")]
         [ServiceFilter(typeof(TokenValidationFilter))]
         public async Task<ActionResult<Ticket>> GetTicketByReference(string reference, [FromHeader] int userID)
@@ -244,12 +294,17 @@ namespace Carbon_Vault.Controllers.API
             return ticket;
         }
 
-
         private bool TicketExists(int id)
         {
             return _context.Tickets.Any(e => e.Id == id);
         }
-       
+
+        /// <summary>
+        /// Obtém estatísticas sobre os tickets de suporte.
+        /// </summary>
+        /// <param name="Authorization">Token de autenticação.</param>
+        /// <param name="userID">ID do utilizador autenticado.</param>
+        /// <returns>Estatísticas sobre os tickets de suporte.</returns>
         // GET: api/Tickets/support/stats
         [HttpGet("support/stats")]
         [ServiceFilter(typeof(TokenValidationFilter))]
@@ -274,8 +329,6 @@ namespace Carbon_Vault.Controllers.API
 
             return supportStats;
         }
-
-
     }
 
     public class SupportStats
@@ -283,6 +336,6 @@ namespace Carbon_Vault.Controllers.API
         public int TotalTickets { get; set; }
         public int OpenTickets { get; set; }
         public int ClosedTickets { get; set; }
-       
+
     }
 }

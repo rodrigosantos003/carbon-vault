@@ -22,8 +22,6 @@ namespace Carbon_Vault.Data
         public DbSet<ProjectFiles> ProjectFiles { get; set; }
         public DbSet<Ticket> Tickets { get; set; } = default!;
         public DbSet<TicketMessage> TicketMessages { get; set; } = default!;
-
-
         public DbSet<Report> Reports { get; set; }
         public DbSet<ReportFiles> ReportFiles { get; set; }
         public Carbon_VaultContext(DbContextOptions<Carbon_VaultContext> options)
@@ -31,6 +29,11 @@ namespace Carbon_Vault.Data
         {
         }
 
+        /// <summary>
+        /// Configura o modelo de dados para a aplicação, é chamado durante a inicialização do DbContext.
+        /// Permite definir as regras de mapeamento entre as classes e as tabelas da base de dados, como definição de relações entre entidades, chaves primárias e estrangerias.
+        /// </summary>
+        /// <param name="modelBuilder">Objeto usado para configurar o modelo de dados.</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -95,6 +98,10 @@ namespace Carbon_Vault.Data
             populateCredits(modelBuilder);
         }
 
+        /// <summary>
+        /// Método que faz a população de Contas
+        /// </summary>
+        /// <param name="modelBuilder"></param>
         private void populateAccounts(ModelBuilder modelBuilder)
         {
             string admin_hashed = AuthHelper.HashPassword("Admin@123");
@@ -114,7 +121,7 @@ namespace Carbon_Vault.Data
                     State = AccountState.Active,
                     Role = Models.AccountType.Admin,
                     CreatedAt = DateTime.UtcNow,
-                    
+
                 },
                 new Models.Account
                 {
@@ -163,12 +170,13 @@ namespace Carbon_Vault.Data
             );
         }
 
+        // Método que faz a população dos tipos de projetos
         private void populateProjectTypes(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ProjectType>().HasData(
-               new ProjectType{Id = 1, Type = ProjectTypeEnum.Poverty},
-               new ProjectType{Id = 2, Type = ProjectTypeEnum.Hunger},
-               new ProjectType{Id = 3, Type = ProjectTypeEnum.Health},
+               new ProjectType { Id = 1, Type = ProjectTypeEnum.Poverty },
+               new ProjectType { Id = 2, Type = ProjectTypeEnum.Hunger },
+               new ProjectType { Id = 3, Type = ProjectTypeEnum.Health },
                new ProjectType { Id = 4, Type = ProjectTypeEnum.Education },
                new ProjectType { Id = 5, Type = ProjectTypeEnum.Gender },
                new ProjectType { Id = 6, Type = ProjectTypeEnum.Water },
@@ -182,6 +190,10 @@ namespace Carbon_Vault.Data
            );
         }
 
+        /// <summary>
+        /// Método que faz a população dos Projetos
+        /// </summary>
+        /// <param name="modelBuilder"></param>
         private void populateProjects(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Project>().HasData(
@@ -228,6 +240,10 @@ namespace Carbon_Vault.Data
            );
         }
 
+        /// <summary>
+        /// Método que faz a população das Transações
+        /// </summary>
+        /// <param name="modelBuilder"></param>
         private void populateTransactions(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Transaction>().HasData(
@@ -259,8 +275,11 @@ namespace Carbon_Vault.Data
                 }
             );
         }
-    
 
+        /// <summary>
+        /// Método que faz a população de Créditos de Carbono
+        /// </summary>
+        /// <param name="modelBuilder"></param>
         private void populateCredits(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<CarbonCredit>().HasData(
@@ -311,7 +330,5 @@ namespace Carbon_Vault.Data
                 }
             );
         }
-      
     }
-
 }
