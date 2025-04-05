@@ -42,6 +42,19 @@ export class UserPurchasesComponent {
   transactionDetails(transaction_id: number) {
     this.router.navigate([`transaction-details/${transaction_id}`]);
   }
+
+  getState(state: string): string {
+    switch (state) {
+      case "Approved":
+        return "Concluído";
+      case "Rejected":
+        return "Rejeitado";
+      case "Pending":
+        return "Pendente";
+      default:
+        return "Desconhecido";
+    }
+  }
 }
 
 interface Purchase {

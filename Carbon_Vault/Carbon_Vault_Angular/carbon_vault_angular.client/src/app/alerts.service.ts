@@ -78,7 +78,7 @@ export class AlertsService {
     }
   }
 
-  enableInfo(message: string, enableTime: number = 4) {
+  enableInfo(message: string, enableTime: number = 3) {
     const infoPopup = document.getElementById('info-popup');
     if (infoPopup) {
       const textSpan = infoPopup.querySelector('#info-message');
