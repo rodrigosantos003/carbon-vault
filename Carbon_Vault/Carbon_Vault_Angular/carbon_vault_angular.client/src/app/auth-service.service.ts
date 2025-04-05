@@ -38,7 +38,10 @@ export class AuthService {
     const token = localStorage.getItem('token');
     const userId = this.getUserId();
 
-    const headers = new HttpHeaders({
+    console.log("Token: ", token);
+    console.log("User ID: ", userId);
+
+    let headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,
       'userID': userId
     });

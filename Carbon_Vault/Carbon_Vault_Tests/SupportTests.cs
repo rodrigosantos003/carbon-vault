@@ -69,7 +69,7 @@ namespace Carbon_Vault_Tests
             int userId = 1;
             string validToken = "Bearer " + AuthHelper.GerarToken(userId);
 
-            var result = await controller.GetTicket(validToken, userId);
+            var result = await controller.GetTicket(userId);
 
             var actionResult = Assert.IsType<ActionResult<IEnumerable<Ticket>>>(result);
             var returnValue = Assert.IsAssignableFrom<IEnumerable<Ticket>>(actionResult.Value);
@@ -101,7 +101,7 @@ namespace Carbon_Vault_Tests
             int userId = 1; // Admin user
             string validToken = "Bearer " + AuthHelper.GerarToken(userId);
 
-            var result = await controller.GetTicketByReference(reference, validToken, userId);
+            var result = await controller.GetTicketByReference(reference, userId);
 
             var actionResult = Assert.IsType<ActionResult<Ticket>>(result);
             var returnedTicket = Assert.IsType<Ticket>(actionResult.Value);
@@ -118,7 +118,7 @@ namespace Carbon_Vault_Tests
             int userId = 1; // Admin user
             string validToken = "Bearer " + AuthHelper.GerarToken(userId);
 
-            var result = await controller.GetTicketByReference(reference, validToken, userId);
+            var result = await controller.GetTicketByReference(reference, userId);
 
             var actionResult = Assert.IsType<ActionResult<Ticket>>(result);
             Assert.IsType<NotFoundResult>(actionResult.Result);
@@ -146,7 +146,7 @@ namespace Carbon_Vault_Tests
             int userId = 1; // Admin user
             string validToken = "Bearer " + AuthHelper.GerarToken(userId);
 
-            var result = await controller.SendMessage(newMessage, validToken, userId);
+            var result = await controller.SendMessage(newMessage, userId);
 
             var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result.Result);
             var returnedMessage = Assert.IsType<TicketMessage>(createdAtActionResult.Value);

@@ -90,10 +90,7 @@ export class UserDetailsComponent {
       return;
     }
 
-    const headers = { 'Authorization': `Bearer ${jwtToken}` };
-    const params = { accountID: accountID };
-
-    this.http.get<any[]>(`${environment.apiUrl}/Transactions`, { headers, params }).subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/Transactions/user/${accountID}`, { headers: this.authService.getHeaders()}).subscribe({
       next: (data) => {
         this.accountTransactions = data;
       },

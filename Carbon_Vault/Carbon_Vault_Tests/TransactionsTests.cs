@@ -81,7 +81,7 @@ namespace Carbon_Vault_Tests_Transactions
             await _controller.PostTransaction(transaction);
 
             // Act
-            var result = await _controller.DeleteTransaction(transaction.Id, validToken, userId);
+            var result = await _controller.DeleteTransaction(transaction.Id);
 
             // Assert
             Assert.IsType<OkResult>(result);
@@ -112,7 +112,7 @@ namespace Carbon_Vault_Tests_Transactions
             await _controller.PostTransaction(transaction);
 
             // Act
-            var result = await _controller.DeleteTransaction(9, userToken, userId);
+            var result = await _controller.DeleteTransaction(9);
 
             // Assert
             Assert.IsType<UnauthorizedResult>(result);

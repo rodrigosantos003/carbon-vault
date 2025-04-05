@@ -31,6 +31,9 @@ namespace Carbon_Vault.Controllers.API
             var project = await _context.Projects.FindAsync(projectId);
             int sellerId = project.OwnerId;
 
+            var sellerAccount = await _context.Account.FindAsync(sellerId);
+            var buyerAccount = await _context.Account.FindAsync(userId);
+
             string payMethod = GetPaymentMethod(paymentMethod);
 
             Transaction t = new Transaction
@@ -38,6 +41,12 @@ namespace Carbon_Vault.Controllers.API
                 SellerId = sellerId,
                 BuyerId = userId,
                 ProjectId = projectId,
+                SellerName = sellerAccount.Name,
+                BuyerName = buyerAccount.Name,
+                ProjectName = project.Name,
+                ProjectCertifier = project.Certification,
+                ProjectDescription = project.Description,
+                ProjectLocation = project.Location,
                 Quantity = quantity,
                 Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
                 State = TransactionState.Approved,
