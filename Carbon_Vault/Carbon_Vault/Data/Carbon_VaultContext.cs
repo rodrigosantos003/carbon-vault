@@ -257,7 +257,7 @@ namespace Carbon_Vault.Data
                     TotalPrice = 12.50,
                     Date = "2025-03-05",
                     State = TransactionState.Approved,
-                    PaymentMethod = "card",
+                    PaymentMethod = "Cartão",
                     CheckoutSession = "cs_123456789"
                 },
                 new Transaction
@@ -270,7 +270,7 @@ namespace Carbon_Vault.Data
                     TotalPrice = 15.75,
                     Date = "2025-03-05",
                     State = TransactionState.Approved,
-                    PaymentMethod = "SEPA",
+                    PaymentMethod = "Transferência Bancária",
                     CheckoutSession = "cs_987456321"
                 }
             );
