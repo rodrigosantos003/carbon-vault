@@ -18,13 +18,33 @@ export class ProjectManagerComponent {
   UserId: string = '';
   selectedProjectId: any;
 
+  /**
+ * Construtor do componente `ProjectManagerComponent`.
+ * Inicializa o componente com os serviços necessários para carregar, exibir e manipular projetos, além de gerenciar a autenticação do utilizador.
+ * 
+ * @param http Serviço para realizar requisições HTTP.
+ * @param alerts Serviço de exibição de alertas.
+ * @param authService Serviço de autenticação e gerenciamento de sessão do utilizador.
+ * @param router Serviço para navegação entre as páginas.
+ */
   constructor(private http: HttpClient, private alerts: AlertsService, private authService: AuthService, private router: Router) {
     this.UserId = this.authService.getUserId();
   }
+
+  /**
+ * Método chamado na inicialização do componente.
+ * - Recupera a lista de projetos chamando o método `getProjects`.
+ */
   ngOnInit(): void {
     this.getProjects();
   }
 
+  /**
+ * Recupera a lista de projetos do servidor.
+ * - Faz uma requisição HTTP para obter os projetos e atualiza a lista exibida no componente.
+ * - Exibe um alerta de carregamento enquanto a requisição está em andamento.
+ * - Exibe um alerta de erro caso ocorra algum problema na requisição.
+ */
   getProjects(): void {
     this.alerts.enableLoading("A carregar Projetos..");
     this.http.get<any[]>(this.projectsURL).subscribe({
@@ -39,18 +59,41 @@ export class ProjectManagerComponent {
     });
   }
 
+  /**
+ * Navega para a página de detalhes de um projeto específico.
+ * 
+ * @param id O ID do projeto a ser visualizado.
+ */
   viewProject(id: number) {
     console.log(id);
     this.router.navigate([`project-manager/${id}`]);
   }
+
+  /**
+ * Retorna o status de um projeto com base no valor do estado.
+ * 
+ * @param state O estado do projeto (0: Ativo, 1: Pendente, 2: Inativo).
+ * @returns O status correspondente ao estado fornecido.
+ */
   getProjectStatus(state: number): string {
     const states = ["Ativo", "Pendente", "inátivo"];
     return states[state] ?? "Unknown"
   }
+
+  /**
+ * Filtra os projetos que estão no estado "Ativo".
+ * 
+ * @returns O número de projetos ativos na lista de projetos.
+ */
   filterActiveProjects(): number {
     return this.projects.filter(project => project.status == 0).length;
   }
 
+  /**
+ * Abre o pop-up de confirmação para eliminar um projeto.
+ * 
+ * @param project_id O ID do projeto a ser eliminado.
+ */
   openPopup(project_id: number) {
     /*console.log("Clicou no projeto: " + project_id);*/
     this.selectedProjectId = project_id;
@@ -63,6 +106,9 @@ export class ProjectManagerComponent {
     }
   }
 
+  /**
+ * Fecha o pop-up de confirmação de eliminar projeto.
+ */
   closePopup() {
     this.selectedProjectId = null;
     const overlay = document.getElementById('modalOverlay');
@@ -74,6 +120,11 @@ export class ProjectManagerComponent {
     }
   }
 
+  /**
+ * Elimina o projeto selecionado.
+ * - Envia uma requisição HTTP DELETE para o servidor para eliminar o projeto.
+ * - Exibe um alerta de sucesso ou erro dependendo do resultado da operação.
+ */
   eliminar() {
     if (this.selectedProjectId) {
       console.log("ID projeto " + this.selectedProjectId);

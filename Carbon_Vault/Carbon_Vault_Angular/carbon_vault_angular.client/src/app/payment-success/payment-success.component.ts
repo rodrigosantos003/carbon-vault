@@ -16,8 +16,26 @@ import { AuthService } from '../auth-service.service';
 })
 export class PaymentSuccessComponent {
   sessionData: any;
+
+  /**
+ * Construtor do componente `PaymentSuccessComponent`.
+ * Inicializa o componente com os serviços necessários para comunicação HTTP, manipulação do carrinho, navegação, alertas e autenticação do utilizador.
+ * 
+ * @param http Serviço para realizar requisições HTTP.
+ * @param cartService Serviço para manipulação do carrinho de compras.
+ * @param router Serviço de navegação do Angular.
+ * @param alerts Serviço de exibição de alertas.
+ * @param authService Serviço de autenticação do utilizador.
+ * @param route Serviço para acessar os parâmetros da rota.
+ */
   constructor(private http: HttpClient, private cartService: CartService, public router: Router, private alerts: AlertsService, private authService: AuthService, private route: ActivatedRoute) { }
 
+  /**
+ * Método que é executado durante a inicialização do componente.
+ * - Limpa o carrinho de compras.
+ * - Verifica o tipo de pagamento realizado (`credits` ou `report`).
+ * - Executa a ação apropriada dependendo do tipo de pagamento.
+ */
   ngOnInit() {
     this.cartService.clearCart();
     const checkoutSession = sessionStorage.getItem("checkoutSession");
@@ -39,6 +57,12 @@ export class PaymentSuccessComponent {
     }
   }
 
+  /**
+ * Atualiza o estado do relatório após o pagamento bem-sucedido.
+ * - Se o pagamento for relacionado a um relatório, a função realiza uma requisição PUT para atualizar o estado do relatório para "concluído".
+ * 
+ * @param checkoutSession ID da sessão de checkout.
+ */
   updateReport(checkoutSession: string) {
     const id = sessionStorage.getItem("reportID")
 
@@ -59,6 +83,13 @@ export class PaymentSuccessComponent {
     }
   }
 
+  /**
+ * Envia a fatura para o utilizador após o pagamento bem-sucedido.
+ * - Faz uma requisição GET para enviar a fatura associada à sessão de checkout.
+ * - Exibe um alerta de sucesso ou erro baseado na resposta da API.
+ * 
+ * @param checkoutSessionId ID da sessão de checkout.
+ */
   sendInvoice(checkoutSessionId: string) {
     const apiUrl = `${environment.apiUrl}/UserPayments/invoice/${checkoutSessionId}/send`;
     this.http.get(apiUrl).subscribe({

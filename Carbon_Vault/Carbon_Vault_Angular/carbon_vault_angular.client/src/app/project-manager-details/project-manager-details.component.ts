@@ -51,17 +51,41 @@ export class ProjectManagerDetailsComponent {
     { id: 13, nome: 'Partnership', label: 'Parcerias Sustentáveis' }
   ];
 
+  /**
+ * Construtor do componente `ProjectManagerDetailsComponent`.
+ * Inicializa o componente com os serviços necessários para carregar, exibir e manipular os detalhes do projeto.
+ * 
+ * @param http Serviço para realizar requisições HTTP.
+ * @param route Serviço para acessar parâmetros da rota ativa.
+ * @param authService Serviço de autenticação e gerenciamento de sessão do utilizador.
+ * @param alerts Serviço de exibição de alertas.
+ */
   constructor(private http: HttpClient, private route: ActivatedRoute, private authService: AuthService, private alerts: AlertsService) { }
 
+  /**
+ * Método chamado na inicialização do componente.
+ * - Recupera os detalhes do projeto a partir do ID na URL.
+ */
   async ngOnInit() {
     const projectId = this.route.snapshot.params['id'];
     this.fetchProjectDetails(projectId);
   }
 
+  /**
+ * Remove um arquivo da lista de documentos.
+ * 
+ * @param index O índice do arquivo a ser removido.
+ */
   removeFile(index: number) {
     this.documentos.splice(index, 1);
   }
 
+  /**
+ * Recupera os detalhes de um projeto específico.
+ * - Faz uma requisição HTTP para obter as informações do projeto e atualiza o componente com esses dados.
+ * 
+ * @param projectId O ID do projeto a ser recuperado.
+ */
   fetchProjectDetails(projectId: number) {
     this.http.get(`${this.apiURL}/${projectId}`).subscribe({
       next: (response: any) => {
@@ -90,10 +114,19 @@ export class ProjectManagerDetailsComponent {
     });
   }
 
+  /**
+ * Verifica se um crédito pode ser vendido.
+ * 
+ * @param credit O crédito a ser verificado.
+ * @returns Verdadeiro se o crédito pode ser vendido, falso caso contrário.
+ */
   getCreditSaleStatus(credit: any): boolean {
     return this.project.carbonCredits.indexOf(credit) < this.project.creditsForSale;
   }
 
+  /**
+ * Abre o pop-up para adicionar ou editar créditos de carbono.
+ */
   openPopup() {
     const overlay = document.getElementById('modalOverlay');
     const delPopup = document.getElementById('credits-form');
@@ -104,6 +137,9 @@ export class ProjectManagerDetailsComponent {
     }
   }
 
+  /**
+ * Fecha o pop-up para adicionar ou editar créditos de carbono.
+ */
   closePopup() {
     const overlay = document.getElementById('modalOverlay');
     const delPopup = document.getElementById('credits-form');
@@ -114,6 +150,11 @@ export class ProjectManagerDetailsComponent {
     }
   }
 
+  /**
+ * Alterna entre o modo de edição e o modo de visualização.
+ * - Quando entra em modo de edição, carrega os documentos atuais.
+ * - Quando sai de modo de edição, salva as alterações feitas.
+ */
   async toggleEditMode() {
     if (this.isEditable) {
       // Save changes when exiting edit mode
@@ -128,6 +169,10 @@ export class ProjectManagerDetailsComponent {
     this.isEditable = !this.isEditable;
   }
 
+  /**
+ * Salva as informações de créditos de carbono (quantidade e preço).
+ * - Valida os dados inseridos antes de enviar a requisição para o servidor.
+ */
   saveCarbonInfo() {
     if (this.newCreditsForSale < 0) {
       this.alerts.enableError("A quantidade de créditos para venda não pode ser negativa");
@@ -160,12 +205,24 @@ export class ProjectManagerDetailsComponent {
     });
   }
 
+  /**
+ * Método chamado durante o evento de arraste (drag) de arquivos.
+ * - Impede o comportamento padrão do navegador e permite o drop de arquivos.
+ * 
+ * @param event O evento de arraste.
+ */
   onDragOver(event: DragEvent) {
     event.preventDefault();
     event.stopPropagation();
     event.dataTransfer!.dropEffect = 'copy';
   }
 
+  /**
+ * Método chamado quando um arquivo é solto na área de drop.
+ * - Valida os arquivos antes de adicioná-los à lista de documentos.
+ * 
+ * @param event O evento de drop.
+ */
   onDrop(event: DragEvent) {
     event.preventDefault();
     event.stopPropagation();
@@ -192,11 +249,22 @@ export class ProjectManagerDetailsComponent {
     }
   }
 
+  /**
+ * Método chamado quando o arquivo é arrastado para fora da área de drop.
+ * 
+ * @param event O evento de dragleave.
+ */
   onDragLeave(event: DragEvent) {
     event.preventDefault();
     event.stopPropagation();
   }
 
+  /**
+ * Método chamado quando uma categoria é selecionada ou desmarcada.
+ * 
+ * @param categoriaId O ID da categoria.
+ * @param event O evento gerado pela seleção/desmarcação.
+ */
   onCategoriaChange(categoriaId: number, event: any) {
     if (event.target.checked) {
       this.categoriasSelecionadas.push(categoriaId);
@@ -204,6 +272,12 @@ export class ProjectManagerDetailsComponent {
       this.categoriasSelecionadas = this.categoriasSelecionadas.filter(id => id !== categoriaId);
     }
   }
+
+  /**
+ * Carrega os arquivos associados a um projeto específico.
+ * 
+ * @param projectId O ID do projeto cujos arquivos devem ser carregados.
+ */
   loadProjectFiles(projectId: number) {
     this.http.get<any[]>(`${this.apiURL}/${projectId}/files`).subscribe({
       next: (files) => {
@@ -213,11 +287,22 @@ export class ProjectManagerDetailsComponent {
     });
   }
 
+  /**
+ * Método chamado quando o utilizador seleciona arquivos para upload.
+ * 
+ * @param event O evento gerado pela seleção de arquivos.
+ */
   onFileChange(event: any) {
     const newFiles = Array.from(event.target.files) as File[];
     this.documentos = [...this.documentos, ...newFiles];
   }
 
+  /**
+ * Método chamado quando o utilizador seleciona uma imagem para upload.
+ * - Valida o tipo e o tamanho da imagem antes de carregá-la.
+ * 
+ * @param event O evento gerado pela seleção de uma imagem.
+ */
   onImageChange(event: any): void {
     const file = event.target.files[0];
     if (!file) return;
@@ -242,6 +327,12 @@ export class ProjectManagerDetailsComponent {
     reader.readAsDataURL(file);
   }
 
+  /**
+ * Faz o download de um arquivo associado ao projeto.
+ * 
+ * @param filePath O caminho do arquivo no servidor.
+ * @param fileName O nome do arquivo para download.
+ */
   downloadFile(filePath: string, fileName: string) {
     const url = `${filePath}`;
     const a = document.createElement('a');
@@ -254,15 +345,24 @@ export class ProjectManagerDetailsComponent {
     document.body.removeChild(a);
   }
 
+  /**
+ * Ativa o modo de edição para adicionar novos arquivos ao projeto.
+ */
   changeToEditMode() {
     this.isAddingFiles = true;
   }
 
+  /**
+ * Reverte para o modo de edição sem adicionar novos arquivos.
+ */
   RevertToEditMode() {
     this.isAddingFiles = false;
     this.documentos = [];
   }
 
+  /**
+ * Envia as alterações feitas ao servidor, incluindo a atualização de imagem, documentos e informações do projeto.
+ */
   submitChanges() {
     // Update image
     if (this.imagem) {

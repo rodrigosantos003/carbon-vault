@@ -49,8 +49,22 @@ export class ProjectManagerDetailsAdminComponent {
     { id: 13, nome: 'Partnership', label: 'Parcerias Sustentáveis' }
   ];
 
+  /**
+   * Construtor do componente.
+   *
+   * @param {HttpClient} http - Serviço para realizar requisições HTTP.
+   * @param {ActivatedRoute} route - Serviço para obter informações da rota.
+   * @param {AuthService} authService - Serviço para autenticação.
+   * @param {AlertsService} alerts - Serviço para mostrar alertas.
+   * @param {Location} location - Serviço para navegação na aplicação.
+   */
   constructor(private http: HttpClient, private route: ActivatedRoute, private authService: AuthService, private alerts: AlertsService, private location: Location) { }
 
+  /**
+   * Inicializa o componente, carregando os detalhes do projeto e arquivos.
+   *
+   * @returns {void}
+   */
   ngOnInit() {
     this.alerts.enableLoading("A carregar informação do projeto...");
     const projectId = this.route.snapshot.params['id'];
@@ -59,11 +73,22 @@ export class ProjectManagerDetailsAdminComponent {
     this.alerts.disableLoading();
   }
 
+  /**
+   * Obtém o status de um projeto baseado no estado numérico.
+   *
+   * @param {number} state - O estado do projeto (0: Ativo, 1: Pendente, 2: Inativo).
+   * @returns {string} O nome do estado do projeto.
+   */
   getProjectStatus(state: number): string {
     const states = ["Ativo", "Pendente", "inátivo"];
     return states[state] ?? "Unknown"
   }
 
+  /**
+   * Aprova o projeto, gerando créditos de carbono.
+   *
+   * @returns {void}
+   */
   approveProject() {
     const projectId = this.project.id;
     const url = `${this.apiURL}/${projectId}/approve`;
@@ -73,7 +98,6 @@ export class ProjectManagerDetailsAdminComponent {
       this.alerts.enableError('O número de créditos deve ser maior que 0.');
       return;
     }
-
 
     const headers = this.authService.getHeaders();
     headers.append('CreditsGenerated', creditsGenerated.toString());
@@ -90,6 +114,11 @@ export class ProjectManagerDetailsAdminComponent {
     });
   }
 
+  /**
+   * Adiciona créditos ao projeto.
+   *
+   * @returns {void}
+   */
   addCredits() {
     const projectId = this.project.id;
     const url = `${this.apiURL}/${projectId}/addCredits`;
@@ -115,6 +144,12 @@ export class ProjectManagerDetailsAdminComponent {
     });
   }
 
+  /**
+   * Obtém os detalhes do projeto a partir da API.
+   *
+   * @param {number} projectId - O ID do projeto a ser carregado.
+   * @returns {Promise<void>}
+   */
   async fetchProjectDetails(projectId: number) {
     this.http.get(`${this.apiURL}/${projectId}`).subscribe((response: any) => {
       this.project = response;
@@ -135,12 +170,24 @@ export class ProjectManagerDetailsAdminComponent {
     });
   }
 
+  /**
+   * Função de callback para o evento de drag over.
+   *
+   * @param {DragEvent} event - O evento de drag over.
+   * @returns {void}
+   */
   onDragOver(event: DragEvent) {
     event.preventDefault();
     event.stopPropagation();
     event.dataTransfer!.dropEffect = 'copy';
   }
 
+  /**
+   * Função de callback para o evento de drop.
+   *
+   * @param {DragEvent} event - O evento de drop.
+   * @returns {void}
+   */
   onDrop(event: DragEvent) {
     event.preventDefault();
     event.stopPropagation();
@@ -149,15 +196,28 @@ export class ProjectManagerDetailsAdminComponent {
     if (fileList && fileList.length > 0) {
       const newFiles = Array.from(fileList);
 
-
       this.documentos = [...this.documentos, ...newFiles];
     }
   }
 
+  /**
+   * Função de callback para o evento de drag leave.
+   *
+   * @param {DragEvent} event - O evento de drag leave.
+   * @returns {void}
+   */
   onDragLeave(event: DragEvent) {
     event.preventDefault();
     event.stopPropagation();
   }
+
+  /**
+   * Função chamada ao alterar uma categoria selecionada.
+   *
+   * @param {number} categoriaId - O ID da categoria.
+   * @param {Event} event - O evento que contém o valor alterado.
+   * @returns {void}
+   */
   onCategoriaChange(categoriaId: number, event: any) {
     if (event.target.checked) {
       this.categoriasSelecionadas.push(categoriaId);
@@ -165,15 +225,36 @@ export class ProjectManagerDetailsAdminComponent {
       this.categoriasSelecionadas = this.categoriasSelecionadas.filter(id => id !== categoriaId);
     }
   }
+
+  /**
+   * Carrega os arquivos do projeto a partir da API.
+   *
+   * @param {number} projectId - O ID do projeto para carregar os arquivos.
+   * @returns {Promise<void>}
+   */
   async loadProjectFiles(projectId: number): Promise<void> {
     this.http.get<any[]>(`${this.apiURL}/${projectId}/files`).subscribe((files) => {
       this.documentosAtuais = files.filter(file => file.filePath != this.project.imageUrl);
     });
   }
+
+  /**
+   * Função chamada ao alterar os arquivos do projeto.
+   *
+   * @param {Event} event - O evento de mudança dos arquivos.
+   * @returns {void}
+   */
   onFileChange(event: any) {
     const newFiles = Array.from(event.target.files) as File[];
     this.documentos = [...this.documentos, ...newFiles];
   }
+
+  /**
+   * Elimina um arquivo associado ao projeto.
+   *
+   * @param {number} fileId - O ID do arquivo a ser eliminado.
+   * @returns {void}
+   */
   deleteFile(fileId: number): void {
     const projectId = this.project.id;
     this.http.delete<void>(`${this.apiURL}/${projectId}/files/${fileId}`, { headers: this.authService.getHeaders() }).subscribe(() => {
@@ -187,6 +268,13 @@ export class ProjectManagerDetailsAdminComponent {
       console.error('Error deleting file:', error);
     });
   }
+
+  /**
+   * Altera o estado do projeto.
+   *
+   * @param {number} newStatus - O novo estado do projeto.
+   * @returns {void}
+   */
   changeProjectStatus(newStatus: number) {
     const projectId = this.project.id;
     const url = `${this.apiURL}/${projectId}/ChangeStatus`;
@@ -209,6 +297,11 @@ export class ProjectManagerDetailsAdminComponent {
     );
   }
 
+  /**
+   * Rejeita o projeto, fornecendo feedback.
+   *
+   * @returns {void}
+   */
   rejectProject() {
     if (!this.rejectionFeedback || this.rejectionFeedback.trim() === "") {
       this.alerts.enableError('Por favor, insira um feedback antes de rejeitar o projeto.');
@@ -233,11 +326,14 @@ export class ProjectManagerDetailsAdminComponent {
         this.alerts.enableError('Ocorreu um erro ao rejeitar o projeto. Tente novamente mais tarde.');
       }
     );
-
   }
 
-
-
+  /**
+   * Função chamada ao alterar a imagem do projeto.
+   *
+   * @param {Event} event - O evento de mudança da imagem.
+   * @returns {void}
+   */
   onImageChange(event: any): void {
     const file = event.target.files[0];
     if (file) {
@@ -249,6 +345,14 @@ export class ProjectManagerDetailsAdminComponent {
       reader.readAsDataURL(file);
     }
   }
+
+  /**
+   * Função chamada para baixar um arquivo do projeto.
+   *
+   * @param {string} filePath - O caminho do arquivo a ser baixado.
+   * @param {string} fileName - O nome do arquivo a ser baixado.
+   * @returns {void}
+   */
   downloadFile(filePath: string, fileName: string) {
     const url = `${filePath}`;
     const a = document.createElement('a');
@@ -261,16 +365,39 @@ export class ProjectManagerDetailsAdminComponent {
     document.body.removeChild(a);
   }
 
+  /**
+   * Altera o modo de edição para permitir a adição de arquivos.
+   *
+   * @returns {void}
+   */
   changeToEditMode() {
     this.isAddingFiles = true;
   }
+
+  /**
+   * Reverte o modo de edição, removendo arquivos selecionados.
+   *
+   * @returns {void}
+   */
   RevertToEditMode() {
     this.isAddingFiles = false;
     this.documentos = [];
   }
+
+  /**
+   * Navega para a página anterior.
+   *
+   * @returns {void}
+   */
   goBack(): void {
     this.location.back();
   }
+
+  /**
+   * Submete as alterações feitas no projeto.
+   *
+   * @returns {Promise<void>}
+   */
   async onSubmit(): Promise<void> {
     if (this.imagem) {
       const projectId = this.project.id;
@@ -299,6 +426,9 @@ export class ProjectManagerDetailsAdminComponent {
   }
 }
 
+/**
+ * Interface que representa um documento associado a um projeto.
+ */
 interface Documento {
   id: number;
   fileName: string;

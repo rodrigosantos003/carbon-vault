@@ -18,7 +18,7 @@ export class AdminReportsComponent {
   reports: Report[] = [];
   selectedReport: Report = { id: 0, lastUpdate: "", checkoutSession: "", text: "", reportState: 0, userID: 0 };
   reportText: string = "";
-  pendingReportsCount : number = 0;
+  pendingReportsCount: number = 0;
   doneReportsCount: number = 0;
   constructor(private http: HttpClient, private auth: AuthService, private alerts: AlertsService, public router: Router) { }
 
@@ -26,7 +26,13 @@ export class AdminReportsComponent {
     this.fetchReports();
   }
 
-  fetchReports() {
+  /**
+ * Obtém todos os relatórios do backend e filtra apenas os pendentes (estado = 1).
+ * Apresenta um *loader* enquanto os dados são carregados.
+ * Em caso de erro, apresenta uma mensagem de erro ao utilizador.
+ * @returns {void}
+ */
+  fetchReports(): void {
     this.alerts.enableLoading("A carregar relatórios");
 
     const url = `${environment.apiUrl}/Reports`;
@@ -46,7 +52,13 @@ export class AdminReportsComponent {
     });
   }
 
-  downloadFiles(id: number) {
+  /**
+ * Faz uma requisição para obter os ficheiros associados a um relatório específico e inicia a criação de um ficheiro ZIP.
+ * 
+ * @param {number} id - O ID do relatório cujos ficheiros se pretende descarregar.
+ * @returns {void}
+ */
+  downloadFiles(id: number): void {
     this.alerts.enableLoading("A descarregar ficheiros");
 
     const url = `${environment.apiUrl}/reports/${id}/files`;
@@ -67,6 +79,13 @@ export class AdminReportsComponent {
     });
   }
 
+  /**
+ * Cria um ficheiro ZIP com os ficheiros recebidos e faz o *download* do mesmo.
+ * Utiliza a biblioteca JSZip para gerar o ZIP e Kendo File Saver para guardar localmente.
+ * 
+ * @param {ReportFile[]} files - Lista de ficheiros a incluir no ZIP.
+ * @returns {Promise<void>} Promessa que representa a conclusão da criação do ZIP.
+ */
   private async createZip(files: ReportFile[]) {
     const zip = new JSZip();
     const filePromises = files.map(file => this.fetchFile(file, zip));
@@ -84,6 +103,13 @@ export class AdminReportsComponent {
     });
   }
 
+  /**
+ * Obtém o conteúdo binário de um ficheiro remoto e adiciona-o ao objeto ZIP.
+ * 
+ * @param {ReportFile} file - O ficheiro a ser obtido.
+ * @param {JSZip} zip - A instância do ZIP à qual o ficheiro será adicionado.
+ * @returns {Promise<void>} Promessa que representa a adição do ficheiro ao ZIP.
+ */
   private async fetchFile(file: ReportFile, zip: JSZip) {
     try {
       const response = await fetch(file.filePath);
@@ -94,6 +120,11 @@ export class AdminReportsComponent {
     }
   }
 
+  /**
+ * Envia uma resposta a um relatório selecionado, alterando o estado do mesmo para "respondido".
+ * Apresenta mensagens de sucesso ou erro conforme o resultado da operação.
+ * @returns {void}
+ */
   answerReport() {
     const reportURL = `${environment.apiUrl}/Reports/${this.selectedReport.id}`;
 
@@ -116,6 +147,12 @@ export class AdminReportsComponent {
     });
   }
 
+  /**
+ * Abre a janela/modal de resposta para um relatório específico.
+ * 
+ * @param {Report} report - O relatório que será respondido.
+ * @returns {void}
+ */
   openAnswer(report: Report) {
     this.selectedReport = report;
     const overlay = document.getElementById('answerPopup');
@@ -127,6 +164,10 @@ export class AdminReportsComponent {
     }
   }
 
+  /**
+ * Fecha a janela/modal de resposta e limpa os dados do relatório selecionado.
+ * @returns {void}
+ */
   closeAnswer() {
     this.selectedReport = { id: 0, lastUpdate: "", checkoutSession: "", text: "", reportState: 0, userID: 0 };
     const overlay = document.getElementById('answerPopup');

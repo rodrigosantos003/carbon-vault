@@ -21,18 +21,40 @@ export class ProjectCardComponent {
   projectData: any = null;
   carbonCreditsForSale: number = 0;
 
+  /**
+ * Construtor do componente `ProjectCardComponent`.
+ * Inicializa o componente com os serviços necessários para manipulação do carrinho, exibição de alertas e requisições HTTP.
+ * 
+ * @param cartService Serviço de manipulação do carrinho de compras.
+ * @param alerts Serviço de exibição de alertas.
+ * @param http Serviço para realizar requisições HTTP.
+ */
   constructor(private cartService: CartService, private alerts: AlertsService, private http: HttpClient) { }
 
+  /**
+ * Método chamado na inicialização do componente.
+ * - Define o valor padrão da quantidade como 1.
+ */
   ngOnInit() {
     this.quantity = 1;
   }
 
+  /**
+ * Valida a quantidade de créditos de carbono que o utilizador deseja adicionar ao carrinho.
+ * - Se a quantidade for menor que 1 ou não for um número válido, o valor é redefinido para 1.
+ */
   validateQuantity() {
     if (this.quantity < 1 || isNaN(this.quantity)) {
       this.quantity = 1;
     }
   }
 
+  /**
+ * Obtém a quantidade de créditos de carbono disponíveis para venda de um projeto.
+ * 
+ * @param projectId ID do projeto.
+ * @returns Um Observable que emite os dados do projeto, incluindo a quantidade de créditos de carbono disponíveis.
+ */
   getProjectQuantityForSale(projectId: number): Observable<any> {
     return this.http.get(`${environment.apiUrl}/projects/${projectId}`).pipe(
       tap((data) => {
@@ -42,11 +64,17 @@ export class ProjectCardComponent {
     );
   }
 
+  /**
+ * Adiciona o item ao carrinho, validando se há créditos suficientes disponíveis para o projeto.
+ * - Verifica se o número de créditos disponíveis é suficiente para a quantidade solicitada.
+ * - Exibe um alerta de erro caso não haja créditos suficientes ou o projeto não tenha créditos disponíveis.
+ * - Se a validação for bem-sucedida, o item é adicionado ao carrinho e o utilizador recebe um alerta de sucesso.
+ */
   addToCart() {
     this.getProjectQuantityForSale(this.projectID).subscribe({
       next: () => {
         console.log("Creditos = " + this.carbonCreditsForSale);
-;        if (this.carbonCreditsForSale < 1) {
+        ; if (this.carbonCreditsForSale < 1) {
           this.alerts.enableError("Este projeto não tem créditos disponveis para venda, tente mais tarde.", 5);
           return;
         }
@@ -75,5 +103,4 @@ export class ProjectCardComponent {
       }
     });
   }
-
 }

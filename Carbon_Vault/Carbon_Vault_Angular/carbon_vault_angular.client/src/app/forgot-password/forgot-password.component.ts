@@ -17,6 +17,13 @@ export class ForgotPasswordComponent {
   isEmailSent: boolean | null = null; // Estado da envio do email
   emailErrorMessage: string | null = null;
 
+  /**
+ * Injeta os serviços necessários:
+ * - FormBuilder: para criar e gerir o formulário reativo
+ * - HttpClient: para enviar requisições HTTP
+ * - Router: para navegação entre páginas
+ * - AlertsService: para exibir alertas de sucesso, erro e carregamento
+ */
   constructor(private fb: FormBuilder, private http: HttpClient, private router: Router, private alerts: AlertsService) {
     // Inicialização do FormGroup com controlos e validações
     this.forgotPasswordForm = this.fb.group({
@@ -24,6 +31,10 @@ export class ForgotPasswordComponent {
     });
   }
 
+  /**
+ * Método chamado quando o utilizador submete o formulário.
+ * Verifica se o formulário é válido e, em caso afirmativo, chama o método para enviar o e-mail de recuperação.
+ */
   onSubmit() {
     if (this.forgotPasswordForm.valid) {
       const formData = this.forgotPasswordForm.value;
@@ -33,6 +44,13 @@ export class ForgotPasswordComponent {
     }
   }
 
+  /**
+ * Envia uma requisição GET para o servidor, pedindo o envio de um e-mail de recuperação de palavra-passe.
+ * - Se o e-mail for válido, é enviado o e-mail de recuperação e o utilizador é redirecionado para a página de login.
+ * - Caso contrário, é exibida uma mensagem de erro.
+ * 
+ * @param email O endereço de e-mail fornecido pelo utilizador
+ */
   sendClientEmail(email: string) {
     this.alerts.enableLoading("A enviar recuperação de palavra-passe...");
 
@@ -49,7 +67,7 @@ export class ForgotPasswordComponent {
           this.alerts.enableError("E-mail inválido");
         }
       },
-      error: (error) => {
+      error: () => {
         this.alerts.disableLoading();
         this.alerts.enableError("Erro ao enviar recuperação de palavra-passe");
       }
