@@ -1,9 +1,9 @@
-import { Component,Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-support-dashboard',
   standalone: false,
-  
+
   templateUrl: './support-dashboard.component.html',
   styleUrl: './support-dashboard.component.css'
 })

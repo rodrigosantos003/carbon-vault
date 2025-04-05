@@ -1,5 +1,19 @@
 import jsPDF from 'jspdf';
 
+/**
+ * Gera o conteúdo HTML para o certificado de aquisição de créditos de carbono.
+ * 
+ * @param {Object} info - Informações sobre a aquisição de créditos de carbono.
+ * @param {string} info.nomeAdquirente - Nome do adquirente dos créditos de carbono.
+ * @param {string} info.dataAquisicao - Data de aquisição dos créditos de carbono.
+ * @param {number} info.quantidadeCreditos - Quantidade de créditos adquiridos (em toneladas).
+ * @param {string} info.nomeProjeto - Nome do projeto de créditos de carbono.
+ * @param {string} info.localizacaoProjeto - Localização do projeto de créditos de carbono.
+ * @param {string} info.certificador - Certificador responsável pela verificação do projeto.
+ * @param {string} info.descricaoProjeto - Descrição do projeto de créditos de carbono.
+ * 
+ * @returns {string} O conteúdo HTML gerado para o certificado.
+ */
 function generateHtml(info: any): string {
   return `
   <body>
@@ -131,14 +145,27 @@ function generateHtml(info: any): string {
 `;
 }
 
+/**
+ * Gera e faz o download de um PDF contendo o certificado de aquisição de créditos de carbono.
+ * Utiliza a biblioteca jsPDF para gerar o arquivo PDF com as informações do certificado.
+ * 
+ * @param {Object} info - Informações sobre a aquisição de créditos de carbono.
+ * @param {string} info.nomeAdquirente - Nome do adquirente dos créditos de carbono.
+ * @param {string} info.dataAquisicao - Data de aquisição dos créditos de carbono.
+ * @param {number} info.quantidadeCreditos - Quantidade de créditos adquiridos (em toneladas).
+ * @param {string} info.nomeProjeto - Nome do projeto de créditos de carbono.
+ * @param {string} info.localizacaoProjeto - Localização do projeto de créditos de carbono.
+ * @param {string} info.certificador - Certificador responsável pela verificação do projeto.
+ * @param {string} info.descricaoProjeto - Descrição do projeto de créditos de carbono.
+ */
 export function downloadPDF(
   info: {
-    nomeAdquirente: string, 
-    dataAquisicao: string, 
-    quantidadeCreditos: number, 
-    nomeProjeto: string, 
-    localizacaoProjeto: string, 
-    certificador: string, 
+    nomeAdquirente: string,
+    dataAquisicao: string,
+    quantidadeCreditos: number,
+    nomeProjeto: string,
+    localizacaoProjeto: string,
+    certificador: string,
     descricaoProjeto: string,
   }): void {
 

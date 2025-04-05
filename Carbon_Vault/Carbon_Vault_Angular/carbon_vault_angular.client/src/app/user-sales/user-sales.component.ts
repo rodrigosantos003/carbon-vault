@@ -16,14 +16,31 @@ export class UserSalesComponent {
   sales: Sale[] = [];
   private salesURL: string;
 
+  /**
+   * Construtor do componente.
+   * Inicializa o componente com os serviços necessários para autenticação, alertas, e navegação.
+   *
+   * @param http Serviço HTTP para comunicação com a API.
+   * @param alerts Serviço de alertas para mostrar mensagens de sucesso ou erro.
+   * @param authService Serviço de autenticação para obter o ID do utilizador.
+   * @param router Serviço de navegação para redirecionar o utilizador.
+   */
   constructor(private http: HttpClient, private alerts: AlertsService, private authService: AuthService, private router: Router) {
     this.salesURL = `${environment.apiUrl}/Transactions/type/1/user/${this.authService.getUserId()}`;
   }
 
+  /**
+   * Método do ciclo de vida do Angular, chamado quando o componente é inicializado.
+   * Chama o método `getSales` para carregar as vendas do utilizador.
+   */
   ngOnInit(): void {
     this.getSales();
   }
 
+  /**
+   * Método para obter as vendas do utilizador a partir da API.
+   * Atualiza a lista de vendas e mostra informações de carregamento ou erro.
+   */
   getSales(): void {
     this.alerts.enableLoading("A carregar vendas...");
     this.http.get<Sale[]>(this.salesURL, {
@@ -40,11 +57,24 @@ export class UserSalesComponent {
     })
   }
 
+  /**
+   * Método para navegar para os detalhes de uma transação.
+   * Redireciona o utilizador para a página de detalhes da transação com base no ID fornecido.
+   *
+   * @param transaction_id ID da transação cujos detalhes devem ser visualizados.
+   */
   transactionDetails(transaction_id: number) {
     console.log("ID = " + transaction_id);
     this.router.navigate([`transaction-details/${transaction_id}`]);
   }
 
+  /**
+   * Método para obter o estado de uma venda de acordo com o seu valor.
+   * Converte o estado da venda para um texto mais compreensível.
+   *
+   * @param state Estado da venda, como "Approved", "Rejected", ou "Pending".
+   * @returns O estado da venda em formato textual (por exemplo, "Concluído", "Rejeitado", "Pendente").
+   */
   getState(state: string): string {
     switch (state) {
       case "Approved":
@@ -59,6 +89,10 @@ export class UserSalesComponent {
   }
 }
 
+/**
+ * Interface que define a estrutura de uma venda.
+ * Representa os dados necessários para mostrar uma venda, incluindo seu estado, projeto, quantidade e método de pagamento.
+ */
 interface Sale {
   id: number,
   project: string,

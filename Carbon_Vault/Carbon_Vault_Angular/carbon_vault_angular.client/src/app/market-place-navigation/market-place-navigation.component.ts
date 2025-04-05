@@ -18,6 +18,13 @@ export class MarketPlaceNavigationComponent {
 
   userId: string;
   userInitial: string;
+
+  /**
+ * Injeta os serviços necessários para o funcionamento do componente:
+ * - `HttpClient`: Para fazer requisições à API e obter dados do utilizador.
+ * - `Router`: Para navegação entre páginas.
+ * - `AuthService`: Para verificar o estado de autenticação do utilizador.
+ */
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -26,6 +33,12 @@ export class MarketPlaceNavigationComponent {
     this.userInitial = ''
     this.userId = this.authService.getUserId();
   }
+
+  /**
+ * Método de inicialização do componente. 
+ * Faz uma requisição HTTP para obter as informações do utilizador logado (como inicial do nome) 
+ * e configura o texto do botão de login com base no estado de autenticação.
+ */
   ngOnInit(): void {
     const url = `${environment.apiUrl}/accounts/${this.userId}`;
 
@@ -41,10 +54,15 @@ export class MarketPlaceNavigationComponent {
 
       }
     );
-    this.changeLoginBtnText();
 
+    this.changeLoginBtnText();
   }
 
+  /**
+ * Altera o texto e o comportamento do botão de login/terminar sessão com base no estado de autenticação do utilizador.
+ * Se o utilizador estiver logado, o texto é alterado para "Terminar Sessão" e o botão executa o logout.
+ * Caso contrário, o texto é alterado para "Entrar" e o botão redireciona o utilizador para a página de login.
+ */
   changeLoginBtnText(): void {
     this.isUserLoggedIn = this.authService.isAuthenticated();
     if (this.isUserLoggedIn) {
@@ -61,14 +79,26 @@ export class MarketPlaceNavigationComponent {
       }
     }
   }
+
+  /**
+ * Navega para a página de dashboard do utilizador.
+ */
   navigateToDashboard(): void {
     this.router.navigate(['/dashboard']);
 
   }
+
+  /**
+ * Navega para a página inicial (landing page).
+ */
   navigateToLanding(): void {
     this.router.navigate(['/']);
 
   }
+
+  /**
+ * Navega para a página do marketplace onde os utilizadors podem visualizar e comprar créditos de carbono.
+ */
   navigateToMarketPlace(): void {
     this.router.navigate(['/marketplace']);
 

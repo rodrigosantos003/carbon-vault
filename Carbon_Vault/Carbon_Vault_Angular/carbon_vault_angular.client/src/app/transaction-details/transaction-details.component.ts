@@ -30,8 +30,20 @@ export class TransactionDetailsComponent {
   projectCertifier: string = ''; // Certificador do projeto
   projectDescription: string = ''; // Descrição do projeto
 
+  /**
+   * Construtor do componente.
+   *
+   * @param route Serviço para obter parâmetros da rota.
+   * @param http Cliente HTTP para requisições à API.
+   * @param auth Serviço de autenticação para obter ID do utilizador e headers.
+   * @param alerts Serviço de alertas e carregamentos.
+   */
   constructor(private route: ActivatedRoute, private http: HttpClient, private auth: AuthService, private alerts: AlertsService) { }
 
+  /**
+   * Ciclo de vida do componente. É executado quando o componente é inicializado.
+   * Obtém os detalhes da transação com base no ID da rota.
+   */
   ngOnInit() {
     this.transactionId = this.route.snapshot.paramMap.get('id') ?? "";
 
@@ -44,7 +56,7 @@ export class TransactionDetailsComponent {
 
     var userId = this.auth.getUserId();
 
-    this.http.get(url, { headers: this.auth.getHeaders()}).subscribe((data: any) => {
+    this.http.get(url, { headers: this.auth.getHeaders() }).subscribe((data: any) => {
       var type;
 
       switch (userId) {
@@ -78,6 +90,10 @@ export class TransactionDetailsComponent {
     });
   }
 
+  /**
+   * Permite descarregar a fatura da transação.
+   * A fatura é aberta numa nova aba do navegador.
+   */
   downloadInvoice() {
     this.alerts.enableLoading("A obter fatura...");
 
@@ -95,6 +111,10 @@ export class TransactionDetailsComponent {
     })
   }
 
+  /**
+   * Gera e descarrega o certificado da transação em formato PDF,
+   * usando os dados preenchidos do projeto e do comprador.
+   */
   downloadCertificate() {
     const info = {
       nomeAdquirente: this.transactionBuyer,

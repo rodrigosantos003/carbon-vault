@@ -9,7 +9,7 @@ export class CartService {
   constructor(private cookieService: CookieService, private authService: AuthService) { }
 
   private getUserId(): string {
-    // Simula a obtenção do ID do usuário do localStorage ou JWT
+    // Simula a obtenção do ID do utilizador do localStorage ou JWT
     return this.authService.getUserId() || 'guest';
   }
 

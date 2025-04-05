@@ -1,5 +1,15 @@
 import jsPDF from 'jspdf';
 
+/**
+ * Gera o conteúdo HTML para o relatório de emissões de carbono.
+ * 
+ * @param {Object} info - Informações sobre o relatório de emissões de carbono.
+ * @param {string} info.client - Nome do cliente que solicitou o relatório.
+ * @param {string} info.reportDate - Data do relatório.
+ * @param {string} info.reportText - Texto do relatório, contendo informações detalhadas sobre as emissões.
+ * 
+ * @returns {string} O conteúdo HTML gerado para o relatório de emissões.
+ */
 function generateHtml(info: any): string {
   return `
   <body>
@@ -119,6 +129,15 @@ function generateHtml(info: any): string {
 `;
 }
 
+/**
+ * Gera e faz o download de um PDF contendo o relatório de emissões de carbono.
+ * Utiliza a biblioteca jsPDF para gerar o arquivo PDF com as informações do relatório.
+ * 
+ * @param {Object} info - Informações sobre o relatório de emissões de carbono.
+ * @param {string} info.client - Nome do cliente que solicitou o relatório.
+ * @param {string} info.reportDate - Data do relatório.
+ * @param {string} info.reportText - Texto do relatório, contendo informações detalhadas sobre as emissões.
+ */
 export function downloadReportPDF(
   info: {
     client: string,

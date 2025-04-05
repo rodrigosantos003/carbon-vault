@@ -20,6 +20,14 @@ export class UserEmissionsComponent {
 
   userId: string;
 
+  /**
+   * Construtor do componente.
+   *
+   * @param fb FormBuilder para criar o formulário.
+   * @param http Serviço HTTP para comunicação com a API.
+   * @param authService Serviço de autenticação.
+   * @param alerts Serviço de alertas para mensagens de sucesso ou erro.
+   */
   constructor(private fb: FormBuilder, private http: HttpClient, private authService: AuthService, private alerts: AlertsService) {
 
     this.emissionsForm = this.fb.group({
@@ -31,6 +39,12 @@ export class UserEmissionsComponent {
     this.userId = this.authService.getUserId();
   }
 
+  /**
+   * Ciclo de vida do componente após inicialização.
+   * 
+   * Busca os dados de emissões do utilizador. Se não existirem, inicializa com zeros e cria novo registo.
+   * Também calcula automaticamente as emissões totais ao alterar qualquer campo.
+   */
   ngOnInit() {
     const url = `${environment.apiUrl}/UserEmissions/${this.userId}`;
 
@@ -84,6 +98,10 @@ export class UserEmissionsComponent {
     });
   }
 
+  /**
+   * Envia os dados do formulário para a API.
+   * Se o registo já existir, faz `PUT` (atualização).
+   */
   onSubmit() {
     const formValue = this.emissionsForm.value;
 
@@ -118,6 +136,12 @@ export class UserEmissionsComponent {
     });
   }
 
+  /**
+   * Calcula as emissões totais com base nos dados inseridos.
+   *
+   * @param formData Objeto com os valores de eletricidade, gasolina e gasóleo.
+   * @returns Total de emissões em kg CO₂e.
+   */
   calculateEmissions(formData: { electricity: string, petrol: string, diesel: string }) {
     const electricity = parseFloat(formData.electricity) || 0;
     const petrol = parseFloat(formData.petrol) || 0;

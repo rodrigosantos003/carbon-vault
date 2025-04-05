@@ -29,7 +29,7 @@ export class MarketplaceComponent implements OnInit {
  * Injeta os serviços necessários para o funcionamento do componente:
  * - `HttpClient`: Para fazer requisições à API.
  * - `Router`: Para navegação entre páginas.
- * - `AuthService`: Para verificar se o usuário está autenticado.
+ * - `AuthService`: Para verificar se o utilizador está autenticado.
  */
   constructor(
     private http: HttpClient,
@@ -95,10 +95,10 @@ export class MarketplaceComponent implements OnInit {
   }
 
   /**
- * Aplica o filtro de busca nos projetos com base no nome.
+ * Aplica o filtro de pesquisa nos projetos com base no nome.
  * Exibe apenas os projetos cujo nome contém o valor da pesquisa.
  * 
- * @param {any} event - O evento de alteração no campo de busca.
+ * @param {any} event - O evento de alteração no campo de pesquisa.
  */
   changeSearchValue(event: any): void {
     const searchValue = event.target.value.toLowerCase();
