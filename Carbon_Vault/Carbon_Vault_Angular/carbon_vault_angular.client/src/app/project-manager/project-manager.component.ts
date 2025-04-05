@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AlertsService } from '../alerts.service';
-import { AuthService } from '../auth-service.service';  // Importa o AuthService
+import { AuthService } from '../auth-service.service';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 
@@ -79,17 +79,16 @@ export class ProjectManagerComponent {
       console.log("ID projeto " + this.selectedProjectId);
       this.http.delete(`${environment.apiUrl}/Projects/${this.selectedProjectId}`).subscribe({
         next: () => {
-          console.log('Project deleted successfully');
+          this.closePopup();
           this.alerts.enableSuccess("Projeto eliminado com sucesso");
           this.getProjects();
         },
         error: (err) => {
           console.error('Error deleting project:', err);
+          this.closePopup();
           this.alerts.enableError("Erro ao apagar projeto com ID = " + this.selectedProjectId);
         }
       });
     }
   }
 }
-
-

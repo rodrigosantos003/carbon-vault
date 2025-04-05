@@ -57,10 +57,12 @@ export class ProjectManagerUserComponent {
     if (this.selectedProjectId) {
       this.http.delete(`${environment.apiUrl}/Projects/${this.selectedProjectId}`).subscribe({
         next: () => {
+          this.closePopup();
           this.alerts.enableSuccess("Projeto eliminado com sucesso");
           this.getProjects(parseInt(this.UserId));
         },
-        error: (err) => {
+        error: () => {
+          this.closePopup();
           this.alerts.enableError("Erro ao apagar projeto com ID = " + this.selectedProjectId);
         }
       });
