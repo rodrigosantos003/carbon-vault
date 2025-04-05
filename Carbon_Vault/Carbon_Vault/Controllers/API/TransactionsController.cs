@@ -29,6 +29,22 @@ namespace Carbon_Vault.Controllers.API
             return await _context.Transactions.ToListAsync();
         }
 
+        [HttpGet("/user/{userID}")]
+        [ServiceFilter(typeof(TokenValidationFilter))]
+        public async Task<ActionResult<IEnumerable<Transaction>>> GetTransactionsByUser(int userID)
+        {
+            var transactions = await _context.Transactions
+                .Where(t => t.BuyerId == userID || t.SellerId == userID)
+                .ToListAsync();
+
+            if (!transactions.Any())
+            {
+                return NotFound(new {message = "Nenhuma transação encontrada para este utilizador."});
+            }
+
+            return Ok(transactions);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Transaction>> GetTransaction(int id)
         {
@@ -99,9 +115,9 @@ namespace Carbon_Vault.Controllers.API
             return Ok();
         }
 
-        [HttpGet("type/{type}/user/{userID}")]
+        [HttpGet("type/{type}")]
         [ServiceFilter(typeof(TokenValidationFilter))]
-        public async Task<ActionResult<IEnumerable<Transaction>>> GetTransactionsByType(int type, int userID)
+        public async Task<ActionResult<IEnumerable<Transaction>>> GetTransactionsByType(int type, [FromHeader] int userID)
         {
             var transactions = await _context.Transactions.Select(t => new
             {

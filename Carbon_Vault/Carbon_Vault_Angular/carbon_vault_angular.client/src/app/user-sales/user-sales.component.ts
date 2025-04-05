@@ -17,7 +17,7 @@ export class UserSalesComponent {
   private salesURL: string;
 
   constructor(private http: HttpClient, private alerts: AlertsService, private authService: AuthService, private router: Router) {
-    this.salesURL = `${environment.apiUrl}/Transactions/type/1/user/${this.authService.getUserId()}`;
+    this.salesURL = `${environment.apiUrl}/Transactions/type/1`;
   }
 
   ngOnInit(): void {
@@ -31,6 +31,7 @@ export class UserSalesComponent {
     }).subscribe({
       next: (data) => {
         this.sales = data;
+        console.log("Vendas: ", this.sales);
         this.alerts.disableLoading();
       },
       error: (error) => {
@@ -48,7 +49,7 @@ export class UserSalesComponent {
 
 interface Sale {
   id: number,
-  project: string,
+  projectName: string,
   quantity: number,
   date: string,
   state: string,

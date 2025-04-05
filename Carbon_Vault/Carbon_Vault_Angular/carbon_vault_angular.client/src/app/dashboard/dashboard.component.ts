@@ -106,10 +106,8 @@ export class DashboardComponent {
 
   getTransactions() {
     this.alerts.enableLoading("A carregar dados");
-    const purchasesURL = `${environment.apiUrl}/Transactions/type/0/user/${this.userId}`;
-    const salesURL = `${environment.apiUrl}/Transactions/type/1/user/${this.userId}`;
-
-    const jwtToken = localStorage.getItem('token');
+    const purchasesURL = `${environment.apiUrl}/Transactions/type/0`;
+    const salesURL = `${environment.apiUrl}/Transactions/type/1`;
 
     this.http.get<Transaction[]>(purchasesURL, {
       headers: this.auth.getHeaders()
