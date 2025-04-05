@@ -271,7 +271,7 @@ export class DashboardComponent {
 
 interface Transaction {
   id: number,
-  project: string,
+  projectName: string,
   quantity: number,
   date: string,
   state: string,

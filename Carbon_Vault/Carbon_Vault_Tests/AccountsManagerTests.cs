@@ -113,7 +113,7 @@ namespace Carbon_Vault_Tests_AccountsManager
             string validToken = "Bearer " + accountToken;
 
             // Act
-            var result = await controller.PutAccount(acc.Id, acc, validToken);
+            var result = await controller.PutAccount(acc.Id, acc);
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
@@ -139,7 +139,7 @@ namespace Carbon_Vault_Tests_AccountsManager
             string invalidToken = AuthHelper.GerarToken(acc.Id);
 
             // Act
-            var result = await controller.PutAccount(acc.Id, acc, invalidToken);
+            var result = await controller.PutAccount(acc.Id, acc);
 
             // Assert
             var unauthorizedResult = Assert.IsType<UnauthorizedObjectResult>(result);

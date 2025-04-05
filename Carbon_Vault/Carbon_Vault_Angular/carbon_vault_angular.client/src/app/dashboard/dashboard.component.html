@@ -1,5 +1,5 @@
 <body>
-  <app-user-menu  *ngIf="userRole != 2"></app-user-menu>
+  <app-user-menu *ngIf="userRole != 2"></app-user-menu>
 
   <!-- Default User Content -->
   <div class="main-content" *ngIf="userRole == 0">
@@ -41,7 +41,7 @@
               <td colspan="4" class="text-center" id="nothingToShow">Nada a mostrar!</td>
             </tr>
             <tr *ngFor="let purchase of purchases">
-              <td>{{purchase.project}}</td>
+              <td>{{purchase.projectName}}</td>
               <td>{{purchase.date}}</td>
               <td><button class="details-button" (click)="transactionDetails(purchase.id)">Ver detalhes</button></td>
             </tr>
@@ -64,7 +64,7 @@
               <td colspan="4" class="text-center" id="nothingToShow">Nada a mostrar!</td>
             </tr>
             <tr *ngFor="let sale of sales">
-              <td>{{sale.project}}</td>
+              <td>{{sale.projectName}}</td>
               <td>{{sale.date}}</td>
               <td><button class="details-button" (click)="transactionDetails(sale.id)">Ver detalhes</button></td>
             </tr>
@@ -128,21 +128,12 @@
       </div>
     </div>
   </main> -->
-  <app-admin-dashboard *ngIf="userRole == 1"
-  [dailyVisits]="dailyVisits"
-  [userCount]="userCount"
-  [ProjectCount]="ProjectCount"
-  [TransactionCount]="TransactionCount"
-  [CreditCount]="CreditCount"
-  ></app-admin-dashboard>
-  <app-evaluator-dashboard *ngIf="userRole == 2"
-
-  ></app-evaluator-dashboard>
+  <app-admin-dashboard *ngIf="userRole == 1" [dailyVisits]="dailyVisits" [userCount]="userCount"
+    [ProjectCount]="ProjectCount" [TransactionCount]="TransactionCount"
+    [CreditCount]="CreditCount"></app-admin-dashboard>
+  <app-evaluator-dashboard *ngIf="userRole == 2"></app-evaluator-dashboard>
 
   <!-- Support User Content -->
-  <app-support-dashboard *ngIf="userRole == 3"
-  [TotalTickets]="TotalTickets"
-  [TotalOpenTickets]="TotalOpenTickets"
-  [TotalClosedTickets]="TotalClosedTickets"
-  ></app-support-dashboard>
+  <app-support-dashboard *ngIf="userRole == 3" [TotalTickets]="TotalTickets" [TotalOpenTickets]="TotalOpenTickets"
+    [TotalClosedTickets]="TotalClosedTickets"></app-support-dashboard>
 </body>
