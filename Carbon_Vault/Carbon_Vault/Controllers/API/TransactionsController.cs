@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Carbon_Vault.Controllers.API
 {
     /// <summary>
-    /// Controller para gerenciar transações no sistema Carbon Vault.
+    /// Controller para gerir transações no sistema Carbon Vault.
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
