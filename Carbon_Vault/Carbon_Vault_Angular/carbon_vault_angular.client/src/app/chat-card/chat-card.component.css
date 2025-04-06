@@ -1,0 +1,45 @@
+.card{
+    display: flex;
+    gap: 20px;
+}
+
+.icon{
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: var(--main-color);
+    display: flex
+;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.message-header{
+    padding: 15px;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    background-color: #4ea741;
+    color: white;
+}
+
+.message-content{
+    max-width: 605px;
+    border: 1px solid #4ea741;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.message-content p{
+    word-wrap: break-word;
+    text-wrap: wrap;
+    margin: 0;
+    padding: 10px;
+}
+
+.card.reverse {
+    flex-direction: row-reverse;
+}
+.card.last , .card.reverse.last{
+   margin-bottom: 100px;
+}

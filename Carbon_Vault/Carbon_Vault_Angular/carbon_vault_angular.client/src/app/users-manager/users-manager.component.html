@@ -2,24 +2,61 @@
   <app-user-menu></app-user-menu>
 
   <!-- Confirm Delet Popup -->
-  <div class="modal-overlay" id="modalOverlay">
+  <div class="modal-overlay" id="deleteAccountPopup">
     <div class="delete" id="delete">
-      <div class="delete-content">
+      <div class="popup-content">
         <p class="delete-heading">Deseja mesmo eliminar este utilizador?</p>
         <img src="images/DeleteBin.png" />
-        <p class="delete-description">Esta ação irá eliminar permanentemente o utilizador e toda a informação associada.</p>
+        <p class="delete-description">Esta ação irá eliminar permanentemente o utilizador e toda a informação associada.
+        </p>
       </div>
       <div class="delete-button-wrapper">
-        <button class="delete-button secondary" (click)="closePopup()">Cancelar</button>
+        <button class="delete-button secondary" (click)="closeDeleteAccount()">Cancelar</button>
         <button class="delete-button primary" (click)="deleteAccount()">Eliminar</button>
       </div>
-      <button class="exit-button" (click)="closePopup()">
+      <button class="exit-button" (click)="closeDeleteAccount()">
         <svg height="20px" viewBox="0 0 384 512">
-          <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"></path>
+          <path
+            d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z">
+          </path>
         </svg>
       </button>
     </div>
   </div>
+
+  <!-- Add account popup -->
+  <div class="modal-overlay" id="addAccountPopup">
+    <div class="user-form" id="user-form">
+      <div class="user-form-content">
+        <p class="user-form-heading">Adicionar Administrador</p>
+        <div class="form-group">
+          <label for="userName">Nome:</label>
+          <input type="text" id="userName" [(ngModel)]="userName">
+        </div>
+        <div class="form-group">
+          <label for="userEmail">E-mail:</label>
+          <input type="text" id="userEmail" [(ngModel)]="userEmail">
+        </div>
+        <div class="form-group">
+          <label for="userNIF">NIF:</label>
+          <input type="text" id="userNIF" [(ngModel)]="userNIF">
+        </div>
+        <div class="form-group">
+          <label for="userRole">Tipo:</label>
+          <select id="userRole" [(ngModel)]="userRole">
+            <option value="1">Admin</option>
+            <option value="2">Avaliador</option>
+            <option value="3">Suporte</option>
+          </select>
+        </div>
+      </div>
+      <div class="user-form-button-wrapper">
+        <button class="user-form-button secondary" (click)="closeAddAccount()">Cancelar</button>
+        <button class="user-form-button save" (click)="addAccount()">Guardar</button>
+      </div>
+    </div>
+  </div>
+
 
   <div class="main-content">
     <h1>Gestão de Utilizadores</h1>
@@ -44,7 +81,7 @@
     <div class="user-table">
       <div class="table-header">
         <h2>Utilizadores</h2>
-        <button class="add-btn">+ Adicionar</button>
+        <button class="add-btn" (click)="openAddAccount()">+ Adicionar</button>
       </div>
       <table>
         <thead>
@@ -66,7 +103,7 @@
             <td>{{ account.role }}</td>
             <td>{{ account.createdAt | date:'dd/MM/yyyy HH:mm:ss' }}</td>
             <td><button class="view-btn" (click)="viewAccount(account)">Ver mais</button></td>
-            <td><button class="delete-btn" (click)="openPopup(account.id)">Eliminar</button></td>
+            <td><button class="delete-btn" (click)="openDeleteAccount(account.id)">Eliminar</button></td>
           </tr>
         </tbody>
       </table>

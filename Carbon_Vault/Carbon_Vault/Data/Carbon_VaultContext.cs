@@ -20,35 +20,73 @@ namespace Carbon_Vault.Data
         public DbSet<UserEmissions> UserEmissions { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<ProjectFiles> ProjectFiles { get; set; }
-
+        public DbSet<Ticket> Tickets { get; set; } = default!;
+        public DbSet<TicketMessage> TicketMessages { get; set; } = default!;
+        public DbSet<Report> Reports { get; set; }
+        public DbSet<ReportFiles> ReportFiles { get; set; }
         public Carbon_VaultContext(DbContextOptions<Carbon_VaultContext> options)
             : base(options)
         {
         }
 
+        /// <summary>
+        /// Configura o modelo de dados para a aplicação, é chamado durante a inicialização do DbContext.
+        /// Permite definir as regras de mapeamento entre as classes e as tabelas da base de dados, como definição de relações entre entidades, chaves primárias e estrangerias.
+        /// </summary>
+        /// <param name="modelBuilder">Objeto usado para configurar o modelo de dados.</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // Configurar o relacionamento entre Project e CarbonCredit
+            // Relação entre Account e Projects
+            modelBuilder.Entity<Project>()
+                .HasOne(p => p.Owner)
+                .WithMany(a => a.Projects)
+                .HasForeignKey(p => p.OwnerId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Relação entre Account e Transactions
+            modelBuilder.Entity<Ticket>()
+                .HasOne(t => t.Author)
+                .WithMany(a => a.Tickets)
+                .HasForeignKey(t => t.AuthorId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            //Relação entre Account e Tickets
+            modelBuilder.Entity<Report>()
+                .HasOne(r => r.User)
+                .WithMany(u => u.Reports)
+                .HasForeignKey(r => r.UserID)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Relação entre Project e ProjectType
             modelBuilder.Entity<CarbonCredit>()
                 .HasOne(cc => cc.Project)
                 .WithMany(p => p.CarbonCredits)
-                .HasForeignKey(cc => cc.ProjectId).OnDelete(DeleteBehavior.NoAction);
+                .HasForeignKey(cc => cc.ProjectId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            // Configurar o relacionamento entre Project e Ficheiros deste
+            // Relação entre Project e ProjectType
             modelBuilder.Entity<ProjectFiles>()
-               .HasOne(cc => cc.Project)
-               .WithMany(p => p.Files)
-               .HasForeignKey(cc => cc.ProjectId)
-               .OnDelete(DeleteBehavior.Cascade);
+                .HasOne(pf => pf.Project)
+                .WithMany(p => p.Files)
+                .HasForeignKey(pf => pf.ProjectId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            // Configurar o relacionamento entre Project e o seu dono
-            modelBuilder.Entity<Project>()
-               .HasOne(cc => cc.Owner)
-               .WithMany(p => p.Projects)
-               .HasForeignKey(cc => cc.OwnerId);
-               
+            // Relação entre ProjectType e Project
+            modelBuilder.Entity<ReportFiles>()
+                .HasOne(rf => rf.Report)
+                .WithMany(r => r.Files)
+                .HasForeignKey(rf => rf.ReportId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Relação entre ProjectType e Project
+            modelBuilder.Entity<TicketMessage>()
+                .HasOne(tm => tm.Ticket)
+                .WithMany(t => t.Messages)
+                .HasForeignKey(tm => tm.TicketId)
+                 .OnDelete(DeleteBehavior.NoAction);
+
             populateAccounts(modelBuilder);
 
             populateProjectTypes(modelBuilder);
@@ -56,8 +94,14 @@ namespace Carbon_Vault.Data
             populateProjects(modelBuilder);
 
             populateTransactions(modelBuilder);
+
+            populateCredits(modelBuilder);
         }
 
+        /// <summary>
+        /// Método que faz a população de Contas
+        /// </summary>
+        /// <param name="modelBuilder"></param>
         private void populateAccounts(ModelBuilder modelBuilder)
         {
             string admin_hashed = AuthHelper.HashPassword("Admin@123");
@@ -77,7 +121,7 @@ namespace Carbon_Vault.Data
                     State = AccountState.Active,
                     Role = Models.AccountType.Admin,
                     CreatedAt = DateTime.UtcNow,
-                    
+
                 },
                 new Models.Account
                 {
@@ -116,22 +160,23 @@ namespace Carbon_Vault.Data
                 {
                     Id = 5,
                     Name = "Jane Doe",
-                    Email = "user3@carbonvault.com",
+                    Email = "Evaluator@carbonvault.com",
                     Password = user3_hashed,
                     Nif = "555555555",
                     State = AccountState.Active,
-                    Role = Models.AccountType.User,
+                    Role = Models.AccountType.Evaluator,
                     CreatedAt = DateTime.UtcNow
                 }
             );
         }
 
+        // Método que faz a população dos tipos de projetos
         private void populateProjectTypes(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ProjectType>().HasData(
-               new ProjectType{Id = 1, Type = ProjectTypeEnum.Poverty},
-               new ProjectType{Id = 2, Type = ProjectTypeEnum.Hunger},
-               new ProjectType{Id = 3, Type = ProjectTypeEnum.Health},
+               new ProjectType { Id = 1, Type = ProjectTypeEnum.Poverty },
+               new ProjectType { Id = 2, Type = ProjectTypeEnum.Hunger },
+               new ProjectType { Id = 3, Type = ProjectTypeEnum.Health },
                new ProjectType { Id = 4, Type = ProjectTypeEnum.Education },
                new ProjectType { Id = 5, Type = ProjectTypeEnum.Gender },
                new ProjectType { Id = 6, Type = ProjectTypeEnum.Water },
@@ -145,6 +190,10 @@ namespace Carbon_Vault.Data
            );
         }
 
+        /// <summary>
+        /// Método que faz a população dos Projetos
+        /// </summary>
+        /// <param name="modelBuilder"></param>
         private void populateProjects(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Project>().HasData(
@@ -191,6 +240,10 @@ namespace Carbon_Vault.Data
            );
         }
 
+        /// <summary>
+        /// Método que faz a população das Transações
+        /// </summary>
+        /// <param name="modelBuilder"></param>
         private void populateTransactions(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Transaction>().HasData(
@@ -200,11 +253,17 @@ namespace Carbon_Vault.Data
                     BuyerId = 2,
                     SellerId = 4,
                     ProjectId = 1,
+                    BuyerName = "Utilizador Comum",
+                    SellerName = "My User",
+                    ProjectName = "Water Access Initiative",
+                    ProjectLocation = "-2,2",
+                    ProjectDescription = "AAAAA",
+                    ProjectCertifier = "Gold Standard",
                     Quantity = 1,
                     TotalPrice = 12.50,
                     Date = "2025-03-05",
                     State = TransactionState.Approved,
-                    PaymentMethod = "card",
+                    PaymentMethod = "Cartão",
                     CheckoutSession = "cs_123456789"
                 },
                 new Transaction
@@ -213,12 +272,73 @@ namespace Carbon_Vault.Data
                     SellerId = 4,
                     BuyerId = 5,
                     ProjectId = 2,
+                    BuyerName = "My User",
+                    SellerName = "John Smith",
+                    ProjectName = "Water Access Initiative",
+                    ProjectLocation = "-1,1",
+                    ProjectDescription = "AAAAA",
+                    ProjectCertifier = "Gold Standard",
                     Quantity = 1,
                     TotalPrice = 15.75,
                     Date = "2025-03-05",
                     State = TransactionState.Approved,
-                    PaymentMethod = "SEPA",
+                    PaymentMethod = "Transferência Bancária",
                     CheckoutSession = "cs_987456321"
+                }
+            );
+        }
+
+        /// <summary>
+        /// Método que faz a população de Créditos de Carbono
+        /// </summary>
+        /// <param name="modelBuilder"></param>
+        private void populateCredits(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<CarbonCredit>().HasData(
+                new CarbonCredit
+                {
+                    Id = 1,
+                    ProjectId = 2,
+                    IsSold = false,
+                    Price = 15.75M,
+                    Certification = "ISO 14001",
+                    SerialNumber = "123456789",
+                },
+                new CarbonCredit
+                {
+                    Id = 2,
+                    ProjectId = 2,
+                    IsSold = false,
+                    Price = 15.75M,
+                    Certification = "ISO 14001",
+                    SerialNumber = "123456789",
+                },
+                new CarbonCredit
+                {
+                    Id = 3,
+                    ProjectId = 2,
+                    IsSold = false,
+                    Price = 15.75M,
+                    Certification = "ISO 14001",
+                    SerialNumber = "123456789",
+                },
+                new CarbonCredit
+                {
+                    Id = 4,
+                    ProjectId = 2,
+                    IsSold = false,
+                    Price = 15.75M,
+                    Certification = "ISO 14001",
+                    SerialNumber = "123456789",
+                },
+                new CarbonCredit
+                {
+                    Id = 5,
+                    ProjectId = 2,
+                    IsSold = false,
+                    Price = 15.75M,
+                    Certification = "ISO 14001",
+                    SerialNumber = "123456789",
                 }
             );
         }

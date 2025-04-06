@@ -3,21 +3,22 @@
   <app-alerts></app-alerts>
 
   <main>
+    <app-go-back-button></app-go-back-button>
     <form [formGroup]="emissionsForm" (ngSubmit)="onSubmit()" class="content">
-      <h1>As minhas emissões - 2025</h1>
+      <h1>As minhas emissões</h1>
       <div class="form-group">
         <label>Consumo de Electricidade</label>
-        <input type="text" value="0" id="electricity" formControlName="electricity">
+        <input type="number" min="0" value="0" id="electricity" formControlName="electricity">
         <span>MWh</span>
       </div>
       <div class="form-group">
         <label>Consumo de Gasolina</label>
-        <input type="text" value="0" id="petrol" formControlName="petrol">
+        <input type="number" min="0" value="0" id="petrol" formControlName="petrol">
         <span>L</span>
       </div>
       <div class="form-group">
         <label>Consumo de Gasóleo</label>
-        <input type="text" value="0" id="diesel" formControlName="diesel">
+        <input type="number" min="0" all value="0" id="diesel" formControlName="diesel">
         <span>L</span>
       </div>
       <div class="form-group" id="form-total">

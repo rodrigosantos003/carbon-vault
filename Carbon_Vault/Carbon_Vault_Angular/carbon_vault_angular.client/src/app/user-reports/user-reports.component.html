@@ -1,0 +1,36 @@
+<body>
+    <app-user-menu></app-user-menu>
+    <app-alerts></app-alerts>
+
+    <main class="content">
+        <h1>Os meus relatórios</h1>
+
+        <div class="button-container">
+            <button class="request-button" (click)="this.router.navigate(['/request-report'])">Pedir relatório</button>
+        </div>
+
+        <div class="table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Estado</th>
+                        <th>Ação</th>
+                </thead>
+                <tbody>
+                    <tr *ngIf="reports.length === 0">
+                        <td colspan="4" class="text-center" id="nothingToShow">Nada a mostrar!</td>
+                    </tr>
+                    <tr *ngFor="let report of reports">
+                        <td>{{report.lastUpdate | date:'dd/MM/yyyy HH:mm:ss'}}</td>
+                        <td>{{report.stateText}}</td>
+                        <td *ngIf="report.reportState == 0"><button class="details-button"
+                                (click)="payReport(report.id)">Pagar Relatório</button></td>
+                        <td *ngIf="report.reportState == 2"><button class="details-button"
+                                (click)="downloadReport(report.id)">Download</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>

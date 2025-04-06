@@ -23,6 +23,13 @@ export class RegisterComponent {
   isNifValid: boolean | null = null;
   nifErrorMessage: string | null = null;
 
+  /**
+   * Construtor do componente.
+   *
+   * @param fb FormBuilder para criação do formulário.
+   * @param http Serviço HTTP para comunicação com a API.
+   * @param alerts Serviço para mostrar alertas ao utilizador.
+   */
   constructor(private fb: FormBuilder, private http: HttpClient, private alerts: AlertsService) {
     this.registerForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
@@ -32,6 +39,10 @@ export class RegisterComponent {
     });
   }
 
+  /**
+   * Submete os dados do formulário de registo.
+   * Valida os dados localmente antes de fazer a requisição à API.
+   */
   onSubmit() {
     if (this.registerForm.invalid) {
       this.showFormErrors();
@@ -45,12 +56,6 @@ export class RegisterComponent {
     if (!this.validatePassword(formData.password)) {
       return;
     }
-
-    // this.validateNif(formData.nif).then(isValid => {
-    //   if (!isValid) {
-    //     return;
-    //   }
-    // });
 
     this.http.post(`${environment.apiUrl}/Accounts`, formData).subscribe({
       next: (response) => {
@@ -66,6 +71,9 @@ export class RegisterComponent {
     );
   }
 
+  /**
+   * Apresenta mensagens de erro consoante os erros detetados nos campos do formulário.
+   */
   showFormErrors() {
     const errors = this.registerForm.controls;
 
@@ -94,6 +102,12 @@ export class RegisterComponent {
     }
   }
 
+  /**
+   * Valida a força da palavra-passe introduzida.
+   *
+   * @param password Palavra-passe a validar.
+   * @returns Verdadeiro se a palavra-passe cumprir os critérios mínimos.
+   */
   validatePassword(password: string): boolean {
     if (!password) return false;
 
@@ -121,6 +135,10 @@ export class RegisterComponent {
 
     return isValid;
   }
+
+  /**
+   * Atualiza os indicadores visuais de força da palavra-passe.
+   */
   updatePasswordStrength() {
     const password = this.registerForm.get('password')?.value || '';
 
@@ -159,10 +177,4 @@ export class RegisterComponent {
       return false;
     }
   }
-
 }
-
-
-
-
-

@@ -3,12 +3,13 @@
   <div class="main-content">
     <div class="project-details">
       <div class="project-details-header">
+        <app-go-back-button></app-go-back-button>
         <h3>{{ isEditable ? 'Editar Projeto' : 'Detalhes do Projeto' }}</h3>
       </div>
       <hr>
     </div>
 
-    <form (ngSubmit)="onSubmit()" class="add-project-form">
+    <form class="add-project-form">
       <div class="first-column">
         <div class="form-item">
           <label>Nome</label><br>
@@ -54,27 +55,61 @@
       </div>
 
       <div class="third-column">
-        <div class="form-item">
-          <h2>Documentos Atuais</h2>
-          <div *ngIf="documentos.length == 0" class="file-list">
-            <p>Sem documentos</p>
+        <ng-container *ngIf="isEditable; else viewMode">
+          <!-- Edit Mode -->
+          <div class="form-item-image">
+            <h2>Imagem do Projeto</h2>
+            <img *ngIf="project.imageUrl" class="preview" [src]="project.imageUrl" alt="Imagem do Projeto" /><br>
+            <div class="form-item-image-wrap">
+              <input type="file" (change)="onImageChange($event)" accept="image/*" id="imageInput" />
+              <div *ngIf="imagePreviewUrl" class="imagePreview">
+                <img [src]="imagePreviewUrl" alt="Preview da Imagem" />
+              </div>
+            </div>
+            <span class="tooltip"><b>Formatos permitidos:</b>.png,.jpg</span>
           </div>
-          <ul *ngIf="documentosAtuais.length > 0" class="file-list">
-            <li *ngFor="let documento of documentosAtuais">
-              <span style="z-index: 6;" (click)="downloadFile(documento.filePath, documento.fileName)">
-                {{ documento.fileName }}
-              </span>
-              <button *ngIf="isEditable" (click)="deleteFile(documento.id)">Remover</button>
-            </li>
-          </ul>
-        </div>
 
-        <div class="form-item">
-          <h2>Imagem do Projeto</h2><br>
-          <img *ngIf="project.imageUrl" class="preview" [src]="project.imageUrl" alt="Imagem do Projeto" /><br>
-          <input type="file" (change)="onImageChange($event)" accept="image/*" [disabled]="!isEditable" />
-        </div>
+          <div class="form-item">
+            <h2>Documentos</h2>
+            <div class="drag-area" (dragover)="onDragOver($event)" (drop)="onDrop($event)"
+              (dragleave)="onDragLeave($event)" (click)="fileInput.click()">
+              <p>Arraste e solte arquivos aqui ou clique para selecionar</p>
+              <input #fileInput type="file" (change)="onFileChange($event)" multiple style="display:none" />
+              <ul *ngIf="documentos.length > 0" class="file-list">
+                <li *ngFor="let documento of documentos; let i = index">
+                  {{ documento.name }}
+                  <button type="button" class="remove" (click)="removeFile(i)">Remover</button>
+                </li>
+              </ul>
+            </div>
+            <span class="tooltip"><b>Formatos permitidos:</b>.docx,.pdf,.csv</span>
+          </div>
+        </ng-container>
+
+        <!-- View Mode -->
+        <ng-template #viewMode>
+          <div class="form-item">
+            <h2>Imagem do Projeto</h2><br>
+            <img *ngIf="project.imageUrl" class="preview" [src]="project.imageUrl" alt="Imagem do Projeto" /><br>
+            <input type="file" (change)="onImageChange($event)" accept="image/*" [disabled]="!isEditable" />
+          </div>
+
+          <div class="form-item">
+            <h2>Documentos Atuais</h2>
+            <div *ngIf="documentosAtuais.length == 0" class="file-list">
+              <p>Sem documentos</p>
+            </div>
+            <ul *ngIf="documentosAtuais.length > 0" class="file-list">
+              <li *ngFor="let documento of documentosAtuais">
+                <span style="z-index: 6;" (click)="downloadFile(documento.filePath, documento.fileName)">
+                  {{ documento.fileName }}
+                </span>
+              </li>
+            </ul>
+          </div>
+        </ng-template>
       </div>
+
 
       <button class="button-edit-save" id="button-edit-save" type="button" (click)="toggleEditMode()">
         {{ isEditable ? 'Salvar Alterações' : 'Editar' }}
@@ -83,8 +118,12 @@
 
 
     <br>
-    <h2 style="color: #4ea741;"> Créditos Disponiveis </h2>
+    <div style="display: flex; justify-content: space-between; align-items: center;"> 
+      <h2 style="color: #4ea741; margin-bottom: 0;"> Créditos Disponiveis </h2>
+      <button class="credits-button" (click)="openPopup()"> Editar critérios de Venda</button>
+    </div>
 
+    
     <div style="max-height: 295px; overflow-y: scroll; position: relative;">
       <table>
         <thead>
@@ -111,7 +150,6 @@
     <div class="credits-info">
       O projeto tem <b>{{project.carbonCredits.length}}</b> créditos disponiveis dos quais
       <b>{{project.creditsForSale}}</b> estão à venda por <b>{{project.pricePerCredit}}€</b> cada.
-      <button class="credits-button" (click)="openPopup()"> Editar critérios de Venda</button>
     </div>
 
 
@@ -122,8 +160,10 @@
         <p class="credits-form-heading">Critérios de Venda dos Créditos</p>
         <p class="credits-form-field" style="text-align: center; font-weight: 500;">Créditos totais do Projeto:
           {{project.carbonCredits.length}}</p>
-        <p class="credits-form-field">Créditos para venda: <input type="text" [(ngModel)]="newCreditsForSale"></p>
-        <p class="credits-form-field">Preço por Crédito: <input type="text" [(ngModel)]="newPricePerCredit"></p>
+        <p class="credits-form-field">Créditos para venda: <input type="text" type="number"
+            [(ngModel)]="newCreditsForSale"></p>
+        <p class="credits-form-field">Preço por Crédito: <input type="text" type="number"
+            [(ngModel)]="newPricePerCredit"></p>
       </div>
       <div class="credits-form-button-wrapper">
         <button class="credits-form-button secondary" (click)="closePopup()">Cancelar</button>

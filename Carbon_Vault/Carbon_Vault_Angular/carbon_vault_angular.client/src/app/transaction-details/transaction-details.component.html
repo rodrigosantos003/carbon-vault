@@ -1,8 +1,12 @@
 <body>
-    <app-alerts></app-alerts>
+   
     <app-user-menu></app-user-menu>
+    
     <main class="transaction-container">
-
+        <app-alerts></app-alerts>
+        <app-go-back-button></app-go-back-button>
+        <br>
+        <br>
         <span class="transaction-title"> Detalhes da {{ transactionType == 'Venda' ? 'Venda' : 'Compra' }} - #{{
             transactionId }} </span>
 
@@ -39,7 +43,8 @@
             <div class="transaction-tables">
                 <span class="transaction-header">
                     Faturação
-                    <button class="download-button" (click)="downloadInvoice()"> Descarregar </button>
+                    <button class="download-button" (click)="downloadCertificate()"> Descarregar Certificado</button>
+                    <button class="download-button" (click)="downloadInvoice()"> Descarregar Fatura</button>
                 </span>
 
                 <div class="table">

@@ -15,31 +15,54 @@ export class CartComponent implements OnInit {
   total: number = 0;
   selectedItemId: number | null = null;
 
+  /**
+ * Injeta os serviços necessários: carrinho, autenticação e HTTP.
+ * 
+ * @param cartService Serviço de gestão do carrinho.
+ * @param http Serviço HTTP para chamadas à API.
+ * @param authService Serviço de autenticação para obter o ID do utilizador.
+ */
   constructor(private cartService: CartService, private http: HttpClient, private authService: AuthService) { }
 
+  /**
+ * Inicializa o componente e atualiza o estado do carrinho.
+ */
   ngOnInit() {
     this.updateCart();
   }
 
-  addItem(item: any) {
-    this.cartService.addItem(item);
-    this.updateCart();
-  }
-
+  /**
+ * Incrementa a quantidade de um item específico no carrinho.
+ * 
+ * @param itemId ID do item a incrementar.
+ */
   incrementQuantity(itemId: number) {
     this.cartService.incrementQuantity(itemId);
     this.updateCart();
   }
 
+  /**
+ * Diminui a quantidade de um item específico no carrinho.
+ * 
+ * @param itemId ID do item a decrementar.
+ */
   decrementQuantity(itemId: number) {
     this.cartService.decrementQuantity(itemId);
     this.updateCart();
   }
 
+  /**
+ * Mostra o popup de confirmação para remover um item.
+ * 
+ * @param itemId ID do item a remover.
+ */
   removeItem(itemId: number) {
     this.openPopup(itemId);
   }
 
+  /**
+ * Remove o item selecionado após confirmação via popup.
+ */
   deleteItem() {
     if (this.selectedItemId !== null) {
       this.cartService.removeItem(this.selectedItemId);
@@ -48,24 +71,34 @@ export class CartComponent implements OnInit {
     this.closePopup();
   }
 
+  /**
+ * Atualiza a lista de itens e o total do carrinho.
+ */
   updateCart() {
     this.cartItems = this.cartService.getCart();
     this.total = this.cartService.getTotal();
   }
 
+  /**
+ * Remove todos os itens do carrinho.
+ */
   clearCart() {
     this.cartService.clearCart();
     this.updateCart();
   }
 
+  /**
+ * Inicia o processo de pagamento com os dados atuais do carrinho.
+ * Envia um POST para a API para gerar o URL de pagamento.
+ * 
+ * Abre a página de pagamento e armazena a sessão de checkout.
+ */
   checkout() {
-    const apiUrl = `${environment.apiUrl}/UserPayments`;
+    const apiUrl = `${environment.apiUrl}/UserPayments?type=credits`;
     const paymentData = {
       items: this.cartService.getCart(),
       userId: this.authService.getUserId(),
     };
-
-    this
 
     this.http.post<{ message: string; checkout_session: string; payment_url: string }>(apiUrl, paymentData).subscribe({
       next: (data) => {
@@ -78,6 +111,11 @@ export class CartComponent implements OnInit {
     );
   }
 
+  /**
+ * Mostra o popup de confirmação de remover o item do carrinho.
+ * 
+ * @param itemId ID do item que o utilizador pretende remover.
+ */
   openPopup(itemId: number) {
     this.selectedItemId = itemId;
     const overlay = document.getElementById('modalOverlay');
@@ -89,6 +127,9 @@ export class CartComponent implements OnInit {
     }
   }
 
+  /**
+ * Fecha o popup de confirmação de remover o item do carrinho.
+ */
   closePopup() {
     this.selectedItemId = null;
     const overlay = document.getElementById('modalOverlay');

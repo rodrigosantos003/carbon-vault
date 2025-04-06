@@ -16,6 +16,7 @@ import { UsersManagerComponent } from './users-manager/users-manager.component';
 import { UserPaymentComponent } from './user-payment/user-payment.component';
 import { CartComponent } from './cart/cart.component';
 import { AuthGuard } from './auth.guard';
+import { PermissionGuard } from './permission-guard.guard';
 import { UserPurchasesComponent } from './user-purchases/user-purchases.component';
 import { UserSalesComponent } from './user-sales/user-sales.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
@@ -27,6 +28,19 @@ import { ProjectManagerDetailsComponent } from './project-manager-details/projec
 import { TransactionDetailsComponent } from './transaction-details/transaction-details.component';
 import { ProjectManagerDetailsAdminComponent } from './project-manager-details-admin/project-manager-details-admin.component';
 import { AdminTransactionsComponent } from './admin-transactions/admin-transactions.component'
+import { UserSettingsComponent } from './user-settings/user-settings.component';
+import { SupportManagerAdminComponent } from './support-manager-admin/support-manager-admin.component';
+import { SupportChatComponent } from './support-chat/support-chat.component';
+import { UserSupportComponent } from './user-support/user-support.component';
+import { UserReportsComponent } from './user-reports/user-reports.component';
+import { RequestReportComponent } from './request-report/request-report.component';
+import { AdminReportsComponent } from './admin-reports/admin-reports.component';
+import { TicketManagerComponent } from './ticket-manager/ticket-manager.component';
+import { UnauthorizedPageComponent } from './unauthorized-page/unauthorized-page.component';
+import { NotFoundError } from 'rxjs';
+import { NotFoundPageComponent } from './not-found-page/not-found-page.component';
+import { ValidParamGuard } from './valid-param-guard.guard';
+import { TermsAndConditionsComponent } from './terms-and-conditions/terms-and-conditions.component';
 /*import { EditProjectComponent } from './edit-project/edit-project.component';*/
 
 const routes: Routes = [
@@ -42,20 +56,31 @@ const routes: Routes = [
   { path: 'marketplace/project/:id', component: ProjectDetailsComponent },
   { path: 'user-menu', component: UserMenuComponent },
   { path: 'admin-dashboard', component: AdminDashboardComponent },
-  { path: 'users-manager', component: UsersManagerComponent, canActivate: [AuthGuard] },
+  { path: 'users-manager', component: UsersManagerComponent, canActivate: [AuthGuard, PermissionGuard], data: { requiredRole: 1 } },
   { path: 'user-payment', component: UserPaymentComponent },
-  { path: 'cart', component: CartComponent },
+  { path: 'cart', component: CartComponent, canActivate: [AuthGuard]},
   { path: 'purchases', component: UserPurchasesComponent },
   { path: 'project-manager', component: ProjectManagerComponent },
   { path: 'Account-project-manager/addProject', component: ProjectAddComponent },
   { path: 'Account-project-manager/:id', component: ProjectManagerDetailsComponent },
-  { path: 'project-manager/:id', component: ProjectManagerDetailsAdminComponent,canActivate: [AuthGuard] },
-  { path: 'Account-project-manager', component: ProjectManagerUserComponent,canActivate: [AuthGuard] },
+  { path: 'project-manager/:id', component: ProjectManagerDetailsAdminComponent, canActivate: [AuthGuard] },
+  { path: 'Account-project-manager', component: ProjectManagerUserComponent, canActivate: [AuthGuard] },
   { path: 'sales', component: UserSalesComponent },
   { path: 'users-manager/user-details/:id', component: UserDetailsComponent, },
-  { path: 'payment-success', component: PaymentSuccessComponent },
+  { path: 'payment-success/:type', component: PaymentSuccessComponent },
   { path: 'transaction-details/:id', component: TransactionDetailsComponent },
   { path: 'admin-transactions', component: AdminTransactionsComponent },
+  { path: 'settings', component: UserSettingsComponent },
+  { path: 'support-manager', component: TicketManagerComponent, canActivate: [AuthGuard] },
+  { path: 'support-manager/:id', component: SupportChatComponent, canActivate: [AuthGuard] },
+  { path: 'user-support', component: UserSupportComponent },
+  { path: 'user-reports', component: UserReportsComponent },
+  { path: 'request-report', component: RequestReportComponent },
+  { path: 'admin-reports', component: AdminReportsComponent },
+  { path: 'Unauthorized', component: UnauthorizedPageComponent },
+  { path: 'NotFound', component: NotFoundPageComponent },
+  { path: 'terms', component: TermsAndConditionsComponent },
+
 ];
 
 @NgModule({

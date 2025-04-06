@@ -1,6 +1,6 @@
-import { By, until, WebDriver } from 'selenium-webdriver';
+const { By, until } = require('selenium-webdriver');
 
-export async function testLogin(driver, email, password) {
+async function testLogin(driver, email, password) {
     await driver.get('http://localhost:59115/login');
 
     let emailInput = await driver.wait(until.elementLocated(By.id('email')), 5000);
@@ -18,7 +18,7 @@ export async function testLogin(driver, email, password) {
         console.log("Alerta encontrado:", await alert.getText());
         await alert.accept();
     } catch (e) {
-        console.log("Nenhum alerta encontrado.");
+        //console.log("Nenhum alerta encontrado.");
     }
 
     // Esperar pelo redirecionamento
@@ -34,3 +34,7 @@ export async function testLogin(driver, email, password) {
     console.log("✅ Login bem-sucedido! Token armazenado:", token);
     return token;
 }
+
+module.exports = {
+    testLogin
+};

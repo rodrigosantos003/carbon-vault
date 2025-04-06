@@ -3,6 +3,9 @@
   <app-alerts></app-alerts>
 
   <div class="main-content">
+    <app-go-back-button></app-go-back-button>
+
+
     <div class="project-details">
       <div class="project-details-header">
         <h3>Detalhes Projeto</h3>
@@ -123,7 +126,7 @@
       <div class="tab-content">
         <div class="tab-pane" *ngIf="showRejectionFeedback">
           <label>Feedback para o Utilizador:</label><br>
-          <textarea [(ngModel)]="project.rejectionFeedback" name="rejectionFeedback"></textarea><br>
+          <textarea [(ngModel)]="rejectionFeedback" name="rejectionFeedback"></textarea><br>
           <button class="decline-button-top" (click)="rejectProject()">Enviar Feedback e Rejeitar</button>
         </div>
 
@@ -153,8 +156,8 @@
             <option value=1>Pendente</option>
             <option value=0>Ativo</option>
             <option value=2>Inátivo</option>
-          </select><br>
-          <!-- <button class="Aprove-button-top" (click)="changeStatus()">Alterar Status</button> -->
+          </select><br><br>
+          <button class="Aprove-button-top" (click)="changeProjectStatus(project.status)">Alterar Estado</button>
         </div>
       </div>
     </div>

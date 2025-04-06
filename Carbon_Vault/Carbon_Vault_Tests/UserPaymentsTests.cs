@@ -1,6 +1,7 @@
 ﻿using Carbon_Vault.Controllers.API;
 using Carbon_Vault.Data;
 using Carbon_Vault.Services;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,7 @@ namespace Carbon_Vault_Tests_payments
         private readonly Mock<IEmailService> _mockEmailService;
         private readonly Mock<IConfiguration> _mockConfiguration;
         private readonly Carbon_VaultContext _mockContext;
+        private readonly Mock<IWebHostEnvironment> _mockEnvironment;
 
         public UserPaymentsTests()
         {
@@ -33,6 +35,9 @@ namespace Carbon_Vault_Tests_payments
 
             _mockEmailService = new Mock<IEmailService>(); 
             _mockConfiguration = new Mock<IConfiguration>();
+            _mockEnvironment = new Mock<IWebHostEnvironment>();
+
+            _mockContext.Account.Add(new Carbon_Vault.Models.Account { Id = 1, Name = "John Doe", Email = "john.doe@example.com", Nif = "123456789" });
             
             Environment.SetEnvironmentVariable("CLIENT_URL", "http://localhost:59115/");
             
@@ -53,6 +58,7 @@ namespace Carbon_Vault_Tests_payments
             item.Price = 12;
             item.Quantity = 1;
             cart.Items.Add(item);
+            cart.UserId = 1;
 
             var mockSessionService = new Mock<SessionService>();
             var session = new Session { Id = "test_session_id", Url = "https://checkout.stripe.com/test" };
@@ -62,7 +68,7 @@ namespace Carbon_Vault_Tests_payments
             var controller = new UserPaymentsController(_mockEmailService.Object, _mockContext);
 
             // Act
-            var result = controller.MakePayment(cart);
+            var result = controller.MakePayment(cart, "credits");
 
             // Assert
             Assert.IsType<OkObjectResult>(result);

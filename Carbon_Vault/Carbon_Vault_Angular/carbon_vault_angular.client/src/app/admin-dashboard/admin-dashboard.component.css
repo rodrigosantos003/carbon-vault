@@ -2,28 +2,28 @@ body {
   font-family: 'Poppins', sans-serif;
   color: black;
   margin: 0px !important;
-  display: flex;
-  height: 100vh;
 }
-
 
 /* Dashboard */
 .dashboard {
   flex: 1;
-  padding: 20px 50px 20px 90px;
+  padding: 20px 10px 20px 40px;
 }
 
-  .dashboard h1 {
-    margin-bottom: 50px;
-  }
+.dashboard h1 {
+  margin-bottom: 50px;
+}
 
 /* Cartões */
 .cards {
   display: flex;
-  gap: 50px;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 10px;
 }
 
 .card {
+  flex: 1 1;
   width: 210px;
   padding: 20px;
   border-radius: 10px;
@@ -32,17 +32,17 @@ body {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
-  .card div {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 50px;
-  }
+.card div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
+}
 
-  .card span {
-      font-weight: bold;
-      font-size: 30px;
-  }
+.card span {
+  font-weight: bold;
+  font-size: 30px;
+}
 
 .orange {
   background-color: #f28b50;
@@ -89,12 +89,12 @@ body {
 }
 
 .line {
-    width: 600px;
+  width: 600px;
 }
 
-  .chart {
-    width: 100%;
-  }
+.chart {
+  width: 100%;
+}
 
 /* Botão Exportar */
 .export-btn {

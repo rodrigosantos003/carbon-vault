@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { AuthService } from '../auth-service.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-
+import { AlertsService } from '../alerts.service';
 import { Chart, registerables } from 'chart.js';
 import { Router } from '@angular/router';
 Chart.register(...registerables);
@@ -20,57 +20,131 @@ export class DashboardComponent {
   lineChart: any;
   circularChart: any;
   emissions: number;
-  projects: number;
+  projects: any[];
   credits: number;
   purchases: Transaction[];
   sales: Transaction[];
+  dailyVisits: number = 0;
+  userCount: number = 0;
+  ProjectCount: number = 0;
+  TransactionCount: number = 0;
+  CreditCount: number = 0;
+  TotalTickets: number = 0;
+  TotalOpenTickets: number = 0;
+  TotalClosedTickets: number = 0;
 
-  constructor(private authService: AuthService, private http: HttpClient, private router: Router) {
+  /**
+   * Responsável por injetar os serviços necessários para o funcionamento do dashboard administrativo,
+   * além de inicializar propriedades essenciais, como o ID do utilizador autenticado e estruturas
+   * básicas de dados (emissões, projetos, transações, etc.).
+   * 
+   * @param authService Serviço de autenticação utilizado para obter o ID do utilizador atual.
+   * @param http Serviço HTTP para realizar requisições à API.
+   * @param router Serviço de roteamento Angular para navegação entre páginas.
+   * @param auth Serviço de autenticação (duplicado de `authService`, verificar se ambos são necessários).
+   * @param alerts Serviço responsável por mostrar notificações e alertas no frontend.
+   */
+  constructor(private authService: AuthService, private http: HttpClient, private router: Router, private auth: AuthService, private alerts: AlertsService) {
 
     this.userId = this.authService.getUserId();
     this.emissions = 0;
-    this.projects = 0;
+    this.projects = [];
     this.credits = 0;
     this.purchases = [];
     this.sales = [];
   }
 
+  /**
+ * - Limpa a sessão
+ * - Procura os dados do utilizador autenticado
+ * - Consoante o tipo de utilizador, chama os métodos específicos de dashboard.
+ */
   ngOnInit() {
-    const url = `${environment.apiUrl}/accounts/${this.userId}`;
-    this.http.get(url).subscribe(
-      (data: any) => {
-        // Se a requisição for bem-sucedida, preenche o formulário com os dados recebidos
-        this.userRole = data.role
-        this.fetchDashboardData();
-      },
-      error => {
-        // Caso contrário, exibe o erro no console
-        console.error("Erro na requisição:", error);
+    sessionStorage.clear();
 
+    const url = `${environment.apiUrl}/accounts/${this.userId}`;
+    this.http.get(url).subscribe({
+      next: (data: any) => {
+        // Se a requisição for bem-sucedida, preenche o formulário com os dados recebidos
+        if (data.role == 1) this.fetchAdminDashboardStatistics();
+        if (data.role == 3) this.fetchDashboardStatistics_support();
+        else this.fetchUserDashboardData();
+        this.userRole = data.role
+      },
+      error: (e) => {
+        console.error("Erro na requisição:", e);
       }
-    );
-    if (this.userRole != 0) {
-      this.createLineChart();
-      this.createCircularChart();
-    }
+    });
   }
 
-  fetchDashboardData() {
+  /**
+   * Vai procurar estatísticas para utilizador de suporte:
+   * - Nº total de tickets
+   * - Tickets abertos
+   * - Tickets fechados
+   */
+  fetchDashboardStatistics_support() {
+    const url = `${environment.apiUrl}/Tickets/support/stats`;
+    this.http.get(url, { headers: this.authService.getHeaders() }).subscribe(
+      (data: any) => {
+        console.log(data)
+        this.TotalTickets = data.totalTickets;
+        this.TotalOpenTickets = data.openTickets;
+        this.TotalClosedTickets = data.closedTickets;
+      },
+      error => console.error('Erro ao procurar estatísticas do dashboard:', error)
+    );
+  }
+
+  /**
+ * Vai procurar estatísticas globais do sistema (admin):
+ * - nº utilizadores
+ * - nº projetos
+ * - nº transações
+ * - nº créditos disponíveis
+ * - visitas diárias
+ */
+  fetchAdminDashboardStatistics() {
+    const url = `${environment.apiUrl}/accounts/DashboardStatistics`;
+    this.http.get(url, { headers: this.authService.getHeaders() }).subscribe(
+      (data: any) => {
+        console.log(data)
+        this.userCount = data.numeroTotalDeUtilizadores;
+        this.ProjectCount = data.numeroTotalDeProjetosDisponiveis
+        this.TransactionCount = data.numeroDeTransacoesFeitas
+        this.CreditCount = data.numeroTotalDeCreditosDeCarbonoDisponiveis
+        this.dailyVisits = data.numeroDiarioDeVisitas;
+
+        console.log(this.userCount)
+      },
+      error => console.error('Erro ao procurar estatísticas do dashboard:', error)
+    );
+  }
+
+  /**
+ * Carrega dados do dashboard de um utilizador normal:
+ * - Projetos
+ * - Emissões
+ * - Transações (compras/vendas)
+ */
+  fetchUserDashboardData() {
     Promise.all([
-      this.getCredits(),
       this.getProjects(),
       this.getEmissions(),
       this.getTransactions()]);
   }
 
+  /**
+ * Vai procurar as compras e vendas feitas pelo utilizador autenticado.
+ * Mostra alerta de carregamento enquanto os dados são obtidos.
+ */
   getTransactions() {
-    const purchasesURL = `${environment.apiUrl}/Transactions/type/0/user/${this.userId}`;
-    const salesURL = `${environment.apiUrl}/Transactions/type/1/user/${this.userId}`;
-
-    const jwtToken = localStorage.getItem('token');
+    this.alerts.enableLoading("A carregar dados");
+    const purchasesURL = `${environment.apiUrl}/Transactions/type/0`;
+    const salesURL = `${environment.apiUrl}/Transactions/type/1`;
 
     this.http.get<Transaction[]>(purchasesURL, {
-      headers: { 'Authorization': `Bearer ${jwtToken}` }
+      headers: this.auth.getHeaders()
     }).subscribe({
       next: (data) => {
         this.purchases = data;
@@ -81,37 +155,59 @@ export class DashboardComponent {
     });
 
     this.http.get<Transaction[]>(salesURL, {
-      headers: { 'Authorization': `Bearer ${jwtToken}` }
+      headers: this.auth.getHeaders()
     }).subscribe({
       next: (data) => {
         this.sales = data;
+        this.alerts.disableLoading();
       },
       error: (error) => {
         console.error("Erro ao obter compras: ", error);
+        this.alerts.disableLoading();
+        this.alerts.enableError("Erro ao carregar os dados");
       }
     });
   }
 
+  /**
+ * Soma todos os créditos de carbono associados aos projetos do utilizador.
+ */
   getCredits() {
-    const url = `${environment.apiUrl}/CarbonCredits/user/${this.userId}`;
+    //const url = `${environment.apiUrl}/CarbonCredits/user/${this.userId}`;
 
-    this.http.get(url).subscribe({
-      next: (data: any) => {
-        this.projects = data.length;
-      }
-    });
+    //this.http.get(url).subscribe({
+    //  next: (data: any) => {
+    //    this.projects = data.length;
+    //    console.log("Data: " + data.length);
+    //  }
+    //});
+
+    for (let proj of this.projects) {
+      this.CreditCount += proj.carbonCredits.length;
+    }
   }
 
+  /**
+ * Vai procurar os projetos do utilizador autenticado.
+ * - Atualiza o número de projetos
+ * - Chama o método para somar os créditos associados
+ */
   getProjects() {
     const url = `${environment.apiUrl}/Projects/user/${this.userId}`;
 
     this.http.get(url).subscribe({
       next: (data: any) => {
-        this.projects = data.length;
+        this.projects = data;
+        this.ProjectCount = data.length;
+
+        this.getCredits();
       }
     });
   }
 
+  /**
+ * Vai procurar as emissões do utilizador e calcula o total convertido em CO₂.
+ */
   getEmissions() {
     const url = `${environment.apiUrl}/UserEmissions/${this.userId}`;
 
@@ -122,6 +218,13 @@ export class DashboardComponent {
     });
   }
 
+  /**
+ * Calcula o total de emissões com base nos consumos (kWh, litros de combustível).
+ * Conversão:
+ * - Eletricidade: 0.189 kg CO₂/kWh
+ * - Gasolina: 0.00231 kg CO₂/litro
+ * - Gasóleo: 0.00268 kg CO₂/litro
+ */
   calculateEmissions(data: { electricity: number, petrol: number, diesel: number }) {
     const electricityEquivalent = data.electricity * 0.189;
     const petrolEquivalent = data.petrol * 0.00231;
@@ -134,10 +237,16 @@ export class DashboardComponent {
     return total;
   }
 
+  /**
+ * Redireciona para a página de detalhes de uma transação selecionada.
+ */
   transactionDetails(transaction_id: number) {
     this.router.navigate([`transaction-details/${transaction_id}`]);
   }
 
+  /**
+ * Cria um gráfico de linhas com dados fictícios de compras nos últimos dias.
+ */
   createLineChart(): void {
     this.lineChart = new Chart('MyLineChart', {
       type: 'line',
@@ -187,6 +296,9 @@ export class DashboardComponent {
     });
   }
 
+  /**
+ * Cria um gráfico circular com a distribuição de utilizadores por período do dia.
+ */
   createCircularChart(): void {
     this.circularChart = new Chart('MyCircularChart', {
       type: 'doughnut',
@@ -218,7 +330,7 @@ export class DashboardComponent {
 
 interface Transaction {
   id: number,
-  project: string,
+  projectName: string,
   quantity: number,
   date: string,
   state: string,

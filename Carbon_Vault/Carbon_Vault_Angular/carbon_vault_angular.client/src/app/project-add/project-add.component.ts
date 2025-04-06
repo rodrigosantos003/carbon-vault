@@ -32,6 +32,12 @@ export class ProjectAddComponent {
   imagem: File | null = null;
   imagePreviewUrl: string | null = null;
 
+  allowedFileTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/csv'];
+  maxMb = 5;
+  maxFileSize = this.maxMb * 1024 * 1024; // 5MB in bytes
+
+  allowedImageTypes = ['image/png', 'image/jpeg'];
+  maxImageSize = 2 * 1024 * 1024; // 2MB
 
   categorias = [
     { id: 1, nome: 'Poverty', label: 'Erradicar a pobreza' },
@@ -47,25 +53,43 @@ export class ProjectAddComponent {
     { id: 11, nome: 'LandLife', label: 'Proteger a Vida Terrestre' },
     { id: 12, nome: 'Peace', label: 'Proteger a Paz global' },
     { id: 13, nome: 'Partnership', label: 'Parcerias Sustentáveis' }
-
-
   ];
 
+  /**
+ * Construtor do componente `ProjectAddComponent`.
+ * Inicializa o componente com os serviços necessários para comunicação HTTP, autenticação do utilizador, alertas e navegação.
+ * 
+ * @param http Serviço para realizar requisições HTTP.
+ * @param authService Serviço de autenticação do utilizador.
+ * @param alerts Serviço de alertas.
+ * @param location Serviço de navegação de localização.
+ */
   constructor(private http: HttpClient, private authService: AuthService, private alerts: AlertsService, private location: Location) {
     this.userId = this.authService.getUserId();
-
   }
 
+  /**
+ * Método que permite voltar para a página anterior.
+ */
   goBack(): void {
     this.location.back();
   }
+
+  /**
+ * Valida os campos do formulário.
+ * - Verifica se todos os campos obrigatórios foram preenchidos corretamente.
+ * - Verifica se as datas estão corretas (data de início não pode ser posterior à data de fim).
+ * - Verifica se pelo menos uma categoria foi selecionada.
+ * 
+ * @returns `true` se o formulário for válido, `false` caso contrário.
+ */
   validateForm(): boolean {
     if (!this.nome.trim()) {
       this.alerts.enableError('O nome é obrigatório.');
       return false;
     }
-    if (this.preco !== null && this.preco < 0) {
-      this.alerts.enableError('O preço não pode ser negativo.');
+    if (this.preco == null || this.preco <= 0) {
+      this.alerts.enableError('O preço tem que ser maior que 0.');
       return false;
     }
     if (!this.localizacao.trim()) {
@@ -76,7 +100,10 @@ export class ProjectAddComponent {
       this.alerts.enableError('A descrição é obrigatória.');
       return false;
     }
-
+    if (!this.benefits.trim()) {
+      this.alerts.enableError('Os benefícios são obrigatórios.');
+      return false;
+    }
     if (!this.dataInicio) {
       this.alerts.enableError('A data de início é obrigatória.');
       return false;
@@ -104,37 +131,73 @@ export class ProjectAddComponent {
       }
     }
     if (this.categoriasSelecionadas.length === 0) {
-      alert('Deve selecionar pelo menos uma categoria .');
+      this.alerts.enableError('Deve selecionar pelo menos uma categoria.');
       return false;
     }
 
     return true;
   }
 
+  /**
+ * Adiciona arquivos ao array de documentos a serem enviados.
+ * 
+ * @param event Evento disparado ao selecionar arquivos.
+ */
   onFileChange(event: any) {
-    const newFiles = Array.from(event.target.files) as File[]; // Type cast here
+    const newFiles = Array.from(event.target.files) as File[];
 
     this.documentos = [...this.documentos, ...newFiles];
   }
 
+  /**
+ * Remove um arquivo da lista de documentos.
+ * 
+ * @param index Índice do arquivo a ser removido.
+ */
   removeFile(index: number) {
     this.documentos.splice(index, 1);
   }
 
+  /**
+ * Valida e carrega a imagem selecionada.
+ * - Verifica o tipo e tamanho do arquivo da imagem.
+ * - Mostra uma prévia da imagem caso seja válida.
+ * 
+ * @param event Evento disparado ao selecionar uma imagem.
+ */
   onImageChange(event: any): void {
     const file = event.target.files[0];
-    if (file) {
-      this.imagem = file;
+    if (!file) return;
 
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.imagePreviewUrl = e.target.result;
-      };
-      reader.readAsDataURL(file);
+    // Validate image type
+    if (!this.allowedImageTypes.includes(file.type)) {
+      this.alerts.enableError("Formato inválido. Apenas .png e .jpg são permitidos.");
+      return;
     }
+
+    // Validate image size
+    if (file.size > this.maxImageSize) {
+      this.alerts.enableError("Imagem demasiado grande. O limite são 5MB.");
+      return;
+    }
+
+    // If valid, update the preview
+    this.imagem = file;
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.imagePreviewUrl = e.target.result;
+    };
+    reader.readAsDataURL(file);
   }
+
   errors: any = {};
 
+  /**
+ * Envia a imagem para o backend.
+ * 
+ * @param projectId ID do projeto a ser associado à imagem.
+ * @returns A URL da imagem enviada.
+ */
   async uploadImage(projectId: number): Promise<string> {
     if (!this.imagem) return '';
     const formData = new FormData();
@@ -149,6 +212,12 @@ export class ProjectAddComponent {
     }
   }
 
+  /**
+ * Atualiza a lista de categorias selecionadas com base no estado da checkbox.
+ * 
+ * @param categoriaId ID da categoria.
+ * @param event Evento disparado ao alterar o estado da checkbox.
+ */
   onCategoriaChange(categoriaId: number, event: any) {
     if (event.target.checked) {
       this.categoriasSelecionadas.push(categoriaId);
@@ -156,30 +225,67 @@ export class ProjectAddComponent {
       this.categoriasSelecionadas = this.categoriasSelecionadas.filter(c => c !== categoriaId);
     }
   }
+
+  /**
+ * Previne o comportamento padrão de arrastar e soltar e define o efeito de cópia.
+ * 
+ * @param event Evento de arrastar.
+ */
   onDragOver(event: DragEvent) {
     event.preventDefault();
     event.stopPropagation();
     event.dataTransfer!.dropEffect = 'copy';
   }
 
-
+  /**
+ * Lida com o evento de soltar arquivos na área de arrastar e soltar.
+ * - Valida os arquivos arrastados (tipo e tamanho).
+ * - Adiciona os arquivos válidos à lista de documentos.
+ * 
+ * @param event Evento de soltar.
+ */
   onDrop(event: DragEvent) {
     event.preventDefault();
     event.stopPropagation();
 
-    const fileList: FileList = event.dataTransfer?.files!;
-    if (fileList && fileList.length > 0) {
-      const newFiles = Array.from(fileList);
+    if (event.dataTransfer && event.dataTransfer.files.length > 0) {
+      const droppedFiles = Array.from(event.dataTransfer.files) as File[];
 
+      for (let file of droppedFiles) {
+        // Validate file type
+        if (!this.allowedFileTypes.includes(file.type)) {
+          this.alerts.enableError("Formato inválido. Ficheiros permitidos: .docx, .pdf, .csv");
+          return;
+        }
 
-      this.documentos = [...this.documentos, ...newFiles];
+        // Validate file size
+        if (file.size > this.maxFileSize) {
+          this.alerts.enableError("Ficheiro demasiado grande. O limite são " + this.maxMb + "MB.");
+          return;
+        }
+      }
+
+      // If all files are valid, add them
+      this.documentos = [...this.documentos, ...droppedFiles];
     }
   }
 
+  /**
+ * Previne o comportamento padrão de arrastar e soltar.
+ * 
+ * @param event Evento de sair com o mouse da área de arrastar.
+ */
   onDragLeave(event: DragEvent) {
     event.preventDefault();
     event.stopPropagation();
   }
+
+  /**
+ * Envia os dados do projeto para o backend.
+ * - Valida o formulário e verifica se os dados estão corretos.
+ * - Envia os dados do projeto e seus arquivos.
+ * - Mostra um alerta de sucesso ou erro com base na resposta da API.
+ */
   async onSubmit() {
     if (!this.validateForm()) return;
 
@@ -204,7 +310,7 @@ export class ProjectAddComponent {
       projectUrl: this.urlProjeto,
       imageUrl: this.urlImagem,
       ownerId: Number(this.userId),
-      benefits : this.benefits,
+      benefits: this.benefits,
       types: this.categoriasSelecionadas.map(id => ({ id }))
     };
 

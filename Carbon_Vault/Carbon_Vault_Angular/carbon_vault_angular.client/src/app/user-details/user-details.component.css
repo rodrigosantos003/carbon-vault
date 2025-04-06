@@ -107,8 +107,9 @@
     border-top-right-radius: 25px;
     margin: 0;
     padding: 15px;
-    background-color: #d1d3d07a;
+    background-color: #4ea741;
     border-top-left-radius: 25px;
+    color: white;
   }
 
   .purchase-history-table{

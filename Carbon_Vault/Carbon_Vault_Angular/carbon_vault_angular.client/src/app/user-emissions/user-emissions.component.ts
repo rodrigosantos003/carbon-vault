@@ -20,6 +20,14 @@ export class UserEmissionsComponent {
 
   userId: string;
 
+  /**
+   * Construtor do componente.
+   *
+   * @param fb FormBuilder para criar o formulário.
+   * @param http Serviço HTTP para comunicação com a API.
+   * @param authService Serviço de autenticação.
+   * @param alerts Serviço de alertas para mensagens de sucesso ou erro.
+   */
   constructor(private fb: FormBuilder, private http: HttpClient, private authService: AuthService, private alerts: AlertsService) {
 
     this.emissionsForm = this.fb.group({
@@ -31,11 +39,17 @@ export class UserEmissionsComponent {
     this.userId = this.authService.getUserId();
   }
 
+  /**
+   * Ciclo de vida do componente após inicialização.
+   * 
+   * Procura os dados de emissões do utilizador. Se não existirem, inicializa com zeros e cria novo registo.
+   * Também calcula automaticamente as emissões totais ao alterar qualquer campo.
+   */
   ngOnInit() {
     const url = `${environment.apiUrl}/UserEmissions/${this.userId}`;
 
-    this.http.get(url).subscribe(
-      (data: any) => {
+    this.http.get(url).subscribe({
+      next: (data: any) => {
         // Se a requisição for bem-sucedida, preenche o formulário com os dados recebidos
         this.emissionsForm.setValue({
           electricity: data.electricity,
@@ -43,7 +57,7 @@ export class UserEmissionsComponent {
           diesel: data.diesel
         });
       },
-      error => {
+      error: (error) => {
         // Caso ocorra um erro, e o status seja 404, define os valores como 0
         if (error.status === 404) {
           this.emissionsForm.setValue({
@@ -51,38 +65,29 @@ export class UserEmissionsComponent {
             petrol: 0,
             diesel: 0
           });
-
-          const formValue = this.emissionsForm.value;
-
-          const emissionData = {
-            electricity: formValue.electricity,
-            petrol: formValue.petrol,
-            diesel: formValue.diesel,
-            UserId: this.userId
-          };
-
-          this.http.post(`${environment.apiUrl}/UserEmissions`, emissionData).subscribe(
-            () => {
-              this.alerts.enableSuccess("Emissões adicionadas com sucesso");
-            },
-            (error) => {
-              this.alerts.enableError("Erro ao adicionar emissões");
-            }
-          );
         }
         else {
-          // Caso contrário, exibe o erro no console
-          console.error("Erro na requisição:", error);
+          this.alerts.enableError("Erro ao obter emissões");
         }
       }
-    );
+    });
 
-    this.emissionsForm.valueChanges.subscribe((changes) => {
-      this.totalEmissions = this.calculateEmissions(changes);
+    this.emissionsForm.valueChanges.subscribe(() => {
+      ['electricity', 'petrol', 'diesel'].forEach(field => {
+        const control = this.emissionsForm.get(field);
+        if (control && control.value < 0) {
+          control.setValue(0);
+        }
+      });
+
+      this.totalEmissions = this.calculateEmissions(this.emissionsForm.value);
     });
   }
 
-
+  /**
+   * Envia os dados do formulário para a API.
+   * Se o registo já existir, faz `PUT` (atualização).
+   */
   onSubmit() {
     const formValue = this.emissionsForm.value;
 
@@ -96,37 +101,61 @@ export class UserEmissionsComponent {
     const url = `${environment.apiUrl}/UserEmissions/${this.userId}`;
 
     // Verifica se a emissão já existe
-    this.http.get(url).subscribe(
-      (data: any) => {
-        if (data) {
-          // Caso a emissão já exista, faz o PUT (atualização)
-          this.http.put(url, emissionData).subscribe({
-            next: () => {
-              this.alerts.enableSuccess("Emissões atualizadas com sucesso");
-            },
-            error: (error) => {
-              this.alerts.enableError("Erro ao atualizar emissões");
-            }
-          }
-          );
-        }
+    this.http.get(url).subscribe({
+      next: () => {
+        // Caso a emissão já exista, faz o PUT (atualização)
+        this.updateEmissions(url, emissionData);
       },
-      (error) => {
-        this.alerts.enableError("Erro ao obter emissões");
+      error: (error) => {
+        // Caso contrário, faz o POST (criação)
+        if (error.status === 404) {
+          this.createEmissions(emissionData);
+        } else {
+          this.alerts.enableError("Erro ao obter emissões");
+        }
       }
-    );
+    });
   }
 
+  createEmissions(data: { electricity: number, petrol: number, diesel: number }) {
+    const url = `${environment.apiUrl}/UserEmissions`;
 
+    this.http.post(url, data).subscribe({
+      next: () => {
+        this.alerts.enableSuccess("Emissões atualizadas com sucesso");
+      },
+      error: () => {
+        this.alerts.enableError("Erro ao atualizar emissões");
+      }
+    });
+  }
+
+  updateEmissions(url: string, data: { electricity: number, petrol: number, diesel: number }) {
+    this.http.put(url, data).subscribe({
+      next: () => {
+        this.alerts.enableSuccess("Emissões atualizadas com sucesso");
+      },
+      error: () => {
+        this.alerts.enableError("Erro ao atualizar emissões");
+      }
+    });
+  }
+
+  /**
+   * Calcula as emissões totais com base nos dados inseridos.
+   * 
+   * @param formData Objeto com os valores de eletricidade, gasolina e gasóleo.
+   * @returns Total de emissões em kg CO₂e.
+   */
   calculateEmissions(formData: { electricity: number, petrol: number, diesel: number }) {
-    const electricityEquivalent = formData.electricity * 0.189;
-    const petrolEquivalent = formData.petrol * 0.00231;
-    const dieselEquivalent = formData.diesel * 0.00268;
+    const electricity = formData.electricity;
+    const petrol = formData.petrol;
+    const diesel = formData.diesel;
 
-    const sumTotal = electricityEquivalent + petrolEquivalent + dieselEquivalent;
+    const electricityEquivalent = electricity * 0.189;
+    const petrolEquivalent = petrol * 0.00231;
+    const dieselEquivalent = diesel * 0.00268;
 
-    const total = Math.round(sumTotal * 100) / 100;
-
-    return total;
+    return electricityEquivalent + petrolEquivalent + dieselEquivalent;
   }
 }

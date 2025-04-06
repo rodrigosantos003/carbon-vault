@@ -7,7 +7,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Stripe;
 using Carbon_Vault.Controllers;
+using Microsoft.Extensions.FileProviders;
 
+DotNetEnv.Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<Carbon_VaultContext>(options =>
@@ -16,6 +18,8 @@ builder.Services.AddDbContext<Carbon_VaultContext>(options =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<TokenValidationFilter>();
+builder.Services.AddScoped<AdminFilter>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigins", policy =>
@@ -26,7 +30,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-var key = Encoding.ASCII.GetBytes("SuaChaveSecretaMuitoSeguraComPeloMenos32Caracteres");
+var key = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY"));
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -45,8 +49,6 @@ builder.Services.AddAuthentication(x =>
     };
 });
 
-DotNetEnv.Env.Load();
-
 var app = builder.Build();
 
 
@@ -61,6 +63,15 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.ContentRootPath, "App_Data", "files")),
+    RequestPath = "/files",
+    ServeUnknownFileTypes = true
+});
+
 
 app.UseRouting();
 

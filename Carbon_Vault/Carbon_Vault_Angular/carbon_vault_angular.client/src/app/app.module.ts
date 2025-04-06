@@ -37,6 +37,21 @@ import { ProjectManagerDetailsComponent } from './project-manager-details/projec
 import { TransactionDetailsComponent } from './transaction-details/transaction-details.component';
 import { ProjectManagerDetailsAdminComponent } from './project-manager-details-admin/project-manager-details-admin.component';
 import { AdminTransactionsComponent } from './admin-transactions/admin-transactions.component';
+import { UserSettingsComponent } from './user-settings/user-settings.component';
+import { SupportChatComponent } from './support-chat/support-chat.component';
+import { SupportManagerAdminComponent } from './support-manager-admin/support-manager-admin.component';
+import { ChatCardComponent } from './chat-card/chat-card.component';
+import { UserSupportComponent } from './user-support/user-support.component';
+import { GoBackButtonComponent } from './go-back-button/go-back-button.component';
+import { UserReportsComponent } from './user-reports/user-reports.component';
+import { RequestReportComponent } from './request-report/request-report.component';
+import { AdminReportsComponent } from './admin-reports/admin-reports.component';
+import { SupportDashboardComponent } from './support-dashboard/support-dashboard.component';
+import { TicketManagerComponent } from './ticket-manager/ticket-manager.component';
+import { UnauthorizedPageComponent } from './unauthorized-page/unauthorized-page.component';
+import { NotFoundPageComponent } from './not-found-page/not-found-page.component';
+import { TermsAndConditionsComponent } from './terms-and-conditions/terms-and-conditions.component';
+import { EvaluatorDashboardComponent } from './evaluator-dashboard/evaluator-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -70,6 +85,22 @@ import { AdminTransactionsComponent } from './admin-transactions/admin-transacti
     ProjectManagerDetailsAdminComponent,
     AdminTransactionsComponent,
     TransactionDetailsComponent,
+    UserSettingsComponent,
+    SupportChatComponent,
+    SupportManagerAdminComponent,
+    ChatCardComponent,
+    UserSupportComponent,
+    GoBackButtonComponent,
+    UserSupportComponent,
+    UserReportsComponent,
+    RequestReportComponent,
+    AdminReportsComponent,
+    SupportDashboardComponent,
+    TicketManagerComponent,
+    UnauthorizedPageComponent,
+    NotFoundPageComponent,
+    TermsAndConditionsComponent,
+    EvaluatorDashboardComponent
   ],
   imports: [
     BrowserModule,

@@ -1,6 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { CartService } from '../cart.service';
 import { AlertsService } from '../alerts.service'
+import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../auth-service.service';
 
 @Component({
   selector: 'app-projectCard',
@@ -15,31 +17,43 @@ export class ProjectCardComponent {
   @Input() pricePerCredit!: number;
   @Input() projectID!: number;
   @Input() quantity: number = 1; // Valor padrão de 1
+  projectData: any = null;
+  carbonCreditsForSale: number = 0;
 
-  constructor(private cartService: CartService, private alerts: AlertsService) {}
+  /**
+ * Construtor do componente `ProjectCardComponent`.
+ * Inicializa o componente com os serviços necessários para manipulação do carrinho, de alertas e requisições HTTP.
+ * 
+ * @param cartService Serviço de manipulação do carrinho de compras.
+ * @param alerts Serviço de alertas.
+ * @param http Serviço para realizar requisições HTTP.
+ * @param authService Serviço para verificar se o utilizador está autenticado.
+ */
+  constructor(private cartService: CartService, private alerts: AlertsService, private http: HttpClient, private authService: AuthService) { }
 
+  /**
+ * Método chamado na inicialização do componente.
+ * - Define o valor padrão da quantidade como 1.
+ */
   ngOnInit() {
     this.quantity = 1;
   }
 
+  /**
+ * Valida a quantidade de créditos de carbono que o utilizador deseja adicionar ao carrinho.
+ * - Se a quantidade for menor que 1 ou não for um número válido, o valor é redefinido para 1.
+ */
+  validateQuantity() {
+    if (this.quantity < 1 || isNaN(this.quantity)) {
+      this.quantity = 1;
+    }
+  }
+
+  /**
+ * Adiciona o item ao carrinho, validando se há créditos suficientes disponíveis para o projeto.
+ */
   addToCart() {
-    const item = {
-      id: this.projectID,
-      image: this.imageUrl,
-      name: this.name,
-      description: this.description,
-      price: this.pricePerCredit,
-      quantity: this.quantity,
-    };
-
-    this.cartService.addItem(item);
-
-    this.alerts.enableSuccess("Item adicionado ao carrinho!");
-    //alert('Item adicionado ao carrinho!');
-    //setTimeout(() => {
-    //  this.alerts.disableSuccess();
-    //}, 3000);
-
+    this.cartService.addItem(this.projectID, this.quantity);
     this.quantity = 1;
   }
 }

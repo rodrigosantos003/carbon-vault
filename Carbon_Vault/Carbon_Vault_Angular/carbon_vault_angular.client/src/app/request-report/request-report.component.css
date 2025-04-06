@@ -1,0 +1,132 @@
+/* Geral */
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--main-color) !important;
+    color: #fff;
+    margin: 0px !important;
+}
+
+/* Container principal */
+.request-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100vh;
+    padding: 0 15%;
+}
+
+/* Caixa de request */
+.request-box {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background-color: #fff;
+    color: var(--main-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    width: 40%;
+    height: 60%;
+    text-align: center;
+}
+
+.logo-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.request-box h1 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+}
+
+.request-box label {
+    display: block;
+    font-size: 20px;
+    margin-top: 10px;
+    text-align: left;
+}
+
+.request-box input {
+    width: 95%;
+    padding: 10px;
+    margin-top: 5px;
+    border: none;
+    border-bottom: 2px solid black;
+}
+
+.file-drop-area {
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    background-color: #f4f4f4;
+    cursor: pointer;
+    transition: 0.3s;
+    font-family: Arial, sans-serif;
+}
+
+/* Efeito ao passar o rato por cima */
+.file-drop-area:hover {
+    background-color: #e8e8e8;
+}
+
+/* Efeito ao arrastar ficheiros */
+.file-drop-area.dragover {
+    border-color: #45a049;
+    background-color: #e3f2fd;
+}
+
+/* Estilo do botão de procurar */
+.file-label {
+    font-size: 16px !important;
+    text-align: center !important;
+    color: #45a049;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.request-button {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--main-color);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    margin-top: 27px;
+}
+
+.request-button:hover {
+    background-color: #45a049;
+}
+
+/* Caixa de informações */
+.info-box {
+    width: 40%;
+    text-align: center;
+}
+
+.info-box h2 {
+    font-size: 40px;
+    margin-bottom: 20px;
+}
+
+.info-box p {
+    font-size: 20px;
+    line-height: 1.5;
+}
+
+.info-box span {
+    background-color: rgba(238, 238, 238, 0.4);
+}
+
+.logo img,
+.plant-icon img {
+    width: 150px;
+    margin-bottom: 20px;
+}

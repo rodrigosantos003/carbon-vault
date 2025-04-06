@@ -4,6 +4,7 @@ import { environment } from '../../environments/environment';
 import { AuthService } from '../auth-service.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AlertsService } from '../alerts.service';
+import { downloadPDF } from '../services/certificate-generator';
 
 @Component({
   selector: 'app-transaction-details',
@@ -25,8 +26,24 @@ export class TransactionDetailsComponent {
   @Input() transactionSession: string = ''; // Sessão de pagamento
   @Input() transactionMethod: string = ''; // Processador de pagamento
 
+  projectLocation: string = ''; // Localização do projeto
+  projectCertifier: string = ''; // Certificador do projeto
+  projectDescription: string = ''; // Descrição do projeto
+
+  /**
+   * Construtor do componente.
+   *
+   * @param route Serviço para obter parâmetros da rota.
+   * @param http Cliente HTTP para requisições à API.
+   * @param auth Serviço de autenticação para obter ID do utilizador e headers.
+   * @param alerts Serviço de alertas e carregamentos.
+   */
   constructor(private route: ActivatedRoute, private http: HttpClient, private auth: AuthService, private alerts: AlertsService) { }
 
+  /**
+   * Ciclo de vida do componente. É executado quando o componente é inicializado.
+   * Obtém os detalhes da transação com base no ID da rota.
+   */
   ngOnInit() {
     this.transactionId = this.route.snapshot.paramMap.get('id') ?? "";
 
@@ -35,18 +52,11 @@ export class TransactionDetailsComponent {
       return;
     }
 
-    var url = environment.apiUrl + "/transactions/details/" + this.transactionId;
-
-    var token = localStorage.getItem('token');
+    var url = environment.apiUrl + "/Transactions/details/" + this.transactionId;
 
     var userId = this.auth.getUserId();
 
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'userID': userId
-    });
-
-    this.http.get(url, { headers }).subscribe((data: any) => {
+    this.http.get(url, { headers: this.auth.getHeaders() }).subscribe((data: any) => {
       var type;
 
       switch (userId) {
@@ -60,21 +70,30 @@ export class TransactionDetailsComponent {
           type = "Admin";
       }
 
+      console.log(data);
       this.transactionType = type;
       this.transactionBuyer = data.buyerName;
       this.transactionSeller = data.sellerName;
-      this.transactionProject = data.project;
+      this.transactionProject = data.projectName;
       this.transactionDate = data.date;
       this.transactionQuantity = data.quantity;
       this.transactionTotal = data.totalPrice;
       this.transactionSession = data.checkoutSession;
       this.transactionMethod = data.paymentMethod;
+      this.projectCertifier = data.projectCertifier;
+      this.projectLocation = data.projectLocation;
+      this.projectDescription = data.projectDescription;
+
     }, error => {
       console.error("Erro na requisição:", error);
       this.alerts.enableError("Erro ao obter transação");
     });
   }
 
+  /**
+   * Permite descarregar a fatura da transação.
+   * A fatura é aberta numa nova aba do navegador.
+   */
   downloadInvoice() {
     this.alerts.enableLoading("A obter fatura...");
 
@@ -90,5 +109,22 @@ export class TransactionDetailsComponent {
         this.alerts.enableError("Erro ao obter fatura");
       }
     })
+  }
+
+  /**
+   * Gera e descarrega o certificado da transação em formato PDF,
+   * usando os dados preenchidos do projeto e do comprador.
+   */
+  downloadCertificate() {
+    const info = {
+      nomeAdquirente: this.transactionBuyer,
+      dataAquisicao: this.transactionDate,
+      quantidadeCreditos: parseInt(this.transactionQuantity),
+      nomeProjeto: this.transactionProject,
+      localizacaoProjeto: this.projectLocation,
+      certificador: this.projectCertifier,
+      descricaoProjeto: this.projectDescription
+    }
+    downloadPDF(info);
   }
 }

@@ -1,0 +1,67 @@
+<body>
+    <app-user-menu></app-user-menu>
+    <app-alerts></app-alerts>
+
+    <div class="modal-overlay" id="answerPopup">
+        <div class="answer" id="answer">
+            <div class="popup-content">
+                <p class="answer-heading">Adicionar Análise</p>
+                <textarea [(ngModel)]="reportText"></textarea>
+            </div>
+            <div class="answer-button-wrapper">
+                <button class="answer-button secondary" (click)="closeAnswer()">Cancelar</button>
+                <button class="answer-button primary" (click)="answerReport()">Responder</button>
+            </div>
+            <button class="exit-button" (click)="closeAnswer()">
+                <svg height="20px" viewBox="0 0 384 512">
+                    <path
+                        d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z">
+                    </path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <main class="content">
+        <div class="stats">
+            <div class="card yellow">
+                <h3>Número Total de Relatorios Pendentes</h3>
+                <div>
+                    <img src="images/Pending_reports.png" class="icon" width="50px" />
+                    <h2 class="value">{{pendingReportsCount}}</h2>
+                </div>
+            </div>
+            <div class="card green">
+                <h3>Número Total de Relatorios Concluidos</h3>
+                <div>
+                    <img src="images/Done_REPORTS.png" width="50px" />
+                    <h2>{{ doneReportsCount}}</h2>
+                </div>
+
+            </div>
+        </div>
+        <h1>Relatórios Solicitados</h1>
+
+        <div class="table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Descarregar Ficheiros</th>
+                        <th>Responder</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngIf="reports.length === 0">
+                        <td colspan="4" class="text-center" id="nothingToShow">Nada a mostrar!</td>
+                    </tr>
+                    <tr *ngFor="let report of reports">
+                        <td>{{report.lastUpdate | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+                        <td><button class="details-button" (click)="downloadFiles(report.id)">Descarregar</button></td>
+                        <td><button class="details-button" (click)="openAnswer(report)">Responder</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
