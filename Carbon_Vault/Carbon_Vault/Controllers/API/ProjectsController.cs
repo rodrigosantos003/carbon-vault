@@ -126,6 +126,9 @@ namespace Carbon_Vault.Controllers.API
                 return NotFound();
             }
 
+            if (project.Status != ProjectStatus.Confirmed)
+                return StatusCode(403, "O projeto não está ativo");
+
             // Update the project state (flip the IsForSale value)
             project.IsForSale = !project.IsForSale;
 
@@ -143,14 +146,38 @@ namespace Carbon_Vault.Controllers.API
         // PUT: api/Projects/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProject(int id, Project project)
+        public async Task<IActionResult> PutProject(int id, Project updatedProject)
         {
-            if (id != project.Id)
+            if (id != updatedProject.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(project).State = EntityState.Modified;
+            // Load the existing project including its types
+            var existingProject = await _context.Projects
+                .Include(p => p.Types)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (existingProject == null)
+            {
+                return NotFound();
+            }
+
+            // Update scalar properties
+            _context.Entry(existingProject).CurrentValues.SetValues(updatedProject);
+
+            // Clear and reassign project types
+            existingProject.Types.Clear();
+
+            foreach (var type in updatedProject.Types)
+            {
+                // Attach if detached
+                var existingType = await _context.ProjectTypes.FindAsync(type.Id);
+                if (existingType != null)
+                {
+                    existingProject.Types.Add(existingType);
+                }
+            }
 
             try
             {
@@ -213,6 +240,7 @@ namespace Carbon_Vault.Controllers.API
                 project.Types = projectTypes;  // Associar os tipos do projeto
             }
 
+            project.CreatedAt = DateTime.UtcNow;
 
             _context.Projects.Add(project);
             await _context.SaveChangesAsync();
@@ -777,8 +805,14 @@ namespace Carbon_Vault.Controllers.API
         /// <returns>Retorna uma mensagem de sucesso ou erro, dependendo do resultado.</returns>
         [HttpPut("sell-credits/{projectId}")]
         [ServiceFilter(typeof(TokenValidationFilter))]
-        public async Task<IActionResult> SellCredits([FromHeader] string Authorization, int userId, int projectId, int credits)
+        public async Task<IActionResult> SellCredits([FromHeader] int userID, int projectId, [FromBody] int credits)
         {
+            var account = await _context.Account.FindAsync(userID);
+            if (account == null)
+            {
+                return NotFound(new { message = "Account not found." });
+            }
+
             var project = await _context.Projects.FindAsync(projectId);
 
             if (project == null)
@@ -803,7 +837,7 @@ namespace Carbon_Vault.Controllers.API
             foreach (var credit in creditsToSell)
             {
                 credit.IsSold = true;
-                credit.BuyerId = userId;
+                credit.BuyerId = account.Id;
             }
 
             project.CreditsForSale -= credits;

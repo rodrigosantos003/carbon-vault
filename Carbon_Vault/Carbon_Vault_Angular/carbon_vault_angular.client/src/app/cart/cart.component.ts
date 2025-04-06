@@ -32,16 +32,6 @@ export class CartComponent implements OnInit {
   }
 
   /**
- * Adiciona um item ao carrinho.
- * 
- * @param item Objeto do item a adicionar.
- */
-  addItem(item: any) {
-    this.cartService.addItem(item);
-    this.updateCart();
-  }
-
-  /**
  * Incrementa a quantidade de um item específico no carrinho.
  * 
  * @param itemId ID do item a incrementar.

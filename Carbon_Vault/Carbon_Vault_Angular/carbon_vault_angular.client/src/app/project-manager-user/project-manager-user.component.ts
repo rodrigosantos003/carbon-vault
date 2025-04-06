@@ -123,6 +123,12 @@ export class ProjectManagerUserComponent {
           this.alerts.enableSuccess('Estado de venda do projeto alterado com sucesso!');
         },
         error: (error) => {
+          this.closeForSale();
+          if (error.status === 403) {
+            this.alerts.enableError("O projeto tem de estar ativo");
+            return;
+          }
+
           console.error('Erro ao colocar projeto à venda:', error);
           this.alerts.enableError('Erro ao colocar projeto à venda.');
         },

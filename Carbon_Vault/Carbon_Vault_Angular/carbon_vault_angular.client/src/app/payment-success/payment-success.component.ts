@@ -4,7 +4,6 @@ import { environment } from '../../environments/environment';
 import { CartService } from '../cart.service';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { loadStripe, Stripe } from '@stripe/stripe-js';
-import { AlertsService } from '../alerts.service';
 import { AuthService } from '../auth-service.service';
 
 @Component({
@@ -15,6 +14,7 @@ import { AuthService } from '../auth-service.service';
   styleUrl: './payment-success.component.css'
 })
 export class PaymentSuccessComponent {
+  message: string = "A processar pagamento...";
   sessionData: any;
 
   /**
@@ -24,11 +24,10 @@ export class PaymentSuccessComponent {
  * @param http Serviço para realizar requisições HTTP.
  * @param cartService Serviço para manipulação do carrinho de compras.
  * @param router Serviço de navegação do Angular.
- * @param alerts Serviço de alertas.
  * @param authService Serviço de autenticação do utilizador.
  * @param route Serviço para aceder os parâmetros da rota.
  */
-  constructor(private http: HttpClient, private cartService: CartService, public router: Router, private alerts: AlertsService, private authService: AuthService, private route: ActivatedRoute) { }
+  constructor(private http: HttpClient, private cartService: CartService, public router: Router, private authService: AuthService, private route: ActivatedRoute) { }
 
   /**
  * Método que é executado durante a inicialização do componente.
@@ -37,18 +36,23 @@ export class PaymentSuccessComponent {
  * - Executa a ação apropriada dependendo do tipo de pagamento.
  */
   ngOnInit() {
-    this.cartService.clearCart();
     const checkoutSession = sessionStorage.getItem("checkoutSession");
 
     if (checkoutSession) {
       const type = this.route.snapshot.paramMap.get('type');
-      console.log(type);
 
       if (type == "credits") {
-        console.log("CREDITOS");
         this.http.get(`${environment.apiUrl}/UserPayments/session/${checkoutSession}`, { headers: this.authService.getHeaders() }).subscribe({
-          next: () => this.sendInvoice(checkoutSession),
-          error: () => this.alerts.enableError("Erro ao processar")
+          next: () => {
+            let headers = this.authService.getHeaders();
+            headers = headers.append('Content-Type', 'application/json');
+            this.cartService.getCart().forEach(item => {
+              this.http.put(`${environment.apiUrl}/Projects/sell-credits/${item.id}`, JSON.stringify(item.quantity), { headers: headers }).subscribe();
+            });
+            this.cartService.clearCart();
+          },
+          complete: () => this.sendInvoice(checkoutSession),
+          error: () => this.message = "Erro ao processar pagamento"
         });
       }
       else if (type == "report") {
@@ -78,7 +82,7 @@ export class PaymentSuccessComponent {
 
       this.http.put(reportURL, report, { headers: this.authService.getHeaders() }).subscribe({
         next: () => this.sendInvoice(checkoutSession),
-        error: () => this.alerts.enableError("Erro ao processar")
+        error: () => this.message = "Erro ao atualizar relatório"
       });
     }
   }
@@ -93,15 +97,14 @@ export class PaymentSuccessComponent {
   sendInvoice(checkoutSessionId: string) {
     const apiUrl = `${environment.apiUrl}/UserPayments/invoice/${checkoutSessionId}/send`;
     this.http.get(apiUrl).subscribe({
-      next: (data) => {
-        this.alerts.enableSuccess("Fatura enviada com sucesso");
+      next: () => {
+        this.message = "Pagamento realizado com sucesso!"
         sessionStorage.clear();
       },
-      error: (error) => {
-        console.error("Erro ao enviar a fatura: ", error);
-        this.alerts.enableError("Erro ao enviar a fatura");
+      error: () => {
+        this.message = "Erro ao enviar fatura"
         sessionStorage.clear();
       }
-    })
+    });
   }
 }

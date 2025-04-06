@@ -156,6 +156,7 @@ export class AdminReportsComponent {
       next: () => {
         this.alerts.enableSuccess("Relatório respondido com sucesso");
         this.closeAnswer();
+        location.reload();
       },
       error: () => {
         this.alerts.enableError("Erro ao responder ao relatório");

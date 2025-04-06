@@ -99,37 +99,13 @@ export class ProjectDetailsComponent {
 
   /**
  * Adiciona o item ao carrinho, validando se há créditos suficientes disponíveis para o projeto.
- * - Verifica se o número de créditos disponíveis é suficiente para a quantidade solicitada.
- * - Mostra um alerta de erro caso não haja créditos suficientes ou o projeto não tenha créditos disponíveis.
- * - Se a validação for bem-sucedida, o item é adicionado ao carrinho e o utilizador recebe um alerta de sucesso.
+ *
  */
-  addToCart() {
-    console.log("CC = " + this.projectData.creditsForSale);
-    console.log("Quant = " + this.quantity);
-    if (this.projectData.creditsForSale < 1) {
-      this.alerts.enableError("Este projeto não tem créditos disponveis para venda, tente mais tarde.", 5);
-      return;
-    }
-
-    if (this.projectData.creditsForSale < this.quantity) {
-      this.alerts.enableError("Quantidade máxima de " + this.projectData.creditsForSale + " CC para este projeto", 5);
-      return;
-    }
-
-    const item = {
-      id: parseInt(this.projectId),
-      image: this.projectData.imageUrl,
-      name: this.projectData.name,
-      description: this.projectData.description,
-      price: this.projectData.pricePerCredit,
-      quantity: this.quantity,
-    };
-
-    this.cartService.addItem(item);
-    this.alerts.enableSuccess("Item adicionado ao carrinho!");
-
+  addToCart(): void {
+    this.cartService.addItem(parseInt(this.projectId), this.quantity);
     this.quantity = 1;
   }
+
 
   // ### PAGE SYSTEM ###
 
