@@ -58,7 +58,7 @@ export class UserEmissionsComponent {
       }
     });
 
-    this.emissionsForm.valueChanges.subscribe((changes) => {
+    this.emissionsForm.valueChanges.subscribe(() => {
       ['electricity', 'petrol', 'diesel'].forEach(field => {
         const control = this.emissionsForm.get(field);
         if (control && control.value < 0) {
@@ -84,28 +84,43 @@ export class UserEmissionsComponent {
 
     // Verifica se a emissão já existe
     this.http.get(url).subscribe({
-      next: (data: any) => {
-        if (data) {
-          // Caso a emissão já exista, faz o PUT (atualização)
-          this.http.put(url, emissionData).subscribe({
-            next: () => {
-              this.alerts.enableSuccess("Emissões atualizadas com sucesso");
-            },
-            error: (error) => {
-              this.alerts.enableError("Erro ao atualizar emissões");
-            }
-          }
-          );
-        }
+      next: () => {
+        // Caso a emissão já exista, faz o PUT (atualização)
+        this.updateEmissions(url, emissionData);
       },
-      error: () => {
-        this.alerts.enableError("Erro ao obter emissões");
+      error: (error) => {
+        // Caso contrário, faz o POST (criação)
+        if (error.status === 404) {
+          this.createEmissions(emissionData);
+        } else {
+          this.alerts.enableError("Erro ao obter emissões");
+        }
       }
     });
   }
 
-  validateValue() {
+  createEmissions(data: { electricity: number, petrol: number, diesel: number }) {
+    const url = `${environment.apiUrl}/UserEmissions`;
 
+    this.http.post(url, data).subscribe({
+      next: () => {
+        this.alerts.enableSuccess("Emissões atualizadas com sucesso");
+      },
+      error: () => {
+        this.alerts.enableError("Erro ao atualizar emissões");
+      }
+    });
+  }
+
+  updateEmissions(url: string, data: { electricity: number, petrol: number, diesel: number }) {
+    this.http.put(url, data).subscribe({
+      next: () => {
+        this.alerts.enableSuccess("Emissões atualizadas com sucesso");
+      },
+      error: () => {
+        this.alerts.enableError("Erro ao atualizar emissões");
+      }
+    });
   }
 
   calculateEmissions(formData: { electricity: number, petrol: number, diesel: number }) {
