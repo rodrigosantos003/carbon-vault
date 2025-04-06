@@ -21,11 +21,6 @@ export class CartComponent implements OnInit {
     this.updateCart();
   }
 
-  addItem(item: any) {
-    this.cartService.addItem(item);
-    this.updateCart();
-  }
-
   incrementQuantity(itemId: number) {
     this.cartService.incrementQuantity(itemId);
     this.updateCart();
