@@ -2,12 +2,15 @@ import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthService } from './auth-service.service';
 import { Router } from '@angular/router';
+import { AlertsService } from './alerts.service';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CartService {
-  constructor(private cookieService: CookieService, private authService: AuthService, private router: Router) { }
+  constructor(private cookieService: CookieService, private authService: AuthService, private router: Router, private alerts: AlertsService, private http: HttpClient) { }
 
   private getUserId(): string {
     // Simula a obtenção do ID do usuário do localStorage ou JWT
@@ -29,30 +32,73 @@ export class CartService {
 
   loadCart(): any[] {
     let cart = this.getCart();
-    if (cart.length === 0) {
-      cart = this.getDefaultProducts();
-      this.saveCart(cart);
-    }
     return cart;
   }
 
-  addItem(item: any) {
-    if(!this.authService.isAuthenticated())
-      this.router.navigate(['/login']);
-
-    console.log('Adding item to cart:', item);
-
-    let cart = this.getCart();
-    const existingItem = cart.find(i => i.id === item.id);
-
-    if (existingItem) {
-      existingItem.quantity += item.quantity;
-    } else {
-      cart.push({ ...item, quantity: item.quantity });
-    }
-
-    this.saveCart(cart);
+  addItem(projectId: number, quantity: number): void {
+  if (!this.authService.isAuthenticated()) {
+    this.alerts.enableError("Apenas utilizadores com conta podem comprar créditos.", 5);
+    return;
   }
+
+  if (quantity < 1 || isNaN(quantity)) {
+    quantity = 1;
+  }
+
+  this.authService.getUserRole().then((role) => {
+    if (role != 0) {
+      this.alerts.enableError("Apenas utilizadores com conta podem comprar créditos.", 5);
+      return;
+    }
+  });
+
+  this.http.get(`${environment.apiUrl}/projects/${projectId}`).subscribe({
+    next: (projectData: any) => {
+      console.log(projectData)
+      console.log(this.authService.getUserId())
+      if (projectData.creditsForSale < 1) {
+        this.alerts.enableError("Este projeto não tem créditos disponíveis para venda, tente mais tarde.", 5);
+        return;
+      }
+
+      if (quantity > projectData.creditsForSale) {
+        this.alerts.enableError(`Quantidade máxima de ${projectData.creditsForSale} CC para este projeto`, 5);
+        return;
+      }
+
+      if (projectData.ownerId == this.authService.getUserId()) {
+        this.alerts.enableError("Não pode comprar créditos do seu próprio projeto", 5);
+        return;
+      }
+
+      const item = {
+        id: projectData.id,
+        image: projectData.imageUrl,
+        name: projectData.name,
+        description: projectData.description,
+        price: projectData.pricePerCredit,
+        quantity,
+        projectOwner: projectData.ownerId,
+      };
+
+      const cart = this.getCart();
+      const existingItem = cart.find(i => i.id === item.id);
+
+      if (existingItem) {
+        existingItem.quantity += quantity;
+      } else {
+        cart.push(item);
+      }
+
+      this.saveCart(cart);
+      this.alerts.enableSuccess("Item adicionado ao carrinho!");
+    },
+    error: (error) => {
+      console.error("Erro ao buscar projeto:", error);
+      this.alerts.enableError("Erro ao buscar informações do projeto.", 5);
+    }
+  });
+}
 
   incrementQuantity(itemId: number) {
     let cart = this.getCart();
@@ -97,15 +143,5 @@ export class CartService {
     }
 
     return total;
-  }
-
-  getDefaultProducts() {
-    return [
-      { id: 1, image: 'https://picsum.photos/200?random=1', name: 'Teclado Mecânico RGB', price: 75.99, quantity: 1 },
-      { id: 2, image: 'https://picsum.photos/200?random=2', name: 'Monitor 24" Full HD', price: 199.99, quantity: 1 },
-      { id: 3, image: 'https://picsum.photos/200?random=3', name: 'Mouse Gamer 16000 DPI', price: 49.99, quantity: 1 },
-      { id: 4, image: 'https://picsum.photos/200?random=4', name: 'Headset Wireless Surround', price: 129.99, quantity: 1 },
-      { id: 5, image: 'https://picsum.photos/200?random=5', name: 'Cadeira Ergonômica Gamer', price: 299.99, quantity: 1 }
-    ];
   }
 }
