@@ -3,6 +3,9 @@ using System.Text.Json.Serialization;
 
 namespace Carbon_Vault.Models
 {
+    /// <summary>
+    /// Enumerado que define os diferentes estados de um relatório dentro do sistema.
+    /// </summary>
     public enum ReportState
     {
         Pending,
@@ -10,6 +13,10 @@ namespace Carbon_Vault.Models
         Created
     }
 
+    /// <summary>
+    /// A classe Report representa um relatório criado por um utilizador no sistema.
+    /// Contém informações sobre o estado do relatório, o utilizador que o criou, o texto associado e os arquivos relacionados.
+    /// </summary>
     public class Report
     {
         [Key]

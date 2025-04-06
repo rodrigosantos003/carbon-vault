@@ -35,7 +35,6 @@ CREATE TABLE [dbo].[Projects] (
     CONSTRAINT [FK_Projects_Account_OwnerId] FOREIGN KEY ([OwnerId]) REFERENCES [dbo].[Account] ([Id]) ON DELETE CASCADE
 );
 
-
 CREATE NONCLUSTERED INDEX [IX_Projects_OwnerId]
     ON [dbo].[Projects]([OwnerId] ASC);
 
@@ -46,6 +45,10 @@ CREATE TABLE [dbo].[ProjectProjectType] (
     CONSTRAINT [FK_ProjectProjectType_ProjectTypes_TypesId] FOREIGN KEY ([TypesId]) REFERENCES [dbo].[ProjectTypes] ([Id]) ON DELETE CASCADE,
     CONSTRAINT [FK_ProjectProjectType_Projects_ProjectsId] FOREIGN KEY ([ProjectsId]) REFERENCES [dbo].[Projects] ([Id]) ON DELETE CASCADE
 );
+
+
+CREATE NONCLUSTERED INDEX [IX_ProjectProjectType_TypesId]
+    ON [dbo].[ProjectProjectType]([TypesId] ASC);
 
 
 CREATE TABLE [dbo].[ProjectTypes] (
@@ -69,7 +72,6 @@ CREATE TABLE [dbo].[ProjectFiles] (
     CONSTRAINT [FK_ProjectFiles_Projects_ProjectId] FOREIGN KEY ([ProjectId]) REFERENCES [dbo].[Projects] ([Id]) ON DELETE CASCADE
 );
 
-
 CREATE NONCLUSTERED INDEX [IX_ProjectFiles_ProjectId]
     ON [dbo].[ProjectFiles]([ProjectId] ASC);
 
@@ -87,13 +89,11 @@ CREATE TABLE [dbo].[CarbonCredits] (
     [Status]        INT             NOT NULL,
     CONSTRAINT [PK_CarbonCredits] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_CarbonCredits_Account_BuyerId] FOREIGN KEY ([BuyerId]) REFERENCES [dbo].[Account] ([Id]),
-    CONSTRAINT [FK_CarbonCredits_Projects_ProjectId] FOREIGN KEY ([ProjectId]) REFERENCES [dbo].[Projects] ([Id])
+    CONSTRAINT [FK_CarbonCredits_Projects_ProjectId] FOREIGN KEY ([ProjectId]) REFERENCES [dbo].[Projects] ([Id]) ON DELETE CASCADE
 );
-
 
 CREATE NONCLUSTERED INDEX [IX_CarbonCredits_BuyerId]
     ON [dbo].[CarbonCredits]([BuyerId] ASC);
-
 
 
 CREATE NONCLUSTERED INDEX [IX_CarbonCredits_ProjectId]
@@ -110,7 +110,6 @@ CREATE TABLE [dbo].[Reports] (
     CONSTRAINT [PK_Reports] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Reports_Account_UserID] FOREIGN KEY ([UserID]) REFERENCES [dbo].[Account] ([Id]) ON DELETE CASCADE
 );
-
 
 CREATE NONCLUSTERED INDEX [IX_Reports_UserID]
     ON [dbo].[Reports]([UserID] ASC);
@@ -148,6 +147,7 @@ CREATE TABLE [dbo].[Tickets] (
 );
 
 
+GO
 CREATE NONCLUSTERED INDEX [IX_Tickets_AuthorId]
     ON [dbo].[Tickets]([AuthorId] ASC);
 
@@ -163,7 +163,6 @@ CREATE TABLE [dbo].[TicketMessages] (
     CONSTRAINT [FK_TicketMessages_Tickets_TicketId] FOREIGN KEY ([TicketId]) REFERENCES [dbo].[Tickets] ([Id])
 );
 
-
 CREATE NONCLUSTERED INDEX [IX_TicketMessages_AutorId]
     ON [dbo].[TicketMessages]([AutorId] ASC);
 
@@ -173,19 +172,24 @@ CREATE NONCLUSTERED INDEX [IX_TicketMessages_TicketId]
 
 
 CREATE TABLE [dbo].[Transactions] (
-    [Id]              INT            IDENTITY (1, 1) NOT NULL,
-    [BuyerId]         INT            NOT NULL,
-    [SellerId]        INT            NOT NULL,
-    [ProjectId]       INT            NOT NULL,
-    [Quantity]        INT            NOT NULL,
-    [TotalPrice]      FLOAT (53)     NOT NULL,
-    [Date]            NVARCHAR (MAX) NOT NULL,
-    [State]           INT            NOT NULL,
-    [CheckoutSession] NVARCHAR (MAX) NOT NULL,
-    [PaymentMethod]   NVARCHAR (MAX) NOT NULL,
+    [Id]                 INT            IDENTITY (1, 1) NOT NULL,
+    [BuyerId]            INT            NOT NULL,
+    [SellerId]           INT            NOT NULL,
+    [ProjectId]          INT            NOT NULL,
+    [BuyerName]          NVARCHAR (MAX) NOT NULL,
+    [SellerName]         NVARCHAR (MAX) NOT NULL,
+    [ProjectName]        NVARCHAR (MAX) NOT NULL,
+    [ProjectDescription] NVARCHAR (MAX) NOT NULL,
+    [ProjectCertifier]   NVARCHAR (MAX) NOT NULL,
+    [ProjectLocation]    NVARCHAR (MAX) NOT NULL,
+    [Quantity]           INT            NOT NULL,
+    [TotalPrice]         FLOAT (53)     NOT NULL,
+    [Date]               NVARCHAR (MAX) NOT NULL,
+    [State]              INT            NOT NULL,
+    [CheckoutSession]    NVARCHAR (MAX) NOT NULL,
+    [PaymentMethod]      NVARCHAR (MAX) NOT NULL,
     CONSTRAINT [PK_Transactions] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
-
 
 CREATE TABLE [dbo].[UserEmissions] (
     [Id]          INT        IDENTITY (1, 1) NOT NULL,

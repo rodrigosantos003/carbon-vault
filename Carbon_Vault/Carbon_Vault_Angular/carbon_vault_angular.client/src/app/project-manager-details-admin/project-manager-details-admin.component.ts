@@ -75,8 +75,8 @@ export class ProjectManagerDetailsAdminComponent {
     }
 
 
-    const headers = this.authService.getHeaders();
-    headers.append('CreditsGenerated', creditsGenerated.toString());
+    let headers = this.authService.getHeaders();
+    headers = headers.append('CreditsGenerated', creditsGenerated.toString());
 
     this.http.post(url, {}, { headers }).subscribe({
       next: () => {
@@ -100,8 +100,8 @@ export class ProjectManagerDetailsAdminComponent {
       return;
     }
 
-    const headers = this.authService.getHeaders();
-    headers.append('NumberOfCredits', creditsGenerated.toString());
+    let headers = this.authService.getHeaders();
+    headers = headers.append('NumberOfCredits', creditsGenerated.toString());
 
     this.http.post(url, {}, { headers }).subscribe({
       next: () => {
@@ -191,8 +191,8 @@ export class ProjectManagerDetailsAdminComponent {
     const projectId = this.project.id;
     const url = `${this.apiURL}/${projectId}/ChangeStatus`;
 
-    const headers = this.authService.getHeaders();
-    headers.append('Content-Type', 'application/json');
+    let headers = this.authService.getHeaders();
+    headers = headers.append('Content-Type', 'application/json');
 
     const body = JSON.stringify(newStatus);
 
@@ -220,8 +220,8 @@ export class ProjectManagerDetailsAdminComponent {
     const projectId = this.project.id;
     const url = `${this.apiURL}/${projectId}/reject`;
 
-    const headers = this.authService.getHeaders();
-    headers.append('feedback', this.rejectionFeedback);
+    let headers = this.authService.getHeaders();
+    headers = headers.append('feedback', this.rejectionFeedback);
 
     this.http.post(url, {}, { headers }).subscribe(
       () => {

@@ -9,6 +9,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Carbon_Vault.Controllers.API
 {
+    /// <summary>
+    /// Controlador de pagamentos do utilizador. Gerencia os processos de pagamento via Stripe, incluindo a criação de sessões de pagamento e o gerenciamento de faturas.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class UserPaymentsController : ControllerBase
@@ -28,6 +31,9 @@ namespace Carbon_Vault.Controllers.API
             var project = await _context.Projects.FindAsync(projectId);
             int sellerId = project.OwnerId;
 
+            var sellerAccount = await _context.Account.FindAsync(sellerId);
+            var buyerAccount = await _context.Account.FindAsync(userId);
+
             string payMethod = GetPaymentMethod(paymentMethod);
 
             Transaction t = new Transaction
@@ -35,6 +41,12 @@ namespace Carbon_Vault.Controllers.API
                 SellerId = sellerId,
                 BuyerId = userId,
                 ProjectId = projectId,
+                SellerName = sellerAccount.Name,
+                BuyerName = buyerAccount.Name,
+                ProjectName = project.Name,
+                ProjectCertifier = project.Certification,
+                ProjectDescription = project.Description,
+                ProjectLocation = project.Location,
                 Quantity = quantity,
                 Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
                 State = TransactionState.Approved,
@@ -55,6 +67,12 @@ namespace Carbon_Vault.Controllers.API
             return "Transferência Bancária";
         }
 
+        /// <summary>
+        /// Realiza o pagamento de um utilizador com base nos dados fornecidos.
+        /// </summary>
+        /// <param name="data">Dados do pagamento, incluindo os itens no carrinho e o ID do utilizador.</param>
+        /// <param name="type">Tipo de pagamento (ex: "purchase", "donation").</param>
+        /// <returns>Retorna a URL de pagamento gerada pela Stripe e o ID da sessão de pagamento.</returns>
         [HttpPost]
         public IActionResult MakePayment(PaymentData data, string type)
         {
@@ -118,6 +136,11 @@ namespace Carbon_Vault.Controllers.API
             return Ok(new { message = "Pagamento realizado com sucesso.", checkout_session = session.Id, payment_url = session.Url });
         }
 
+        /// <summary>
+        /// Obtém os detalhes de uma sessão de pagamento com base no ID da sessão fornecido.
+        /// </summary>
+        /// <param name="sessionId">ID da sessão de pagamento da Stripe.</param>
+        /// <returns>Retorna os detalhes da sessão de pagamento, incluindo os itens comprados e o método de pagamento.</returns>
         [HttpGet("session/{sessionId}")]
         public async Task<IActionResult> GetSessionDetails(string sessionId)
         {
@@ -162,6 +185,11 @@ namespace Carbon_Vault.Controllers.API
             }
         }
 
+        /// <summary>
+        /// Cria os itens de pagamento a partir dos dados fornecidos pelo utilizador.
+        /// </summary>
+        /// <param name="data">Dados do pagamento, incluindo os itens no carrinho.</param>
+        /// <returns>Lista de itens de pagamento configurados para a Stripe.</returns>
         private List<SessionLineItemOptions> GetLineItems(PaymentData data)
         {
             List<SessionLineItemOptions> my_list = new List<SessionLineItemOptions>();
@@ -174,6 +202,14 @@ namespace Carbon_Vault.Controllers.API
             return my_list;
         }
 
+        /// <summary>
+        /// Adiciona um item ao pagamento, configurando os dados necessários para a Stripe.
+        /// </summary>
+        /// <param name="amount">Preço unitário do item.</param>
+        /// <param name="product_name">Nome do produto.</param>
+        /// <param name="product_description">Descrição do produto.</param>
+        /// <param name="quantity">Quantidade do produto.</param>
+        /// <returns>Retorna um item de pagamento configurado.</returns>
         private SessionLineItemOptions AddItem(decimal amount, string product_name, string product_description, int quantity)
         {
             return new SessionLineItemOptions
@@ -192,6 +228,11 @@ namespace Carbon_Vault.Controllers.API
             };
         }
 
+        /// <summary>
+        /// Obtém o PDF da fatura associada a uma sessão de pagamento.
+        /// </summary>
+        /// <param name="sessionId">ID da sessão de pagamento da Stripe.</param>
+        /// <returns>Retorna o arquivo PDF da fatura, se disponível.</returns>
         [HttpGet("invoice/{sessionId}")]
         public IActionResult GetInvoicePdf(string sessionId)
         {
@@ -209,6 +250,11 @@ namespace Carbon_Vault.Controllers.API
             return NotFound(new { message = "Fatura não encontrada." });
         }
 
+        /// <summary>
+        /// Envia a fatura gerada pela Stripe para o e-mail do cliente.
+        /// </summary>
+        /// <param name="sessionId">ID da sessão de pagamento da Stripe.</param>
+        /// <returns>Retorna uma mensagem de sucesso ou erro dependendo do resultado.</returns>
         [HttpGet("invoice/{sessionId}/send")]
         public IActionResult SendInvoice(string sessionId)
         {
@@ -248,5 +294,4 @@ namespace Carbon_Vault.Controllers.API
         public decimal Price { get; set; }
         public int Quantity { get; set; }
     }
-
 }

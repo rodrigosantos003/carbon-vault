@@ -11,6 +11,9 @@ using Carbon_Vault.Services;
 
 namespace Carbon_Vault.Controllers.API
 {
+    /// <summary>
+    /// Controlador responsável pela gestão de mensagens de tickets.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class TicketMessagesController : ControllerBase
@@ -19,13 +22,22 @@ namespace Carbon_Vault.Controllers.API
         private readonly string _frontendBaseUrl;
         private readonly Carbon_VaultContext _context;
 
-        public TicketMessagesController(Carbon_VaultContext context,IEmailService emailService)
+        /// <summary>
+        /// Construtor do controlador de mensagens de tickets.
+        /// </summary>
+        /// <param name="context">Contexto do banco de dados.</param>
+        /// <param name="emailService">Serviço de envio de emails.</param>
+        public TicketMessagesController(Carbon_VaultContext context, IEmailService emailService)
         {
             _context = context;
             _emailService = emailService;
             _frontendBaseUrl = Environment.GetEnvironmentVariable("CLIENT_URL");
         }
 
+        /// <summary>
+        /// Obtém todas as mensagens de tickets cadastradas no sistema.
+        /// </summary>
+        /// <returns>Uma lista contendo todas as mensagens de tickets.</returns>
         // GET: api/TicketMessages
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TicketMessage>>> GetTicketMessage()
@@ -33,6 +45,11 @@ namespace Carbon_Vault.Controllers.API
             return await _context.TicketMessages.ToListAsync();
         }
 
+        /// <summary>
+        /// Obtém uma mensagem de ticket específica pelo seu ID.
+        /// </summary>
+        /// <param name="id">O identificador único da mensagem do ticket.</param>
+        /// <returns>Retorna a mensagem do ticket correspondente ou erro 404 se não for encontrada.</returns>
         // GET: api/TicketMessages/5
         [HttpGet("{id}")]
         public async Task<ActionResult<TicketMessage>> GetTicketMessage(int id)
@@ -47,6 +64,12 @@ namespace Carbon_Vault.Controllers.API
             return ticketMessage;
         }
 
+        /// <summary>
+        /// Atualiza uma mensagem de ticket existente.
+        /// </summary>
+        /// <param name="id">O identificador único da mensagem do ticket.</param>
+        /// <param name="ticketMessage">Objeto contendo os dados atualizados da mensagem.</param>
+        /// <returns>Retorna NoContent se a atualização for bem-sucedida ou erro se houver falha.</returns>
         // PUT: api/TicketMessages/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -78,6 +101,11 @@ namespace Carbon_Vault.Controllers.API
             return NoContent();
         }
 
+        /// <summary>
+        /// Cria uma nova mensagem em um ticket.
+        /// </summary>
+        /// <param name="ticketMessage">Objeto contendo os dados da nova mensagem.</param>
+        /// <returns>Retorna a mensagem criada com status 201 (Created) ou erro caso o token seja inválido.</returns>
         // POST: api/TicketMessages
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -90,7 +118,13 @@ namespace Carbon_Vault.Controllers.API
             return CreatedAtAction("GetTicketMessage", new { id = ticketMessage.Id }, ticketMessage);
         }
 
-
+        /// <summary>
+        /// Envia uma nova mensagem para um ticket e notifica o destinatário adequado.
+        /// </summary>
+        /// <param name="ticketMessage">Objeto contendo os dados da nova mensagem.</param>
+        /// <param name="Authorization">Token de autorização.</param>
+        /// <param name="userID">ID do utilizador que está enviando a mensagem.</param>
+        /// <returns>Retorna a mensagem criada ou erro caso o utilizador não seja autorizado.</returns>
         [HttpPost("send")]
         [ServiceFilter(typeof(TokenValidationFilter))]
         public async Task<ActionResult<TicketMessage>> SendMessage(TicketMessage ticketMessage, [FromHeader] int userID)
@@ -161,6 +195,11 @@ namespace Carbon_Vault.Controllers.API
             return CreatedAtAction("GetTicketMessage", new { id = ticketMessage.Id }, ticketMessage);
         }
 
+        /// <summary>
+        /// Exclui uma mensagem de ticket pelo seu ID.
+        /// </summary>
+        /// <param name="id">O identificador único da mensagem do ticket.</param>
+        /// <returns>Retorna NoContent se a exclusão for bem-sucedida ou erro 404 se a mensagem não for encontrada.</returns>
         // DELETE: api/TicketMessages/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTicketMessage(int id)
@@ -177,6 +216,11 @@ namespace Carbon_Vault.Controllers.API
             return NoContent();
         }
 
+        /// <summary>
+        /// Verifica se uma mensagem de ticket existe no banco de dados.
+        /// </summary>
+        /// <param name="id">O identificador único da mensagem do ticket.</param>
+        /// <returns>Retorna true se a mensagem existir, caso contrário, retorna false.</returns>
         private bool TicketMessageExists(int id)
         {
             return _context.TicketMessages.Any(e => e.Id == id);

@@ -19,9 +19,9 @@
                         <td colspan="4" class="text-center" id="nothingToShow">Nada a mostrar!</td>
                     </tr>
                     <tr *ngFor="let purchase of sales">
-                        <td>{{purchase.project}}</td>
+                        <td>{{purchase.projectName}}</td>
                         <td>{{purchase.date}}</td>
-                        <td>{{purchase.state}}</td>
+                        <td>{{getState(purchase.state)}}</td>
                         <td><button class="details-button" (click)="transactionDetails(purchase.id)">Ver
                                 detalhes</button></td>
                     </tr>

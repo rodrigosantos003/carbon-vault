@@ -44,7 +44,7 @@ export class TransactionDetailsComponent {
 
     var userId = this.auth.getUserId();
 
-    this.http.get(url, { headers: this.auth.getHeaders()}).subscribe((data: any) => {
+    this.http.get(url, { headers: this.auth.getHeaders() }).subscribe((data: any) => {
       var type;
 
       switch (userId) {
@@ -62,7 +62,7 @@ export class TransactionDetailsComponent {
       this.transactionType = type;
       this.transactionBuyer = data.buyerName;
       this.transactionSeller = data.sellerName;
-      this.transactionProject = data.project;
+      this.transactionProject = data.projectName;
       this.transactionDate = data.date;
       this.transactionQuantity = data.quantity;
       this.transactionTotal = data.totalPrice;
