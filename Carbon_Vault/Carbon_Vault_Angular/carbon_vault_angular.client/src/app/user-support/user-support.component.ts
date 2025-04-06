@@ -21,6 +21,15 @@ export class UserSupportComponent {
   userId: string;
   ticketCategories = Object.values(TicketCategory); // Converte num array
 
+  /**
+   * Construtor do componente. Inicializa os formulários e o ID do utilizador.
+   * 
+   * @param fb Serviço para criar e validar formulários.
+   * @param alerts Serviço para gerir alertas e mensagens para o utilizador.
+   * @param http Serviço para realizar requisições HTTP.
+   * @param auth Serviço de autenticação para obter o ID do utilizador.
+   * @param router Serviço de navegação para alterar as rotas.
+   */
   constructor(private fb: FormBuilder, private alerts: AlertsService, private http: HttpClient, private auth: AuthService, private router: Router) {
     this.supportForm = this.fb.group({
       titulo: ['', [Validators.required]],
@@ -33,6 +42,10 @@ export class UserSupportComponent {
     this.userId = this.auth.getUserId();
   }
 
+  /**
+   * Submete o ticket de suporte com as informações fornecidas no formulário.
+   * Envia os dados para a API e mostra uma mensagem de sucesso ou erro.
+   */
   onSubmit() {
     if (this.supportForm.valid) {
       const formData = {
@@ -62,6 +75,10 @@ export class UserSupportComponent {
     }
   }
 
+  /**
+   * Pesquisa um ticket de suporte utilizando a referência fornecida no formulário.
+   * Se o ticket for encontrado, redireciona para a página de detalhes do ticket.
+   */
   onSearch() {
     if (this.SearchForm.valid) {
       const reference = this.SearchForm.value.reference;
@@ -78,8 +95,8 @@ export class UserSupportComponent {
           }
         },
         error: (err) => {
-          console.error('Erro ao buscar ticket:', err);
-          this.alerts.enableError('Ocorreu um erro ao buscar o Ticket.');
+          console.error('Erro ao procurar ticket:', err);
+          this.alerts.enableError('Ocorreu um erro ao procurar o Ticket.');
         }
       });
 
@@ -88,6 +105,12 @@ export class UserSupportComponent {
     }
   }
 
+  /**
+   * Mostra a descrição completa de uma categoria de ticket.
+   * 
+   * @param category Categoria do ticket.
+   * @returns A descrição completa da categoria.
+   */
   showCategory(category: string): string {
     const categoryMap: { [key: string]: string } = {
       Compra: "Ajuda com Compras de Créditos",

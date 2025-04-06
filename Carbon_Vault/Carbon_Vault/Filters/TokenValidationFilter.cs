@@ -6,7 +6,7 @@ public class TokenValidationFilter : IActionFilter
 {
     /// <summary>
     /// Método que é chamado antes da execução de uma ação no controlador.
-    /// Valida o token de autorização e o ID do usuário presentes nos cabeçalhos da requisição.
+    /// Valida o token de autorização e o ID do utilizador presentes nos cabeçalhos da requisição.
     /// Se os cabeçalhos estiverem ausentes ou inválidos, a requisição é negada com um resultado "Unauthorized".
     /// </summary>
     /// <param name="context"></param>

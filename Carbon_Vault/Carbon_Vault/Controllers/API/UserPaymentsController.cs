@@ -10,7 +10,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Carbon_Vault.Controllers.API
 {
     /// <summary>
-    /// Controlador de pagamentos do utilizador. Gerencia os processos de pagamento via Stripe, incluindo a criação de sessões de pagamento e o gerenciamento de faturas.
+    /// Controlador de pagamentos do utilizador. Faz a gestão dos processos de pagamento via Stripe, incluindo a criação de sessões de pagamento e o gestão de faturas.
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]

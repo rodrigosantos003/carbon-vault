@@ -27,17 +27,37 @@ export class UsersManagerComponent {
   userNIF: string = '';
   userRole: number = 0;
 
+  /**
+   * Construtor do componente. Inicializa os serviços necessários.
+   * 
+   * @param http Serviço para realizar requisições HTTP.
+   * @param alerts Serviço para gerir alertas e mensagens para o utilizador.
+   * @param authService Serviço de autenticação para gerir a autenticação do utilizador.
+   * @param router Serviço de navegação para alterar as rotas.
+   */
   constructor(private http: HttpClient, private alerts: AlertsService, private authService: AuthService, private router: Router) { }
 
+  /**
+   * Método de ciclo de vida do componente. Executado quando o componente é inicializado.
+   * Carrega as contas de utilizadores e os dados de crescimento do mês passado.
+   */
   ngOnInit(): void {
     this.getAccounts();
     this.getPastMonthGrowthPercentage();
   }
 
+  /**
+   * Navega para a página de detalhes de uma conta de utilizador.
+   * 
+   * @param account A conta de utilizador a ser visualizada.
+   */
   viewAccount(account: any) {
     this.router.navigate([`users-manager/user-details/${account.id}`]);
   }
 
+  /**
+   * Obtém a lista de contas de utilizadores da API.
+   */
   getAccounts(): void {
     this.alerts.enableLoading("A carregar utilizadores..");
     this.http.get<any[]>(this.userAccountsURL).subscribe({
@@ -52,6 +72,9 @@ export class UsersManagerComponent {
     });
   }
 
+  /**
+   * Obtém os dados estatísticos de crescimento mensal dos utilizadores.
+   */
   getPastMonthGrowthPercentage(): void {
     const now = new Date();
     const firstDayLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
@@ -72,6 +95,9 @@ export class UsersManagerComponent {
     });
   }
 
+  /**
+   * Abre o formulário de adicionar um novo utilizador.
+   */
   openAddAccount() {
     const overlay = document.getElementById('addAccountPopup');
     const addPopup = document.getElementById('user-form');
@@ -82,6 +108,9 @@ export class UsersManagerComponent {
     }
   }
 
+  /**
+   * Fecha o formulário de adicionar um novo utilizador.
+   */
   closeAddAccount() {
     this.selectedAccountId = null;
     const overlay = document.getElementById('addAccountPopup');
@@ -93,6 +122,9 @@ export class UsersManagerComponent {
     }
   }
 
+  /**
+   * Adiciona um novo utilizador à plataforma.
+   */
   addAccount() {
     const addURL = `${environment.apiUrl}/Accounts`;
     const newPasswordURL = `${environment.apiUrl}/Accounts/NewPassword?email=${this.userEmail}`;
@@ -122,6 +154,11 @@ export class UsersManagerComponent {
     })
   }
 
+  /**
+   * Abre o formulário para confirmação da eliminação de uma conta de utilizador.
+   * 
+   * @param account_id ID da conta a ser eliminada.
+   */
   openDeleteAccount(account_id: number) {
     this.selectedAccountId = account_id;
     const overlay = document.getElementById('deleteAccountPopup');
@@ -133,6 +170,9 @@ export class UsersManagerComponent {
     }
   }
 
+  /**
+   * Fecha o formulário de confirmação da eliminação de uma conta de utilizador.
+   */
   closeDeleteAccount() {
     this.selectedAccountId = null;
     const overlay = document.getElementById('deleteAccountPopup');
@@ -144,6 +184,10 @@ export class UsersManagerComponent {
     }
   }
 
+  /**
+   * Elimina uma conta de utilizador da plataforma.
+   * Impede a eliminação da própria conta do utilizador autenticado.
+   */
   deleteAccount() {
     if (this.selectedAccountId !== null) {
       const deleteURL = `${this.apiURL}/${this.selectedAccountId}`;
@@ -171,8 +215,11 @@ export class UsersManagerComponent {
       console.log("ID é null");
     }
   }
-
 }
+
+/**
+ * Interface que define a estrutura de uma conta de utilizador.
+ */
 interface Account {
   id: number;
   name: string;

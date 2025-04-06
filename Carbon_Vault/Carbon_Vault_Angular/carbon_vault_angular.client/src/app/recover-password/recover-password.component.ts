@@ -22,6 +22,15 @@ export class RecoverPasswordComponent {
   passwordLowerCase = false;
   passwordSpecialChar = false;
 
+  /**
+   * Construtor do componente.
+   * 
+   * @param fb Construtor de formulários reativos.
+   * @param http Serviço HTTP para comunicação com a API.
+   * @param route Serviço para aceder a parâmetros da rota (ex: token).
+   * @param router Serviço de navegação.
+   * @param alerts Serviço de alertas para feedback visual.
+   */
   constructor(private fb: FormBuilder, private http: HttpClient, private route: ActivatedRoute, public router: Router, private alerts: AlertsService) {
     // Inicialização do FormGroup com controlos e validações
     this.recoverPasswordForm = this.fb.group({
@@ -30,6 +39,12 @@ export class RecoverPasswordComponent {
     });
   }
 
+  /**
+   * Valida a força da palavra-passe com base em critérios de segurança.
+   * 
+   * @param password Palavra-passe a validar.
+   * @returns Verdadeiro se todos os critérios forem cumpridos.
+   */
   validatePassword(password: string): boolean {
     const minLength = 8;
     const hasUpperCase = /[A-Z]/.test(password); // Verifica se contém pelo menos uma letra maiúscula
@@ -45,6 +60,9 @@ export class RecoverPasswordComponent {
     );
   }
 
+  /**
+   * Atualiza os indicadores visuais de força da palavra-passe enquanto o utilizador escreve.
+   */
   updatePasswordStrength() {
     const password = this.recoverPasswordForm.get('password')?.value || '';
 
@@ -54,7 +72,10 @@ export class RecoverPasswordComponent {
     this.passwordSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
   }
 
-
+  /**
+   * Manipula o envio do formulário de recuperação da palavra-passe.
+   * Valida os campos e envia os dados para a API.
+   */
   onSubmit() {
     if (this.recoverPasswordForm.valid) {
       const formData = this.recoverPasswordForm.value;
@@ -68,7 +89,12 @@ export class RecoverPasswordComponent {
     }
   }
 
-  // Aramzenar nova palavra-passe
+  /**
+   * Submete a nova palavra-passe para a API juntamente com o token de recuperação.
+   * 
+   * @param password Nova palavra-passe.
+   * @param passwordConfirmation Confirmação da nova palavra-passe.
+   */
   resetPassword(password: string, passwordConfirmation: string) {
     const token = this.route.snapshot.queryParamMap.get('token');
     const apiUrl = `${environment.apiUrl}/Accounts/SetPassword?token=${token}`;
@@ -87,6 +113,12 @@ export class RecoverPasswordComponent {
     });
   }
 
+  /**
+   * Verifica se a palavra-passe cumpre todos os critérios de validação.
+   * 
+   * @param password Palavra-passe a verificar.
+   * @returns Verdadeiro se for válida.
+   */
   isPasswordValid(password: string): boolean {
     const minLength = 8;
     const hasUpperCase = /[A-Z]/.test(password); // Verifica se contém pelo menos uma letra maiúscula

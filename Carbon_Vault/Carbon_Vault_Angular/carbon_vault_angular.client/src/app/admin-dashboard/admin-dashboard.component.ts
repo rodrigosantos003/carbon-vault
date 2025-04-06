@@ -1,4 +1,4 @@
-import { Component, OnInit ,Input ,SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 import { Papa } from 'ngx-papaparse';
@@ -22,21 +22,38 @@ export class AdminDashboardComponent implements OnInit {
   transactionsThisWeek: any[] = [];
   transactionsLastWeek: any[] = [];
 
+  /**
+   * Injeta os serviços necessários para obter dados da API e exportar CSVs.
+   * 
+   * @param http Serviço HTTP para comunicação com a API.
+   * @param papa Serviço `PapaParse` usado para gerar ficheiros CSV.
+   */
+  constructor(private http: HttpClient, private papa: Papa) { }
 
-
-  constructor(private http: HttpClient, private papa: Papa) {}
-
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log('Changes detected:', changes);
-  }
+  /**
+   * Responsável por iniciar o carregamento dos dados de atividade e transações semanais.
+   */
   ngOnInit(): void {
     //this.createLineChart();
     //this.createCircularChart();
     this.fetchActivityData();
     this.fetchWeeklyTransactionData();
-
   }
 
+  /**
+ * Deteta alterações nas propriedades de entrada (`@Input`).
+ * 
+ * @param {SimpleChanges} changes - Objeto contendo as alterações detetadas nas `@Input`.
+ * @returns {void}
+ */
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log('Changes detected:', changes);
+  }
+
+  /**
+ * Obtém os períodos de atividade dos utilizadores através da API e atualiza o gráfico correspondente.
+ * @returns {void}
+ */
   fetchActivityData() {
     const url = `${environment.apiUrl}/accounts/activity-periods`;
     this.http.get<any[]>(url).subscribe(data => {
@@ -47,6 +64,11 @@ export class AdminDashboardComponent implements OnInit {
     });
   }
 
+  /**
+ * Obtém os dados de transações da semana atual e da semana anterior via API,
+ * e atualiza o gráfico de linhas com os dados recebidos.
+ * @returns {void}
+ */
   fetchWeeklyTransactionData() {
     const url = `${environment.apiUrl}/transactions/weekly`;
     this.http.get<any>(url).subscribe(data => {
@@ -57,18 +79,26 @@ export class AdminDashboardComponent implements OnInit {
       console.error('Error fetching weekly transaction data:', error);
     });
   }
+
+  /**
+ * Atualiza o gráfico de linhas com os dados de transações semanais.
+ * Compara os totais diários de transações entre esta semana e a anterior.
+ * 
+ * @param {any} response - Objeto com os dados das transações (thisWeek e lastWeek).
+ * @returns {void}
+ */
   updateLineChart(response: any) {
     // Mapeia os dados da semana passada e da semana atual para incluir sempre os dias da semana de segunda a sexta
     const thisWeek = response?.thisWeek || [];
     const lastWeek = response?.lastWeek || [];
-  
+
     // Definindo os dias da semana de segunda a sexta
     const daysOfWeek = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta'];
-  
+
     // Função para acumular a quantidade total de transações por dia da semana
     const getWeeklyData = (weekData: any[], daysOfWeek: string[]) => {
       const weeklyData: number[] = new Array(5).fill(0);  // Inicializa com 5 dias (segunda a sexta)
-  
+
       weekData.forEach((entry: any) => {
         const entryDate = new Date(entry.date);
         const dayIndex = entryDate.getDay() - 1;  // Ajuste: getDay retorna 0 para Domingo, então subtrai 1 para começar a contagem de Segunda
@@ -76,19 +106,19 @@ export class AdminDashboardComponent implements OnInit {
           weeklyData[dayIndex] += entry.totalQuantity;
         }
       });
-  
+
       return weeklyData;
     };
-  
+
     // Organize the data for this week and last week
     const thisWeekData = getWeeklyData(thisWeek, daysOfWeek);
     const lastWeekData = getWeeklyData(lastWeek, daysOfWeek);
-  
+
     // Se o gráfico já existir, destrua-o para evitar múltiplas instâncias
     if (this.lineChart) {
       this.lineChart.destroy();
     }
-  
+
     // Criação do gráfico
     this.lineChart = new Chart('MyLineChart', {
       type: 'line',
@@ -142,10 +172,13 @@ export class AdminDashboardComponent implements OnInit {
       }
     });
   }
-  
-  
 
-
+  /**
+ * Atualiza o gráfico de donuts com os dados dos períodos de atividade dos utilizadores (Manhã, Tarde, Noite).
+ * 
+ * @param {any[]} data - Lista de objetos com informação do período de atividade.
+ * @returns {void}
+ */
   updateActivityChart(data: any[]) {
     const periods = ['Manhã', 'Tarde', 'Noite'];
     const counts = periods.map(period => {
@@ -182,6 +215,11 @@ export class AdminDashboardComponent implements OnInit {
     });
   }
 
+  /**
+ * Exporta os dados de períodos de atividade para um ficheiro `.csv`.
+ * Utiliza a biblioteca `ngx-papaparse` para gerar o CSV e dispara o download automático.
+ * @returns {void}
+ */
   downloadActivityCSV() {
     const url = `${environment.apiUrl}/accounts/activity-periods`;
     this.http.get<any[]>(url).subscribe(data => {
@@ -195,6 +233,12 @@ export class AdminDashboardComponent implements OnInit {
       console.error('Error fetching activity periods:', error);
     });
   }
+
+  /**
+ * Exporta todas as transações da semana atual e da anterior para um ficheiro `.csv`.
+ * Concatena os dados, formata-os para exportação e inicia o download.
+ * @returns {void}
+ */
   downloadTransactionsCSV() {
     const allTransactions = [
       ...this.transactionsThisWeek.flatMap((t: any) => t.transactions),
@@ -213,18 +257,16 @@ export class AdminDashboardComponent implements OnInit {
       'Checkout Session': transaction.checkoutSession,
       'Payment Method': transaction.paymentMethod
     }));
-    
-  
+
+
     // Unparse the data to CSV
     const csv = this.papa.unparse(dataToExport);
-  
+
     // Create a blob from the CSV string
     const blob = new Blob([csv], { type: 'text/csv' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = 'transactions.csv';  
+    a.download = 'transactions.csv';
     a.click();
   }
-  
-
 }

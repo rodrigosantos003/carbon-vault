@@ -62,12 +62,23 @@ export class HomeComponent {
     }
   ];
 
+  /**
+ * Injeta o serviço `Router` do Angular para navegação entre páginas.
+ */
   constructor(public router: Router) { }
 
+  /**
+ * A página vai até a seção de FAQ, ao uar `scrollIntoView`.
+ */
   goToFAQ() {
     document.getElementById("faq")?.scrollIntoView();
   }
 
+  /**
+ * Alterna o estado de visibilidade de uma FAQ, fechando as outras e abre a selecionada.
+ * 
+ * @param {number} index - Índice da FAQ a ser aberta/fechada.
+ */
   toggleFAQ(index: number) {
     this.faqs.forEach((faq, i) => {
       faq.open = i === index ? !faq.open : false; // Fecha os outros e abre apenas um

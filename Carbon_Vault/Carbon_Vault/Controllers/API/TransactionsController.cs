@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Carbon_Vault.Controllers.API
 {
     /// <summary>
-    /// Controller para gerenciar transações no sistema Carbon Vault.
+    /// Controller para gerir transações no sistema Carbon Vault.
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
@@ -202,7 +202,8 @@ namespace Carbon_Vault.Controllers.API
                 t.Date,
                 t.BuyerName,
                 t.SellerName,
-                t.BuyerId, t.SellerId
+                t.BuyerId,
+                t.SellerId
             }).Where(t => type == 0 ? t.BuyerId == userID : t.SellerId == userID)
             .ToListAsync();
 

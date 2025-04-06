@@ -20,6 +20,14 @@ export class UserEmissionsComponent {
 
   userId: string;
 
+  /**
+   * Construtor do componente.
+   *
+   * @param fb FormBuilder para criar o formulário.
+   * @param http Serviço HTTP para comunicação com a API.
+   * @param authService Serviço de autenticação.
+   * @param alerts Serviço de alertas para mensagens de sucesso ou erro.
+   */
   constructor(private fb: FormBuilder, private http: HttpClient, private authService: AuthService, private alerts: AlertsService) {
 
     this.emissionsForm = this.fb.group({
@@ -31,6 +39,12 @@ export class UserEmissionsComponent {
     this.userId = this.authService.getUserId();
   }
 
+  /**
+   * Ciclo de vida do componente após inicialização.
+   * 
+   * Procura os dados de emissões do utilizador. Se não existirem, inicializa com zeros e cria novo registo.
+   * Também calcula automaticamente as emissões totais ao alterar qualquer campo.
+   */
   ngOnInit() {
     const url = `${environment.apiUrl}/UserEmissions/${this.userId}`;
 
@@ -58,7 +72,7 @@ export class UserEmissionsComponent {
       }
     });
 
-    this.emissionsForm.valueChanges.subscribe((changes) => {
+    this.emissionsForm.valueChanges.subscribe(() => {
       ['electricity', 'petrol', 'diesel'].forEach(field => {
         const control = this.emissionsForm.get(field);
         if (control && control.value < 0) {
@@ -70,6 +84,10 @@ export class UserEmissionsComponent {
     });
   }
 
+  /**
+   * Envia os dados do formulário para a API.
+   * Se o registo já existir, faz `PUT` (atualização).
+   */
   onSubmit() {
     const formValue = this.emissionsForm.value;
 
@@ -84,30 +102,51 @@ export class UserEmissionsComponent {
 
     // Verifica se a emissão já existe
     this.http.get(url).subscribe({
-      next: (data: any) => {
-        if (data) {
-          // Caso a emissão já exista, faz o PUT (atualização)
-          this.http.put(url, emissionData).subscribe({
-            next: () => {
-              this.alerts.enableSuccess("Emissões atualizadas com sucesso");
-            },
-            error: (error) => {
-              this.alerts.enableError("Erro ao atualizar emissões");
-            }
-          }
-          );
-        }
+      next: () => {
+        // Caso a emissão já exista, faz o PUT (atualização)
+        this.updateEmissions(url, emissionData);
       },
-      error: () => {
-        this.alerts.enableError("Erro ao obter emissões");
+      error: (error) => {
+        // Caso contrário, faz o POST (criação)
+        if (error.status === 404) {
+          this.createEmissions(emissionData);
+        } else {
+          this.alerts.enableError("Erro ao obter emissões");
+        }
       }
     });
   }
 
-  validateValue() {
+  createEmissions(data: { electricity: number, petrol: number, diesel: number }) {
+    const url = `${environment.apiUrl}/UserEmissions`;
 
+    this.http.post(url, data).subscribe({
+      next: () => {
+        this.alerts.enableSuccess("Emissões atualizadas com sucesso");
+      },
+      error: () => {
+        this.alerts.enableError("Erro ao atualizar emissões");
+      }
+    });
   }
 
+  updateEmissions(url: string, data: { electricity: number, petrol: number, diesel: number }) {
+    this.http.put(url, data).subscribe({
+      next: () => {
+        this.alerts.enableSuccess("Emissões atualizadas com sucesso");
+      },
+      error: () => {
+        this.alerts.enableError("Erro ao atualizar emissões");
+      }
+    });
+  }
+
+  /**
+   * Calcula as emissões totais com base nos dados inseridos.
+   * 
+   * @param formData Objeto com os valores de eletricidade, gasolina e gasóleo.
+   * @returns Total de emissões em kg CO₂e.
+   */
   calculateEmissions(formData: { electricity: number, petrol: number, diesel: number }) {
     const electricity = formData.electricity;
     const petrol = formData.petrol;

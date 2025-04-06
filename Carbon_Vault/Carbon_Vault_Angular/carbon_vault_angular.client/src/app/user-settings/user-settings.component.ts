@@ -22,8 +22,18 @@ export class UserSettingsComponent {
   // IBANS de Teste:
   // ✅ PT50000201231234567890154
   // ❌ ES7921000813610123456789
-  // ❌ PT50000201231234567890150 
+  // ❌ PT50000201231234567890150
 
+  /**
+   * Construtor do componente.
+   * Inicializa o formulário com os campos necessários e obtém o ID do utilizador.
+   *
+   * @param fb Serviço de FormBuilder para criar o formulário.
+   * @param http Serviço HTTP para comunicação com a API.
+   * @param authService Serviço de autenticação para obter o ID do utilizador.
+   * @param alerts Serviço de alertas para mostrar mensagens de sucesso ou erro.
+   * @param router Serviço de navegação para redirecionar o utilizador.
+   */
   constructor(private fb: FormBuilder, private http: HttpClient, private authService: AuthService, private alerts: AlertsService, private router: Router) {
 
     this.settingsForm = this.fb.group({
@@ -39,6 +49,10 @@ export class UserSettingsComponent {
     this.userId = this.authService.getUserId();
   }
 
+  /**
+   * Método do ciclo de vida do Angular, chamado quando o componente é inicializado.
+   * Obtém as informações do utilizador e as preenche no formulário.
+   */
   ngOnInit() {
     const url = `${environment.apiUrl}/Accounts/${this.userId}`;
 
@@ -59,6 +73,10 @@ export class UserSettingsComponent {
     });
   }
 
+  /**
+   * Método chamado ao submeter o formulário de definições.
+   * Valida o IBAN e envia as informações para atualização.
+   */
   onSubmit() {
     this.alerts.enableLoading("A guardar informações...");
 
@@ -99,13 +117,10 @@ export class UserSettingsComponent {
     }
   }
 
-  // toggleEdit() {
-  //   this.editMode = !this.editMode;
-  //   if (!this.editMode) {
-  //     this.onSubmit();
-  //   }
-  // }
-
+  /**
+   * Método para eliminar a conta do utilizador.
+   * Envia uma solicitação para eliminar a conta e efetua logout.
+   */
   deleteAccount() {
     const deleteAccountURL = `${environment.apiUrl}/Accounts/${this.userId}`;
 
@@ -120,6 +135,10 @@ export class UserSettingsComponent {
     })
   }
 
+  /**
+   * Método para alterar a password do utilizador.
+   * Envia um link de confirmação para o e-mail do utilizador.
+   */
   changePassword() {
     this.alerts.enableLoading("A enviar link de confirmação...");
 
@@ -142,6 +161,9 @@ export class UserSettingsComponent {
     })
   }
 
+  /**
+   * Método para abrir a janela de confirmação de eliminação de conta.
+   */
   openDeleteAccount() {
     const overlay = document.getElementById('deleteAccountPopup');
     const delPopup = document.getElementById('delete');
@@ -152,6 +174,9 @@ export class UserSettingsComponent {
     }
   }
 
+  /**
+   * Método para fechar a janela de confirmação de eliminação de conta.
+   */
   closeDeleteAccount() {
     const overlay = document.getElementById('deleteAccountPopup');
     const delPopup = document.getElementById('delete');
@@ -163,6 +188,9 @@ export class UserSettingsComponent {
   }
 }
 
+/**
+ * Interface que define a estrutura das informações de conta do utilizador.
+ */
 interface Account {
   id: number;
   name: string;
@@ -173,14 +201,22 @@ interface Account {
   role: number;
 }
 
+/**
+ * Classe para validação de IBAN.
+ * Contém métodos para validar IBANs portugueses e verificar o checksum.
+ */
 export class IbanValidator {
 
-  public IbanValidator() {
+  public IbanValidator() { }
 
-  }
-
+  /**
+   * Valida um IBAN português.
+   * Verifica o formato do IBAN e o checksum.
+   *
+   * @param iban O IBAN a ser validado.
+   * @returns Verdadeiro se o IBAN for válido, falso caso contrário.
+   */
   validatePortugueseIBAN(iban: string): boolean {
-    // Remove spaces and convert to uppercase
     iban = iban.replace(/\s+/g, '').toUpperCase();
 
     // Check length and country code
@@ -188,19 +224,21 @@ export class IbanValidator {
       return false;
     }
 
-    // IBAN checksum validation
     return this.validateIBANChecksum(iban);
   }
 
-  // Function to validate IBAN checksum
+  /**
+   * Função para validar o checksum do IBAN.
+   * Realiza uma operação de módulo 97 no número do IBAN.
+   *
+   * @param iban O IBAN a ser validado.
+   * @returns Verdadeiro se o checksum for válido, falso caso contrário.
+   */
   validateIBANChecksum(iban: string): boolean {
-    // Move the first four characters to the end
     const rearranged = iban.slice(4) + iban.slice(0, 4);
 
-    // Convert letters to numbers (A = 10, B = 11, ..., Z = 35)
     const numericIBAN = rearranged.replace(/[A-Z]/g, (char) => (char.charCodeAt(0) - 55).toString());
 
-    // Perform modulo 97 operation
     let remainder = '';
     for (const char of numericIBAN) {
       remainder = (parseInt(remainder + char, 10) % 97).toString();

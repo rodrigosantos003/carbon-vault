@@ -16,6 +16,14 @@ export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
 
+  /**
+ * Injeta os serviços necessários para o funcionamento do componente:
+ * - `FormBuilder`: Para construção do formulário reativo.
+ * - `HttpClient`: Para realizar as requisições HTTP.
+ * - `Router`: Para navegação entre as páginas.
+ * - `AuthService`: Para verificar se o utilizador está autenticado.
+ * - `AlertsService`: Para mostrar alertas de sucesso, erro, e loading.
+ */
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
@@ -29,6 +37,11 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  /**
+ * Método de inicialização do componente.
+ * Fecha qualquer popup aberto, e verifica se o utilizador já está autenticado.
+ * Se estiver autenticado, redireciona o utilizador para o dashboard.
+ */
   ngOnInit(): void {
     this.alerts.closePopup();
 
@@ -38,10 +51,20 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  /**
+ * Armazena o token JWT no localStorage para manter o utilizador autenticado.
+ * 
+ * @param {string} token - O token JWT recebido da resposta de login.
+ */
   setToken(token: string) {
     localStorage.setItem('token', token);
   }
 
+  /**
+ * Valida o formulário e, se válido, faz a requisição de login.
+ * Se o login for bem-sucedido, armazena o token e redireciona para o dashboard.
+ * Caso contrário, mostra um erro.
+ */
   onSubmit() {
     if (this.loginForm.valid) {
       this.alerts.enableLoading("A verificar as credenciais...");

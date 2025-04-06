@@ -17,6 +17,15 @@ export class RequestReportComponent {
   requestForm: FormGroup;
   documents: File[] = [];
 
+  /**
+   * Construtor do componente.
+   *
+   * @param fb FormBuilder para criação de formulários.
+   * @param http Serviço HTTP para comunicações com a API.
+   * @param router Serviço de navegação.
+   * @param authService Serviço de autenticação do utilizador.
+   * @param alerts Serviço de alertas para feedback visual ao utilizador.
+   */
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
@@ -30,18 +39,33 @@ export class RequestReportComponent {
     });
   }
 
+  /**
+   * Chamada ao submeter o formulário. Inicia o processo de pedido de relatório.
+   */
   onSubmit() {
     this.requestReport();
   }
 
+  /**
+   * Atualiza a lista de ficheiros quando o utilizador seleciona novos ficheiros.
+   * 
+   * @param event Evento de input do tipo file.
+   */
   onFileSelected(event: any) {
     this.documents = Array.from(event.target.files);
   }
 
+  /**
+   * Retorna os nomes dos ficheiros selecionados, separados por vírgula.
+   */
   get fileNames(): string {
     return this.documents.map(file => file.name).join(', ');
   }
 
+  /**
+   * Cria um novo pedido de relatório através da API.
+   * O relatório é criado com o ID do utilizador autenticado e texto vazio.
+   */
   requestReport() {
     const createURL = `${environment.apiUrl}/Reports`;
 
@@ -65,6 +89,11 @@ export class RequestReportComponent {
     });
   }
 
+  /**
+   * Faz upload dos ficheiros associados ao pedido de relatório recém-criado.
+   *
+   * @param data Dados do relatório criado (inclui ID).
+   */
   uploadDocuments(data: any) {
     const uploadURL = `${environment.apiUrl}/Reports/${data.id}/upload`
 
@@ -77,6 +106,11 @@ export class RequestReportComponent {
     })
   }
 
+  /**
+   * Inicia o processo de pagamento do relatório, criando uma sessão de pagamento.
+   *
+   * @param id ID do relatório criado.
+   */
   payReport(id: number) {
     const url = `${environment.apiUrl}/UserPayments?type=report`;
 
@@ -100,6 +134,12 @@ export class RequestReportComponent {
     });
   }
 
+  /**
+   * Atualiza o relatório com a sessão de pagamento e redireciona o utilizador.
+   *
+   * @param id ID do relatório.
+   * @param paymentData Dados da resposta da API de pagamentos.
+   */
   updateReport(id: number, paymentData: any) {
     const reportURL = `${environment.apiUrl}/Reports/${id}`;
 

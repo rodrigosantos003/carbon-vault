@@ -17,13 +17,30 @@ export class UserReportsComponent {
   reports: Report[] = [];
   clientName: string = '';
 
+  /**
+   * Construtor do componente.
+   * Inicializa o componente com os serviços necessários para autenticação, alertas, e navegação.
+   *
+   * @param http Serviço HTTP para comunicação com a API.
+   * @param auth Serviço de autenticação para obter o ID do utilizador.
+   * @param alerts Serviço de alertas para mostrar mensagens de sucesso ou erro.
+   * @param router Serviço de navegação para redirecionar o utilizador.
+   */
   constructor(private http: HttpClient, private auth: AuthService, private alerts: AlertsService, public router: Router) { }
 
+  /**
+   * Método do ciclo de vida do Angular, chamado quando o componente é inicializado.
+   * Chama os métodos `fetchReports` e `getClientName` para carregar os relatórios e o nome do utilizador.
+   */
   ngOnInit() {
     this.fetchReports();
     this.getClientName();
   }
 
+  /**
+   * Método para obter o nome do cliente a partir da API.
+   * Preenche a variável `clientName` com o nome do utilizador.
+   */
   getClientName() {
     const url = `${environment.apiUrl}/Accounts/${this.auth.getUserId()}`;
 
@@ -32,6 +49,10 @@ export class UserReportsComponent {
     })
   }
 
+  /**
+   * Método para obter os relatórios do utilizador a partir da API.
+   * Atualiza a lista de relatórios e mostra informações de carregamento ou erro.
+   */
   fetchReports() {
     this.alerts.enableLoading("A carregar relatórios");
 
@@ -60,6 +81,13 @@ export class UserReportsComponent {
       }
     });
   }
+
+  /**
+   * Método para descarregar um relatório em formato PDF.
+   * Faz uma requisição à API para obter os detalhes do relatório e usa o serviço `downloadReportPDF` para gerar o PDF.
+   *
+   * @param id ID do relatório a ser descarregado.
+   */
   downloadReport(id: number) {
     this.alerts.enableLoading("A descarregar relatório");
 
@@ -81,6 +109,13 @@ export class UserReportsComponent {
     });
   }
 
+  /**
+   * Método para efetuar o pagamento de um relatório.
+   * Se o relatório tiver uma URL de pagamento, abre essa URL em uma nova janela para realizar o pagamento.
+   * Caso contrário, mostra uma mensagem de erro.
+   *
+   * @param id ID do relatório a ser pago.
+   */
   payReport(id: number) {
     const url = `${environment.apiUrl}/reports/${id}`;
     this.http.get<Report>(url, { headers: this.auth.getHeaders() }).subscribe({
@@ -99,6 +134,10 @@ export class UserReportsComponent {
   }
 }
 
+/**
+ * Interface que define a estrutura de um relatório.
+ * Representa os dados necessários para mostrar um relatório, incluindo seu estado, texto e informações de pagamento.
+ */
 interface Report {
   id: number;
   lastUpdate: string;
