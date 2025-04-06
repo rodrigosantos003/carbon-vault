@@ -84,7 +84,7 @@ export class UserMenuComponent {
 
       },
       error => {
-        // Caso contrário, exibe o erro no console
+        // Caso contrário, mostra o erro no console
         console.error("Erro na requisição:", error);
 
       }

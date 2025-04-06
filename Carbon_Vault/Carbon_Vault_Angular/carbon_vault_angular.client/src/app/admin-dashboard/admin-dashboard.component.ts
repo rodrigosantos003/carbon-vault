@@ -22,8 +22,17 @@ export class AdminDashboardComponent implements OnInit {
   transactionsThisWeek: any[] = [];
   transactionsLastWeek: any[] = [];
 
+  /**
+   * Injeta os serviços necessários para obter dados da API e exportar CSVs.
+   * 
+   * @param http Serviço HTTP para comunicação com a API.
+   * @param papa Serviço `PapaParse` usado para gerar ficheiros CSV.
+   */
   constructor(private http: HttpClient, private papa: Papa) { }
 
+  /**
+   * Responsável por iniciar o carregamento dos dados de atividade e transações semanais.
+   */
   ngOnInit(): void {
     //this.createLineChart();
     //this.createCircularChart();

@@ -42,7 +42,7 @@ export class UserEmissionsComponent {
   /**
    * Ciclo de vida do componente após inicialização.
    * 
-   * Busca os dados de emissões do utilizador. Se não existirem, inicializa com zeros e cria novo registo.
+   * Procura os dados de emissões do utilizador. Se não existirem, inicializa com zeros e cria novo registo.
    * Também calcula automaticamente as emissões totais ao alterar qualquer campo.
    */
   ngOnInit() {

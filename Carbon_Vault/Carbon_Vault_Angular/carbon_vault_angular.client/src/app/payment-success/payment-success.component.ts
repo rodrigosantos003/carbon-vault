@@ -24,7 +24,7 @@ export class PaymentSuccessComponent {
  * @param http Serviço para realizar requisições HTTP.
  * @param cartService Serviço para manipulação do carrinho de compras.
  * @param router Serviço de navegação do Angular.
- * @param alerts Serviço de exibição de alertas.
+ * @param alerts Serviço de alertas.
  * @param authService Serviço de autenticação do utilizador.
  * @param route Serviço para acessar os parâmetros da rota.
  */
@@ -86,7 +86,7 @@ export class PaymentSuccessComponent {
   /**
  * Envia a fatura para o utilizador após o pagamento bem-sucedido.
  * - Faz uma requisição GET para enviar a fatura associada à sessão de checkout.
- * - Exibe um alerta de sucesso ou erro baseado na resposta da API.
+ * - Mostra um alerta de sucesso ou erro baseado na resposta da API.
  * 
  * @param checkoutSessionId ID da sessão de checkout.
  */

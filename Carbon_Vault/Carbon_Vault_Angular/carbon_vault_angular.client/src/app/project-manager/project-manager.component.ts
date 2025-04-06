@@ -20,11 +20,11 @@ export class ProjectManagerComponent {
 
   /**
  * Construtor do componente `ProjectManagerComponent`.
- * Inicializa o componente com os serviços necessários para carregar, exibir e manipular projetos, além de gerenciar a autenticação do utilizador.
+ * Inicializa o componente com os serviços necessários para carregar, mostrar e manipular projetos, além de gerir a autenticação do utilizador.
  * 
  * @param http Serviço para realizar requisições HTTP.
- * @param alerts Serviço de exibição de alertas.
- * @param authService Serviço de autenticação e gerenciamento de sessão do utilizador.
+ * @param alerts Serviço de alertas.
+ * @param authService Serviço de autenticação e gestão de sessão do utilizador.
  * @param router Serviço para navegação entre as páginas.
  */
   constructor(private http: HttpClient, private alerts: AlertsService, private authService: AuthService, private router: Router) {
@@ -41,9 +41,9 @@ export class ProjectManagerComponent {
 
   /**
  * Recupera a lista de projetos do servidor.
- * - Faz uma requisição HTTP para obter os projetos e atualiza a lista exibida no componente.
- * - Exibe um alerta de carregamento enquanto a requisição está em andamento.
- * - Exibe um alerta de erro caso ocorra algum problema na requisição.
+ * - Faz uma requisição HTTP para obter os projetos e atualiza a lista.
+ * - Mostra um alerta de carregamento enquanto a requisição está em andamento.
+ * - Mostra um alerta de erro caso ocorra algum problema na requisição.
  */
   getProjects(): void {
     this.alerts.enableLoading("A carregar Projetos..");
@@ -123,7 +123,7 @@ export class ProjectManagerComponent {
   /**
  * Elimina o projeto selecionado.
  * - Envia uma requisição HTTP DELETE para o servidor para eliminar o projeto.
- * - Exibe um alerta de sucesso ou erro dependendo do resultado da operação.
+ * - Mostra um alerta de sucesso ou erro dependendo do resultado da operação.
  */
   eliminar() {
     if (this.selectedProjectId) {

@@ -25,7 +25,7 @@ export class UserDetailsComponent {
    * @param http Serviço HTTP para fazer chamadas à API.
    * @param authService Serviço de autenticação para obter headers e ID do utilizador autenticado.
    * @param router Serviço de navegação Angular.
-   * @param alerts Serviço para exibir mensagens de carregamento e erro.
+   * @param alerts Serviço para mostrar mensagens de carregamento e erro.
    */
   constructor(private route: ActivatedRoute, private http: HttpClient, private authService: AuthService, private router: Router, private alerts: AlertsService) { }
 
@@ -44,7 +44,7 @@ export class UserDetailsComponent {
   }
 
   /**
-   * Exibe o popup de confirmação para eliminação da conta.
+   * Mostra o popup de confirmação para eliminação da conta.
    */
   openDeletePopup() {
     const overlay = document.getElementById('modalOverlay');
@@ -71,7 +71,7 @@ export class UserDetailsComponent {
 
   /**
    * Elimina a conta do utilizador, caso não seja a própria conta do utilizador autenticado.
-   * Exibe erro se o utilizador tentar eliminar a sua própria conta.
+   * Mostra erro se o utilizador tentar eliminar a sua própria conta.
    */
   deleteAccount() {
     if (this.accountId) {

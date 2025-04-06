@@ -20,8 +20,25 @@ export class AdminReportsComponent {
   reportText: string = "";
   pendingReportsCount: number = 0;
   doneReportsCount: number = 0;
+
+  /**
+   * Responsável por injetar os serviços necessários para:
+   * Realizar chamadas HTTP à API (`HttpClient`);
+   * Obter informações e cabeçalhos de autenticação (`AuthService`);
+   * Apresentar mensagens de alerta, loading ou erro (`AlertsService`);
+   * Navegar entre páginas da aplicação (`Router`).
+   * 
+   * @param http Serviço HTTP para comunicação com o backend.
+   * @param auth Serviço de autenticação, usado para obter headers e ID do utilizador.
+   * @param alerts Serviço responsável por apresentar mensagens de loading, sucesso e erro.
+   * @param router Serviço de navegação entre rotas.
+   */
   constructor(private http: HttpClient, private auth: AuthService, private alerts: AlertsService, public router: Router) { }
 
+  /**
+   * - Carrega todos os relatórios disponíveis através do método `fetchReports()`;
+   * - Inicializa o estado do componente com os dados dos relatórios pendentes.
+   */
   ngOnInit() {
     this.fetchReports();
   }

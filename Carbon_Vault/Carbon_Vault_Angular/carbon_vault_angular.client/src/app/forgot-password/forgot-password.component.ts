@@ -22,7 +22,7 @@ export class ForgotPasswordComponent {
  * - FormBuilder: para criar e gerir o formulário reativo
  * - HttpClient: para enviar requisições HTTP
  * - Router: para navegação entre páginas
- * - AlertsService: para exibir alertas de sucesso, erro e carregamento
+ * - AlertsService: para mostrar alertas de sucesso, erro e carregamento
  */
   constructor(private fb: FormBuilder, private http: HttpClient, private router: Router, private alerts: AlertsService) {
     // Inicialização do FormGroup com controlos e validações

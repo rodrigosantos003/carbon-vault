@@ -24,10 +24,10 @@ export class ProjectCardComponent {
 
   /**
  * Construtor do componente `ProjectCardComponent`.
- * Inicializa o componente com os serviços necessários para manipulação do carrinho, exibição de alertas e requisições HTTP.
+ * Inicializa o componente com os serviços necessários para manipulação do carrinho, de alertas e requisições HTTP.
  * 
  * @param cartService Serviço de manipulação do carrinho de compras.
- * @param alerts Serviço de exibição de alertas.
+ * @param alerts Serviço de alertas.
  * @param http Serviço para realizar requisições HTTP.
  * @param authService Serviço para verificar se o utilizador está autenticado.
  */
@@ -70,7 +70,7 @@ export class ProjectCardComponent {
   /**
  * Adiciona o item ao carrinho, validando se há créditos suficientes disponíveis para o projeto.
  * - Verifica se o número de créditos disponíveis é suficiente para a quantidade solicitada.
- * - Exibe um alerta de erro caso não haja créditos suficientes ou o projeto não tenha créditos disponíveis.
+ * - Mostra um alerta de erro caso não haja créditos suficientes ou o projeto não tenha créditos disponíveis.
  * - Se a validação for bem-sucedida, o item é adicionado ao carrinho e o utilizador recebe um alerta de sucesso.
  */
   addToCart() {

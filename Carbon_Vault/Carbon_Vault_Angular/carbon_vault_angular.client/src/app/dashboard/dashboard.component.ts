@@ -34,12 +34,16 @@ export class DashboardComponent {
   TotalClosedTickets: number = 0;
 
   /**
- * Injeta os serviços necessários:
- * - AuthService: autenticação e headers
- * - HttpClient: chamadas à API
- * - Router: navegação
- * - AlertsService: carregamento/erros
- */
+   * Responsável por injetar os serviços necessários para o funcionamento do dashboard administrativo,
+   * além de inicializar propriedades essenciais, como o ID do utilizador autenticado e estruturas
+   * básicas de dados (emissões, projetos, transações, etc.).
+   * 
+   * @param authService Serviço de autenticação utilizado para obter o ID do utilizador atual.
+   * @param http Serviço HTTP para realizar requisições à API.
+   * @param router Serviço de roteamento Angular para navegação entre páginas.
+   * @param auth Serviço de autenticação (duplicado de `authService`, verificar se ambos são necessários).
+   * @param alerts Serviço responsável por exibir notificações e alertas no frontend.
+   */
   constructor(private authService: AuthService, private http: HttpClient, private router: Router, private auth: AuthService, private alerts: AlertsService) {
 
     this.userId = this.authService.getUserId();
@@ -51,8 +55,8 @@ export class DashboardComponent {
   }
 
   /**
- * - Limpa sessão
- * - Vai buscar os dados do utilizador autenticado
+ * - Limpa a sessão
+ * - Procura os dados do utilizador autenticado
  * - Consoante o tipo de utilizador, chama os métodos específicos de dashboard.
  */
   ngOnInit() {
@@ -74,11 +78,11 @@ export class DashboardComponent {
   }
 
   /**
- * Vai buscar estatísticas para utilizador de suporte:
- * - Nº total de tickets
- * - Tickets abertos
- * - Tickets fechados
- */
+   * Vai procurar estatísticas para utilizador de suporte:
+   * - Nº total de tickets
+   * - Tickets abertos
+   * - Tickets fechados
+   */
   fetchDashboardStatistics_support() {
     const url = `${environment.apiUrl}/Tickets/support/stats`;
     this.http.get(url, { headers: this.authService.getHeaders() }).subscribe(
@@ -88,12 +92,12 @@ export class DashboardComponent {
         this.TotalOpenTickets = data.openTickets;
         this.TotalClosedTickets = data.closedTickets;
       },
-      error => console.error('Erro ao buscar estatísticas do dashboard:', error)
+      error => console.error('Erro ao procurar estatísticas do dashboard:', error)
     );
   }
 
   /**
- * Vai buscar estatísticas globais do sistema (admin):
+ * Vai procurar estatísticas globais do sistema (admin):
  * - nº utilizadores
  * - nº projetos
  * - nº transações
@@ -113,7 +117,7 @@ export class DashboardComponent {
 
         console.log(this.userCount)
       },
-      error => console.error('Erro ao buscar estatísticas do dashboard:', error)
+      error => console.error('Erro ao procurar estatísticas do dashboard:', error)
     );
   }
 
@@ -131,7 +135,7 @@ export class DashboardComponent {
   }
 
   /**
- * Vai buscar as compras e vendas feitas pelo utilizador autenticado.
+ * Vai procurar as compras e vendas feitas pelo utilizador autenticado.
  * Mostra alerta de carregamento enquanto os dados são obtidos.
  */
   getTransactions() {
@@ -184,7 +188,7 @@ export class DashboardComponent {
   }
 
   /**
- * Vai buscar os projetos do utilizador autenticado.
+ * Vai procurar os projetos do utilizador autenticado.
  * - Atualiza o número de projetos
  * - Chama o método para somar os créditos associados
  */
@@ -202,7 +206,7 @@ export class DashboardComponent {
   }
 
   /**
- * Vai buscar as emissões do utilizador e calcula o total convertido em CO₂.
+ * Vai procurar as emissões do utilizador e calcula o total convertido em CO₂.
  */
   getEmissions() {
     const url = `${environment.apiUrl}/UserEmissions/${this.userId}`;

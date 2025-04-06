@@ -51,7 +51,7 @@ export class UserReportsComponent {
 
   /**
    * Método para obter os relatórios do utilizador a partir da API.
-   * Atualiza a lista de relatórios e exibe informações de carregamento ou erro.
+   * Atualiza a lista de relatórios e mostra informações de carregamento ou erro.
    */
   fetchReports() {
     this.alerts.enableLoading("A carregar relatórios");
@@ -112,7 +112,7 @@ export class UserReportsComponent {
   /**
    * Método para efetuar o pagamento de um relatório.
    * Se o relatório tiver uma URL de pagamento, abre essa URL em uma nova janela para realizar o pagamento.
-   * Caso contrário, exibe uma mensagem de erro.
+   * Caso contrário, mostra uma mensagem de erro.
    *
    * @param id ID do relatório a ser pago.
    */

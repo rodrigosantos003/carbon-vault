@@ -53,12 +53,12 @@ export class ProjectManagerDetailsComponent {
 
   /**
  * Construtor do componente `ProjectManagerDetailsComponent`.
- * Inicializa o componente com os serviços necessários para carregar, exibir e manipular os detalhes do projeto.
+ * Inicializa o componente com os serviços necessários para carregar, mostrar e manipular os detalhes do projeto.
  * 
  * @param http Serviço para realizar requisições HTTP.
- * @param route Serviço para acessar parâmetros da rota ativa.
- * @param authService Serviço de autenticação e gerenciamento de sessão do utilizador.
- * @param alerts Serviço de exibição de alertas.
+ * @param route Serviço para aceder aos parâmetros da rota ativa.
+ * @param authService Serviço de autenticação e gestão de sessão do utilizador.
+ * @param alerts Serviço de alertas.
  */
   constructor(private http: HttpClient, private route: ActivatedRoute, private authService: AuthService, private alerts: AlertsService) { }
 

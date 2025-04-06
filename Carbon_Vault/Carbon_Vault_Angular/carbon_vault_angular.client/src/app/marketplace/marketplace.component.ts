@@ -96,7 +96,7 @@ export class MarketplaceComponent implements OnInit {
 
   /**
  * Aplica o filtro de pesquisa nos projetos com base no nome.
- * Exibe apenas os projetos cujo nome contém o valor da pesquisa.
+ * Mostra apenas os projetos cujo nome contém o valor da pesquisa.
  * 
  * @param {any} event - O evento de alteração no campo de pesquisa.
  */

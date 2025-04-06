@@ -63,7 +63,6 @@ export class ProjectManagerDetailsAdminComponent {
   /**
    * Inicializa o componente, carregando os detalhes do projeto e arquivos.
    *
-   * @returns {void}
    */
   ngOnInit() {
     this.alerts.enableLoading("A carregar informação do projeto...");
@@ -87,7 +86,6 @@ export class ProjectManagerDetailsAdminComponent {
   /**
    * Aprova o projeto, gerando créditos de carbono.
    *
-   * @returns {void}
    */
   approveProject() {
     const projectId = this.project.id;
@@ -117,7 +115,6 @@ export class ProjectManagerDetailsAdminComponent {
   /**
    * Adiciona créditos ao projeto.
    *
-   * @returns {void}
    */
   addCredits() {
     const projectId = this.project.id;
@@ -148,7 +145,6 @@ export class ProjectManagerDetailsAdminComponent {
    * Obtém os detalhes do projeto a partir da API.
    *
    * @param {number} projectId - O ID do projeto a ser carregado.
-   * @returns {Promise<void>}
    */
   async fetchProjectDetails(projectId: number) {
     this.http.get(`${this.apiURL}/${projectId}`).subscribe((response: any) => {
@@ -174,7 +170,6 @@ export class ProjectManagerDetailsAdminComponent {
    * Função de callback para o evento de drag over.
    *
    * @param {DragEvent} event - O evento de drag over.
-   * @returns {void}
    */
   onDragOver(event: DragEvent) {
     event.preventDefault();
@@ -186,7 +181,6 @@ export class ProjectManagerDetailsAdminComponent {
    * Função de callback para o evento de drop.
    *
    * @param {DragEvent} event - O evento de drop.
-   * @returns {void}
    */
   onDrop(event: DragEvent) {
     event.preventDefault();
@@ -204,7 +198,6 @@ export class ProjectManagerDetailsAdminComponent {
    * Função de callback para o evento de drag leave.
    *
    * @param {DragEvent} event - O evento de drag leave.
-   * @returns {void}
    */
   onDragLeave(event: DragEvent) {
     event.preventDefault();
@@ -216,7 +209,6 @@ export class ProjectManagerDetailsAdminComponent {
    *
    * @param {number} categoriaId - O ID da categoria.
    * @param {Event} event - O evento que contém o valor alterado.
-   * @returns {void}
    */
   onCategoriaChange(categoriaId: number, event: any) {
     if (event.target.checked) {
@@ -242,7 +234,6 @@ export class ProjectManagerDetailsAdminComponent {
    * Função chamada ao alterar os arquivos do projeto.
    *
    * @param {Event} event - O evento de mudança dos arquivos.
-   * @returns {void}
    */
   onFileChange(event: any) {
     const newFiles = Array.from(event.target.files) as File[];
@@ -273,7 +264,6 @@ export class ProjectManagerDetailsAdminComponent {
    * Altera o estado do projeto.
    *
    * @param {number} newStatus - O novo estado do projeto.
-   * @returns {void}
    */
   changeProjectStatus(newStatus: number) {
     const projectId = this.project.id;
@@ -300,7 +290,6 @@ export class ProjectManagerDetailsAdminComponent {
   /**
    * Rejeita o projeto, fornecendo feedback.
    *
-   * @returns {void}
    */
   rejectProject() {
     if (!this.rejectionFeedback || this.rejectionFeedback.trim() === "") {
@@ -351,7 +340,6 @@ export class ProjectManagerDetailsAdminComponent {
    *
    * @param {string} filePath - O caminho do arquivo a ser baixado.
    * @param {string} fileName - O nome do arquivo a ser baixado.
-   * @returns {void}
    */
   downloadFile(filePath: string, fileName: string) {
     const url = `${filePath}`;
@@ -368,7 +356,6 @@ export class ProjectManagerDetailsAdminComponent {
   /**
    * Altera o modo de edição para permitir a adição de arquivos.
    *
-   * @returns {void}
    */
   changeToEditMode() {
     this.isAddingFiles = true;
@@ -377,7 +364,6 @@ export class ProjectManagerDetailsAdminComponent {
   /**
    * Reverte o modo de edição, removendo arquivos selecionados.
    *
-   * @returns {void}
    */
   RevertToEditMode() {
     this.isAddingFiles = false;

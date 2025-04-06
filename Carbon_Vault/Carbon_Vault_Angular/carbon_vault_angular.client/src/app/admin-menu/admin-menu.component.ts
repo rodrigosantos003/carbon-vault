@@ -9,11 +9,16 @@ import { AuthService } from '../auth-service.service';
   styleUrl: './admin-menu.component.css'
 })
 export class AdminMenuComponent {
+
+  /**
+   * Responsável por injetar o serviço de autenticação.
+   * 
+   * @param authService Serviço de autenticação utilizado para encerrar a sessão do utilizador.
+   */
   constructor(private authService: AuthService) { }
 
   /**
  * Termina a sessão do utilizador autenticado, ao chamar o método `logout()` do `AuthService`.
- * @returns {void}
  */
   onLogout() {
     this.authService.logout();

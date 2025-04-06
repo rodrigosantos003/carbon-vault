@@ -9,6 +9,12 @@ import { Location } from '@angular/common';
   styleUrl: './go-back-button.component.css'
 })
 export class GoBackButtonComponent {
+
+  /**
+   * Injeta o serviço `Location`, que permite aceder e controlar o histórico de navegação.
+   * 
+   * @param location Serviço Angular que fornece acesso ao histórico do navegador.
+   */
   constructor(private location: Location) { }
 
   /**

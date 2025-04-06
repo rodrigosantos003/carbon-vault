@@ -13,7 +13,7 @@ using Carbon_Vault.Services;
 namespace Carbon_Vault.Controllers.API
 {
     /// <summary>
-    /// Controlador de projetos. Gerencia operações CRUD para projetos, incluindo recuperação, criação, atualização, exclusão e manipulação de arquivos relacionados a projetos.
+    /// Controlador de projetos. Faz a gestão de operações CRUD para projetos, incluindo recuperação, criação, atualização, exclusão e manipulação de arquivos relacionados a projetos.
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]

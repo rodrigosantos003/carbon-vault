@@ -16,10 +16,23 @@ export class AdminTransactionsComponent {
   accountTransactions: any[] = [];
   accounts: Account[] | undefined;
 
-  constructor(private http: HttpClient, private authService: AuthService, private router: Router) {
+  /**
+   * Responsável por injetar os serviços necessários para:
+   * Fazer chamadas HTTP à API (HttpClient)
+   * Obter informações do utilizador autenticado (AuthService)
+   * Navegar entre páginas da aplicação (Router)
+   * 
+   * @param http Serviço HTTP utilizado para comunicação com a API.
+   * @param authService Serviço de autenticação utilizado para obter o ID do utilizador e headers com token.
+   * @param router Serviço de navegação para redirecionamento entre rotas.
+   */
+  constructor(private http: HttpClient, private authService: AuthService, private router: Router) { }
 
-  }
-
+  /**
+   * - Obtém o ID do utilizador autenticado e armazena em `accountId`.
+   * - Recolhe a lista de contas de utilizadores da API.
+   * - Recolhe todas as transações registadas para exibição no dashboard.
+   */
   ngOnInit(): void {
     this.accountId = this.authService.getUserId();
     this.getAccounts();

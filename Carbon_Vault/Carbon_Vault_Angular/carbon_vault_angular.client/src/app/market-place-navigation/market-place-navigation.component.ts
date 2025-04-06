@@ -49,9 +49,8 @@ export class MarketPlaceNavigationComponent {
         this.userInitial = data.name[0]
       },
       error => {
-        // Caso contrário, exibe o erro no console
+        // Caso contrário, imprime o erro no console
         console.error("Erro na requisição:", error);
-
       }
     );
 

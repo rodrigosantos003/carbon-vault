@@ -61,7 +61,7 @@ export class ProjectAddComponent {
  * 
  * @param http Serviço para realizar requisições HTTP.
  * @param authService Serviço de autenticação do utilizador.
- * @param alerts Serviço de exibição de alertas.
+ * @param alerts Serviço de alertas.
  * @param location Serviço de navegação de localização.
  */
   constructor(private http: HttpClient, private authService: AuthService, private alerts: AlertsService, private location: Location) {
@@ -161,7 +161,7 @@ export class ProjectAddComponent {
   /**
  * Valida e carrega a imagem selecionada.
  * - Verifica o tipo e tamanho do arquivo da imagem.
- * - Exibe uma prévia da imagem caso seja válida.
+ * - Mostra uma prévia da imagem caso seja válida.
  * 
  * @param event Evento disparado ao selecionar uma imagem.
  */
@@ -284,7 +284,7 @@ export class ProjectAddComponent {
  * Envia os dados do projeto para o backend.
  * - Valida o formulário e verifica se os dados estão corretos.
  * - Envia os dados do projeto e seus arquivos.
- * - Exibe um alerta de sucesso ou erro com base na resposta da API.
+ * - Mostra um alerta de sucesso ou erro com base na resposta da API.
  */
   async onSubmit() {
     if (!this.validateForm()) return;
