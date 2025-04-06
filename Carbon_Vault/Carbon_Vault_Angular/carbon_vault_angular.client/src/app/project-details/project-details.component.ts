@@ -30,7 +30,7 @@ export class ProjectDetailsComponent {
  * Construtor do componente `ProjectDetailsComponent`.
  * Inicializa o componente com os serviços necessários para mostrar os detalhes do projeto, controlar o carrinho e fazer a gestão do login.
  * 
- * @param route Serviço para acessar os parâmetros da rota ativa.
+ * @param route Serviço para aceder os parâmetros da rota ativa.
  * @param http Serviço para realizar requisições HTTP.
  * @param authService Serviço para autenticação e gestão de sessão do utilizador.
  * @param router Serviço para navegação entre as páginas.

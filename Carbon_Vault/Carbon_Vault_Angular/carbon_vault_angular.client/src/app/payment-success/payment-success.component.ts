@@ -26,7 +26,7 @@ export class PaymentSuccessComponent {
  * @param router Serviço de navegação do Angular.
  * @param alerts Serviço de alertas.
  * @param authService Serviço de autenticação do utilizador.
- * @param route Serviço para acessar os parâmetros da rota.
+ * @param route Serviço para aceder os parâmetros da rota.
  */
   constructor(private http: HttpClient, private cartService: CartService, public router: Router, private alerts: AlertsService, private authService: AuthService, private route: ActivatedRoute) { }
 
