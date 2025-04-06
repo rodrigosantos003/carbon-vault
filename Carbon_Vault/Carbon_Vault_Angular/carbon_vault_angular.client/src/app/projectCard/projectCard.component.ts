@@ -4,6 +4,7 @@ import { AlertsService } from '../alerts.service'
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable, tap } from 'rxjs';
+import { AuthService } from '../auth-service.service';
 
 @Component({
   selector: 'app-projectCard',
@@ -28,8 +29,9 @@ export class ProjectCardComponent {
  * @param cartService Serviço de manipulação do carrinho de compras.
  * @param alerts Serviço de exibição de alertas.
  * @param http Serviço para realizar requisições HTTP.
+ * @param authService Serviço para verificar se o utilizador está autenticado.
  */
-  constructor(private cartService: CartService, private alerts: AlertsService, private http: HttpClient) { }
+  constructor(private cartService: CartService, private alerts: AlertsService, private http: HttpClient, private authService: AuthService) { }
 
   /**
  * Método chamado na inicialização do componente.
@@ -58,6 +60,7 @@ export class ProjectCardComponent {
   getProjectQuantityForSale(projectId: number): Observable<any> {
     return this.http.get(`${environment.apiUrl}/projects/${projectId}`).pipe(
       tap((data) => {
+        console.log(data);
         this.projectData = data;
         this.carbonCreditsForSale = this.projectData.creditsForSale;
       })
@@ -84,6 +87,11 @@ export class ProjectCardComponent {
           return;
         }
 
+        if (this.projectData.owner != this.authService.getUserId()) {
+          this.alerts.enableError("Não pode comprar créditos do seu próprio projeto", 5);
+          return;
+        }
+
         const item = {
           id: this.projectID,
           image: this.imageUrl,
@@ -94,7 +102,6 @@ export class ProjectCardComponent {
         };
 
         this.cartService.addItem(item);
-        this.alerts.enableSuccess("Item adicionado ao carrinho!");
 
         this.quantity = 1;
       },

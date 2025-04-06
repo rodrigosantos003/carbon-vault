@@ -41,6 +41,23 @@ namespace Carbon_Vault.Controllers.API
             return await _context.Transactions.ToListAsync();
         }
 
+
+        [HttpGet("/user/{userID}")]
+        [ServiceFilter(typeof(TokenValidationFilter))]
+        public async Task<ActionResult<IEnumerable<Transaction>>> GetTransactionsByUser(int userID)
+        {
+            var transactions = await _context.Transactions
+                .Where(t => t.BuyerId == userID || t.SellerId == userID)
+                .ToListAsync();
+
+            if (!transactions.Any())
+            {
+                return NotFound(new {message = "Nenhuma transação encontrada para este utilizador."});
+            }
+
+            return Ok(transactions);
+        }
+
         /// <summary>
         /// Obtém uma transação pelo ID.
         /// </summary>
@@ -142,18 +159,19 @@ namespace Carbon_Vault.Controllers.API
         /// <param name="type">Tipo da transação (0 para compras, 1 para vendas).</param>
         /// <param name="userID">ID do utilizador.</param>
         /// <returns>Lista de transações filtradas pelo tipo especificado.</returns>
-        [HttpGet("type/{type}/user/{userID}")]
+        [HttpGet("type/{type}")]
         [ServiceFilter(typeof(TokenValidationFilter))]
-        public async Task<ActionResult<IEnumerable<Transaction>>> GetTransactionsByType(int type, int userID)
+        public async Task<ActionResult<IEnumerable<Transaction>>> GetTransactionsByType(int type, [FromHeader] int userID)
         {
             var transactions = await _context.Transactions.Select(t => new
             {
                 t.Id,
                 State = t.State.ToString(),
-                Project = _context.Projects.Where(p => p.Id == t.ProjectId).Select(p => p.Name).FirstOrDefault(),
+                t.ProjectName,
                 t.Date,
-                t.BuyerId,
-                t.SellerId
+                t.BuyerName,
+                t.SellerName,
+                t.BuyerId, t.SellerId
             }).Where(t => type == 0 ? t.BuyerId == userID : t.SellerId == userID)
             .ToListAsync();
 
@@ -177,31 +195,26 @@ namespace Carbon_Vault.Controllers.API
         {
             var account = await _context.Account.FindAsync(userID);
 
-            Console.WriteLine("###############################################");
-            Console.WriteLine("ID: " + id);
-
             var transaction = await _context.Transactions
                 .Where(t => t.Id == id && (t.BuyerId == userID || t.SellerId == userID || account.Role == AccountType.Admin))
                 .Select(t => new
                 {
                     t.Id,
-                    Project = _context.Projects.Where(p => p.Id == t.ProjectId).Select(p => p.Name).FirstOrDefault(),
+                    t.ProjectName,
                     t.Date,
                     t.BuyerId,
                     t.SellerId,
                     t.TotalPrice,
-                    buyerName = _context.Account.Where(a => a.Id == t.BuyerId).Select(a => a.Name).FirstOrDefault(),
-                    sellerName = _context.Account.Where(a => a.Id == t.SellerId).Select(a => a.Name).FirstOrDefault(),
+                    t.BuyerName,
+                    t.SellerName,
                     t.Quantity,
                     t.CheckoutSession,
                     t.PaymentMethod,
-                    projectDescription = _context.Projects.Where(p => p.Id == t.ProjectId).Select(p => p.Description).FirstOrDefault(),
-                    projectCertifier = _context.Projects.Where(p => p.Id == t.ProjectId).Select(p => p.Certification).FirstOrDefault(),
-                    projectLocation = _context.Projects.Where(p => p.Id == t.ProjectId).Select(p => p.Location).FirstOrDefault(),
+                    t.ProjectDescription,
+                    t.ProjectCertifier,
+                    t.ProjectLocation
                 })
                 .FirstOrDefaultAsync();
-
-            Console.WriteLine("Transaction: " + transaction);
 
             if (transaction == null)
             {

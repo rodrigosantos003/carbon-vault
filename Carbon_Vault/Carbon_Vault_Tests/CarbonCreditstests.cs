@@ -47,34 +47,12 @@ namespace Carbon_Vault_Tests_CarbonCredits
             string validToken = "Bearer " + userToken;
 
             // Act
-            var result = await _controller.PostCarbonCredit(carbonCredit, userId, validToken);
+            var result = await _controller.PostCarbonCredit(carbonCredit);
 
             // Assert
             var createdResult = Assert.IsType<CreatedAtActionResult>(result.Result);
             Assert.Equal("GetCarbonCredit", createdResult.ActionName);
             Assert.Equal(carbonCredit, createdResult.Value);
-        }
-
-        [Fact]
-        public async Task PostCarbonCredit_InvalidToken_ReturnsUnauthorized()
-        {
-            // Arrange
-            var carbonCredit = new CarbonCredit {
-                ProjectId = 1,
-                Price = 10,
-                IsSold = false,
-                Certification = "Certification",
-                SerialNumber = "1234567890"
-            };
-
-            string token = "invalid_token";
-            int userId = 123;
-
-            // Act
-            var result = await _controller.PostCarbonCredit(carbonCredit, userId, token);
-
-            // Assert
-            Assert.IsType<UnauthorizedResult>(result.Result);
         }
 
         [Fact]
@@ -94,7 +72,7 @@ namespace Carbon_Vault_Tests_CarbonCredits
             string userToken = AuthHelper.GerarToken(userId);
             string validToken = "Bearer " + userToken;
 
-            await _controller.PostCarbonCredit(carbonCredit, userId, validToken);
+            await _controller.PostCarbonCredit(carbonCredit);
 
             // Act
             var result = await _controller.GetCarbonCredit(carbonCredit.Id);
@@ -134,12 +112,12 @@ namespace Carbon_Vault_Tests_CarbonCredits
             string userToken = AuthHelper.GerarToken(userId);
             string validToken = "Bearer " + userToken;
 
-            await _controller.PostCarbonCredit(carbonCredit, userId, validToken);
+            await _controller.PostCarbonCredit(carbonCredit);
 
             carbonCredit.Price = 500;
 
             // Act
-            var result = await _controller.PutCarbonCredit(carbonCredit.Id, carbonCredit, userId, validToken);
+            var result = await _controller.PutCarbonCredit(carbonCredit.Id, carbonCredit);
 
             // Assert
             Assert.IsType<NoContentResult>(result);
@@ -162,10 +140,10 @@ namespace Carbon_Vault_Tests_CarbonCredits
             string userToken = AuthHelper.GerarToken(userId);
             string validToken = "Bearer " + userToken;
 
-            await _controller.PostCarbonCredit(carbonCredit, userId, validToken);
+            await _controller.PostCarbonCredit(carbonCredit);
 
             // Act
-            var result = await _controller.DeleteCarbonCredit(carbonCredit.Id, userId, validToken);
+            var result = await _controller.DeleteCarbonCredit(carbonCredit.Id);
 
             // Assert
             Assert.IsType<NoContentResult>(result);
@@ -181,25 +159,10 @@ namespace Carbon_Vault_Tests_CarbonCredits
             string validToken = "Bearer " + userToken;
 
             // Act
-            var result = await _controller.DeleteCarbonCredit(creditId, userId, validToken);
+            var result = await _controller.DeleteCarbonCredit(creditId);
 
             // Assert
             Assert.IsType<NotFoundResult>(result);
-        }
-
-        [Fact]
-        public async Task DeleteCarbonCredit_InvalidToken_ReturnsUnauthorized()
-        {
-            // Arrange
-            int creditId = 1;
-            int userId = 321;
-            string userToken = AuthHelper.GerarToken(userId);
-
-            // Act
-            var result = await _controller.DeleteCarbonCredit(creditId, userId, userToken);
-
-            // Assert
-            Assert.IsType<UnauthorizedResult>(result);
         }
 
         public void Dispose()

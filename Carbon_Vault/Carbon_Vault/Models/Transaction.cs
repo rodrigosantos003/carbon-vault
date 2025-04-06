@@ -24,8 +24,21 @@ namespace Carbon_Vault.Models
         public int BuyerId { get; set; }
         public int SellerId { get; set; }
 
-        [Required]
         public int ProjectId { get; set; }
+
+        [Required]
+        public string BuyerName { get; set; }
+
+        [Required]
+        public string SellerName { get; set; }
+        [Required]
+        public string ProjectName { get; set; }
+        [Required]
+        public string ProjectDescription { get; set; }
+        [Required]
+        public string ProjectCertifier { get; set; }
+        [Required]
+        public string ProjectLocation { get; set; }
 
         [Required]
         public int Quantity { get; set; }

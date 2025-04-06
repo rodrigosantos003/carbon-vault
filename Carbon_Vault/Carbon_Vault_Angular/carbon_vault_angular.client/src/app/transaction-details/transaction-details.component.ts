@@ -74,7 +74,7 @@ export class TransactionDetailsComponent {
       this.transactionType = type;
       this.transactionBuyer = data.buyerName;
       this.transactionSeller = data.sellerName;
-      this.transactionProject = data.project;
+      this.transactionProject = data.projectName;
       this.transactionDate = data.date;
       this.transactionQuantity = data.quantity;
       this.transactionTotal = data.totalPrice;

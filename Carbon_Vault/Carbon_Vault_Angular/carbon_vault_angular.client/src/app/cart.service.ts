@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthService } from './auth-service.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CartService {
-  constructor(private cookieService: CookieService, private authService: AuthService) { }
+  constructor(private cookieService: CookieService, private authService: AuthService, private router: Router) { }
 
   private getUserId(): string {
     // Simula a obtenção do ID do utilizador do localStorage ou JWT
@@ -36,6 +37,11 @@ export class CartService {
   }
 
   addItem(item: any) {
+    if(!this.authService.isAuthenticated())
+      this.router.navigate(['/login']);
+
+    console.log('Adding item to cart:', item);
+
     let cart = this.getCart();
     const existingItem = cart.find(i => i.id === item.id);
 

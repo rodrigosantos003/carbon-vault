@@ -65,36 +65,22 @@ export class UserEmissionsComponent {
             petrol: 0,
             diesel: 0
           });
-
-          const formValue = this.emissionsForm.value;
-
-          const emissionData = {
-            electricity: formValue.electricity,
-            petrol: formValue.petrol,
-            diesel: formValue.diesel,
-            UserId: this.userId
-          };
-
-          this.http.post(`${environment.apiUrl}/UserEmissions`, emissionData).subscribe(
-            {
-              next: () => {
-                this.alerts.enableSuccess("Emissões adicionadas com sucesso");
-              },
-              error: () => {
-                this.alerts.enableError("Erro ao adicionar emissões");
-              }
-            }
-          );
         }
         else {
-          // Caso contrário, exibe o erro no console
-          console.error("Erro na requisição:", error);
+          this.alerts.enableError("Erro ao obter emissões");
         }
       }
     });
 
     this.emissionsForm.valueChanges.subscribe((changes) => {
-      this.totalEmissions = this.calculateEmissions(changes);
+      ['electricity', 'petrol', 'diesel'].forEach(field => {
+        const control = this.emissionsForm.get(field);
+        if (control && control.value < 0) {
+          control.setValue(0);
+        }
+      });
+
+      this.totalEmissions = this.calculateEmissions(this.emissionsForm.value);
     });
   }
 
@@ -136,16 +122,20 @@ export class UserEmissionsComponent {
     });
   }
 
+  validateValue() {
+
+  }
+
   /**
    * Calcula as emissões totais com base nos dados inseridos.
-   *
+   * 
    * @param formData Objeto com os valores de eletricidade, gasolina e gasóleo.
    * @returns Total de emissões em kg CO₂e.
    */
-  calculateEmissions(formData: { electricity: string, petrol: string, diesel: string }) {
-    const electricity = parseFloat(formData.electricity) || 0;
-    const petrol = parseFloat(formData.petrol) || 0;
-    const diesel = parseFloat(formData.diesel) || 0;
+  calculateEmissions(formData: { electricity: number, petrol: number, diesel: number }) {
+    const electricity = formData.electricity;
+    const petrol = formData.petrol;
+    const diesel = formData.diesel;
 
     const electricityEquivalent = electricity * 0.189;
     const petrolEquivalent = petrol * 0.00231;

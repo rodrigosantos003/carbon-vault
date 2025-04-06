@@ -26,7 +26,7 @@ export class UserPurchasesComponent {
    * @param router Serviço de navegação para redirecionar o utilizador.
    */
   constructor(private http: HttpClient, private alerts: AlertsService, private authService: AuthService, private router: Router) {
-    this.purchasesURL = `${environment.apiUrl}/Transactions/type/0/user/${this.authService.getUserId()}`;
+    this.purchasesURL = `${environment.apiUrl}/Transactions/type/0`;
   }
 
   /**
@@ -42,8 +42,8 @@ export class UserPurchasesComponent {
    * Atualiza a lista de compras e mostra ou oculta as mensagens de carregamento.
    */
   getPurchases(): void {
-    this.alerts.enableLoading("A carregar compras...");
-
+    this.alerts.enableLoading("A carregar compras..."); 
+    
     this.http.get<Purchase[]>(this.purchasesURL, { headers: this.authService.getHeaders() }).subscribe({
       next: (data) => {
         this.purchases = data;
@@ -92,7 +92,7 @@ export class UserPurchasesComponent {
  */
 interface Purchase {
   id: number,
-  project: string,
+  projectName: string,
   quantity: number,
   date: string,
   state: string,

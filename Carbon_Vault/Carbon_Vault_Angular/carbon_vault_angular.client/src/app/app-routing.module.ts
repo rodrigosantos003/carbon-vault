@@ -58,7 +58,7 @@ const routes: Routes = [
   { path: 'admin-dashboard', component: AdminDashboardComponent },
   { path: 'users-manager', component: UsersManagerComponent, canActivate: [AuthGuard, PermissionGuard], data: { requiredRole: 1 } },
   { path: 'user-payment', component: UserPaymentComponent },
-  { path: 'cart', component: CartComponent },
+  { path: 'cart', component: CartComponent, canActivate: [AuthGuard]},
   { path: 'purchases', component: UserPurchasesComponent },
   { path: 'project-manager', component: ProjectManagerComponent },
   { path: 'Account-project-manager/addProject', component: ProjectAddComponent },
