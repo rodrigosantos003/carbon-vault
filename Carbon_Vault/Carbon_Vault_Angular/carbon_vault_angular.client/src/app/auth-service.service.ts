@@ -9,21 +9,41 @@ import { environment } from '../environments/environment';
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private jwtHelper: JwtHelperService, private router: Router,private http: HttpClient) { }
 
-  // Check if the user is authenticated
+  /**
+   * Injeta os serviços necessários: JWT helper, Router e HTTP Client.
+   * 
+   * @param {JwtHelperService} jwtHelper - Serviço para manipulação de tokens JWT.
+   * @param {Router} router - Serviço de navegação do Angular.
+   * @param {HttpClient} http - Serviço HTTP para chamadas à API.
+   */
+  constructor(private jwtHelper: JwtHelperService, private router: Router, private http: HttpClient) { }
+
+  /**
+   * Verifica se o utilizador está autenticado com base na existência e validade do token JWT.
+   * 
+   * @returns {boolean} - `true` se o token existir e não estiver expirado, `false` caso contrário.
+   */
   isAuthenticated(): boolean {
     const token = localStorage.getItem('token');
     return token !== null && !this.jwtHelper.isTokenExpired(token);
   }
 
-  // Log out by removing the token
+  /**
+   * Termina a sessão do utilizador removendo o token do `localStorage` e redirecionando para a página inicial.
+   * 
+   * @returns {void}
+   */
   logout(): void {
     localStorage.removeItem('token');
     this.router.navigate(['/']);
   }
 
-  // Get the user's ID
+  /**
+   * Obtém o ID do utilizador autenticado a partir do token JWT decodificado.
+   * 
+   * @returns {string} - O ID do utilizador (claim `nameid`) ou string vazia se o token não existir.
+   */
   getUserId(): string {
     const token = localStorage.getItem('token');
     if (token === null) {
@@ -34,6 +54,11 @@ export class AuthService {
     return decodedToken['nameid'];
   }
 
+  /**
+   * Constrói os headers HTTP com o token JWT e o ID do utilizador, para serem usados em chamadas autenticadas à API.
+   * 
+   * @returns {HttpHeaders} - Cabeçalhos HTTP com os campos `Authorization` e `userID`.
+   */
   getHeaders() {
     const token = localStorage.getItem('token');
     const userId = this.getUserId();
@@ -48,6 +73,12 @@ export class AuthService {
 
     return headers;
   }
+
+  /**
+   * Obtém o papel (role) do utilizador a partir da API, com base no seu ID.
+   * 
+   * @returns {Promise<number>} - Promessa que resolve com o valor do `role` do utilizador.
+   */
   getUserRole(): Promise<number> {
     return new Promise((resolve, reject) => {
       const userId = this.getUserId();
@@ -66,8 +97,12 @@ export class AuthService {
     });
   }
 
+  /**
+   * Verifica se o utilizador tem o papel de `Support` (3) ou `Admin` (1).
+   * 
+   * @returns {Promise<boolean>} - Promessa que resolve com `true` se for suporte ou admin, `false` caso contrário.
+   */
   isSupportOrAdmin(): Promise<boolean> {
     return this.getUserRole().then((role) => role === 1 || role === 3);  // 3 = Support, 1 = Admin
   }
-
 }

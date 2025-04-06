@@ -42,7 +42,7 @@ export class DashboardComponent {
    * @param http Serviço HTTP para realizar requisições à API.
    * @param router Serviço de roteamento Angular para navegação entre páginas.
    * @param auth Serviço de autenticação (duplicado de `authService`, verificar se ambos são necessários).
-   * @param alerts Serviço responsável por exibir notificações e alertas no frontend.
+   * @param alerts Serviço responsável por mostrar notificações e alertas no frontend.
    */
   constructor(private authService: AuthService, private http: HttpClient, private router: Router, private auth: AuthService, private alerts: AlertsService) {
 

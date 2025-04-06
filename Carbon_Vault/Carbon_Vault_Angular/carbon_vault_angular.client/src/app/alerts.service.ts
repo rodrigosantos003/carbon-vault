@@ -4,6 +4,12 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class AlertsService {
+
+  /**
+   * Associa eventos de clique aos ícones de fechar (`.close-icon`) para
+   * permitir que o utilizador feche pop-ups manualmente.
+   *
+   */
   closePopup() {
     document.querySelectorAll('.close-icon').forEach(closeIcon => {
       closeIcon.addEventListener('click', () => {
@@ -15,6 +21,12 @@ export class AlertsService {
     });
   }
 
+  /**
+   * Ativa um pop-up de sucesso com uma mensagem personalizada durante um determinado tempo.
+   *
+   * @param {string} message - Mensagem de sucesso a mostrar.
+   * @param {number} [enableTime=6] - Tempo (em segundos) que o pop-up deve permanecer visível.
+   */
   enableSuccess(message: string, enableTime: number = 6) {
     const successPopup = document.getElementById('success-popup');
     if (successPopup) {
@@ -26,10 +38,15 @@ export class AlertsService {
 
       setTimeout(() => {
         this.disableSuccess();
-      }, enableTime*1000);
+      }, enableTime * 1000);
     }
   }
 
+  /**
+   * Oculta o pop-up de sucesso.
+   *
+   * @private
+   */
   private disableSuccess() {
     const successPopup = document.getElementById('success-popup');
     if (successPopup) {
@@ -37,6 +54,11 @@ export class AlertsService {
     }
   }
 
+  /**
+   * Ativa o botão ou indicador de carregamento com texto personalizado.
+   *
+   * @param {string} newText - Texto a apresentar durante o carregamento.
+   */
   enableLoading(newText: string) {
     const loadingButton = document.getElementById('loading');
     if (loadingButton) {
@@ -48,6 +70,10 @@ export class AlertsService {
     }
   }
 
+  /**
+   * Oculta o botão ou indicador de carregamento.
+   *
+   */
   disableLoading() {
     const loadingButton = document.getElementById('loading');
     if (loadingButton) {
@@ -55,7 +81,12 @@ export class AlertsService {
     }
   }
 
-
+  /**
+   * Ativa um pop-up de erro com uma mensagem personalizada durante um determinado tempo.
+   *
+   * @param {string} message - Mensagem de erro a mostrar.
+   * @param {number} [enableTime=3] - Tempo (em segundos) que o pop-up deve permanecer visível.
+   */
   enableError(message: string, enableTime: number = 3) {
     const errorPopup = document.getElementById('error-popup');
     if (errorPopup) {
@@ -67,10 +98,15 @@ export class AlertsService {
 
       setTimeout(() => {
         this.disableError();
-      }, enableTime*1000);
+      }, enableTime * 1000);
     }
   }
 
+  /**
+   * Oculta o pop-up de erro.
+   *
+   * @private
+   */
   private disableError() {
     const errorPopup = document.getElementById('error-popup');
     if (errorPopup) {
@@ -78,6 +114,12 @@ export class AlertsService {
     }
   }
 
+  /**
+   * Ativa um pop-up de informação com uma mensagem personalizada durante um determinado tempo.
+   *
+   * @param {string} message - Mensagem informativa a mostrar.
+   * @param {number} [enableTime=3] - Tempo (em segundos) que o pop-up deve permanecer visível.
+   */
   enableInfo(message: string, enableTime: number = 3) {
     const infoPopup = document.getElementById('info-popup');
     if (infoPopup) {
@@ -93,6 +135,11 @@ export class AlertsService {
     }
   }
 
+  /**
+   * Oculta o pop-up de informação.
+   *
+   * @private
+   */
   private disableInfo() {
     const infoPopup = document.getElementById('info-popup');
     if (infoPopup) {
