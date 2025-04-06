@@ -66,33 +66,11 @@ export class ProjectDetailsComponent {
     }
   }
 
-  addToCart() {
-    console.log("CC = " + this.projectData.creditsForSale);
-    console.log("Quant = " + this.quantity);
-    if (this.projectData.creditsForSale < 1) {
-      this.alerts.enableError("Este projeto não tem créditos disponveis para venda, tente mais tarde.", 5);
-      return;
-    }
-
-    if (this.projectData.creditsForSale < this.quantity) {
-      this.alerts.enableError("Quantidade máxima de " + this.projectData.creditsForSale + " CC para este projeto", 5);
-      return;
-    }
-
-    const item = {
-      id: parseInt(this.projectId),
-      image: this.projectData.imageUrl,
-      name: this.projectData.name,
-      description: this.projectData.description,
-      price: this.projectData.pricePerCredit,
-      quantity: this.quantity,
-    };
-
-    this.cartService.addItem(item);
-    this.alerts.enableSuccess("Item adicionado ao carrinho!");
-
+  addToCart(): void {
+    this.cartService.addItem(parseInt(this.projectId), this.quantity);
     this.quantity = 1;
   }
+  
 
   // PAGE SYSTEM
   getFilteredCredits(): any[] {
