@@ -57,5 +57,7 @@ namespace Carbon_Vault.Models
 
         // Método de pagamento utilizado na transação
         public string PaymentMethod { get; set; }
+
+        public bool? isClaimed { get; set; } = false;
     }
 }

@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
 export class UserSalesComponent {
   sales: Sale[] = [];
   private salesURL: string;
+  totalUnpaid: number = 0;
 
   constructor(private http: HttpClient, private alerts: AlertsService, private authService: AuthService, private router: Router) {
     this.salesURL = `${environment.apiUrl}/Transactions/type/1`;
@@ -22,8 +23,23 @@ export class UserSalesComponent {
 
   ngOnInit(): void {
     this.getSales();
+    this.getUnpaidSalesTotal();
+
+ 
   }
 
+  getUnpaidSalesTotal(): void {
+    this.http.get<any>(`${environment.apiUrl}/Transactions/unpaid-sales/${this.authService.getUserId()}`, {
+      headers: this.authService.getHeaders()
+    }).subscribe({
+      next: (data: any) => {
+        this.totalUnpaid = data.totalUnpaid;
+      },
+      error: (err: any) => {
+        console.error('Erro ao buscar total de vendas não pagas', err);
+      }
+    });
+  }
   getSales(): void {
     this.alerts.enableLoading("A carregar vendas...");
     this.http.get<Sale[]>(this.salesURL, {
