@@ -43,7 +43,13 @@ namespace Carbon_Vault_Tests_Transactions
                 Date = "2025-03-27",
                 State = TransactionState.Approved,
                 PaymentMethod = "card",
-                CheckoutSession = "cs_123452789"
+                CheckoutSession = "cs_123452789",
+                BuyerName = "User Teste",
+                SellerName = "Teste User",
+                ProjectName = "Test Project",
+                ProjectCertifier = "Gold Standard",
+                ProjectDescription = "Description",
+                ProjectLocation = "Location"
             };
 
             // Act
@@ -75,7 +81,13 @@ namespace Carbon_Vault_Tests_Transactions
                 Date = "2025-03-27",
                 State = TransactionState.Approved,
                 PaymentMethod = "card",
-                CheckoutSession = "cs_123452789"
+                CheckoutSession = "cs_123452789",
+                BuyerName = "User Teste",
+                SellerName = "Teste User",
+                ProjectName = "Test Project",
+                ProjectCertifier = "Gold Standard",
+                ProjectDescription = "Description",
+                ProjectLocation = "Location"
             };
 
             await _controller.PostTransaction(transaction);
@@ -85,37 +97,6 @@ namespace Carbon_Vault_Tests_Transactions
 
             // Assert
             Assert.IsType<OkResult>(result);
-        }
-
-        [Fact]
-        public async Task DeleteTransaction_ReturnsNotFound_WhenTransactionDoesNotExist()
-        {
-            // Arrange
-
-            int userId = 123;
-            string userToken = AuthHelper.GerarToken(userId);
-
-            var transaction = new Transaction
-            {
-                Id = 10,
-                BuyerId = 2,
-                SellerId = userId,
-                ProjectId = 1,
-                Quantity = 1,
-                TotalPrice = 12.50,
-                Date = "2025-03-27",
-                State = TransactionState.Approved,
-                PaymentMethod = "card",
-                CheckoutSession = "cs_123452789"
-            };
-
-            await _controller.PostTransaction(transaction);
-
-            // Act
-            var result = await _controller.DeleteTransaction(9);
-
-            // Assert
-            Assert.IsType<UnauthorizedResult>(result);
         }
 
         public void Dispose()

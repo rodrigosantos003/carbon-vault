@@ -45,6 +45,12 @@ namespace Carbon_Vault_Tests_payments
                 CheckoutSession = "cs_test_123",
                 Date = "2021-01-01",
                 PaymentMethod = "Credit Card",
+                BuyerName = "User Teste",
+                SellerName = "Teste User",
+                ProjectName = "Test Project",
+                ProjectCertifier = "Gold Standard",
+                ProjectDescription = "Description",
+                ProjectLocation = "Location"
             };
 
             _context.Account.Add(
@@ -78,6 +84,12 @@ namespace Carbon_Vault_Tests_payments
                     CheckoutSession = "cs_test_123",
                     Date = "2021-01-01",
                     PaymentMethod = "Credit Card",
+                    BuyerName = "User Teste",
+                    SellerName = "Teste User",
+                    ProjectName = "Test Project",
+                    ProjectCertifier = "Gold Standard",
+                    ProjectDescription = "Description",
+                    ProjectLocation = "Location"
                 }
             );
             await _context.SaveChangesAsync();
@@ -103,6 +115,12 @@ namespace Carbon_Vault_Tests_payments
                     CheckoutSession = "cs_test_123",
                     Date = "2021-01-01",
                     PaymentMethod = "Credit Card",
+                    BuyerName = "User Teste",
+                    SellerName = "Teste User",
+                    ProjectName = "Test Project",
+                    ProjectCertifier = "Gold Standard",
+                    ProjectDescription = "Description",
+                    ProjectLocation = "Location"
                 }
             );
 

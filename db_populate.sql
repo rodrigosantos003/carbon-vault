@@ -3,6 +3,7 @@ INSERT INTO [dbo].[ProjectTypes] ([Type])
 VALUES 
 (1), (2), (3), (4), (5), (6), (7), (8), (9),
 (10), (11), (12), (13), (14), (15), (16), (17);
+
 -- 2. Inserir contas (Accounts)
 INSERT INTO [dbo].[Account] 
 ([Name], [Email], [Password], [Nif], [State], [Role], [CreatedAt], [LastLogin], [Iban]) 
@@ -10,7 +11,7 @@ VALUES
 ('Admin', 'admin@carbonvault.com', 'zV/DlseKJHjNzdKvQzNm3LxCWNDeFplbEqJe2/FIIZ9vWuDV23KW7T4u5bjmjVlE', '123456789', 1, 1, GETDATE(), GETDATE(), 'PT50000201231234567890154'),
 ('John Doe', 'user@carbonvault.com', 'TMUlzHDxHJELZBtsNTsA9FX4eC3NEmrbI4QIogB3LiYfN2BtnYTW4FNmXI6CMAT1', '987654321', 1, 0, GETDATE(), GETDATE(), 'PT50000201239876543210987'),
 ('John Smith', 'support@carbonvault.com', 'tjuV9ouDvaXTlJ/2QbE3s8SoBofibWMGReyL1ks3p7toMnShEtF+mqoImZWNMi7J', '258741963', 1, 3, GETDATE(), GETDATE(), 'PT50000201239876543210989'),
-('Harvey Specter', 'user2@carbonvault.com', 'k0CsUfJNPdEOeHRaAKRrTMNywwrb3xZWV2QeJ93fIqujZHnkF9/KQOPhtwwaBqMF', '222222222', 1, 0,GETDATE(), GETDATE(), 'PT50000201239876543210988');
+('Harvey Specter', 'user2@carbonvault.com', 'k0CsUfJNPdEOeHRaAKRrTMNywwrb3xZWV2QeJ93fIqujZHnkF9/KQOPhtwwaBqMF', '222222222', 1, 0, GETDATE(), GETDATE(), 'PT50000201239876543210988');
 
 -- 3. Inserir projetos
 INSERT INTO [dbo].[Projects]
@@ -25,7 +26,8 @@ VALUES
  'Energia limpa, empregos, redução de CO2', GETDATE(), 4, 1);
 
 -- 4. Associar tipos aos projetos
-INSERT INTO [dbo].[ProjectProjectType] ([ProjectsId], [TypesId]) VALUES (1, 1), (1, 3), (2, 2);
+INSERT INTO [dbo].[ProjectProjectType] ([ProjectsId], [TypesId]) 
+VALUES (1, 1), (1, 3), (2, 2);
 
 -- 5. Inserir ficheiros de projeto
 INSERT INTO [dbo].[ProjectFiles]
@@ -42,7 +44,8 @@ VALUES
 (2, '2022-07-01', '2032-07-01', 'CC-002-2022', 'GoldStandard', 12.0, 1, 1, 1);
 
 -- 7. Inserir relatórios
-INSERT INTO [dbo].[Reports] ([UserID], [LastUpdate], [ReportState], [Text], [CheckoutSession])
+INSERT INTO [dbo].[Reports]
+([UserID], [LastUpdate], [ReportState], [Text], [CheckoutSession])
 VALUES
 (1, GETDATE(), 1, 'Tudo a funcionar conforme planeado.', NULL),
 (2, GETDATE(), 2, 'Necessário revisão técnica do sistema.', NULL);
@@ -70,9 +73,11 @@ VALUES
 
 -- 11. Inserir transações
 INSERT INTO [dbo].[Transactions]
-([BuyerId], [SellerId], [ProjectId], [Quantity], [TotalPrice], [Date], [State], [CheckoutSession], [PaymentMethod])
+([BuyerId], [SellerId], [ProjectId], [BuyerName], [SellerName], [ProjectName], [ProjectDescription], [ProjectCertifier],
+ [ProjectLocation], [Quantity], [TotalPrice], [Date], [State], [CheckoutSession], [PaymentMethod])
 VALUES
-(1, 2, 2, 50, 600.00, '2024-12-01', 1, 'session_abc123', 'Cartão de Crédito');
+(1, 2, 2, 'Admin', 'John Doe', 'Painéis Solares Algarve', 'Instalação de painéis solares em larga escala',
+ 'GoldStandard', 'Faro', 50, 600.00, '2024-12-01', 1, 'session_abc123', 'Cartão de Crédito');
 
 -- 12. Inserir emissões de utilizadores
 INSERT INTO [dbo].[UserEmissions]

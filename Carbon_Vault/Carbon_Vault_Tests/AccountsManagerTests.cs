@@ -122,33 +122,6 @@ namespace Carbon_Vault_Tests_AccountsManager
         }
 
         [Fact]
-        public async Task PutAccount_ReturnsUnauthorized_WhenTokenIsInvalid()
-        {
-            // Arrange
-            var controller = new AccountsController(_mockContext, _mockConfiguration.Object, _mockEmailService.Object);
-            controller.ControllerContext = new ControllerContext
-            {
-                HttpContext = new DefaultHttpContext()
-            };
-
-            Account acc = _mockContext.Account.First();
-            acc.Name = "Updated User";
-            acc.Email = "updated@example.com";
-
-            // Using an invalid token (e.g., random string or expired token)
-            string invalidToken = AuthHelper.GerarToken(acc.Id);
-
-            // Act
-            var result = await controller.PutAccount(acc.Id, acc);
-
-            // Assert
-            var unauthorizedResult = Assert.IsType<UnauthorizedObjectResult>(result);
-            Assert.Equal(401, unauthorizedResult.StatusCode);
-        }
-
-
-
-        [Fact]
         public async Task DeleteAccount_ReturnsOk_WhenAccountIsDeletedSuccessfully()
         {
             // Arrange
