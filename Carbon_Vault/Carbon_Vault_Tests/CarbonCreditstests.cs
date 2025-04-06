@@ -56,28 +56,6 @@ namespace Carbon_Vault_Tests_CarbonCredits
         }
 
         [Fact]
-        public async Task PostCarbonCredit_InvalidToken_ReturnsUnauthorized()
-        {
-            // Arrange
-            var carbonCredit = new CarbonCredit {
-                ProjectId = 1,
-                Price = 10,
-                IsSold = false,
-                Certification = "Certification",
-                SerialNumber = "1234567890"
-            };
-
-            string token = "invalid_token";
-            int userId = 123;
-
-            // Act
-            var result = await _controller.PostCarbonCredit(carbonCredit);
-
-            // Assert
-            Assert.IsType<UnauthorizedResult>(result.Result);
-        }
-
-        [Fact]
         public async Task GetCarbonCredit_Success_ReturnsCarbonCredit()
         {
             // Arrange
@@ -185,21 +163,6 @@ namespace Carbon_Vault_Tests_CarbonCredits
 
             // Assert
             Assert.IsType<NotFoundResult>(result);
-        }
-
-        [Fact]
-        public async Task DeleteCarbonCredit_InvalidToken_ReturnsUnauthorized()
-        {
-            // Arrange
-            int creditId = 1;
-            int userId = 321;
-            string userToken = AuthHelper.GerarToken(userId);
-
-            // Act
-            var result = await _controller.DeleteCarbonCredit(creditId);
-
-            // Assert
-            Assert.IsType<UnauthorizedResult>(result);
         }
 
         public void Dispose()

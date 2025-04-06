@@ -69,7 +69,7 @@ namespace Carbon_Vault_Tests
             int userId = 1;
             string validToken = "Bearer " + AuthHelper.GerarToken(userId);
 
-            var result = await controller.GetTicket(userId);
+            var result = await controller.GetTickets(userId);
 
             var actionResult = Assert.IsType<ActionResult<IEnumerable<Ticket>>>(result);
             var returnValue = Assert.IsAssignableFrom<IEnumerable<Ticket>>(actionResult.Value);

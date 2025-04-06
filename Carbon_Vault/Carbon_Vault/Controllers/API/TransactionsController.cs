@@ -172,7 +172,6 @@ namespace Carbon_Vault.Controllers.API
                 t.BuyerName,
                 t.SellerName,
                 t.BuyerId, t.SellerId
-                t.SellerId
             }).Where(t => type == 0 ? t.BuyerId == userID : t.SellerId == userID)
             .ToListAsync();
 
