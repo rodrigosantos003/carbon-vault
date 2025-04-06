@@ -26,6 +26,12 @@ export class ProjectCardComponent {
     this.quantity = 1;
   }
 
+  validateQuantity() {
+    if (this.quantity < 1 || isNaN(this.quantity)) {
+      this.quantity = 1;
+    }
+  }
+
   addToCart() {
     this.cartService.addItem(this.projectID, this.quantity);
     this.quantity = 1;

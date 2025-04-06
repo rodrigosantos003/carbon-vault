@@ -126,6 +126,9 @@ namespace Carbon_Vault.Controllers.API
                 return NotFound();
             }
 
+            if (project.Status != ProjectStatus.Confirmed)
+                return StatusCode(403, "O projeto não está ativo");
+
             // Update the project state (flip the IsForSale value)
             project.IsForSale = !project.IsForSale;
 

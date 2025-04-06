@@ -18,7 +18,7 @@ export class AdminReportsComponent {
   reports: Report[] = [];
   selectedReport: Report = { id: 0, lastUpdate: "", checkoutSession: "", text: "", reportState: 0, userID: 0 };
   reportText: string = "";
-  pendingReportsCount : number = 0;
+  pendingReportsCount: number = 0;
   doneReportsCount: number = 0;
   constructor(private http: HttpClient, private auth: AuthService, private alerts: AlertsService, public router: Router) { }
 
@@ -108,6 +108,7 @@ export class AdminReportsComponent {
       next: () => {
         this.alerts.enableSuccess("Relatório respondido com sucesso");
         this.closeAnswer();
+        location.reload();
       },
       error: () => {
         this.alerts.enableError("Erro ao responder ao relatório");

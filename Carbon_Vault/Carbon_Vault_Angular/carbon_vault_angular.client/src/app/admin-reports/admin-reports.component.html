@@ -25,21 +25,21 @@
     <main class="content">
         <div class="stats">
             <div class="card yellow">
-              <h3>Número Total de Relatorios Pendentes</h3>
-              <div>
-                <img src="images/Pending_reports.png" class="icon" width="50px"/>
-                <h2 class="value">{{pendingReportsCount}}</h2>
-              </div>
+                <h3>Número Total de Relatorios Pendentes</h3>
+                <div>
+                    <img src="images/Pending_reports.png" class="icon" width="50px" />
+                    <h2 class="value">{{pendingReportsCount}}</h2>
+                </div>
             </div>
             <div class="card green">
-              <h3>Número Total de Relatorios Concluidos</h3>
-              <div>
-                <img src="images/Done_REPORTS.png" width="50px"/>
-                <h2>{{  doneReportsCount}}</h2>
-              </div>
-      
+                <h3>Número Total de Relatorios Concluidos</h3>
+                <div>
+                    <img src="images/Done_REPORTS.png" width="50px" />
+                    <h2>{{ doneReportsCount}}</h2>
+                </div>
+
             </div>
-          </div>
+        </div>
         <h1>Relatórios Solicitados</h1>
 
         <div class="table">
@@ -56,7 +56,7 @@
                         <td colspan="4" class="text-center" id="nothingToShow">Nada a mostrar!</td>
                     </tr>
                     <tr *ngFor="let report of reports">
-                        <td>{{report.lastUpdate}}</td>
+                        <td>{{report.lastUpdate | date:'dd/MM/yyyy HH:mm:ss' }}</td>
                         <td><button class="details-button" (click)="downloadFiles(report.id)">Descarregar</button></td>
                         <td><button class="details-button" (click)="openAnswer(report)">Responder</button></td>
                     </tr>
