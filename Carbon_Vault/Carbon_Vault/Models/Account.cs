@@ -80,7 +80,8 @@ namespace Carbon_Vault.Models
         public string Nif { get; set; }
         public AccountState State { get; set; } = AccountState.Inactive;
         public AccountType Role { get; set; } = AccountType.User;
-        public DateTime CreatedAt { get; set; }
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime LastLogin { get; set; }
         public string Iban { get; set; } = "";
 

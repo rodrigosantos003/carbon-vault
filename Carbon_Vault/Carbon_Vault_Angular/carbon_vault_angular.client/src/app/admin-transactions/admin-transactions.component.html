@@ -1,4 +1,3 @@
-
 <body>
   <app-user-menu></app-user-menu>
 
@@ -6,7 +5,6 @@
     <!-- Client Details -->
     <div class="client-details">
       <h2 class="client-name">Transações Realizadas</h2>
-
 
       <div class="client-details-container">
         <!-- Purchase History -->
@@ -21,13 +19,14 @@
                 <th>Tipo</th>
                 <th>Data</th>
                 <th>Estado de Pagamento</th>
-                <th>Estado</th>
+        
                 <th>Detalhes</th>
+                <th>Recolha de Fundos</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngIf="accountTransactions.length === 0">
-                <td colspan="4" class="text-center">Nada a mostrar</td>
+                <td colspan="7" class="text-center">Nada a mostrar</td>
               </tr>
               <tr *ngFor="let transaction of accountTransactions">
                 <td>{{ transaction.id }}</td>
@@ -35,42 +34,27 @@
                 <td>Compra</td>
                 <td>{{ transaction.date | date:'dd/MM/yyyy' }}</td>
                 <td>
-                  <span class="payment-status">{{getTransactionState( transaction.state) }}</span>
+                  <span class="payment-status">{{ getTransactionState(transaction.state) }}</span>
+                
                 </td>
-                <td>
-                  <span class="status">
-                    <span class="status-dot"></span> {{ getTransactionPaymentState(transaction.state) }}
-                  </span>
-                </td>
+                
                 <td><button class="view-btn" (click)="transactionDetails(transaction.id)">Detalhes</button></td>
+                <td style="display: flex; flex-direction: column; align-items: center;">
+                  <span class="status">
+                    <span class="status-dot" [ngClass]="{ 'claimed': transaction.isClaimed, 'unclaimed': !transaction.isClaimed }"></span> {{ getTransactionIsClaimedState(transaction.isClaimed) }}
+                  </span>
+                 
+                  <button class="view-btn" [disabled]="transaction.isClaimed" (click)="processPayment(transaction.id)">Realizar Pagamento offline</button>
+                  
+                
+              </td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
-
     </div>
-    <!--<div class="modal-overlay" id="modalOverlay">
-      <div class="delete" id="delete">
-        <div class="delete-content">
-          <p class="delete-heading">Deseja mesmo eliminar este utilizador?</p>
-          <img src="images/DeleteBin.png" />
-          <p class="delete-description">Esta ação irá eliminar permanentemente o utilizador e toda a informação associada.</p>
-        </div>
-        <div class="delete-button-wrapper">
-          <button class="delete-button secondary" (click)="closePopup()">Cancelar</button>
-          <button class="delete-button primary" (click)="deleteAccount()">Eliminar</button>
-        </div>
-        <button class="exit-button" (click)="closePopup()">
-          <svg height="20px" viewBox="0 0 384 512">
-            <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"></path>
-          </svg>
-        </button>
-      </div>
-    </div>-->
-
-
-
   </div>
-</body>
+  <app-alerts></app-alerts>
 
+</body>

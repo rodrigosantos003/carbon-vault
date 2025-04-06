@@ -3,6 +3,10 @@
     <app-alerts></app-alerts>
 
     <main class="content">
+        <div  class="unpaid-summary">
+            <strong>Ainda tem <span style="color: white; font-size: 28px;">{{ totalUnpaid | number:'1.2-2' }}€</span> por receber.</strong><br>
+            <span>O pagamento é feito offline por parte da equipa financeira do Carbon Vault , em caso de dúvida ou valor irregular por favor contacte o nosso <a href="mailto:support@carbonvault.com">Suporte</a>.</span><br>
+        </div>
         <h1>As minhas vendas</h1>
 
         <div class="table">
@@ -28,6 +32,8 @@
                 </tbody>
             </table>
         </div>
+        <br>
+     
     </main>
 
 </body>

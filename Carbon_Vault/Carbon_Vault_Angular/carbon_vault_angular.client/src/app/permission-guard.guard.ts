@@ -20,7 +20,7 @@ export class PermissionGuard implements CanActivate {
         return true;
       }
 
-      this.router.navigate(['/Unauthorized']); // Redirect if not authorized
+      this.router.navigate(['/Unauthorized']);
       return false;
     } catch (error) {
       this.router.navigate(['/login']);

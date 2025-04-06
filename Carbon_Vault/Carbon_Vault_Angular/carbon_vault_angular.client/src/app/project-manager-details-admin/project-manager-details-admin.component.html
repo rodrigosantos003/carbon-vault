@@ -1,4 +1,4 @@
-<body>
+<body style="height: 120vh;">
   <app-user-menu></app-user-menu>
   <app-alerts></app-alerts>
 
@@ -17,31 +17,31 @@
       <div class="first-column">
         <div class="form-item">
           <label>Nome</label><br>
-          <input type="text" [(ngModel)]="project.name" name="nome" [disabled]="isEditable" />
+          <input type="text" [(ngModel)]="project.name" name="nome" [disabled]="true" />
         </div>
         <div class="form-item">
           <label>Descrição</label><br>
-          <textarea [(ngModel)]="project.description" name="descricao" [disabled]="isEditable"></textarea>
+          <textarea [(ngModel)]="project.description" name="descricao" [disabled]="true"></textarea>
         </div>
         <div class="form-item">
           <label>Localização</label><br>
-          <input type="text" [(ngModel)]="project.location" name="localizacao" [disabled]="isEditable" />
+          <input type="text" [(ngModel)]="project.location" name="localizacao" [disabled]="true" />
         </div>
         <div class="form-item">
           <label>Data de Início</label><br>
-          <input type="date" [(ngModel)]="project.startDate" name="dataInicio" [disabled]="isEditable" />
+          <input type="date" [(ngModel)]="project.startDate" name="dataInicio" [disabled]="true" />
         </div>
         <div class="form-item">
           <label>Data de Fim</label><br>
-          <input type="date" [(ngModel)]="project.endDate" name="dataFim" [disabled]="isEditable" />
+          <input type="date" [(ngModel)]="project.endDate" name="dataFim" [disabled]="true" />
         </div>
         <div class="form-item">
           <label>Desenvolvedor</label><br>
-          <input type="text" [(ngModel)]="project.developer" name="desenvolvedor" [disabled]="isEditable" />
+          <input type="text" [(ngModel)]="project.developer" name="desenvolvedor" [disabled]="true" />
         </div>
         <div class="form-item">
           <label>URL do Projeto</label><br>
-          <input type="text" [(ngModel)]="project.projectUrl" name="urlProjeto" [disabled]="isEditable" />
+          <input type="text" [(ngModel)]="project.projectUrl" name="urlProjeto" [disabled]="true" />
         </div>
       </div>
 
@@ -51,7 +51,7 @@
           <div *ngFor="let categoria of categorias">
             <label>
               <input type="checkbox" [checked]="categoriasSelecionadas.includes(categoria.id)"
-                (change)="onCategoriaChange(categoria.id, $event)" class="custom-checkbox" [disabled]="isEditable" />
+                (change)="onCategoriaChange(categoria.id, $event)" class="custom-checkbox" [disabled]="true" />
               {{ categoria.label }}
             </label>
           </div>
@@ -102,23 +102,23 @@
       <h2>Área de Administração</h2>
       <div class="tabs">
         <button class="tab-button" [class.active]="showAprovedFeedback"
-          (click)="showAprovedFeedback = !showAprovedFeedback; showRejectionFeedback = false;" *ngIf="isEditable">
+          (click)="showAprovedFeedback = !showAprovedFeedback; showRejectionFeedback = false;" *ngIf="!isEditable">
           Aprovar Projeto
         </button>
 
         <button class="tab-button" [class.active]="showRejectionFeedback"
-          (click)="showRejectionFeedback = !showRejectionFeedback; showAprovedFeedback = false;" *ngIf="isEditable">
+          (click)="showRejectionFeedback = !showRejectionFeedback; showAprovedFeedback = false;" *ngIf="!isEditable">
           Rejeitar Projeto
         </button>
 
         <button class="tab-button" [class.active]="showAddCredits"
-          (click)="showAddCredits = !showAddCredits;  showChangeState = false;" *ngIf="!isEditable">
+          (click)="showAddCredits = !showAddCredits;  showChangeState = false;" *ngIf="isEditable">
           Adicionar Créditos
         </button>
 
 
         <button class="tab-button" [class.active]="showChangeState"
-          (click)="showChangeState = !showChangeState; showAddCredits = false;" *ngIf="!isEditable">
+          (click)="showChangeState = !showChangeState; showAddCredits = false;" *ngIf="isEditable">
           Alterar Estado do projeto
         </button>
       </div>

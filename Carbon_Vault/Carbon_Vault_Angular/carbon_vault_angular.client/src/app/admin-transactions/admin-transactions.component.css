@@ -83,6 +83,11 @@ th {
   margin-right: 5px;
 }
 
+.status-dot.unclaimed{
+  background-color: #F2383A;
+
+}
+
 .delete-button-top {
   background-color: #F2383A;
   color: white;
@@ -123,8 +128,9 @@ th {
   border-top-right-radius: 25px;
   margin: 0;
   padding: 15px;
-  background-color: #d1d3d07a;
+  background-color: #4ea741;
   border-top-left-radius: 25px;
+  color: white;
 }
 
 .purchase-history-table {
@@ -270,4 +276,11 @@ tr {
 
 .purchase-history-table tr:last-child td {
   border-bottom: 0;
+}
+
+
+button:disabled {
+
+  opacity: 0.5;
+  cursor: not-allowed;
 }
