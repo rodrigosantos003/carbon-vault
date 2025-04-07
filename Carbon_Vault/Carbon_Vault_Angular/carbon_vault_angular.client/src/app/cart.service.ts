@@ -87,7 +87,6 @@ export class CartService {
       quantity = 1;
     }
 
-    // Ensure role validation is awaited
     this.authService.getUserRole().then((role) => {
       if (role !== 0) {
         this.alerts.enableError("Apenas utilizadores com conta podem comprar créditos.", 5);

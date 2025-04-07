@@ -59,6 +59,9 @@ export class PaymentSuccessComponent {
         this.updateReport(checkoutSession);
       }
     }
+    else {
+      this.router.navigate(['/NotFound']);
+    }
   }
 
   /**

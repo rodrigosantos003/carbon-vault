@@ -14,9 +14,9 @@ export class PermissionGuard implements CanActivate {
   ): Promise<boolean> {
     try {
       const userRole = await this.authService.getUserRole();
-      const requiredRole = route.data['requiredRole'];
+      const requiredRoles: number[] = route.data['requiredRoles'];
 
-      if (userRole === requiredRole || userRole === 1) { 
+      if (requiredRoles && requiredRoles.includes(userRole)) {
         return true;
       }
 
