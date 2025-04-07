@@ -59,3 +59,10 @@
   .buy-btn:hover {
     background-color: #559a5a;
   }
+
+.credits-available {
+  padding-left: 32px;
+  font-weight: normal !important;
+  margin-top: 10px;
+  margin-bottom: 0px;
+}

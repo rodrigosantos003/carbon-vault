@@ -17,8 +17,8 @@ export class ProjectCardComponent {
   @Input() pricePerCredit!: number;
   @Input() projectID!: number;
   @Input() quantity: number = 1; // Valor padrão de 1
+  @Input() creditsAvailable!: number;
   projectData: any = null;
-  carbonCreditsForSale: number = 0;
 
   /**
  * Construtor do componente `ProjectCardComponent`.

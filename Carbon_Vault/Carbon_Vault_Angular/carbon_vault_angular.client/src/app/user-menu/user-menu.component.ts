@@ -98,4 +98,30 @@ export class UserMenuComponent {
   onLogout() {
     this.authService.logout();
   }
+
+  /**
+   * Método para abrir a janela de confirmação de eliminação de conta.
+   */
+  openDeleteAccount() {
+    const overlay = document.getElementById('deleteAccountPopup');
+    const delPopup = document.getElementById('delete');
+
+    if (overlay && delPopup) {
+      overlay.style.display = 'flex';
+      delPopup.style.display = 'block';
+    }
+  }
+
+  /**
+   * Método para fechar a janela de confirmação de eliminação de conta.
+   */
+  closeDeleteAccount() {
+    const overlay = document.getElementById('deleteAccountPopup');
+    const delPopup = document.getElementById('delete');
+
+    if (overlay && delPopup) {
+      overlay.style.display = 'none';
+      delPopup.style.display = 'none';
+    }
+  }
 }
