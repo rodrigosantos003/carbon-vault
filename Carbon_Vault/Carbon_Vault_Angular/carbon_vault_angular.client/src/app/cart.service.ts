@@ -78,7 +78,7 @@ export class CartService {
    * @param {number} quantity - Quantidade de créditos a adicionar.
    */
   addItem(projectId: number, quantity: number): void {
-    if (!this.authService.isAuthenticated()) {
+    if (!this.authService.isAuthenticated() || this.authService.getUserRole() != 0) {
       this.alerts.enableError("Apenas utilizadores com conta podem comprar créditos.", 5);
       return;
     }
@@ -86,14 +86,7 @@ export class CartService {
     if (quantity < 1 || isNaN(quantity)) {
       quantity = 1;
     }
-
-    this.authService.getUserRole().then((role) => {
-      if (role != 0) {
-        this.alerts.enableError("Apenas utilizadores com conta podem comprar créditos.", 5);
-        return;
-      }
-    });
-
+    
     this.http.get(`${environment.apiUrl}/projects/${projectId}`).subscribe({
       next: (projectData: any) => {
         console.log(projectData)

@@ -341,7 +341,7 @@ namespace Carbon_Vault.Controllers.API
             _context.Account.Update(account);
             await _context.SaveChangesAsync();
 
-            var token = AuthHelper.GerarToken(account.Id);
+            var token = AuthHelper.GerarToken(account);
 
             return Ok(new
             {

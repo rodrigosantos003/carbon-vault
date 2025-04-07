@@ -39,7 +39,7 @@ export class SupportChatComponent {
   ngOnInit(): void {
     const ticketId = this.route.snapshot.params['id'];
     this.getTicket(ticketId);
-    this.authService.getUserRole().then((role) => this.userRole = role);
+    this.userRole = this.authService.getUserRole(); // Obter o papel do utilizador de forma síncrona
   }
 
   /**

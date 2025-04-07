@@ -18,17 +18,14 @@ import { MarketplaceComponent } from './marketplace/marketplace.component';
 import { ProjectCardComponent } from './projectCard/projectCard.component';
 import { UserMenuComponent } from './user-menu/user-menu.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
-import { AdminMenuComponent } from './admin-menu/admin-menu.component';
 import { ProjectDetailsComponent } from './project-details/project-details.component';
 import { AlertsComponent } from './alerts/alerts.component';
 import { UsersManagerComponent } from './users-manager/users-manager.component';
 import { MarketPlaceNavigationComponent } from './market-place-navigation/market-place-navigation.component';
-import { UserPaymentComponent } from './user-payment/user-payment.component';
 import { CartComponent } from './cart/cart.component';
 import { UserPurchasesComponent } from './user-purchases/user-purchases.component';
 import { UserSalesComponent } from './user-sales/user-sales.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
-import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { ProjectManagerComponent } from './project-manager/project-manager.component';
 import { PaymentSuccessComponent } from './payment-success/payment-success.component';
 import { ProjectManagerUserComponent } from './project-manager-user/project-manager-user.component';
@@ -67,12 +64,10 @@ import { EvaluatorDashboardComponent } from './evaluator-dashboard/evaluator-das
     ProjectCardComponent,
     UserMenuComponent,
     AdminDashboardComponent,
-    AdminMenuComponent,
     ProjectDetailsComponent,
     AlertsComponent,
     UsersManagerComponent,
     MarketPlaceNavigationComponent,
-    UserPaymentComponent,
     CartComponent,
     UserPurchasesComponent,
     UserSalesComponent,
@@ -107,7 +102,6 @@ import { EvaluatorDashboardComponent } from './evaluator-dashboard/evaluator-das
     HttpClientModule,
     AppRoutingModule,
     FormsModule,
-    BreadcrumbComponent,
     ReactiveFormsModule,
     JwtModule.forRoot({
       config: {
