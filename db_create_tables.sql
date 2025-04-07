@@ -38,6 +38,13 @@ CREATE TABLE [dbo].[Projects] (
 CREATE NONCLUSTERED INDEX [IX_Projects_OwnerId]
     ON [dbo].[Projects]([OwnerId] ASC);
 
+CREATE TABLE [dbo].[ProjectTypes] (
+    [Id]   INT IDENTITY (1, 1) NOT NULL,
+    [Type] INT NOT NULL,
+    CONSTRAINT [PK_ProjectTypes] PRIMARY KEY CLUSTERED ([Id] ASC)
+);
+
+
 CREATE TABLE [dbo].[ProjectProjectType] (
     [ProjectsId] INT NOT NULL,
     [TypesId]    INT NOT NULL,
@@ -46,20 +53,9 @@ CREATE TABLE [dbo].[ProjectProjectType] (
     CONSTRAINT [FK_ProjectProjectType_Projects_ProjectsId] FOREIGN KEY ([ProjectsId]) REFERENCES [dbo].[Projects] ([Id]) ON DELETE CASCADE
 );
 
-
 CREATE NONCLUSTERED INDEX [IX_ProjectProjectType_TypesId]
     ON [dbo].[ProjectProjectType]([TypesId] ASC);
 
-
-CREATE TABLE [dbo].[ProjectTypes] (
-    [Id]   INT IDENTITY (1, 1) NOT NULL,
-    [Type] INT NOT NULL,
-    CONSTRAINT [PK_ProjectTypes] PRIMARY KEY CLUSTERED ([Id] ASC)
-);
-
-
-CREATE NONCLUSTERED INDEX [IX_ProjectProjectType_TypesId]
-    ON [dbo].[ProjectProjectType]([TypesId] ASC);
 
 CREATE TABLE [dbo].[ProjectFiles] (
     [Id]         INT            IDENTITY (1, 1) NOT NULL,
@@ -147,7 +143,6 @@ CREATE TABLE [dbo].[Tickets] (
 );
 
 
-GO
 CREATE NONCLUSTERED INDEX [IX_Tickets_AuthorId]
     ON [dbo].[Tickets]([AuthorId] ASC);
 
@@ -188,6 +183,7 @@ CREATE TABLE [dbo].[Transactions] (
     [State]              INT            NOT NULL,
     [CheckoutSession]    NVARCHAR (MAX) NOT NULL,
     [PaymentMethod]      NVARCHAR (MAX) NOT NULL,
+    [isClaimed]			 BIT,
     CONSTRAINT [PK_Transactions] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 

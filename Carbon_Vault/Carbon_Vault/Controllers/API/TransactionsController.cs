@@ -76,6 +76,37 @@ namespace Carbon_Vault.Controllers.API
             return Ok(transaction);
         }
 
+        [HttpPatch("process-offlinePayment")]
+        [ServiceFilter(typeof(TokenValidationFilter))]
+        public async Task<ActionResult> ProcessOfflinePayment([FromBody] int transactionId)
+        {
+            var transaction = await _context.Transactions.FindAsync(transactionId);
+            if (transaction == null)
+            {
+                return NotFound("Transação não encontrada.");
+            }
+
+            transaction.isClaimed = true;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Pagamento offline processado com sucesso.", transaction });
+        }
+
+        [HttpGet("unpaid-sales/{sellerId}")]
+        [ServiceFilter(typeof(TokenValidationFilter))]
+        public async Task<ActionResult> GetUnpaidSalesAmount(int sellerId)
+        {
+            var unpaidSales = await _context.Transactions
+                .Where(t => t.SellerId == sellerId && (t.isClaimed == false || t.isClaimed == null))
+                .ToListAsync();
+
+            double totalUnpaid = unpaidSales.Sum(t => t.TotalPrice);
+
+            return Ok(new { totalUnpaid });
+        }
+
+
         /// <summary>
         /// Cria uma nova transação.
         /// </summary>

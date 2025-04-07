@@ -40,7 +40,7 @@ namespace Carbon_Vault.Models
 
         // Relationship with CarbonCredit
         public ICollection<CarbonCredit> CarbonCredits { get; set; } = new List<CarbonCredit>();
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         // Relationship with User
         [JsonIgnore]

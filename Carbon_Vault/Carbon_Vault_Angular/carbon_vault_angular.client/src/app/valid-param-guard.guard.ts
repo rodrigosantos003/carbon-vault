@@ -18,11 +18,12 @@ export class ValidParamGuard implements CanActivate {
     state: RouterStateSnapshot
   ): boolean | Observable<boolean> {
     const id = route.paramMap.get('id');
-
     
-    if (id && /^[0-9a-fA-F]{24}$/.test(id)) { 
+    
+    if (id  && id.match(/^[0-9]+$/)) { 
       return true;
     } else {
+      console.log('Invalid ID format:', id);
       this.router.navigate(['/NotFound']);  
       return false;
     }

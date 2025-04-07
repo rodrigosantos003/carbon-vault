@@ -64,14 +64,16 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.UseStaticFiles(new StaticFileOptions
+if (Environment.GetEnvironmentVariable("CLIENT_URL").Contains("localhost"))
 {
-    FileProvider = new PhysicalFileProvider(
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new PhysicalFileProvider(
         Path.Combine(builder.Environment.ContentRootPath, "App_Data", "files")),
-    RequestPath = "/files",
-    ServeUnknownFileTypes = true
-});
-
+        RequestPath = "/files",
+        ServeUnknownFileTypes = true
+    });
+}
 
 app.UseRouting();
 

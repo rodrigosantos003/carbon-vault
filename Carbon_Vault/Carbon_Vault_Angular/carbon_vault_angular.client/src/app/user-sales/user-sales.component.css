@@ -58,3 +58,10 @@ table td {
 .details-button:hover {
     background-color: #45a049;
 }
+
+.unpaid-summary{
+    padding: 10px;
+    background-color: #4EA741;
+    border-radius: 10px;
+color: #ffffff;
+}
