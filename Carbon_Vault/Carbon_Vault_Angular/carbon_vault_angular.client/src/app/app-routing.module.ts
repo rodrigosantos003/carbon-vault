@@ -39,10 +39,10 @@ import { ValidParamGuard } from './valid-param-guard.guard';
 import { TermsAndConditionsComponent } from './terms-and-conditions/terms-and-conditions.component';
 
 enum AccountType {
-  User = 0,
-  Admin = 1,
-  Evaluator = 2,
-  Support = 3
+  User,
+  Admin,
+  Evaluator,
+  Support
 }
 
 const routes: Routes = [
