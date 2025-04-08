@@ -20,9 +20,11 @@
     <PackageReference Include="Stripe.net" Version="47.4.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="App_Data\files\" />
-    <Folder Include="wwwroot\files\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Content Include="App_Data\**\*.*">
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
+
 
 </Project>

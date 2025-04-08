@@ -62,18 +62,19 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
 
-if (Environment.GetEnvironmentVariable("CLIENT_URL").Contains("localhost"))
+var filesPath = Path.Combine(builder.Environment.ContentRootPath, "App_Data", "files");
+Directory.CreateDirectory(filesPath);
+
+app.UseStaticFiles(new StaticFileOptions
 {
-    app.UseStaticFiles(new StaticFileOptions
-    {
-        FileProvider = new PhysicalFileProvider(
-        Path.Combine(builder.Environment.ContentRootPath, "App_Data", "files")),
-        RequestPath = "/files",
-        ServeUnknownFileTypes = true
-    });
-}
+    FileProvider = new PhysicalFileProvider(filesPath),
+    RequestPath = "/files",
+    ServeUnknownFileTypes = true
+});
+
+Console.WriteLine("ContentRootPath: " + builder.Environment.ContentRootPath);
+Console.WriteLine("WebRootPath: " + builder.Environment.WebRootPath);
 
 app.UseRouting();
 
