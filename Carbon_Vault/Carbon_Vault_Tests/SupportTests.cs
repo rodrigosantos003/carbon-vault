@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Moq;
+using SendGrid.Helpers.Mail;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -67,7 +68,8 @@ namespace Carbon_Vault_Tests
             var controller = new TicketsController(_mockContext, _mockEmailService.Object);
 
             int userId = 1;
-            string validToken = "Bearer " + AuthHelper.GerarToken(userId);
+            var account = await _mockContext.Account.FindAsync(userId);
+            string validToken = "Bearer " + AuthHelper.GerarToken(account);
 
             var result = await controller.GetTickets(userId);
 
@@ -99,7 +101,8 @@ namespace Carbon_Vault_Tests
             string reference = "REF123";
 
             int userId = 1; // Admin user
-            string validToken = "Bearer " + AuthHelper.GerarToken(userId);
+            var account = await _mockContext.Account.FindAsync(userId);
+            string validToken = "Bearer " + AuthHelper.GerarToken(account);
 
             var result = await controller.GetTicketByReference(reference, userId);
 
@@ -116,7 +119,8 @@ namespace Carbon_Vault_Tests
             string reference = "INVALID_REF";
 
             int userId = 1; // Admin user
-            string validToken = "Bearer " + AuthHelper.GerarToken(userId);
+            var account = await _mockContext.Account.FindAsync(userId);
+            string validToken = "Bearer " + AuthHelper.GerarToken(account);
 
             var result = await controller.GetTicketByReference(reference, userId);
 
@@ -144,7 +148,8 @@ namespace Carbon_Vault_Tests
             var newMessage = new TicketMessage { Id = 1, TicketId = 1, Content = "This is a test message", AutorId = 1, SendDate = DateTime.Now };
 
             int userId = 1; // Admin user
-            string validToken = "Bearer " + AuthHelper.GerarToken(userId);
+            var account = await _mockContext.Account.FindAsync(userId);
+            string validToken = "Bearer " + AuthHelper.GerarToken(account);
 
             var result = await controller.SendMessage(newMessage, userId);
 
