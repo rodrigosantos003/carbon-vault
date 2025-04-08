@@ -58,13 +58,14 @@ const routes: Routes = [
   { path: 'terms', component: TermsAndConditionsComponent },
 
   //Rotas de utilizador autenticado
-  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
-  { path: 'settings', component: UserSettingsComponent, canActivate: [AuthGuard]},
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+  { path: 'settings', component: UserSettingsComponent, canActivate: [AuthGuard] },
 
   //Rotas de utilizador comum
   { path: 'user-emissions', component: UserEmissionsComponent, canActivate: [AuthGuard, PermissionGuard], data: { requiredRole: AccountType.User } },
   { path: 'cart', component: CartComponent, canActivate: [AuthGuard, PermissionGuard], data: { requiredRole: AccountType.User } },
   { path: 'purchases', component: UserPurchasesComponent, canActivate: [AuthGuard, PermissionGuard], data: { requiredRole: AccountType.User } },
+  { path: 'Account-project-manager', component: ProjectManagerUserComponent, canActivate: [AuthGuard, PermissionGuard], data: { requiredRole: AccountType.User } },
   { path: 'Account-project-manager/addProject', component: ProjectAddComponent, canActivate: [AuthGuard, PermissionGuard], data: { requiredRole: AccountType.User } },
   { path: 'Account-project-manager/:id', component: ProjectManagerDetailsComponent, canActivate: [AuthGuard, PermissionGuard, ValidParamGuard], data: { requiredRole: AccountType.User } },
   { path: 'payment-success/:type', component: PaymentSuccessComponent, canActivate: [AuthGuard, PermissionGuard], data: { requiredRole: AccountType.User } },
@@ -78,7 +79,7 @@ const routes: Routes = [
   { path: 'users-manager', component: UsersManagerComponent, canActivate: [AuthGuard, PermissionGuard], data: { requiredRole: AccountType.Admin } },
   { path: 'project-manager', component: ProjectManagerComponent, canActivate: [AuthGuard, PermissionGuard], data: { requiredRole: AccountType.Admin } },
   { path: 'project-manager/:id', component: ProjectManagerDetailsAdminComponent, canActivate: [AuthGuard, PermissionGuard], data: { requiredRole: AccountType.Admin } },
-  { path: 'Account-project-manager', component: ProjectManagerUserComponent, canActivate: [AuthGuard, PermissionGuard], data: { requiredRole: AccountType.Admin } },
+
   { path: 'users-manager/user-details/:id', component: UserDetailsComponent, canActivate: [AuthGuard, PermissionGuard, ValidParamGuard], data: { requiredRole: AccountType.Admin } },
   { path: 'admin-transactions', component: AdminTransactionsComponent, canActivate: [AuthGuard, PermissionGuard], data: { requiredRole: AccountType.Admin } },
 

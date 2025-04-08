@@ -99,15 +99,18 @@ export class PaymentSuccessComponent {
  */
   sendInvoice(checkoutSessionId: string) {
     const apiUrl = `${environment.apiUrl}/UserPayments/invoice/${checkoutSessionId}/send`;
-    this.http.get(apiUrl).subscribe({
-      next: () => {
-        this.message = "Pagamento realizado com sucesso!"
-        sessionStorage.clear();
-      },
-      error: () => {
-        this.message = "Erro ao enviar fatura"
-        sessionStorage.clear();
-      }
-    });
+
+    setTimeout(() => {
+      this.http.get(apiUrl).subscribe({
+        next: () => {
+          this.message = "Pagamento realizado com sucesso!"
+          sessionStorage.clear();
+        },
+        error: () => {
+          this.message = "Erro ao enviar fatura"
+          sessionStorage.clear();
+        }
+      });
+    }, 3000);
   }
 }
