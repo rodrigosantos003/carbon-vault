@@ -26,6 +26,15 @@ namespace Carbon_Vault_Tests_Transactions
             .Options;
             _context = new Carbon_VaultContext(options);
             _controller = new TransactionsController(_context);
+
+            string hashed_pass = AuthHelper.HashPassword("User@123");
+
+            _context.Account.AddRange(new List<Account>
+                        {
+                            new Account { Id = 1, Name = "Admin User", Email = "admin@example.com", Role = AccountType.Admin, State = AccountState.Active, Nif = "12345678", Password = hashed_pass },
+                            new Account { Id = 2, Name = "Support User", Email = "support@example.com", Role = AccountType.Support, State = AccountState.Active, Nif = "12345678", Password = hashed_pass },
+                            new Account { Id = 3, Name = "Regular User", Email = "user@example.com", Role = AccountType.User, State = AccountState.Active, Nif = "12345678", Password = hashed_pass }
+                        });
         }
 
         [Fact]
@@ -66,8 +75,9 @@ namespace Carbon_Vault_Tests_Transactions
         {
             // Arrange
 
-            int userId = 123;
-            string userToken = AuthHelper.GerarToken(userId);
+            int userId = 3;
+            var account = await _context.Account.FindAsync(userId);
+            string userToken = AuthHelper.GerarToken(account);
             string validToken = "Bearer " + userToken;
 
             var transaction = new Transaction

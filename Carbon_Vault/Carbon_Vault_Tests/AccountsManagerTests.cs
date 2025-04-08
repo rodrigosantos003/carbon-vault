@@ -109,7 +109,7 @@ namespace Carbon_Vault_Tests_AccountsManager
             acc.Name = "Updated User";
             acc.Email = "updated@example.com";
 
-            string accountToken = AuthHelper.GerarToken(acc.Id);
+            string accountToken = AuthHelper.GerarToken(acc);
             string validToken = "Bearer " + accountToken;
 
             // Act
@@ -130,7 +130,7 @@ namespace Carbon_Vault_Tests_AccountsManager
             string hashed_pass = AuthHelper.HashPassword("User@123");
             Account test_admin = new Account { Id = 5, Name = "Test Admin", Email = "admin@example.com", Password = hashed_pass, Nif = "111111111", State = AccountState.Active, Role = AccountType.Admin };
 
-            string adminToken = AuthHelper.GerarToken(test_admin.Id);
+            string adminToken = AuthHelper.GerarToken(test_admin);
             string validToken = "Bearer " + adminToken;
             int accountIdToDelete = 1;
 
@@ -160,7 +160,7 @@ namespace Carbon_Vault_Tests_AccountsManager
             string hashed_pass = AuthHelper.HashPassword("User@123");
             Account test_admin = new Account { Id = 5, Name = "Test Admin", Email = "admin@example.com", Password = hashed_pass, Nif = "111111111", State = AccountState.Active, Role = AccountType.Admin };
 
-            string adminToken = AuthHelper.GerarToken(test_admin.Id);
+            string adminToken = AuthHelper.GerarToken(test_admin);
             string validToken = "Bearer " + adminToken;
             int nonExistentAccountId = 999;
 

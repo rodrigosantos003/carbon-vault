@@ -28,6 +28,15 @@ namespace Carbon_Vault_Tests_CarbonCredits
             _context = new Carbon_VaultContext(options);
 
             _controller = new CarbonCreditsController(_context);
+
+            string hashed_pass = AuthHelper.HashPassword("User@123");
+
+            _context.Account.AddRange(new List<Account>
+                        {
+                            new Account { Id = 1, Name = "Admin User", Email = "admin@example.com", Role = AccountType.Admin, State = AccountState.Active, Nif = "12345678", Password = hashed_pass },
+                            new Account { Id = 2, Name = "Support User", Email = "support@example.com", Role = AccountType.Support, State = AccountState.Active, Nif = "12345678", Password = hashed_pass },
+                            new Account { Id = 3, Name = "Regular User", Email = "user@example.com", Role = AccountType.User, State = AccountState.Active, Nif = "12345678", Password = hashed_pass }
+                        });
         }
 
         [Fact]
@@ -41,10 +50,6 @@ namespace Carbon_Vault_Tests_CarbonCredits
                 Certification = "Certification",
                 SerialNumber = "1234567890"
             };
-
-            int userId = 123;
-            string userToken = AuthHelper.GerarToken(userId);
-            string validToken = "Bearer " + userToken;
 
             // Act
             var result = await _controller.PostCarbonCredit(carbonCredit);
@@ -67,10 +72,6 @@ namespace Carbon_Vault_Tests_CarbonCredits
                 Certification = "Certification",
                 SerialNumber = "1234567890"
             };
-
-            int userId = 123;
-            string userToken = AuthHelper.GerarToken(userId);
-            string validToken = "Bearer " + userToken;
 
             await _controller.PostCarbonCredit(carbonCredit);
 
@@ -108,10 +109,6 @@ namespace Carbon_Vault_Tests_CarbonCredits
                 SerialNumber = "1234567890"
             };
 
-            int userId = 123;
-            string userToken = AuthHelper.GerarToken(userId);
-            string validToken = "Bearer " + userToken;
-
             await _controller.PostCarbonCredit(carbonCredit);
 
             carbonCredit.Price = 500;
@@ -136,10 +133,6 @@ namespace Carbon_Vault_Tests_CarbonCredits
                 SerialNumber = "1234567890"
             };
 
-            int userId = 123;
-            string userToken = AuthHelper.GerarToken(userId);
-            string validToken = "Bearer " + userToken;
-
             await _controller.PostCarbonCredit(carbonCredit);
 
             // Act
@@ -154,9 +147,6 @@ namespace Carbon_Vault_Tests_CarbonCredits
         {
             // Arrange
             int creditId = 1;
-            int userId = 321;
-            string userToken = AuthHelper.GerarToken(userId);
-            string validToken = "Bearer " + userToken;
 
             // Act
             var result = await _controller.DeleteCarbonCredit(creditId);
