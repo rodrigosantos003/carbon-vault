@@ -87,17 +87,15 @@ export class CartService {
       quantity = 1;
     }
 
-    this.authService.getUserRole().then((role) => {
-      if (role != 0) {
-        this.alerts.enableError("Apenas utilizadores com conta podem comprar créditos.", 5);
-        return;
-      }
-    });
+    if (this.authService.getUserRole() !== 0) {
+      this.alerts.enableError("Apenas utilizadores com conta podem comprar créditos.", 5);
+      return;
+    }
 
     this.http.get(`${environment.apiUrl}/projects/${projectId}`).subscribe({
       next: (projectData: any) => {
-        console.log(projectData)
-        console.log(this.authService.getUserId())
+        console.log(projectData);
+        console.log(this.authService.getUserId());
         if (projectData.creditsForSale < 1) {
           this.alerts.enableError("Este projeto não tem créditos disponíveis para venda, tente mais tarde.", 5);
           return;
@@ -108,7 +106,7 @@ export class CartService {
           return;
         }
 
-        if (projectData.ownerId == this.authService.getUserId()) {
+        if (projectData.ownerId === this.authService.getUserId()) {
           this.alerts.enableError("Não pode comprar créditos do seu próprio projeto", 5);
           return;
         }

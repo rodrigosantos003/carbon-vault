@@ -87,22 +87,22 @@ namespace Carbon_Vault.Data
                 .HasForeignKey(tm => tm.TicketId)
                  .OnDelete(DeleteBehavior.NoAction);
 
-            populateAccounts(modelBuilder);
+            PopulateAccounts(modelBuilder);
 
-            populateProjectTypes(modelBuilder);
+            PopulateProjectTypes(modelBuilder);
 
-            populateProjects(modelBuilder);
+            PopulateProjects(modelBuilder);
 
-            populateTransactions(modelBuilder);
+            PopulateTransactions(modelBuilder);
 
-            populateCredits(modelBuilder);
+            PopulateCredits(modelBuilder);
         }
 
         /// <summary>
         /// Método que faz a população de Contas
         /// </summary>
         /// <param name="modelBuilder"></param>
-        private void populateAccounts(ModelBuilder modelBuilder)
+        private static void PopulateAccounts(ModelBuilder modelBuilder)
         {
             string admin_hashed = AuthHelper.HashPassword("Admin@123");
             string user1_hashed = AuthHelper.HashPassword("User@111");
@@ -171,7 +171,7 @@ namespace Carbon_Vault.Data
         }
 
         // Método que faz a população dos tipos de projetos
-        private void populateProjectTypes(ModelBuilder modelBuilder)
+        private static void PopulateProjectTypes(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ProjectType>().HasData(
                new ProjectType { Id = 1, Type = ProjectTypeEnum.Poverty },
@@ -194,7 +194,7 @@ namespace Carbon_Vault.Data
         /// Método que faz a população dos Projetos
         /// </summary>
         /// <param name="modelBuilder"></param>
-        private void populateProjects(ModelBuilder modelBuilder)
+        private static void PopulateProjects(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Project>().HasData(
                new Project
@@ -244,7 +244,7 @@ namespace Carbon_Vault.Data
         /// Método que faz a população das Transações
         /// </summary>
         /// <param name="modelBuilder"></param>
-        private void populateTransactions(ModelBuilder modelBuilder)
+        private static void PopulateTransactions(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Transaction>().HasData(
                 new Transaction
@@ -292,7 +292,7 @@ namespace Carbon_Vault.Data
         /// Método que faz a população de Créditos de Carbono
         /// </summary>
         /// <param name="modelBuilder"></param>
-        private void populateCredits(ModelBuilder modelBuilder)
+        private static void PopulateCredits(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<CarbonCredit>().HasData(
                 new CarbonCredit

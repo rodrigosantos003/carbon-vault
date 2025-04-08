@@ -77,32 +77,26 @@ export class AuthService {
   /**
    * Obtém o papel (role) do utilizador a partir da API, com base no seu ID.
    * 
-   * @returns {Promise<number>} - Promessa que resolve com o valor do `role` do utilizador.
+   * @returns {number | null} - O valor do `role` do utilizador, ou null se não encontrado.
    */
-  getUserRole(): Promise<number> {
-    return new Promise((resolve, reject) => {
-      const userId = this.getUserId();
-      if (!userId) {
-        reject('User ID not found.');
-        return;
-      }
-
-      this.http.get<any>(`${environment.apiUrl}/accounts/${userId}`).subscribe(
-        (data) => resolve(data.role),
-        (error) => {
-          console.error('Error fetching user role:', error);
-          reject(error);
-        }
-      );
-    });
+  getUserRole(): number {
+    const token = localStorage.getItem('token');
+    if (token === null) {
+      return -1; // ou lança erro, dependendo do que preferires
+    }
+  
+    const decodedToken = this.jwtHelper.decodeToken(token);
+    return Number(decodedToken['role']); // ajusta aqui se estiver usando outro nome
   }
+  
 
   /**
    * Verifica se o utilizador tem o papel de `Support` (3) ou `Admin` (1).
    * 
    * @returns {Promise<boolean>} - Promessa que resolve com `true` se for suporte ou admin, `false` caso contrário.
    */
-  isSupportOrAdmin(): Promise<boolean> {
-    return this.getUserRole().then((role) => role === 1 || role === 3);  // 3 = Support, 1 = Admin
+  isSupportOrAdmin(): Boolean {
+    const role = this.getUserRole();
+    return role === 3 || role === 1;
   }
 }
