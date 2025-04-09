@@ -63,6 +63,46 @@ export class RequestReportComponent {
   }
 
   /**
+ * Previne o comportamento padrão de arrastar e soltar e define o efeito de cópia.
+ * 
+ * @param event Evento de arrastar.
+ */
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    event.dataTransfer!.dropEffect = 'copy';
+  }
+
+  /**
+ * Lida com o evento de soltar arquivos na área de arrastar e soltar.
+ * - Valida os arquivos arrastados (tipo e tamanho).
+ * - Adiciona os arquivos válidos à lista de documentos.
+ * 
+ * @param event Evento de soltar.
+ */
+  onDrop(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (event.dataTransfer && event.dataTransfer.files.length > 0) {
+      const droppedFiles = Array.from(event.dataTransfer.files) as File[];
+
+      // If all files are valid, add them
+      this.documents = [...this.documents, ...droppedFiles];
+    }
+  }
+
+  /**
+* Previne o comportamento padrão de arrastar e soltar.
+* 
+* @param event Evento de sair com o mouse da área de arrastar.
+*/
+  onDragLeave(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  /**
    * Cria um novo pedido de relatório através da API.
    * O relatório é criado com o ID do utilizador autenticado e texto vazio.
    */
