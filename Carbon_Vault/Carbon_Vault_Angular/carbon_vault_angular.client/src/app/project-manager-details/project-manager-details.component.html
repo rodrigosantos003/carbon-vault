@@ -1,5 +1,5 @@
 <body style="height: 120vh;">
-  <app-user-menu ></app-user-menu>
+  <app-user-menu></app-user-menu>
   <div class="main-content">
     <div class="project-details">
       <div class="project-details-header">
@@ -75,12 +75,26 @@
               (dragleave)="onDragLeave($event)" (click)="fileInput.click()">
               <p>Arraste e solte arquivos aqui ou clique para selecionar</p>
               <input #fileInput type="file" (change)="onFileChange($event)" multiple style="display:none" />
-              <ul *ngIf="documentos.length > 0" class="file-list">
-                <li *ngFor="let documento of documentos; let i = index">
-                  {{ documento.name }}
-                  <button type="button" class="remove" (click)="removeFile(i)">Remover</button>
-                </li>
-              </ul>
+              <!-- Documentos já existentes -->
+              <div *ngIf="projectDocuments.length > 0">
+                <ul class="file-list">
+                  <li *ngFor="let doc of projectDocuments; let i = index">
+                    {{ doc.fileName }}
+                    <button type="button" class="remove" (click)="removeFile(i, false)">Remover</button>
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Novos documentos adicionados -->
+              <div *ngIf="newDocuments.length > 0">
+                <ul class="file-list">
+                  <li *ngFor="let file of newDocuments; let i = index">
+                    {{ file.name }}
+                    <button type="button" class="remove" (click)="removeFile(i, true)">Remover</button>
+                  </li>
+                </ul>
+              </div>
+
             </div>
             <span class="tooltip"><b>Formatos permitidos:</b>.docx,.pdf,.csv</span>
           </div>
@@ -96,11 +110,11 @@
 
           <div class="form-item">
             <h2>Documentos Atuais</h2>
-            <div *ngIf="documentosAtuais.length == 0" class="file-list">
-              <p>Sem documentos</p>
+            <div *ngIf="projectDocuments.length == 0" class="file-list">
+              <p>Sem Documentos</p>
             </div>
-            <ul *ngIf="documentosAtuais.length > 0" class="file-list">
-              <li *ngFor="let documento of documentosAtuais">
+            <ul *ngIf="projectDocuments.length > 0" class="file-list">
+              <li *ngFor="let documento of projectDocuments">
                 <span style="z-index: 6;" (click)="downloadFile(documento.filePath, documento.fileName)">
                   {{ documento.fileName }}
                 </span>
@@ -118,12 +132,12 @@
 
 
     <br>
-    <div style="display: flex; justify-content: space-between; align-items: center;"> 
+    <div style="display: flex; justify-content: space-between; align-items: center;">
       <h2 style="color: #4ea741; margin-bottom: 0;"> Créditos Disponiveis </h2>
       <button class="credits-button" (click)="openPopup()"> Editar critérios de Venda</button>
     </div>
 
-    
+
     <div style="max-height: 295px; overflow-y: scroll; position: relative;">
       <table>
         <thead>
