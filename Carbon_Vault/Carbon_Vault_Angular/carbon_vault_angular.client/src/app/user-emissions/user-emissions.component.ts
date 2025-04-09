@@ -75,8 +75,12 @@ export class UserEmissionsComponent {
     this.emissionsForm.valueChanges.subscribe(() => {
       ['electricity', 'petrol', 'diesel'].forEach(field => {
         const control = this.emissionsForm.get(field);
-        if (control && control.value < 0) {
-          control.setValue(0);
+        if (control) {
+          if (control.value < 0) {
+            control.setValue(0);
+          } else if (control.value > 99999) {
+            control.setValue(99999);
+          }
         }
       });
 

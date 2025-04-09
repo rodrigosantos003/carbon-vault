@@ -9,6 +9,7 @@ using Carbon_Vault.Data;
 using Carbon_Vault.Models;
 using Microsoft.Extensions.Hosting;
 using Carbon_Vault.Services;
+using System.Text.Json;
 
 namespace Carbon_Vault.Controllers.API
 {
@@ -431,37 +432,28 @@ namespace Carbon_Vault.Controllers.API
             if (files == null)
                 files = new List<IFormFile>();
 
-            var project = _context.Projects.Find(id);
+            var removedFilesJson = Request.Form["removedFiles"];
+            var removedFileNames = string.IsNullOrWhiteSpace(removedFilesJson)
+                ? new List<string>()
+                : JsonSerializer.Deserialize<List<string>>(removedFilesJson);
+
+            var project = await _context.Projects.FindAsync(id);
             if (project == null)
                 return NotFound("Project not found");
 
-            var projectFiles = _context.ProjectFiles.Where(f => f.ProjectId == id).ToList();
+            var projectFiles = await _context.ProjectFiles.Where(f => f.ProjectId == id).ToListAsync();
             var directoryPath = Path.Combine(_environment.ContentRootPath, "App_Data", "files");
             Directory.CreateDirectory(directoryPath);
 
-            // Lista de ficheiros recebidos
-            var receivedFileNames = new List<string>();
+            var uploadedFiles = new List<string>();
 
-            var uploadedFiles = new List<ProjectFiles>();
-
+            // Guardar ficheiros novos
             foreach (var file in files)
             {
                 if (file.Length == 0) continue;
 
                 var originalFileName = Path.GetFileName(file.FileName);
-                var existingFile = projectFiles.Find(f => f.FileName.Contains(originalFileName));
-                string fileName;
-
-                if (existingFile != null)
-                {
-                    fileName = existingFile.FileName;
-                    projectFiles.Remove(existingFile);
-                }
-                else
-                {
-                    fileName = Guid.NewGuid().ToString() + "_" + originalFileName;
-                }
-
+                var fileName = Guid.NewGuid().ToString() + "_" + originalFileName;
                 var filePath = Path.Combine(directoryPath, fileName);
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
@@ -479,30 +471,27 @@ namespace Carbon_Vault.Controllers.API
                 };
 
                 _context.ProjectFiles.Add(projectFile);
-                uploadedFiles.Add(projectFile);
-                receivedFileNames.Add(fileName);
+                uploadedFiles.Add(fileName);
             }
 
-            // Remover ficheiros que não foram enviados
+            // Apagar ficheiros não enviados nem marcados para manter
             foreach (var existingFile in projectFiles)
             {
-                if (project.ImageUrl.Contains(existingFile.FileName))
+                if (removedFileNames.Contains(existingFile.FileName))
                 {
-                    continue;
-                }
+                    var existingFilePath = Path.Combine(directoryPath, existingFile.FileName);
+                    if (System.IO.File.Exists(existingFilePath))
+                    {
+                        System.IO.File.Delete(existingFilePath);
+                    }
 
-                var existingFilePath = Path.Combine(directoryPath, existingFile.FileName);
-                if (System.IO.File.Exists(existingFilePath))
-                {
-                    System.IO.File.Delete(existingFilePath);
+                    _context.ProjectFiles.Remove(existingFile);
                 }
-
-                _context.ProjectFiles.Remove(existingFile);
             }
 
             await _context.SaveChangesAsync();
 
-            return Ok(receivedFileNames);
+            return Ok(uploadedFiles);
         }
 
         /// <summary>

@@ -20,8 +20,9 @@ export class ProjectManagerDetailsComponent {
   credits: any[] = [];
   project: any = {};
   categoriasSelecionadas: number[] = [];
-  documentos: File[] = [];
-  documentosAtuais: Documento[] = [];
+  newDocuments: File[] = [];
+  removedDocuments: Document[] = [];
+  projectDocuments: Document[] = [];
   imagem: File | null = null;
   imagePreviewUrl: string | null = null;
   isEditable: boolean = false;
@@ -72,12 +73,17 @@ export class ProjectManagerDetailsComponent {
   }
 
   /**
- * Remove um arquivo da lista de documentos.
+ * Remove um arquivo da lista de newDocuments.
  * 
  * @param index O índice do arquivo a ser removido.
  */
-  removeFile(index: number) {
-    this.documentos.splice(index, 1);
+  removeFile(index: number, isNovo: boolean) {
+    if (isNovo) {
+      this.newDocuments.splice(index, 1);
+    } else {
+      const removed = this.projectDocuments.splice(index, 1)[0];
+      this.removedDocuments.push(removed);
+    }
   }
 
   /**
@@ -152,18 +158,13 @@ export class ProjectManagerDetailsComponent {
 
   /**
  * Alterna entre o modo de edição e o modo de visualização.
- * - Quando entra em modo de edição, carrega os documentos atuais.
+ * - Quando entra em modo de edição, carrega os newDocuments atuais.
  * - Quando sai de modo de edição, salva as alterações feitas.
  */
   async toggleEditMode() {
     if (this.isEditable) {
       // Save changes when exiting edit mode
       this.submitChanges();
-    } else {
-      //Entering edit mode: Load existing documents into the drop area
-      this.documentos = this.documentosAtuais.map(doc => {
-        return new File([""], doc.fileName, { type: doc.fileType });
-      });
     }
 
     this.isEditable = !this.isEditable;
@@ -219,7 +220,7 @@ export class ProjectManagerDetailsComponent {
 
   /**
  * Método chamado quando um arquivo é solto na área de drop.
- * - Valida os arquivos antes de adicioná-los à lista de documentos.
+ * - Valida os arquivos antes de adicioná-los à lista de newDocuments.
  * 
  * @param event O evento de drop.
  */
@@ -245,7 +246,7 @@ export class ProjectManagerDetailsComponent {
       }
 
       // If all files are valid, add them
-      this.documentos = [...this.documentos, ...droppedFiles];
+      this.newDocuments = [...this.newDocuments, ...droppedFiles];
     }
   }
 
@@ -281,9 +282,9 @@ export class ProjectManagerDetailsComponent {
   loadProjectFiles(projectId: number) {
     this.http.get<any[]>(`${this.apiURL}/${projectId}/files`).subscribe({
       next: (files) => {
-        this.documentosAtuais = files.filter(file => file.filePath != this.project.imageUrl);
+        this.projectDocuments = files.filter(file => file.filePath != this.project.imageUrl);
       },
-      error: () => this.alerts.enableError("Erro ao carregar documentos")
+      error: () => this.alerts.enableError("Erro ao carregar newDocuments")
     });
   }
 
@@ -293,8 +294,8 @@ export class ProjectManagerDetailsComponent {
  * @param event O evento gerado pela seleção de arquivos.
  */
   onFileChange(event: any) {
-    const newFiles = Array.from(event.target.files) as File[];
-    this.documentos = [...this.documentos, ...newFiles];
+    const newDocuments = Array.from(event.target.files) as File[];
+    this.newDocuments = [...this.newDocuments, ...newDocuments];
   }
 
   /**
@@ -357,52 +358,93 @@ export class ProjectManagerDetailsComponent {
  */
   RevertToEditMode() {
     this.isAddingFiles = false;
-    this.documentos = [];
+    this.newDocuments = [];
   }
 
   /**
- * Envia as alterações feitas ao servidor, incluindo a atualização de imagem, documentos e informações do projeto.
- */
-  submitChanges() {
-    // Update image
-    if (this.imagem) {
+   * Atualiza a imagem
+   */
+  updateImage(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (!this.imagem) {
+        resolve();
+        return;
+      }
+
       const projectId = this.project.id;
       const formData = new FormData();
-      this.imagem.name.trim();
       formData.append('file', this.imagem);
 
       this.http.post(`${this.apiURL}/${projectId}/uploadImage`, formData).subscribe({
-        next: (response: any) => this.project.imageUrl = response.filePath,
-        error: () => this.alerts.enableError("Erro ao enviar imagem")
+        next: (response: any) => {
+          this.project.imageUrl = response.filePath;
+          resolve();
+        },
+        error: (err) => {
+          this.alerts.enableError("Erro ao enviar imagem");
+          reject(err);
+        }
       });
-    }
-
-    // Update files
-    const documentsFormData = new FormData();
-    this.documentos.forEach(doc => documentsFormData.append('files', doc));
-
-    // Update project info
-    this.http.post(`${this.apiURL}/${this.project.id}/files/update`, documentsFormData).subscribe({
-      next: () => {
-        const updatedProject = {
-          ...this.project,
-          types: this.categoriasSelecionadas.map((id) => ({ id })),
-        };
-
-        this.http.put(`${this.apiURL}/${this.project.id}`, updatedProject).subscribe({
-          next: () => {
-            this.alerts.enableSuccess("Projeto atualizado com sucesso");
-            location.reload();
-          },
-          error: () => this.alerts.enableError("Erro ao atualizar projeto")
-        });
-      },
-      error: () => this.alerts.enableError("Erro ao enviar documentos")
     });
+  }
+
+  updateProject() {
+    const documentsFormData = new FormData();
+
+    // Anexar ficheiros novos
+    this.newDocuments.forEach(doc => {
+      if (doc instanceof File) {
+        documentsFormData.append('files', doc);
+      }
+    });
+
+    const removedFileNames = this.removedDocuments.map(doc => doc.fileName);
+    documentsFormData.append('removedFiles', JSON.stringify(removedFileNames));
+
+    this.http.post(`${this.apiURL}/${this.project.id}/files/update`, documentsFormData).subscribe({
+      next: () => this.updateInfo(),
+      error: () => this.alerts.enableError("Erro ao enviar newDocuments")
+    });
+  }
+
+  updateInfo() {
+    const updatedProject = {
+      ...this.project,
+      types: this.categoriasSelecionadas.map((id) => ({ id })),
+    };
+
+    this.http.put(`${this.apiURL}/${this.project.id}`, updatedProject).subscribe({
+      next: () => {
+        this.alerts.enableSuccess("Projeto atualizado com sucesso");
+        location.reload();
+      },
+      error: () => {
+        this.alerts.enableError("Erro ao atualizar projeto")
+      },
+      complete: () => { }
+    });
+  }
+
+  /**
+ * Envia as alterações feitas ao servidor, incluindo a atualização de imagem, newDocuments e informações do projeto.
+ */
+  submitChanges() {
+    this.alerts.enableLoading("A atualizar projeto");
+
+    this.updateImage()
+      .then(() => {
+        this.updateProject();
+      })
+      .catch(() => {
+        this.updateProject();
+      })
+      .finally(() => {
+        this.alerts.disableLoading();
+      });
   }
 }
 
-interface Documento {
+interface Document {
   id: number;
   fileName: string;
   filePath: string;
