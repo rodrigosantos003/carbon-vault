@@ -182,36 +182,174 @@ namespace Carbon_Vault.Controllers.API
                                    .Where(a => a.Role == AccountType.Support)
                                    .ToListAsync();
 
-            //foreach (var supportAdmin in supportAccounts)
-            //{
-            //    await _emailService.SendEmail(
-            //        supportAdmin.Email,
-            //        "Novo Ticket Recebido",
-            //        $"Olá,\n\nNovo ticket submetido.\n\n" +
-            //        $" **Referência:** {savedTicket.Reference}\n" +
-            //        $" **Título:** {savedTicket.Title}\n" +
-            //        $" **Categoria:** {savedTicket.Category}\n" +
-            //        $" **Descrição:** {savedTicket.Description}\n\n" +
-            //        $" [Visualizar Ticket]({_frontendBaseUrl}/support-manager/{savedTicket.Id})\n\n" +
-            //        $"Atenciosamente,\nEquipa de Suporte do Carbon Vault",
-            //        null
-            //    );
-            //}
+           foreach (var supportAdmin in supportAccounts)
+            {
+                string supportTicketHtml = $@"
+                <!DOCTYPE html>
+                <html lang='en'>
+                <head>
+                    <meta charset='UTF-8'>
+                    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                    <title>Email Template</title>
+                    <style>
+                        body {{
+                            font-family: Arial, sans-serif;
+                            margin: 0;
+                            padding: 0;
+                            background-color: #f4f4f4;
+                        }}
+                        .email-container {{
+                            max-width: 600px;
+                            margin: 20px auto;
+                            background: #ffffff;
+                            border: 1px solid #ddd;
+                            border-radius: 8px;
+                            overflow: hidden;
+                        }}
+                        .email-header {{
+                            background: #4ea741;
+                            color: #ffffff;
+                            text-align: center;
+                            padding: 20px;
+                        }}
+                        .email-body {{
+                            padding: 20px;
+                            color: #333333;
+                            line-height: 1.6;
+                        }}
+                        .email-footer {{
+                            background: #f4f4f4;
+                            text-align: center;
+                            padding: 10px;
+                            font-size: 12px;
+                            color: #777777;
+                        }}
+                        .button {{
+                            display: inline-block;
+                            padding: 10px 20px;
+                            margin: 20px 0;
+                            background: #4ea741;
+                            color: #ffffff;
+                            text-decoration: none;
+                            border-radius: 5px;
+                        }}
+                    </style>
+                </head>
+                <body>
+                    <div class='email-container'>
+                        <div class='email-header'>
+                            <h1>Novo Ticket Recebido</h1>
+                        </div>
+                        <div class='email-body'>
+                            <p>Olá,</p>
+                            <p>Um novo ticket foi submetido:</p>
+                            <p><strong>Referência:</strong> {savedTicket.Reference}</p>
+                            <p><strong>Título:</strong> {savedTicket.Title}</p>
+                            <p><strong>Categoria:</strong> {savedTicket.Category}</p>
+                            <p><strong>Descrição:</strong></p>
+                            <p>{savedTicket.Description}</p>
+                            <a class='button' href='{_frontendBaseUrl}/support-manager/{savedTicket.Id}'>Visualizar Ticket</a>
+                            <p>Atenciosamente,</p>
+                            <p>Equipa de Suporte do Carbon Vault</p>
+                        </div>
+                        <div class='email-footer'>
+                            <p>&copy; 2025 Carbon Vault. Todos os direitos reservados.</p>
+                        </div>
+                    </div>
+                </body>
+                </html>";
+
+                await _emailService.SendEmail(
+                    supportAdmin.Email,
+                    "Novo Ticket Recebido",
+                    supportTicketHtml,
+                    null
+                );
+            }
 
 
-            //await _emailService.SendEmail(
-            //    author.Email,
-            //    "O seu Ticket Foi Recebido",
-            //    $"Olá {author.Name},\n\n" +
-            //    $"O seu ticket foi recebido com sucesso!\n\n" +
-            //    $"**Referência:** {savedTicket.Reference}\n" +
-            //    $"**Título:** {savedTicket.Title}\n" +
-            //    $"**Categoria:** {savedTicket.Category}\n" +
-            //    $"**Descrição:** {savedTicket.Description}\n\n" +
-            //    $"Acompanhe o estado  do seu ticket aqui: {_frontendBaseUrl}/support-manager/{savedTicket.Id}\n\n" +
-            //    $"Atenciosamente,\nEquipa de Suporte do Carbon Vault",
-            //    null
-            //);
+            string ticketConfirmationHtml = $@"
+                <!DOCTYPE html>
+                <html lang='en'>
+                <head>
+                    <meta charset='UTF-8'>
+                    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                    <title>Email Template</title>
+                    <style>
+                        body {{
+                            font-family: Arial, sans-serif;
+                            margin: 0;
+                            padding: 0;
+                            background-color: #f4f4f4;
+                        }}
+                        .email-container {{
+                            max-width: 600px;
+                            margin: 20px auto;
+                            background: #ffffff;
+                            border: 1px solid #ddd;
+                            border-radius: 8px;
+                            overflow: hidden;
+                        }}
+                        .email-header {{
+                            background: #4ea741;
+                            color: #ffffff;
+                            text-align: center;
+                            padding: 20px;
+                        }}
+                        .email-body {{
+                            padding: 20px;
+                            color: #333333;
+                            line-height: 1.6;
+                        }}
+                        .email-footer {{
+                            background: #f4f4f4;
+                            text-align: center;
+                            padding: 10px;
+                            font-size: 12px;
+                            color: #777777;
+                        }}
+                        .button {{
+                            display: inline-block;
+                            padding: 10px 20px;
+                            margin: 20px 0;
+                            background: #4ea741;
+                            color: #ffffff;
+                            text-decoration: none;
+                            border-radius: 5px;
+                        }}
+                    </style>
+                </head>
+                <body>
+                    <div class='email-container'>
+                        <div class='email-header'>
+                            <h1>O seu Ticket Foi Recebido</h1>
+                        </div>
+                        <div class='email-body'>
+                            <p>Olá {author.Name},</p>
+                            <p>O seu ticket foi recebido com sucesso!</p>
+                            <p><strong>Referência:</strong> {savedTicket.Reference}</p>
+                            <p><strong>Título:</strong> {savedTicket.Title}</p>
+                            <p><strong>Categoria:</strong> {savedTicket.Category}</p>
+                            <p><strong>Descrição:</strong></p>
+                            <p>{savedTicket.Description}</p>
+                            <a class='button' href='{_frontendBaseUrl}/support-manager/{savedTicket.Id}'>Acompanhar Ticket</a>
+                            <p>Atenciosamente,</p>
+                            <p>Equipa de Suporte do Carbon Vault</p>
+                        </div>
+                        <div class='email-footer'>
+                            <p>&copy; 2025 Carbon Vault. Todos os direitos reservados.</p>
+                        </div>
+                    </div>
+                </body>
+                </html>";
+
+                await _emailService.SendEmail(
+                    author.Email,
+                    "O seu Ticket Foi Recebido",
+                    ticketConfirmationHtml,
+                    null
+                );
+
 
             return CreatedAtAction("GetTicket", new { id = savedTicket.Id }, savedTicket);
         }
