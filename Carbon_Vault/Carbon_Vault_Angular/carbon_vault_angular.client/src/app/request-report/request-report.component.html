@@ -2,6 +2,7 @@
 
     <div class="request-container">
         <div class="request-box">
+            <app-go-back-button></app-go-back-button>
             <h1>Solicitar relatório</h1>
             <form [formGroup]="requestForm" (ngSubmit)="onSubmit()">
                 <label for="drop-area">Selecione os documentos para análise</label>

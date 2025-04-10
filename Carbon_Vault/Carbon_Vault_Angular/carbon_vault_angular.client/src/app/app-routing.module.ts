@@ -85,7 +85,7 @@ const routes: Routes = [
 
   //Rotas de utilizador de suporte
   { path: 'support-manager', component: TicketManagerComponent, canActivate: [AuthGuard, PermissionGuard], data: { requiredRole: [AccountType.Support, AccountType.Admin] } },
-  { path: 'support-manager/:id', component: SupportChatComponent, canActivate: [AuthGuard, PermissionGuard, ValidParamGuard], data: { requiredRole: [AccountType.Support, AccountType.Admin] } },
+  { path: 'support-manager/:id', component: SupportChatComponent, canActivate: [AuthGuard, PermissionGuard, ValidParamGuard], data: { requiredRole: [AccountType.Support, AccountType.Admin, AccountType.User] } },
 
   //Rotas de utilizador avaliador
   { path: 'admin-reports', component: AdminReportsComponent, canActivate: [AuthGuard, PermissionGuard], data: { requiredRole: [AccountType.Evaluator, AccountType.Admin] } },

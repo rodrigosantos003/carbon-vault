@@ -69,6 +69,7 @@ export class MarketPlaceNavigationComponent {
       this.loginBtn.nativeElement.innerHTML = "Terminar Sessão";
       this.loginBtn.nativeElement.onclick = () => {
         this.authService.logout();
+        location.reload();
       }
     }
     else {

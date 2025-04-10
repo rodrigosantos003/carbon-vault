@@ -412,6 +412,13 @@ namespace Carbon_Vault.Controllers.API
             var project = await _context.Projects.FindAsync(id);
             if (project != null)
             {
+                var image = await _context.ProjectFiles.FirstOrDefaultAsync(file => file.FilePath == project.ImageUrl);
+                if(image != null)
+                {
+                    System.IO.File.Delete(Path.Combine(Path.Combine(directoryPath, image.FileName)));
+                    _context.ProjectFiles.Remove(image);
+                }
+
                 project.ImageUrl = $"{Request.Scheme}://{Request.Host}/files/{fileName}";
             }
 

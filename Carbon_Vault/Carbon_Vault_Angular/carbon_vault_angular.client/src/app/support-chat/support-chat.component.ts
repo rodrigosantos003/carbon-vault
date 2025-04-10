@@ -106,13 +106,14 @@ export class SupportChatComponent {
     if (this.ticket?.state === 1 && this.userRole == 0) {
       this.ticket.state = 0;
 
-      this.http.put(`${this.ticketsURL}/${this.ticket.id}`, { state: 0 }, { headers: this.authService.getHeaders() }).subscribe(
-        () => {
-          console.log('Ticket reaberto com sucesso.');
+      this.http.put(`${this.ticketsURL}/${this.ticket.id}`, this.ticket, { headers: this.authService.getHeaders() }).subscribe({
+        next: () => {
+          this.alerts.enableSuccess("Ticket reaberto com sucesso");
         },
-        (error) => {
-          console.error('Erro ao reabrir o ticket:', error);
+        error: () => {
+          this.alerts.enableError("Erro ao reabrir ticket");
         }
+      }
       );
     }
 
