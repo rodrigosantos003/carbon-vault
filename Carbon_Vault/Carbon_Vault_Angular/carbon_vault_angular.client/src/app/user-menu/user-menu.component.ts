@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthService } from '../auth-service.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
@@ -75,20 +75,15 @@ export class UserMenuComponent {
   ngOnInit() {
     const url = `${environment.apiUrl}/accounts/${this.userId}`;
 
-    this.http.get(url).subscribe(
-      (data: any) => {
+    this.http.get(url).subscribe({
+      next: (data: any) => {
         // Se a requisição for bem-sucedida, preenche o formulário com os dados recebidos
         this.userName = data.name
         this.userInitial = data.name[0],
           this.userRole = data.role
 
-      },
-      error => {
-        // Caso contrário, mostra o erro no console
-        console.error("Erro na requisição:", error);
-
       }
-    );
+    });
   }
 
   /**
@@ -103,8 +98,8 @@ export class UserMenuComponent {
    * Método para abrir a janela de confirmação de eliminação de conta.
    */
   openDeleteAccount() {
-    const overlay = document.getElementById('deleteAccountPopup');
-    const delPopup = document.getElementById('delete');
+    const overlay = document.getElementById('logoutPopup');
+    const delPopup = document.getElementById('logout');
 
     if (overlay && delPopup) {
       overlay.style.display = 'flex';
@@ -116,8 +111,8 @@ export class UserMenuComponent {
    * Método para fechar a janela de confirmação de eliminação de conta.
    */
   closeDeleteAccount() {
-    const overlay = document.getElementById('deleteAccountPopup');
-    const delPopup = document.getElementById('delete');
+    const overlay = document.getElementById('logoutPopup');
+    const delPopup = document.getElementById('logout');
 
     if (overlay && delPopup) {
       overlay.style.display = 'none';

@@ -78,14 +78,13 @@ export class UserSettingsComponent {
    * Valida o IBAN e envia as informações para atualização.
    */
   onSubmit() {
-    this.alerts.enableLoading("A guardar informações...");
+    this.alerts.enableLoading("A guardar informações");
 
     const formValue = this.settingsForm.value;
 
     const _iban = formValue.iban.trim();
 
     const isIbanValid = this._validator.validatePortugueseIBAN(_iban);
-    console.log(isIbanValid);
 
     if (isIbanValid || _iban == "") {
       const settingsData = {

@@ -28,7 +28,7 @@ export class AdminTransactionsComponent {
    * @param router Serviço de navegação para redirecionamento entre rotas.
    */
 
-  constructor(private http: HttpClient, private authService: AuthService, private router: Router,private alerts: AlertsService) {
+  constructor(private http: HttpClient, private authService: AuthService, private router: Router, private alerts: AlertsService) {
 
   }
   /**
@@ -40,7 +40,7 @@ export class AdminTransactionsComponent {
     this.accountId = this.authService.getUserId();
     this.getAccounts();
     this.getTransactions();
- 
+
   }
 
   /**
@@ -67,17 +67,15 @@ export class AdminTransactionsComponent {
     const jwtToken = localStorage.getItem('token');
 
     if (!jwtToken) {
-      console.error("JWT token not found");
       return;
     }
 
     this.http.get<any[]>(`${environment.apiUrl}/Transactions`, { headers: this.authService.getHeaders() }).subscribe({
       next: (data) => {
         this.accountTransactions = data;
-        console.log(data);
       },
       error: (error) => {
-        console.error('Error fetching transactions:', error);
+        this.alerts.enableError("Erro ao obter transações");
       }
     });
   }
@@ -125,33 +123,33 @@ export class AdminTransactionsComponent {
  * @returns {void}
  */
   getAccounts() {
-    this.http.get(`${environment.apiUrl}/Accounts/users`).subscribe((data: any) => {
-      this.accounts = data;
-    }, error => {
-      console.error("Erro no fetching da account:", error);
+    this.http.get(`${environment.apiUrl}/Accounts/users`).subscribe({
+      next: (data: any) => {
+        this.accounts = data;
+      }, error: () => {
+        this.alerts.enableError("Erro ao obter contas");
+      }
     });
   }
 
   /**
- * Redireciona para a página de detalhes da transação.
- * 
- * @param {number} transaction_id - O ID da transação a visualizar.
- * @returns {void}
- */
+  * Redireciona para a página de detalhes da transação.
+  * 
+  * @param {number} transaction_id - O ID da transação a visualizar.
+  * @returns {void}
+  */
   transactionDetails(transaction_id: number) {
     this.router.navigate([`transaction-details/${transaction_id}`]);
   }
 
-
   processPayment(transactionId: number): void {
-    this.http.patch(`${environment.apiUrl}/Transactions/process-offlinePayment` ,transactionId,{ headers: this.authService.getHeaders() }).subscribe({
-      next: (res) => {
-        this.alerts.enableSuccess('Pagamento processado com sucesso!',5);
+    this.http.patch(`${environment.apiUrl}/Transactions/process-offlinePayment`, transactionId, { headers: this.authService.getHeaders() }).subscribe({
+      next: () => {
+        this.alerts.enableSuccess('Pagamento processado com sucesso!', 5);
         this.getTransactions(); // Refresh the transactions after processing payment
       },
-      error: (err) => {
-        console.error(err);
-        this.alerts.enableError('Erro ao processar o pagamento.',5);
+      error: () => {
+        this.alerts.enableError('Erro ao processar o pagamento.', 5);
       }
     });
   }

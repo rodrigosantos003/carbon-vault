@@ -63,9 +63,6 @@ export class AuthService {
     const token = localStorage.getItem('token');
     const userId = this.getUserId();
 
-    console.log("Token: ", token);
-    console.log("User ID: ", userId);
-
     let headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,
       'userID': userId
@@ -84,11 +81,11 @@ export class AuthService {
     if (token === null) {
       return -1; // ou lança erro, dependendo do que preferires
     }
-  
+
     const decodedToken = this.jwtHelper.decodeToken(token);
     return Number(decodedToken['role']); // ajusta aqui se estiver usando outro nome
   }
-  
+
 
   /**
    * Verifica se o utilizador tem o papel de `Support` (3) ou `Admin` (1).

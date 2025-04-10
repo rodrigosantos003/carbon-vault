@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { AuthService } from '../auth-service.service';
 import { ActivatedRoute } from '@angular/router';
-import { DatePipe } from '@angular/common';
 import { AlertsService } from '../alerts.service';
 import { Location } from '@angular/common';
 
@@ -135,7 +134,6 @@ export class ProjectManagerDetailsAdminComponent {
         this.fetchProjectDetails(this.route.snapshot.params['id']);
       },
       error: (e) => {
-        console.error('Erro ao aprovar o projeto:', e);
         this.alerts.enableError('Ocorreu um erro ao aprovar o projeto. Tente novamente mais tarde.');
       }
     });
@@ -248,15 +246,14 @@ export class ProjectManagerDetailsAdminComponent {
    */
   deleteFile(fileId: number): void {
     const projectId = this.project.id;
-    this.http.delete<void>(`${this.apiURL}/${projectId}/files/${fileId}`, { headers: this.authService.getHeaders() }).subscribe(() => {
-
-      this.fetchProjectDetails(projectId);
-      this.loadProjectFiles(projectId);
-      this.alerts.enableSuccess('Ficheiro Eliminado com sucesso do projeto');
-    }, error => {
-
-      this.alerts.enableError('Um erro aconteceu tente novamente mais tarde');
-      console.error('Error deleting file:', error);
+    this.http.delete<void>(`${this.apiURL}/${projectId}/files/${fileId}`, { headers: this.authService.getHeaders() }).subscribe({
+      next: () => {
+        this.fetchProjectDetails(projectId);
+        this.loadProjectFiles(projectId);
+        this.alerts.enableSuccess('Ficheiro Eliminado com sucesso do projeto');
+      }, error: () => {
+        this.alerts.enableError('Um erro aconteceu tente novamente mais tarde');
+      }
     });
   }
 
@@ -274,17 +271,15 @@ export class ProjectManagerDetailsAdminComponent {
 
     const body = JSON.stringify(newStatus);
 
-    this.http.put(url, body, { headers }).subscribe(
-      (response) => {
+    this.http.put(url, body, { headers }).subscribe({
+      next: () => {
         this.alerts.enableSuccess('O estado do projeto foi atualizado com sucesso!');
-        console.log(response);
         this.fetchProjectDetails(projectId); // Refresh the project details
       },
-      (error) => {
-        console.error('Erro ao atualizar o estado do projeto:', error);
+      error: () => {
         this.alerts.enableError('Ocorreu um erro ao atualizar o estado do projeto. Tente novamente mais tarde.');
       }
-    );
+    });
   }
 
   /**
@@ -297,23 +292,21 @@ export class ProjectManagerDetailsAdminComponent {
       return;
     }
 
-    console.log('Feedback to send:', this.rejectionFeedback);
-
     const projectId = this.project.id;
     const url = `${this.apiURL}/${projectId}/reject`;
 
     let headers = this.authService.getHeaders();
     headers = headers.append('feedback', this.rejectionFeedback);
 
-    this.http.post(url, {}, { headers }).subscribe(
-      () => {
+    this.http.post(url, {}, { headers }).subscribe({
+      next: () => {
         this.alerts.enableSuccess('Projeto rejeitado com sucesso!');
         this.isEditable = false;
       },
-      (error) => {
-        console.error('Erro ao rejeitar o projeto:', error);
+      error: (error) => {
         this.alerts.enableError('Ocorreu um erro ao rejeitar o projeto. Tente novamente mais tarde.');
       }
+    }
     );
   }
 

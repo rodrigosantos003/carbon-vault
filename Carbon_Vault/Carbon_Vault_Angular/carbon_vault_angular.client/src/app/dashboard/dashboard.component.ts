@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthService } from '../auth-service.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
@@ -72,7 +72,7 @@ export class DashboardComponent {
         this.userRole = data.role
       },
       error: (e) => {
-        console.error("Erro na requisição:", e);
+        this.alerts.enableError("Erro ao obter utilizador");
       }
     });
   }
@@ -85,14 +85,14 @@ export class DashboardComponent {
    */
   fetchDashboardStatistics_support() {
     const url = `${environment.apiUrl}/Tickets/support/stats`;
-    this.http.get(url, { headers: this.authService.getHeaders() }).subscribe(
-      (data: any) => {
-        console.log(data)
+    this.http.get(url, { headers: this.authService.getHeaders() }).subscribe({
+      next: (data: any) => {
         this.TotalTickets = data.totalTickets;
         this.TotalOpenTickets = data.openTickets;
         this.TotalClosedTickets = data.closedTickets;
       },
-      error => console.error('Erro ao procurar estatísticas do dashboard:', error)
+      error: () => this.alerts.enableError("Erro ao obter estatísticas")
+    }
     );
   }
 
@@ -106,18 +106,16 @@ export class DashboardComponent {
  */
   fetchAdminDashboardStatistics() {
     const url = `${environment.apiUrl}/accounts/DashboardStatistics`;
-    this.http.get(url, { headers: this.authService.getHeaders() }).subscribe(
-      (data: any) => {
-        console.log(data)
+    this.http.get(url, { headers: this.authService.getHeaders() }).subscribe({
+      next: (data: any) => {
         this.userCount = data.numeroTotalDeUtilizadores;
         this.ProjectCount = data.numeroTotalDeProjetosDisponiveis
         this.TransactionCount = data.numeroDeTransacoesFeitas
         this.CreditCount = data.numeroTotalDeCreditosDeCarbonoDisponiveis
         this.dailyVisits = data.numeroDiarioDeVisitas;
-
-        console.log(this.userCount)
       },
-      error => console.error('Erro ao procurar estatísticas do dashboard:', error)
+      error: () => this.alerts.enableError("Erro ao obter estatísticas")
+    }
     );
   }
 
@@ -149,8 +147,8 @@ export class DashboardComponent {
       next: (data) => {
         this.purchases = data;
       },
-      error: (error) => {
-        console.error("Erro ao obter compras: ", error);
+      error: () => {
+        this.alerts.enableError("Erro ao obter compras")
       }
     });
 
@@ -162,7 +160,6 @@ export class DashboardComponent {
         this.alerts.disableLoading();
       },
       error: (error) => {
-        console.error("Erro ao obter compras: ", error);
         this.alerts.disableLoading();
         this.alerts.enableError("Erro ao carregar os dados");
       }

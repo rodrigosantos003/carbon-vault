@@ -2,8 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { CartService } from '../cart.service';
-import { ActivatedRoute, Route, Router } from '@angular/router';
-import { loadStripe, Stripe } from '@stripe/stripe-js';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../auth-service.service';
 
 @Component({

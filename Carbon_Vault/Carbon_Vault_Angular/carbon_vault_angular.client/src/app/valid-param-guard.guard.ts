@@ -11,20 +11,19 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ValidParamGuard implements CanActivate {
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): boolean | Observable<boolean> {
     const id = route.paramMap.get('id');
-    
-    
-    if (id  && id.match(/^[0-9]+$/)) { 
+
+
+    if (id && id.match(/^[0-9]+$/)) {
       return true;
     } else {
-      console.log('Invalid ID format:', id);
-      this.router.navigate(['/NotFound']);  
+      this.router.navigate(['/NotFound']);
       return false;
     }
   }

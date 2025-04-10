@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../auth-service.service';
@@ -46,11 +46,13 @@ export class ProjectDetailsComponent {
  */
   ngOnInit(): void {
     this.projectId = this.route.snapshot.paramMap.get('id');
-    this.http.get(`${environment.apiUrl}/projects/${this.projectId}`).subscribe((data: any) => {
-      this.projectData = data;
-      this.carbonCredits = this.projectData.carbonCredits || [];
-    }, error => {
-      console.error("Erro na requisição:", error);
+    this.http.get(`${environment.apiUrl}/projects/${this.projectId}`).subscribe({
+      next: (data: any) => {
+        this.projectData = data;
+        this.carbonCredits = this.projectData.carbonCredits || [];
+      }, error: () => {
+        this.alerts.enableError("Erro ao obter projeto")
+      }
     });
   }
 

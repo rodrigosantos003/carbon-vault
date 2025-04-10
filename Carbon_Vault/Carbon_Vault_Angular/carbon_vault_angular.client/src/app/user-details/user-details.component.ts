@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../auth-service.service';
@@ -37,8 +37,6 @@ export class UserDetailsComponent {
     this.accountId = this.route.snapshot.paramMap.get('id') ?? "";
     this.http.get(`${environment.apiUrl}/Accounts/${this.accountId}`).subscribe((data: any) => {
       this.accountData = data;
-    }, error => {
-      console.error("Erro na requisição:", error);
     });
     this.getTransactions(this.accountId)
   }
@@ -93,15 +91,14 @@ export class UserDetailsComponent {
             this.closePopup();
           },
           error => {
-            console.error("Error deleting account:", error);
             this.alerts.enableError('Error deleting the account.');
           }
         );
       } else {
-        console.error("JWT token not found");
+        this.alerts.enableError("Token não encontrado");
       }
     } else {
-      console.log("Account ID is null");
+      this.alerts.enableError("Erro ao obter conta");
     }
   }
 
@@ -114,16 +111,15 @@ export class UserDetailsComponent {
     const jwtToken = localStorage.getItem('token');
 
     if (!jwtToken) {
-      console.error("JWT token not found");
       return;
     }
 
-    this.http.get<any[]>(`${environment.apiUrl}/Transactions/user/${accountID}`, { headers: this.authService.getHeaders()}).subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/Transactions/user/${accountID}`, { headers: this.authService.getHeaders() }).subscribe({
       next: (data) => {
         this.accountTransactions = data;
       },
       error: (error) => {
-        console.error('Error fetching transactions:', error);
+        this.alerts.enableError("Erro ao obter transações");
       }
     });
   }

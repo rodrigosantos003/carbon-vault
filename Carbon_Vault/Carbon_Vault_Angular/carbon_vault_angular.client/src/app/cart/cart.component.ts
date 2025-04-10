@@ -3,6 +3,7 @@ import { CartService } from '../cart.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { AuthService } from '../auth-service.service';
+import { AlertsService } from '../alerts.service';
 
 @Component({
   selector: 'app-cart',
@@ -22,7 +23,7 @@ export class CartComponent implements OnInit {
  * @param http Serviço HTTP para chamadas à API.
  * @param authService Serviço de autenticação para obter o ID do utilizador.
  */
-  constructor(private cartService: CartService, private http: HttpClient, private authService: AuthService) { }
+  constructor(private cartService: CartService, private http: HttpClient, private authService: AuthService, private alerts: AlertsService) { }
 
   /**
  * Inicializa o componente e atualiza o estado do carrinho.
@@ -104,11 +105,10 @@ export class CartComponent implements OnInit {
       next: (data) => {
         window.open(data.payment_url, "_self");
         sessionStorage.setItem("checkoutSession", data.checkout_session);
-      }, error: (error) => {
-        console.error('Erro ao realizar pagamento:', error);
+      }, error: () => {
+        this.alerts.enableError("Erro ao iniciar pagamento");
       }
-    }
-    );
+    });
   }
 
   /**

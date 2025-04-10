@@ -65,7 +65,6 @@ export class ProjectManagerComponent {
  * @param id O ID do projeto a ser visualizado.
  */
   viewProject(id: number) {
-    console.log(id);
     this.router.navigate([`project-manager/${id}`]);
   }
 
@@ -127,7 +126,6 @@ export class ProjectManagerComponent {
  */
   eliminar() {
     if (this.selectedProjectId) {
-      console.log("ID projeto " + this.selectedProjectId);
       this.http.delete(`${environment.apiUrl}/Projects/${this.selectedProjectId}`).subscribe({
         next: () => {
           this.closePopup();
@@ -135,7 +133,6 @@ export class ProjectManagerComponent {
           this.getProjects();
         },
         error: (err) => {
-          console.error('Error deleting project:', err);
           this.closePopup();
           this.alerts.enableError("Erro ao apagar projeto com ID = " + this.selectedProjectId);
         }

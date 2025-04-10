@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { AlertsService } from '../alerts.service';
 import { AuthService } from '../auth-service.service';
 import { Router } from '@angular/router';

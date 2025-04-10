@@ -1,8 +1,8 @@
-import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Component, Input } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { AuthService } from '../auth-service.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { AlertsService } from '../alerts.service';
 import { downloadPDF } from '../services/certificate-generator';
 
@@ -48,7 +48,6 @@ export class TransactionDetailsComponent {
     this.transactionId = this.route.snapshot.paramMap.get('id') ?? "";
 
     if (!this.transactionId) {
-      console.error("ID da transação não informado");
       return;
     }
 
@@ -70,7 +69,6 @@ export class TransactionDetailsComponent {
           type = "Admin";
       }
 
-      console.log(data);
       this.transactionType = type;
       this.transactionBuyer = data.buyerName;
       this.transactionSeller = data.sellerName;
@@ -85,7 +83,6 @@ export class TransactionDetailsComponent {
       this.projectDescription = data.projectDescription;
 
     }, error => {
-      console.error("Erro na requisição:", error);
       this.alerts.enableError("Erro ao obter transação");
     });
   }

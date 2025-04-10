@@ -71,18 +71,18 @@ export class LoginComponent implements OnInit {
 
       const formData = this.loginForm.value;
 
-      this.http.post(`${environment.apiUrl}/Accounts/login`, formData).subscribe(
-        (response: any) => {
+      this.http.post(`${environment.apiUrl}/Accounts/login`, formData).subscribe({
+        next: (response: any) => {
           this.alerts.disableLoading();
           this.alerts.enableSuccess("Login bem sucedido!");
           this.setToken(response.token);  // Save the token in localStorage
           this.router.navigate(['/dashboard']);  // Redirect to dashboard
         },
-        (error) => {
-          console.error('Login failed!', error);
+        error: () => {
           this.alerts.disableLoading();
           this.alerts.enableError("Credenciais inválidas");
         }
+      }
       );
     } else {
       this.alerts.enableError("Dados em falta");
