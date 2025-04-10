@@ -59,13 +59,11 @@ export class UserSupportComponent {
         "category": categoryAux,
       });
 
-      console.log(formData);
       this.http.post(this.apiUrl, formData, { headers }).subscribe({
         next: () => {
           this.alerts.enableSuccess("Ticket submetido com sucesso!");
         },
         error: (err) => {
-          console.error("Erro ao enviar ticket:", err);
           this.alerts.enableError("Ocorreu um erro ao submeter o Ticket");
         }
       });
@@ -94,8 +92,7 @@ export class UserSupportComponent {
             this.alerts.enableError('Ticket não encontrado.');
           }
         },
-        error: (err) => {
-          console.error('Erro ao procurar ticket:', err);
+        error: () => {
           this.alerts.enableError('Ocorreu um erro ao procurar o Ticket.');
         }
       });

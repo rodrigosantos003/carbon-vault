@@ -66,7 +66,7 @@ export class UsersManagerComponent {
         this.alerts.disableLoading();
       },
       error: (error) => {
-        console.error('Erro ao encontrar as contas:', error);
+        this.alerts.enableError("Erro ao encontrar as contas");
         this.alerts.disableLoading();
       }
     });
@@ -90,7 +90,7 @@ export class UsersManagerComponent {
         this.growthData = data;
       },
       error: (error) => {
-        console.error('Error fetching growth data:', error);
+        this.alerts.enableError("Erro ao obter dados de crescimento");
       }
     });
   }
@@ -212,7 +212,7 @@ export class UsersManagerComponent {
         }
       })
     } else {
-      console.log("ID é null");
+      this.alerts.enableError("Erro ao eliminar conta");
     }
   }
 }

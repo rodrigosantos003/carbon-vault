@@ -42,16 +42,17 @@ export class UserPurchasesComponent {
    * Atualiza a lista de compras e mostra ou oculta as mensagens de carregamento.
    */
   getPurchases(): void {
-    this.alerts.enableLoading("A carregar compras..."); 
-    
+    this.alerts.enableLoading("A carregar compras...");
+
     this.http.get<Purchase[]>(this.purchasesURL, { headers: this.authService.getHeaders() }).subscribe({
       next: (data) => {
         this.purchases = data;
         this.alerts.disableLoading();
       },
       error: (error) => {
-        console.error("Erro ao obter compras: ", error);
         this.alerts.disableLoading();
+        if (error.status != 404)
+          this.alerts.enableError("Erro ao obter compras");
       }
     })
   }

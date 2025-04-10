@@ -130,7 +130,7 @@ nav {
   /**/
 }
 
-.logout {
+.logout-btn {
   color: #e53935 !important;
   font-weight: bold;
   cursor: pointer;
@@ -186,7 +186,7 @@ nav {
   z-index: 999;
 }
 
-.delete {
+.logout {
   width: 600px;
   height: fit-content;
   background: rgb(255, 255, 255);
@@ -216,23 +216,23 @@ nav {
   gap: 5px;
 }
 
-  .popup-content img {
-    width: 60px;
-    height: 60px;
-  }
+.popup-content img {
+  width: 60px;
+  height: 60px;
+}
 
-.delete-heading {
+.logout-heading {
   font-size: 20px;
   font-weight: 700;
   color: rgb(27, 27, 27);
 }
 
-.delete-description {
+.logout-description {
   font-weight: 300;
   color: rgb(102, 102, 102);
 }
 
-.delete-button-wrapper {
+.logout-button-wrapper {
   width: 100%;
   display: flex;
   align-items: center;
@@ -240,7 +240,7 @@ nav {
   gap: 10px;
 }
 
-.delete-button {
+.logout-button {
   width: 50%;
   height: 35px;
   border-radius: 10px;
@@ -254,17 +254,17 @@ nav {
   color: white;
 }
 
-  .primary:hover {
-    background-color: rgb(255, 73, 66);
-  }
+.primary:hover {
+  background-color: rgb(255, 73, 66);
+}
 
 .secondary {
   background-color: #ddd;
 }
 
-  .secondary:hover {
-    background-color: rgb(197, 197, 197);
-  }
+.secondary:hover {
+  background-color: rgb(197, 197, 197);
+}
 
 .exit-button {
   display: flex;
@@ -278,10 +278,10 @@ nav {
   cursor: pointer;
 }
 
-  .exit-button:hover svg {
-    fill: black;
-  }
+.exit-button:hover svg {
+  fill: black;
+}
 
-  .exit-button svg {
-    fill: rgb(175, 175, 175);
-  }
+.exit-button svg {
+  fill: rgb(175, 175, 175);
+}

@@ -133,7 +133,7 @@ export class AdminReportsComponent {
       const blob = await response.blob();
       zip.file(file.fileName, blob);
     } catch (error) {
-      console.error(`Erro ao obter ficheiro ${file.fileName}:`, error);
+      this.alerts.enableError(`Erro ao obter ficheiro ${file.fileName}`);
     }
   }
 

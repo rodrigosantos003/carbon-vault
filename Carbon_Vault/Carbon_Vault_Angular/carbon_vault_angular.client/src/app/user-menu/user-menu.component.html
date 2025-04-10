@@ -15,36 +15,38 @@
     <h2 class="menu-title">MENU</h2>
 
     <ul class="menu">
-      <li *ngFor="let item of (userRole === 1 ? adminMenu : (userRole === 2 ? EvaluatorMenu : (userRole === 3 ? supportMenu : userMenu)))">
+      <li
+        *ngFor="let item of (userRole === 1 ? adminMenu : (userRole === 2 ? EvaluatorMenu : (userRole === 3 ? supportMenu : userMenu)))">
 
         <img [src]="item.icon" class="menu-icon" />
         <a [routerLink]="item.route">{{ item.label }}</a>
       </li>
       <li (click)="openDeleteAccount()">
         <img src="images/menu/LogoutIcon.png" class="menu-icon2" />
-        <a class="logout">Terminar Sessão</a>
+        <a class="logout-btn">Terminar Sessão</a>
       </li>
     </ul>
   </div>
 </nav>
 
 <!-- Confirm Delet Popup -->
-<div class="modal-overlay" id="deleteAccountPopup">
-  <div class="delete" id="delete">
+<div class="modal-overlay" id="logoutPopup">
+  <div class="logout" id="logout">
     <div class="popup-content">
-      <p class="delete-heading">Terminar Sessão?</p>
+      <p class="logout-heading">Terminar Sessão?</p>
       <img src="images/menu/LogoutIcon.png" class="menu-icon2" />
-      <p class="delete-description">
+      <p class="logout-description">
         Está prestes a terminar a sessão. Tem a certeza de que deseja continuar?
       </p>
     </div>
-    <div class="delete-button-wrapper">
-      <button class="delete-button secondary" (click)="closeDeleteAccount()">Cancelar</button>
-      <button class="delete-button primary" (click)="onLogout()">Terminar Sessão</button>
+    <div class="logout-button-wrapper">
+      <button class="logout-button secondary" (click)="closeDeleteAccount()">Cancelar</button>
+      <button class="logout-button primary" (click)="onLogout()">Terminar Sessão</button>
     </div>
     <button class="exit-button" (click)="closeDeleteAccount()">
       <svg height="20px" viewBox="0 0 384 512">
-        <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z">
+        <path
+          d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z">
         </path>
       </svg>
     </button>

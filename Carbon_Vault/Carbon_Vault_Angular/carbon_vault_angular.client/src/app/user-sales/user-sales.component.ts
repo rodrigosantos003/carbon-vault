@@ -38,7 +38,7 @@ export class UserSalesComponent {
     this.getSales();
     this.getUnpaidSalesTotal();
 
- 
+
   }
 
   getUnpaidSalesTotal(): void {
@@ -48,8 +48,8 @@ export class UserSalesComponent {
       next: (data: any) => {
         this.totalUnpaid = data.totalUnpaid;
       },
-      error: (err: any) => {
-        console.error('Erro ao buscar total de vendas não pagas', err);
+      error: () => {
+        this.alerts.enableError("Erro ao obter vendas não pagas");
       }
     });
   }
@@ -58,17 +58,17 @@ export class UserSalesComponent {
    * Atualiza a lista de vendas e mostra informações de carregamento ou erro.
    */
   getSales(): void {
-    this.alerts.enableLoading("A carregar vendas...");
+    this.alerts.enableLoading("A carregar vendas");
     this.http.get<Sale[]>(this.salesURL, {
       headers: this.authService.getHeaders()
     }).subscribe({
       next: (data) => {
         this.sales = data;
-        console.log("Vendas: ", this.sales);
         this.alerts.disableLoading();
       },
       error: (error) => {
-        console.error("Erro ao obter vendas: ", error);
+        if (error.status != 400)
+          this.alerts.enableError("Erro ao obter vendas");
         this.alerts.disableLoading();
       }
     })
@@ -81,7 +81,6 @@ export class UserSalesComponent {
    * @param transaction_id ID da transação cujos detalhes devem ser visualizados.
    */
   transactionDetails(transaction_id: number) {
-    console.log("ID = " + transaction_id);
     this.router.navigate([`transaction-details/${transaction_id}`]);
   }
 

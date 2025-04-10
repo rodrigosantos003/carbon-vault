@@ -51,7 +51,10 @@ export class ProjectManagerUserComponent {
       },
       error: (error) => {
         this.alerts.disableLoading();
-        this.alerts.enableError("Erro ao carregar projetos");
+        if (error.status == 404)
+          this.alerts.enableInfo("Não existem projetos");
+        else
+          this.alerts.enableError("Erro ao carregar projetos");
       }
     });
   }
@@ -101,7 +104,7 @@ export class ProjectManagerUserComponent {
         next: () => {
           this.closePopup();
           this.alerts.enableSuccess("Projeto eliminado com sucesso");
-          this.getProjects(parseInt(this.UserId));
+          location.reload();
         },
         error: () => {
           this.closePopup();
@@ -129,7 +132,6 @@ export class ProjectManagerUserComponent {
             return;
           }
 
-          console.error('Erro ao colocar projeto à venda:', error);
           this.alerts.enableError('Erro ao colocar projeto à venda.');
         },
       });

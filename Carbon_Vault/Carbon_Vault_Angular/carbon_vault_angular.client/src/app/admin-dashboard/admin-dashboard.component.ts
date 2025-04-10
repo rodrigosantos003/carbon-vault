@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 import { Papa } from 'ngx-papaparse';
@@ -41,52 +41,39 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   /**
- * Deteta alterações nas propriedades de entrada (`@Input`).
- * 
- * @param {SimpleChanges} changes - Objeto contendo as alterações detetadas nas `@Input`.
- * @returns {void}
- */
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log('Changes detected:', changes);
-  }
-
-  /**
  * Obtém os períodos de atividade dos utilizadores através da API e atualiza o gráfico correspondente.
  * @returns {void}
  */
   fetchActivityData() {
     const url = `${environment.apiUrl}/accounts/activity-periods`;
-    this.http.get<any[]>(url).subscribe(data => {
-      this.updateActivityChart(data);
-      console.log(data)
-    }, error => {
-      console.error('Error fetching activity periods:', error);
+    this.http.get<any[]>(url).subscribe({
+      next: (data) => {
+        this.updateActivityChart(data);
+      }
     });
   }
 
   /**
- * Obtém os dados de transações da semana atual e da semana anterior via API,
- * e atualiza o gráfico de linhas com os dados recebidos.
- * @returns {void}
- */
+  * Obtém os dados de transações da semana atual e da semana anterior via API,
+  * e atualiza o gráfico de linhas com os dados recebidos.
+  * @returns {void}
+  */
   fetchWeeklyTransactionData() {
     const url = `${environment.apiUrl}/transactions/weekly`;
     this.http.get<any>(url).subscribe(data => {
       this.transactionsThisWeek = data.thisWeek;
       this.transactionsLastWeek = data.lastWeek;
       this.updateLineChart(data);
-    }, error => {
-      console.error('Error fetching weekly transaction data:', error);
     });
   }
 
   /**
- * Atualiza o gráfico de linhas com os dados de transações semanais.
- * Compara os totais diários de transações entre esta semana e a anterior.
- * 
- * @param {any} response - Objeto com os dados das transações (thisWeek e lastWeek).
- * @returns {void}
- */
+  * Atualiza o gráfico de linhas com os dados de transações semanais.
+  * Compara os totais diários de transações entre esta semana e a anterior.
+  * 
+  * @param {any} response - Objeto com os dados das transações (thisWeek e lastWeek).
+  * @returns {void}
+  */
   updateLineChart(response: any) {
     // Mapeia os dados da semana passada e da semana atual para incluir sempre os dias da semana de segunda a sexta
     const thisWeek = response?.thisWeek || [];
@@ -174,11 +161,11 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   /**
- * Atualiza o gráfico de donuts com os dados dos períodos de atividade dos utilizadores (Manhã, Tarde, Noite).
- * 
- * @param {any[]} data - Lista de objetos com informação do período de atividade.
- * @returns {void}
- */
+  * Atualiza o gráfico de donuts com os dados dos períodos de atividade dos utilizadores (Manhã, Tarde, Noite).
+  * 
+  * @param {any[]} data - Lista de objetos com informação do período de atividade.
+  * @returns {void}
+  */
   updateActivityChart(data: any[]) {
     const periods = ['Manhã', 'Tarde', 'Noite'];
     const counts = periods.map(period => {
@@ -191,7 +178,6 @@ export class AdminDashboardComponent implements OnInit {
 
     const canvas = document.getElementById('ActivityChart') as HTMLCanvasElement;
     if (!canvas) {
-      console.error("Canvas element not found!");
       return;
     }
 
@@ -216,29 +202,29 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   /**
- * Exporta os dados de períodos de atividade para um ficheiro `.csv`.
- * Utiliza a biblioteca `ngx-papaparse` para gerar o CSV e dispara o download automático.
- * @returns {void}
- */
+  * Exporta os dados de períodos de atividade para um ficheiro `.csv`.
+  * Utiliza a biblioteca `ngx-papaparse` para gerar o CSV e dispara o download automático.
+  * @returns {void}
+  */
   downloadActivityCSV() {
     const url = `${environment.apiUrl}/accounts/activity-periods`;
-    this.http.get<any[]>(url).subscribe(data => {
-      const csv = this.papa.unparse(data);
-      const blob = new Blob([csv], { type: 'text/csv' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'activity_periods.csv';
-      a.click();
-    }, error => {
-      console.error('Error fetching activity periods:', error);
+    this.http.get<any[]>(url).subscribe({
+      next: (data) => {
+        const csv = this.papa.unparse(data);
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'activity_periods.csv';
+        a.click();
+      }
     });
   }
 
   /**
- * Exporta todas as transações da semana atual e da anterior para um ficheiro `.csv`.
- * Concatena os dados, formata-os para exportação e inicia o download.
- * @returns {void}
- */
+  * Exporta todas as transações da semana atual e da anterior para um ficheiro `.csv`.
+  * Concatena os dados, formata-os para exportação e inicia o download.
+  * @returns {void}
+  */
   downloadTransactionsCSV() {
     const allTransactions = [
       ...this.transactionsThisWeek.flatMap((t: any) => t.transactions),

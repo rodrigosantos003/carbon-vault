@@ -94,8 +94,6 @@ export class CartService {
 
     this.http.get(`${environment.apiUrl}/projects/${projectId}`).subscribe({
       next: (projectData: any) => {
-        console.log(projectData);
-        console.log(this.authService.getUserId());
         if (projectData.creditsForSale < 1) {
           this.alerts.enableError("Este projeto não tem créditos disponíveis para venda, tente mais tarde.", 5);
           return;
@@ -133,8 +131,7 @@ export class CartService {
         this.saveCart(cart);
         this.alerts.enableSuccess("Item adicionado ao carrinho!");
       },
-      error: (error) => {
-        console.error("Erro ao buscar projeto:", error);
+      error: () => {
         this.alerts.enableError("Erro ao buscar informações do projeto.", 5);
       }
     });

@@ -1,5 +1,5 @@
 
-import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth-service.service';
@@ -42,17 +42,12 @@ export class MarketPlaceNavigationComponent {
   ngOnInit(): void {
     const url = `${environment.apiUrl}/accounts/${this.userId}`;
 
-    this.http.get(url).subscribe(
-      (data: any) => {
+    this.http.get(url).subscribe({
+      next: (data: any) => {
         // Se a requisição for bem-sucedida, preenche o formulário com os dados recebidos
-
         this.userInitial = data.name[0]
-      },
-      error => {
-        // Caso contrário, imprime o erro no console
-        console.error("Erro na requisição:", error);
       }
-    );
+    });
 
     this.changeLoginBtnText();
   }

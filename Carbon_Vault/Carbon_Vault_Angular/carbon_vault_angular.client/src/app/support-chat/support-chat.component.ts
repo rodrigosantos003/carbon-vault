@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { AlertsService } from '../alerts.service';
 import { AuthService } from '../auth-service.service';  // Importa o AuthService
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { ActivatedRoute } from '@angular/router';
-import { AfterViewChecked, ElementRef, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-support-chat',
@@ -55,13 +54,11 @@ export class SupportChatComponent {
           return;
         }
         this.ticket = response;
-        console.log(this.ticket);
       },
       error: (error) => {
         if (error.status === 400 || error.status === 404) {
           this.router.navigate(['/NotFound']); // Navigate to NotFound page on 404 error
         }
-        console.error('Error fetching ticket:', error);
       }
     });
   }
@@ -123,33 +120,29 @@ export class SupportChatComponent {
       AutorId: Number(userId)
     };
 
-    this.http.post(this.ticketsMessagesURL, data, { headers: this.authService.getHeaders() }).subscribe(
-      (response) => {
-        console.log('Mensagem enviada com sucesso:', response);
+    this.http.post(this.ticketsMessagesURL, data, { headers: this.authService.getHeaders() }).subscribe({
+      next: () => {
         this.messageContent = '';
         this.refreshMessages();
       },
-      (error) => {
-        console.error('Erro ao enviar a mensagem:', error);
-        alert('Ocorreu um erro ao enviar a mensagem. Por favor, tente novamente.');
+      error: () => {
+        this.alerts.enableError("Erro ao enviar mensagem");
       }
-    );
+    });
   }
 
   /**
   * Fecha o ticket atual. Só administradores ou autores devem ter permissão.
   */
   closeTicket() {
-    this.http.put(`${this.ticketsURL}/${this.ticket?.id}`, { ...this.ticket, state: 1 }, { headers: this.authService.getHeaders() }).subscribe(
-      () => {
-        console.log('Ticket fechado com sucesso.');
+    this.http.put(`${this.ticketsURL}/${this.ticket?.id}`, { ...this.ticket, state: 1 }, { headers: this.authService.getHeaders() }).subscribe({
+      next: () => {
         this.ticket!.state = 1
       },
-      (error) => {
-        console.error('Erro ao fechar o ticket:', error);
-        alert('Ocorreu um erro ao fechar o ticket.');
+      error: () => {
+        this.alerts.enableError("Ocorreu um erro ao fechar o ticket");
       }
-    );
+    });
   }
 
   /**

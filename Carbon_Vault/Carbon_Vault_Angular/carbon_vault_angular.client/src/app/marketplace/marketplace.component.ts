@@ -42,31 +42,31 @@ export class MarketplaceComponent implements OnInit {
  * Realiza a requisição para obter todos os projetos disponíveis para venda no marketplace.
  */
   ngOnInit(): void {
-    this.http.get(`${environment.apiUrl}/projects/forSale`).subscribe((data: any) => {
-      this.allProjects = data;
-      this.projectsToShow = this.allProjects;
-    }, error => {
-      console.error("Erro na requisição:", error);
+    this.http.get(`${environment.apiUrl}/projects/forSale`).subscribe({
+      next: (data: any) => {
+        this.allProjects = data;
+        this.projectsToShow = this.allProjects;
+      }
     });
   }
 
   /**
- * Altera o estado da janela de filtros (visível ou invisível).
- */
+  * Altera o estado da janela de filtros (visível ou invisível).
+  */
   changeFiltersWindowState(): void {
     this.isFiltersWindowVisible = !this.isFiltersWindowVisible;
   }
 
   /**
- * Aplica o filtro selecionado e organiza a lista de projetos com base no valor do filtro.
- * Os filtros podem ser:
- * - Preço Ascendente
- * - Preço Descendente
- * - Ordem Alfabética Ascendente
- * - Ordem Alfabética Descendente
- * 
- * @param {any} event - O evento que contém a opção de filtro selecionada.
- */
+  * Aplica o filtro selecionado e organiza a lista de projetos com base no valor do filtro.
+  * Os filtros podem ser:
+  * - Preço Ascendente
+  * - Preço Descendente
+  * - Ordem Alfabética Ascendente
+  * - Ordem Alfabética Descendente
+  * 
+  * @param {any} event - O evento que contém a opção de filtro selecionada.
+  */
   changeFilterOption(event: any): void {
     const filterOption = event.target;
     const value = filterOption.getAttribute('data-value');
@@ -95,11 +95,11 @@ export class MarketplaceComponent implements OnInit {
   }
 
   /**
- * Aplica o filtro de pesquisa nos projetos com base no nome.
- * Mostra apenas os projetos cujo nome contém o valor da pesquisa.
- * 
- * @param {any} event - O evento de alteração no campo de pesquisa.
- */
+  * Aplica o filtro de pesquisa nos projetos com base no nome.
+  * Mostra apenas os projetos cujo nome contém o valor da pesquisa.
+  * 
+  * @param {any} event - O evento de alteração no campo de pesquisa.
+  */
   changeSearchValue(event: any): void {
     const searchValue = event.target.value.toLowerCase();
     this.projectsToShow = this.allProjects.filter((project) => {

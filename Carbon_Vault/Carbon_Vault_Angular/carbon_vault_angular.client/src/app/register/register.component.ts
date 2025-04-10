@@ -170,7 +170,6 @@ export class RegisterComponent {
       return true; // Retorna true quando o NIF é válido
 
     } catch (error) {
-      console.error('Erro ao chamar a API:', error);
       this.isNifValid = false;
       this.nifErrorMessage = 'Erro ao validar o NIF. Tente novamente mais tarde.';
       this.alerts.enableError("Erro ao validar o NIF. Tente novamente mais tarde.");
