@@ -12,7 +12,7 @@
             <th>Prioridade</th>
             <th>Estado</th>
             <th>Data de criação</th>
-            <th>Responder</th>
+            <th>Detalhes</th>
           </tr>
         </thead>
         <tbody>
@@ -34,7 +34,7 @@
             </td>
             <td>{{ ticket.createdAt | date: 'dd/MM/yyyy HH:mm:ss' }}</td>
             <td>
-              <button class="view-btn" [disabled]="ticket.state == 1" (click)="navigateToTicket(ticket.id)">Responder</button>
+              <button class="view-btn" (click)="navigateToTicket(ticket.id)">Ver detalhes</button>
             </td>
           </tr>
         </tbody>
