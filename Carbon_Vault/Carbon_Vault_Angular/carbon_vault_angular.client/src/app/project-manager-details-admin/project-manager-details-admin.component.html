@@ -143,7 +143,7 @@
               class="creditsText"> Créditos gerados até ao momento</span><br></div>
           <label>Adicionar Créditos de Carbono</label><br>
           <input type="number" id="additionalCredits" [(ngModel)]="additionalCredits" name="additionalCredits"
-            placeholder="Adicionar créditos" /><br>
+            placeholder="Adicionar créditos" min="1" max="25000" /><br>
           <button class="Aprove-button-top" (click)="addCredits()">Adicionar Créditos</button>
         </div>
 

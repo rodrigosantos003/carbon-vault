@@ -88,8 +88,8 @@ export class ProjectAddComponent {
       this.alerts.enableError('O nome é obrigatório.');
       return false;
     }
-    if (this.preco == null || this.preco <= 0) {
-      this.alerts.enableError('O preço tem que ser maior que 0.');
+    if (this.preco == null || this.preco <= 0 || this.preco > 1000) {
+      this.alerts.enableError('O preço tem que ser maior que 0 e menor que 1000.');
       return false;
     }
     if (!this.localizacao.trim()) {
@@ -166,18 +166,21 @@ export class ProjectAddComponent {
  * @param event Evento disparado ao selecionar uma imagem.
  */
   onImageChange(event: any): void {
-    const file = event.target.files[0];
+    const fileInput = event.target as HTMLInputElement;
+    const file = fileInput.files?.[0];
     if (!file) return;
 
     // Validate image type
     if (!this.allowedImageTypes.includes(file.type)) {
       this.alerts.enableError("Formato inválido. Apenas .png e .jpg são permitidos.");
+      fileInput.value = '';
       return;
     }
 
     // Validate image size
     if (file.size > this.maxImageSize) {
       this.alerts.enableError("Imagem demasiado grande. O limite são 5MB.");
+      fileInput.value = '';
       return;
     }
 

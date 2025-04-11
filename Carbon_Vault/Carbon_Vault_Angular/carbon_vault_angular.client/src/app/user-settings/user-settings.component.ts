@@ -86,34 +86,44 @@ export class UserSettingsComponent {
 
     const isIbanValid = this._validator.validatePortugueseIBAN(_iban);
 
-    if (isIbanValid || _iban == "") {
-      const settingsData = {
-        id: this.userId,
-        name: formValue.name,
-        email: formValue.email,
-        nif: formValue.nif,
-        iban: _iban,
-        password: formValue.password,
-        role: formValue.role
-      };
-
-      const url = `${environment.apiUrl}/Accounts/${this.userId}`;
-
-      this.http.put(url, settingsData, { headers: this.authService.getHeaders() }).subscribe({
-        next: () => {
-          this.alerts.disableLoading();
-          this.alerts.enableSuccess("Definições atualizadas com sucesso");
-          window.location.reload();
-        },
-        error: () => {
-          this.alerts.disableLoading();
-          this.alerts.enableError("Erro ao atualizar definições");
-        }
-      })
-    } else {
+    if (!isIbanValid && _iban.length > 0) {
       this.alerts.disableLoading();
-      this.alerts.enableError("IBAN não é válido, tente de novo..")
+      this.alerts.enableError("IBAN inválido, tente de novo..")
+      return;
     }
+
+    //verifica se o NIF são 9 numeros
+    const nifPattern = /^\d{9}$/;
+    if (!nifPattern.test(formValue.nif)) {
+      this.alerts.disableLoading();
+      this.alerts.enableError("NIF inválido, deve conter 9 números.");
+      return;
+    }
+
+
+    const settingsData = {
+      id: this.userId,
+      name: formValue.name,
+      email: formValue.email,
+      nif: formValue.nif,
+      iban: _iban,
+      password: formValue.password,
+      role: formValue.role
+    };
+
+    const url = `${environment.apiUrl}/Accounts/${this.userId}`;
+
+    this.http.put(url, settingsData, { headers: this.authService.getHeaders() }).subscribe({
+      next: () => {
+        this.alerts.disableLoading();
+        this.alerts.enableSuccess("Definições atualizadas com sucesso");
+        window.location.reload();
+      },
+      error: () => {
+        this.alerts.disableLoading();
+        this.alerts.enableError("Erro ao atualizar definições");
+      }
+    })
   }
 
   /**
@@ -139,9 +149,10 @@ export class UserSettingsComponent {
    * Envia um link de confirmação para o e-mail do utilizador.
    */
   changePassword() {
-    this.alerts.enableLoading("A enviar link de confirmação...");
+    const user_email = this.settingsForm.value.email
+    this.alerts.enableLoading("A enviar link de confirmação para " + user_email);
 
-    const changePasswordURL = `${environment.apiUrl}/Accounts/NewPassword?email=${this.settingsForm.value.email}`;
+    const changePasswordURL = `${environment.apiUrl}/Accounts/NewPassword?email=${user_email}`;
 
     this.http.get<{ message: string }>(changePasswordURL).subscribe({
       next: (response) => {
@@ -157,7 +168,7 @@ export class UserSettingsComponent {
         this.alerts.disableLoading();
         this.alerts.enableError("Erro ao enviar link de alteração de palavra-passe");
       }
-    })
+    });
   }
 
   /**
@@ -243,6 +254,6 @@ export class IbanValidator {
       remainder = (parseInt(remainder + char, 10) % 97).toString();
     }
 
-    return parseInt(remainder, 10) === 1;
+    return parseInt(remainder, 10) === 1; 
   }
 }

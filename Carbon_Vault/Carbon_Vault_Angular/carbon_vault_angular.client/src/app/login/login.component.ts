@@ -78,9 +78,14 @@ export class LoginComponent implements OnInit {
           this.setToken(response.token);  // Save the token in localStorage
           this.router.navigate(['/dashboard']);  // Redirect to dashboard
         },
-        error: () => {
+        error: (response: any) => {
           this.alerts.disableLoading();
-          this.alerts.enableError("Credenciais inválidas");
+
+          if(response.error.message == "Account is not active."){
+            this.alerts.enableError("A conta não está ativa. Por favor, verifique o seu email para ativar a conta.");
+          }
+          else
+            this.alerts.enableError("Credenciais inválidas");
         }
       }
       );

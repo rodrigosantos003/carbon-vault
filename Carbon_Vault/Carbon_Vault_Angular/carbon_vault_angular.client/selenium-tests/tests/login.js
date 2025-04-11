@@ -14,7 +14,8 @@ async function testLogin(driver, email, password) {
     // Lidar com alerta (se aparecer)
     try {
         await driver.wait(until.alertIsPresent(), 5000);
-        let alert = await driver.switchTo().alert();
+        let alert = await driver.switchTo().
+        );
         console.log("Alerta encontrado:", await alert.getText());
         await alert.accept();
     } catch (e) {

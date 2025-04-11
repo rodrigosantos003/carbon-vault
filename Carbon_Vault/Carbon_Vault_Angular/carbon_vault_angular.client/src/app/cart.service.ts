@@ -104,7 +104,10 @@ export class CartService {
           return;
         }
 
-        if (projectData.ownerId === this.authService.getUserId()) {
+        console.log("Project owner: " + projectData.ownerId + " (type: " + typeof projectData.ownerId + ")");
+        console.log("User: " + this.authService.getUserId() + " (type: " + typeof this.authService.getUserId() + ")");
+
+        if (projectData.ownerId.toString() === this.authService.getUserId()) {
           this.alerts.enableError("Não pode comprar créditos do seu próprio projeto", 5);
           return;
         }
@@ -202,5 +205,11 @@ export class CartService {
     }
 
     return total;
+  }
+
+  getProdQuantity(itemId: number): number {
+    const cart = this.getCart();
+    const item = cart.find(i => i.id === itemId);
+    return item ? item.quantity : 0;
   }
 }

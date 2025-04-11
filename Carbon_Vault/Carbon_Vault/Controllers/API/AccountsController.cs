@@ -269,7 +269,7 @@ namespace Carbon_Vault.Controllers.API
             <div class='email-body'>
                 <p>Caro {account.Name},</p>
                 <p>Obrigado por se juntar a nós! Estamos entusiasmados em tornar o mundo um local mais sustentável. Por favor, clique no botão abaixo para confirmar a sua conta:</p>
-                <a href='{confirmationLink}' class='button'>Verificar Email</a>
+                <a href='{confirmationLink}' class='button' style='color: #ffffff; cursor: pointer;'>Verificar Email</a>
                 <p>Em caso de dúvida, envie um email para: support@CarbonVault.pt</p>
                 <p>Cumprimentos,</p>
                 <p>Equipa do Carbon Vault</p>
@@ -443,7 +443,7 @@ namespace Carbon_Vault.Controllers.API
         <div class='email-body'>
             <p>Caro {account.Name},</p>
             <p>Por favor defina uma nova palavra-passe clicando no botão abaixo</p>
-            <a href='{confirmationLink}' class='button'>Recuperar</a>
+            <a href='{confirmationLink}' class='button' style='color: #ffffff; cursor: pointer;'>Recuperar</a>
             <p>Em caso de dúvida, envie um email para: support@CarbonVault.pt</p>
             <p>Cumprimentos,</p>
             <p>Equipa do Carbon Vault</p>
