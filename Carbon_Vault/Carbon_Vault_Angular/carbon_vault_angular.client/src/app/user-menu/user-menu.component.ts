@@ -95,9 +95,9 @@ export class UserMenuComponent {
   }
 
   /**
-   * Método para abrir a janela de confirmação de eliminação de conta.
+   * Método para abrir a janela de confirmação de logout.
    */
-  openDeleteAccount() {
+  openLogoutAccount() {
     const overlay = document.getElementById('logoutPopup');
     const delPopup = document.getElementById('logout');
 
@@ -108,9 +108,9 @@ export class UserMenuComponent {
   }
 
   /**
-   * Método para fechar a janela de confirmação de eliminação de conta.
+   * Método para fechar a janela de confirmação de logout.
    */
-  closeDeleteAccount() {
+  closeLogoutAccount() {
     const overlay = document.getElementById('logoutPopup');
     const delPopup = document.getElementById('logout');
 

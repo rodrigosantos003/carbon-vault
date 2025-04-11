@@ -89,27 +89,35 @@ export class PaymentSuccessComponent {
     }
   }
 
-  /**
- * Envia a fatura para o utilizador após o pagamento bem-sucedido.
- * - Faz uma requisição GET para enviar a fatura associada à sessão de checkout.
- * - Mostra um alerta de sucesso ou erro baseado na resposta da API.
- * 
- * @param checkoutSessionId ID da sessão de checkout.
- */
-  sendInvoice(checkoutSessionId: string) {
-    const apiUrl = `${environment.apiUrl}/UserPayments/invoice/${checkoutSessionId}/send`;
 
-    setTimeout(() => {
+  /**
+   * Envia a fatura para o utilizador após o pagamento bem-sucedido.
+   * - Faz uma requisição GET para enviar a fatura associada à sessão de checkout.
+   * - Mostra um alerta de sucesso ou erro baseado na resposta da API.
+   * 
+   * @param checkoutSessionId ID da sessão de checkout.
+   */
+  sendInvoice(sessionId: string, retries = 5, delay = 3000) {
+    const apiUrl = `${environment.apiUrl}/UserPayments/invoice/${sessionId}/send`;
+  
+    const attempt = (remaining: number) => {
       this.http.get(apiUrl).subscribe({
-        next: () => {
-          this.message = "Pagamento realizado com sucesso!"
+        next: (data) => {
+          this.message = "Pagamento realizado com sucesso!";
+          console.log(data);
           sessionStorage.clear();
         },
         error: () => {
-          this.message = "Erro ao enviar fatura"
-          sessionStorage.clear();
+          if (remaining > 0) {
+            setTimeout(() => attempt(remaining - 1), delay);
+          } else {
+            this.message = "Erro ao enviar fatura após várias tentativas.";
+            sessionStorage.clear();
+          }
         }
       });
-    }, 3000);
+    };
+  
+    attempt(retries);
   }
 }

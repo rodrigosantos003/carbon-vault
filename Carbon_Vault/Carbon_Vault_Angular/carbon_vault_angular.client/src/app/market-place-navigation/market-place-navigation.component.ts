@@ -18,6 +18,7 @@ export class MarketPlaceNavigationComponent {
 
   userId: string;
   userInitial: string;
+  isUser: boolean = false;
 
   /**
  * Injeta os serviços necessários para o funcionamento do componente:
@@ -32,6 +33,7 @@ export class MarketPlaceNavigationComponent {
   ) {
     this.userInitial = ''
     this.userId = this.authService.getUserId();
+    this.isUser = this.authService.getUserRole() == 0 ? true : false;
   }
 
   /**

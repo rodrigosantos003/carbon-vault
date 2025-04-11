@@ -113,7 +113,7 @@ function generateHtml(info: any): string {
         <table>
             <tr>
                 <td><strong>Data</strong></td>
-                <td>${info.reportDate}</td>
+                <td>${formatDate(info.reportDate)}</td>
             </tr>
             <tr>
                 <td><strong>Cliente</strong></td>
@@ -153,7 +153,7 @@ export function downloadReportPDF(
 
   doc.html(generateHtml(info), {
     callback: function (doc) {
-      doc.save(`Relatório_${info.reportDate}.pdf`);
+      doc.save(`Relatório_${formatDate(info.reportDate)}.pdf`);
     },
     x: 0,
     y: 0,
@@ -161,3 +161,19 @@ export function downloadReportPDF(
     windowWidth: 800
   });
 }
+
+function formatDate(dateString: string): string {
+  const date = new Date(dateString);
+
+  const twoDigits = (num: number) => num.toString().padStart(2, '0');
+
+  const day = twoDigits(date.getDate());
+  const month = twoDigits(date.getMonth() + 1); // mês começa do 0
+  const year = date.getFullYear();
+  const hours = twoDigits(date.getHours());
+  const minutes = twoDigits(date.getMinutes());
+  const seconds = twoDigits(date.getSeconds());
+
+  return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+}
+

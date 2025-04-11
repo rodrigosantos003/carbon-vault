@@ -88,8 +88,8 @@ export class ProjectAddComponent {
       this.alerts.enableError('O nome é obrigatório.');
       return false;
     }
-    if (this.preco == null || this.preco <= 0) {
-      this.alerts.enableError('O preço tem que ser maior que 0.');
+    if (this.preco == null || this.preco <= 0 || this.preco > 1000) {
+      this.alerts.enableError('O preço tem que ser maior que 0 e menor que 1000.');
       return false;
     }
     if (!this.localizacao.trim()) {

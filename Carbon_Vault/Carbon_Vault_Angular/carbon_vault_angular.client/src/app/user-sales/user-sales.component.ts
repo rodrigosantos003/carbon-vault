@@ -48,7 +48,8 @@ export class UserSalesComponent {
       next: (data: any) => {
         this.totalUnpaid = data.totalUnpaid;
       },
-      error: () => {
+      error: (response: any) => {
+        console.log(response)
         this.alerts.enableError("Erro ao obter vendas não pagas");
       }
     });
@@ -67,9 +68,17 @@ export class UserSalesComponent {
         this.alerts.disableLoading();
       },
       error: (error) => {
-        if (error.status != 400)
-          this.alerts.enableError("Erro ao obter vendas");
         this.alerts.disableLoading();
+        if (error.status == 404){
+          this.alerts.enableInfo("Não existem vendas para apresentar");
+          return;
+        }
+
+        if (error.status != 400) {
+          this.alerts.enableError("Erro ao obter vendas");
+          return;
+        }
+
       }
     })
   }
