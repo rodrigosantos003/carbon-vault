@@ -206,4 +206,10 @@ export class CartService {
 
     return total;
   }
+
+  getProdQuantity(itemId: number): number {
+    const cart = this.getCart();
+    const item = cart.find(i => i.id === itemId);
+    return item ? item.quantity : 0;
+  }
 }

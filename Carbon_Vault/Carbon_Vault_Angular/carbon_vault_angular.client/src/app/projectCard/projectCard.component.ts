@@ -53,7 +53,17 @@ export class ProjectCardComponent {
  * Adiciona o item ao carrinho, validando se há créditos suficientes disponíveis para o projeto.
  */
   addToCart() {
-    this.cartService.addItem(this.projectID, this.quantity);
-    this.quantity = 1;
+    const quantityInCart = this.cartService.getProdQuantity(this.projectID);
+    const newQuantity = quantityInCart + this.quantity;
+    console.log(newQuantity);
+
+    if (newQuantity <= this.creditsAvailable) {
+      console.log("Stock: " + this.creditsAvailable + ", quant: " + this.quantity + ", current cart quant: ");
+      this.cartService.addItem(this.projectID, this.quantity);
+      this.quantity = 1;
+    } else {
+      const quantLeft = this.creditsAvailable - quantityInCart;
+      this.alerts.enableError("Não existe stock suficiente para essa quantidade (" + this.quantity + "), insira uma quantidade até (" + quantLeft + ") ou tente mais tarde.", 6);
+    }
   }
 }

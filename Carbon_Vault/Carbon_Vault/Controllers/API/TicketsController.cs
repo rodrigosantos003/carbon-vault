@@ -332,7 +332,7 @@ namespace Carbon_Vault.Controllers.API
                             <p><strong>Categoria:</strong> {savedTicket.Category}</p>
                             <p><strong>Descrição:</strong></p>
                             <p>{savedTicket.Description}</p>
-                            <a class='button' href='{_frontendBaseUrl}/support-manager/{savedTicket.Id}'>Acompanhar Ticket</a>
+                            <a class='button' style='color: #ffffff; cursor: pointer;' href='{_frontendBaseUrl}/support-manager/{savedTicket.Id}'>Acompanhar Ticket</a>
                             <p>Atenciosamente,</p>
                             <p>Equipa de Suporte do Carbon Vault</p>
                         </div>

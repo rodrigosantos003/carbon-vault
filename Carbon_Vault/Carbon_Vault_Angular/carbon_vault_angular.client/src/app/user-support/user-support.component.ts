@@ -89,11 +89,11 @@ export class UserSupportComponent {
             this.alerts.enableSuccess('Ticket encontrado com sucesso!');
             this.router.navigate([`/support-manager/${ticket.id}`]); // Redirect to ticket details page
           } else {
-            this.alerts.enableError('Ticket não encontrado.');
+            this.alerts.enableError('Ocorreu um erro ao procurar o Ticket.');
           }
         },
         error: () => {
-          this.alerts.enableError('Ocorreu um erro ao procurar o Ticket.');
+          this.alerts.enableError('Ticket não encontrado.');
         }
       });
 
