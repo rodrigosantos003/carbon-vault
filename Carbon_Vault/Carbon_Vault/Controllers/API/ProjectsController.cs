@@ -251,26 +251,182 @@ namespace Carbon_Vault.Controllers.API
             var admins = await _context.Account
                              .Where(a => a.Role == AccountType.Admin)
                              .ToListAsync();
-            //foreach (var admin in admins)
-            //{
-            //    var adminEmail = admin.Email; 
+            foreach (var admin in admins)
+                {
+                    var adminEmail = admin.Email;
 
-            //    // Envio do e-mail para o administrador
-            //    await _emailService.SendEmail(
-            //        adminEmail, 
-            //        "Nova Proposta de Projeto Enviada",
-            //        $"Um novo projeto foi enviado e aguarda validação. Projeto: {project.Name}, por {project.Owner.Name}<br> Pode aceder ao projeto <a href={ProjectLink}>aqui</a>",
-            //        null
-            //    );
-            //}
+                    // Prepare the HTML content with dynamic project info
+                    var emailHtmlContent = $@"
+                    <!DOCTYPE html>
+                    <html lang='en'>
+                    <head>
+                        <meta charset='UTF-8'>
+                        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                        <title>Email Template</title>
+                        <style>
+                            body {{
+                                font-family: Arial, sans-serif;
+                                margin: 0;
+                                padding: 0;
+                                background-color: #f4f4f4;
+                            }}
+                            .email-container {{
+                                max-width: 600px;
+                                margin: 20px auto;
+                                background: #ffffff;
+                                border: 1px solid #ddd;
+                                border-radius: 8px;
+                                overflow: hidden;
+                            }}
+                            .email-header {{
+                                background: #4ea741;
+                                color: #ffffff;
+                                text-align: center;
+                                padding: 20px;
+                            }}
+                            .email-body {{
+                                padding: 20px;
+                                color: #333333;
+                                line-height: 1.6;
+                            }}
+                            .email-footer {{
+                                background: #f4f4f4;
+                                text-align: center;
+                                padding: 10px;
+                                font-size: 12px;
+                                color: #777777;
+                            }}
+                            .button {{
+                                display: inline-block;
+                                padding: 10px 20px;
+                                margin: 20px 0;
+                                background: #4ea741;
+                                color: #ffffff;
+                                text-decoration: none;
+                                border-radius: 5px;
+                            }}
+                            .button:hover {{
+                                background: #356a2d;
+                            }}
+                        </style>
+                    </head>
+                    <body>
+                        <div class='email-container'>
+                            <div class='email-header'>
+                                <h1>Nova Proposta de Projeto</h1>
+                            </div>
+                            <div class='email-body'>
+                                <p>Caro Administrador,</p>
+                                <p>Um novo projeto foi enviado e aguarda validação.</p>
+                                <p><strong>Projeto:</strong> {project.Name}</p>
+                                <p><strong>Proprietário:</strong> {project.Owner.Name}</p>
+                                <p>Pode aceder ao projeto clicando no botão abaixo:</p>
+                                <a href='{ProjectLink}' class='button'>Ver Projeto</a>
+                                <p>Em caso de dúvida, envie um email para: support@CarbonVault.pt</p>
+                                <p>Cumprimentos,</p>
+                                <p>Equipa do Carbon Vault</p>
+                            </div>
+                            <div class='email-footer'>
+                                <p>&copy; 2025 Carbon Vault. Todos os direitos reservados.</p>
+                            </div>
+                        </div>
+                    </body>
+                    </html>";
+
+                   
+                    await _emailService.SendEmail(
+                        adminEmail,
+                        "Nova Proposta de Projeto Enviada",
+                        emailHtmlContent,
+                        null
+                    );
+                }
 
             var userEmail = project.Owner.Email;
-            //await _emailService.SendEmail(
-            //    userEmail, 
-            //    "Projeto Enviado para Validação",
-            //    $"O seu projeto {project.Name} foi enviado para validação.Será notificado sobre a sua aprovação num periodo de 7-14 dias.<br> Pode aceder ao projeto <a href={ProjectLink}>aqui</a>",
-            //    null
-            //    );
+           var userEmailHtmlContent = $@"
+            <!DOCTYPE html>
+            <html lang='en'>
+            <head>
+                <meta charset='UTF-8'>
+                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                <title>Email Template</title>
+                <style>
+                    body {{
+                        font-family: Arial, sans-serif;
+                        margin: 0;
+                        padding: 0;
+                        background-color: #f4f4f4;
+                    }}
+                    .email-container {{
+                        max-width: 600px;
+                        margin: 20px auto;
+                        background: #ffffff;
+                        border: 1px solid #ddd;
+                        border-radius: 8px;
+                        overflow: hidden;
+                    }}
+                    .email-header {{
+                        background: #4ea741;
+                        color: #ffffff;
+                        text-align: center;
+                        padding: 20px;
+                    }}
+                    .email-body {{
+                        padding: 20px;
+                        color: #333333;
+                        line-height: 1.6;
+                    }}
+                    .email-footer {{
+                        background: #f4f4f4;
+                        text-align: center;
+                        padding: 10px;
+                        font-size: 12px;
+                        color: #777777;
+                    }}
+                    .button {{
+                        display: inline-block;
+                        padding: 10px 20px;
+                        margin: 20px 0;
+                        background: #4ea741;
+                        color: #ffffff;
+                        text-decoration: none;
+                        border-radius: 5px;
+                    }}
+                    .button:hover {{
+                        background: #356a2d;
+                    }}
+                </style>
+            </head>
+            <body>
+                <div class='email-container'>
+                    <div class='email-header'>
+                        <h1>Projeto Enviado para Validação</h1>
+                    </div>
+                    <div class='email-body'>
+                        <p>Caro Utilizador,</p>
+                        <p>O seu projeto <strong>{project.Name}</strong> foi enviado para validação.</p>
+                        <p>Será notificado sobre a sua aprovação num período de 7-14 dias.</p>
+                        <p>Pode aceder ao projeto clicando no botão abaixo:</p>
+                        <a href='{ProjectLink}' class='button'>Ver Projeto</a>
+                        <p>Em caso de dúvida, envie um email para: support@CarbonVault.pt</p>
+                        <p>Cumprimentos,</p>
+                        <p>Equipa do Carbon Vault</p>
+                    </div>
+                    <div class='email-footer'>
+                        <p>&copy; 2025 Carbon Vault. Todos os direitos reservados.</p>
+                    </div>
+                </div>
+            </body>
+            </html>
+            ";
+
+             
+            await _emailService.SendEmail(
+                userEmail,
+                "Projeto Enviado para Validação",
+                userEmailHtmlContent,
+                null
+            );
 
             return CreatedAtAction("GetProject", new { id = project.Id }, project);
         }
@@ -579,10 +735,85 @@ namespace Carbon_Vault.Controllers.API
 
             var owner = await _context.Account.FindAsync(project.OwnerId);
 
+          var approvalEmailHtmlContent = $@"
+            <!DOCTYPE html>
+            <html lang='en'>
+            <head>
+                <meta charset='UTF-8'>
+                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                <title>Email Template</title>
+                <style>
+                    body {{
+                        font-family: Arial, sans-serif;
+                        margin: 0;
+                        padding: 0;
+                        background-color: #f4f4f4;
+                    }}
+                    .email-container {{
+                        max-width: 600px;
+                        margin: 20px auto;
+                        background: #ffffff;
+                        border: 1px solid #ddd;
+                        border-radius: 8px;
+                        overflow: hidden;
+                    }}
+                    .email-header {{
+                        background: #4ea741;
+                        color: #ffffff;
+                        text-align: center;
+                        padding: 20px;
+                    }}
+                    .email-body {{
+                        padding: 20px;
+                        color: #333333;
+                        line-height: 1.6;
+                    }}
+                    .email-footer {{
+                        background: #f4f4f4;
+                        text-align: center;
+                        padding: 10px;
+                        font-size: 12px;
+                        color: #777777;
+                    }}
+                    .button {{
+                        display: inline-block;
+                        padding: 10px 20px;
+                        margin: 20px 0;
+                        background: #4ea741;
+                        color: #ffffff;
+                        text-decoration: none;
+                        border-radius: 5px;
+                    }}
+                    .button:hover {{
+                        background: #356a2d;
+                    }}
+                </style>
+            </head>
+            <body>
+                <div class='email-container'>
+                    <div class='email-header'>
+                        <h1>Projeto Aprovado</h1>
+                    </div>
+                    <div class='email-body'>
+                        <p>Caro Utilizador,</p>
+                        <p>O seu projeto <strong>{project.Name}</strong> foi aprovado e recebeu <strong>{CreditsGenerated}</strong> créditos de carbono para venda.</p>
+                        <p>Poderá selecionar agora aqueles que quiser vender na sua aba de gestão do projeto.</p>
+                        <p>Em caso de dúvida, envie um email para: support@CarbonVault.pt</p>
+                        <p>Cumprimentos,</p>
+                        <p>Equipa do Carbon Vault</p>
+                    </div>
+                    <div class='email-footer'>
+                        <p>&copy; 2025 Carbon Vault. Todos os direitos reservados.</p>
+                    </div>
+                </div>
+            </body>
+            </html>
+            ";
+
             await _emailService.SendEmail(
                 owner.Email,
                 "Projeto Aprovado",
-                $"O seu projeto {project.Name} foi aprovado e recebeu {CreditsGenerated} créditos de carbono para venda. <br> Poderá selecionar agora aqueles que quiser vender na sua aba de gestão do projeto",
+                approvalEmailHtmlContent,
                 null
             );
 
@@ -653,10 +884,74 @@ namespace Carbon_Vault.Controllers.API
 
             var owner = await _context.Account.FindAsync(project.OwnerId);
 
+            var rejectionEmailHtmlContent = $@"
+            <!DOCTYPE html>
+            <html lang='en'>
+            <head>
+                <meta charset='UTF-8'>
+                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                <title>Email Template</title>
+                <style>
+                    body {{
+                        font-family: Arial, sans-serif;
+                        margin: 0;
+                        padding: 0;
+                        background-color: #f4f4f4;
+                    }}
+                    .email-container {{
+                        max-width: 600px;
+                        margin: 20px auto;
+                        background: #ffffff;
+                        border: 1px solid #ddd;
+                        border-radius: 8px;
+                        overflow: hidden;
+                    }}
+                    .email-header {{
+                        background: #d9534f;
+                        color: #ffffff;
+                        text-align: center;
+                        padding: 20px;
+                    }}
+                    .email-body {{
+                        padding: 20px;
+                        color: #333333;
+                        line-height: 1.6;
+                    }}
+                    .email-footer {{
+                        background: #f4f4f4;
+                        text-align: center;
+                        padding: 10px;
+                        font-size: 12px;
+                        color: #777777;
+                    }}
+                </style>
+            </head>
+            <body>
+                <div class='email-container'>
+                    <div class='email-header'>
+                        <h1>Projeto Rejeitado</h1>
+                    </div>
+                    <div class='email-body'>
+                        <p>Caro Utilizador,</p>
+                        <p>O seu projeto <strong>{project.Name}</strong> foi rejeitado.</p>
+                        <p><strong>Razão:</strong></p>
+                        <p>{feedback}</p>
+                        <p>Em caso de dúvida, envie um email para: support@CarbonVault.pt</p>
+                        <p>Cumprimentos,</p>
+                        <p>Equipa do Carbon Vault</p>
+                    </div>
+                    <div class='email-footer'>
+                        <p>&copy; 2025 Carbon Vault. Todos os direitos reservados.</p>
+                    </div>
+                </div>
+            </body>
+            </html>
+            ";
+
             await _emailService.SendEmail(
                 owner.Email,
                 "Projeto Rejeitado",
-                $"O seu projeto {project.Name} foi rejeitado <br> Razão : <br> {feedback}",
+                rejectionEmailHtmlContent,
                 null
             );
 

@@ -145,18 +145,15 @@ namespace Carbon_Vault.Controllers.API
                 return BadRequest("Ticket not found");
             }
 
-            // Save the message
             ticketMessage.Autor = account;
             ticketMessage.SendDate = DateTime.UtcNow;
             _context.TicketMessages.Add(ticketMessage);
             await _context.SaveChangesAsync();
 
-            // Determine the recipient
             Account recipient = null;
 
             if (account.Role == AccountType.User)
             {
-                // User sends a message → Notify last responding support admin
                 recipient = ticket.Messages
                     .Where(m => m.Autor.Role == AccountType.Support)
                     .OrderByDescending(m => m.SendDate)
@@ -165,31 +162,108 @@ namespace Carbon_Vault.Controllers.API
             }
             else if (account.Role == AccountType.Support)
             {
-                // Admin sends a message → Notify last responding user
                 recipient = ticket.Messages
                     .Where(m => m.Autor.Role == AccountType.User)
                     .OrderByDescending(m => m.SendDate)
                     .Select(m => m.Autor)
                     .FirstOrDefault();
 
-                // If no previous user messages exist, notify the ticket creator
                 if (recipient == null)
                 {
                     recipient = ticket.Author;
                 }
             }
 
-            // Send email notification if a recipient exists
             if (recipient != null)
             {
-                //string subject = (account.Role == AccountType.User) ? "Novo Resposta no Ticket" : "Nova Atualização no Seu Ticket";
-                //string emailBody = $"Olá {recipient.Name},\n\n" +
-                //                   $"{(account.Role == AccountType.User ? "O utilizador" : "O suporte")} {account.Name} respondeu ao ticket \"{ticket.Title}\".\n\n" +
-                //                   $"Mensagem: \"{ticketMessage.Content}\"\n\n" +
-                //                   $"Acompanhe o ticket aqui: {_frontendBaseUrl}/support-manager/{ticket.Id}\n\n" +
-                //                   $"Atenciosamente,\nEquipa de Suporte do Carbon Vault";
+                string subject = (account.Role == AccountType.User) 
+                    ? "Nova Resposta no Ticket" 
+                    : "Nova Atualização no Seu Ticket";
 
-                //await _emailService.SendEmail(recipient.Email, subject, emailBody, null);
+                string responderType = (account.Role == AccountType.User) ? "O utilizador" : "O suporte";
+                string ticketLink = $"{_frontendBaseUrl}/support-manager/{ticket.Id}";
+
+                string ticketEmailHtmlContent = $@"
+                <!DOCTYPE html>
+                <html lang='en'>
+                <head>
+                    <meta charset='UTF-8'>
+                    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                    <title>Email Template</title>
+                    <style>
+                        body {{
+                            font-family: Arial, sans-serif;
+                            margin: 0;
+                            padding: 0;
+                            background-color: #f4f4f4;
+                        }}
+                        .email-container {{
+                            max-width: 600px;
+                            margin: 20px auto;
+                            background: #ffffff;
+                            border: 1px solid #ddd;
+                            border-radius: 8px;
+                            overflow: hidden;
+                        }}
+                        .email-header {{
+                            background: #4ea741;
+                            color: #ffffff;
+                            text-align: center;
+                            padding: 20px;
+                        }}
+                        .email-body {{
+                            padding: 20px;
+                            color: #333333;
+                            line-height: 1.6;
+                        }}
+                        .email-footer {{
+                            background: #f4f4f4;
+                            text-align: center;
+                            padding: 10px;
+                            font-size: 12px;
+                            color: #777777;
+                        }}
+                        .button {{
+                            display: inline-block;
+                            padding: 10px 20px;
+                            margin: 20px 0;
+                            background: #4ea741;
+                            color: #ffffff;
+                            text-decoration: none;
+                            border-radius: 5px;
+                        }}
+                        .button:hover {{
+                            background: #356a2d;
+                        }}
+                    </style>
+                </head>
+                <body>
+                    <div class='email-container'>
+                        <div class='email-header'>
+                            <h1>{subject}</h1>
+                        </div>
+                        <div class='email-body'>
+                            <p>Olá {recipient.Name},</p>
+                            <p>{responderType} <strong>{account.Name}</strong> respondeu ao ticket <strong>{ticket.Title}</strong>.</p>
+                            <p><strong>Mensagem:</strong></p>
+                            <p>{ticketMessage.Content}</p>
+                            <p>Pode acompanhar o ticket clicando no botão abaixo:</p>
+                            <a href='{ticketLink}' class='button'>Ver Ticket</a>
+                            <p>Em caso de dúvida, envie um email para: support@CarbonVault.pt</p>
+                            <p>Atenciosamente,</p>
+                            <p>Equipa de Suporte do Carbon Vault</p>
+                        </div>
+                        <div class='email-footer'>
+                            <p>&copy; 2025 Carbon Vault. Todos os direitos reservados.</p>
+                        </div>
+                    </div>
+                </body>
+                </html>
+                ";
+
+                
+                await _emailService.SendEmail(recipient.Email, subject, ticketEmailHtmlContent, null);
+
             }
 
             return CreatedAtAction("GetTicketMessage", new { id = ticketMessage.Id }, ticketMessage);
