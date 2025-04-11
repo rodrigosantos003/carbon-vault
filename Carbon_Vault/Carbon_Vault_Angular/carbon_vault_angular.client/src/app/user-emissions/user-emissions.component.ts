@@ -160,6 +160,9 @@ export class UserEmissionsComponent {
     const petrolEquivalent = petrol * 0.00231;
     const dieselEquivalent = diesel * 0.00268;
 
-    return electricityEquivalent + petrolEquivalent + dieselEquivalent;
+    const result = electricityEquivalent + petrolEquivalent + dieselEquivalent;
+
+
+    return parseFloat(result.toFixed(2)); // Retorna o resultado com 2 casas decimais
   }
 }

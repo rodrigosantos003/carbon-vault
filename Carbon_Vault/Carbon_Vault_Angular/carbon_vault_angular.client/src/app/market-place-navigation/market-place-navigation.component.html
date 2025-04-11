@@ -5,7 +5,7 @@
   </div>
   <nav class="nav">
     <a *ngIf="isUserLoggedIn" [routerLink]="'/marketplace'" class="navigationItem" >MarketPlace</a>
-    <a *ngIf="isUserLoggedIn" [routerLink]="'/cart'" class="navigationItem"> <img src="/images/cart.svg" /> Carrinho </a>
+    <a *ngIf="isUserLoggedIn && isUser" [routerLink]="'/cart'" class="navigationItem"> <img src="/images/cart.svg" /> Carrinho </a>
     <button *ngIf="isUserLoggedIn" class="profile-btn" (click)="navigateToDashboard()" >{{ userInitial }}</button>
     <button #loginBtn class="logout-btn">Terminar sessão</button>
   </nav>

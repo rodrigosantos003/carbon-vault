@@ -42,7 +42,7 @@
             </tr>
             <tr *ngFor="let purchase of purchases">
               <td>{{purchase.projectName}}</td>
-              <td>{{purchase.date}}</td>
+              <td>{{purchase.date | date:'dd/MM/yyyy HH:mm:ss'}}</td>
               <td><button class="details-button" (click)="transactionDetails(purchase.id)">Ver detalhes</button></td>
             </tr>
           </tbody>
@@ -65,7 +65,7 @@
             </tr>
             <tr *ngFor="let sale of sales">
               <td>{{sale.projectName}}</td>
-              <td>{{sale.date}}</td>
+              <td>{{sale.date | date:'dd/MM/yyyy HH:mm:ss'}}</td>
               <td><button class="details-button" (click)="transactionDetails(sale.id)">Ver detalhes</button></td>
             </tr>
           </tbody>
