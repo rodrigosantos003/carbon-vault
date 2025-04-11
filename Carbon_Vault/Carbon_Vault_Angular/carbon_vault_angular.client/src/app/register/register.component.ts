@@ -61,7 +61,13 @@ export class RegisterComponent {
       next: (response) => {
         this.alerts.disableLoading();
         this.alerts.enableSuccess("Registro realizado com sucesso");
-        window.location.href = "/login";
+
+        const timer = 5;
+        this.alerts.enableInfo("Para efetuar login, por favor faça a confirmação da conta no email.", timer)
+
+        setTimeout(() => {
+          window.location.href = "/login";
+        }, timer * 1000);
       },
       error: (error) => {
         this.alerts.disableLoading();

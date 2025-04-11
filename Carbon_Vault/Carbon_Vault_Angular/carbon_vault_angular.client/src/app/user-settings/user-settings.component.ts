@@ -149,9 +149,10 @@ export class UserSettingsComponent {
    * Envia um link de confirmação para o e-mail do utilizador.
    */
   changePassword() {
-    this.alerts.enableLoading("A enviar link de confirmação...");
+    const user_email = this.settingsForm.value.email
+    this.alerts.enableLoading("A enviar link de confirmação para " + user_email);
 
-    const changePasswordURL = `${environment.apiUrl}/Accounts/NewPassword?email=${this.settingsForm.value.email}`;
+    const changePasswordURL = `${environment.apiUrl}/Accounts/NewPassword?email=${user_email}`;
 
     this.http.get<{ message: string }>(changePasswordURL).subscribe({
       next: (response) => {
@@ -167,7 +168,7 @@ export class UserSettingsComponent {
         this.alerts.disableLoading();
         this.alerts.enableError("Erro ao enviar link de alteração de palavra-passe");
       }
-    })
+    });
   }
 
   /**

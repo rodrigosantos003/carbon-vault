@@ -120,8 +120,13 @@ export class ProjectManagerDetailsAdminComponent {
     const url = `${this.apiURL}/${projectId}/addCredits`;
     const creditsGenerated = this.additionalCredits;
 
-    if (this.additionalCredits <= 0) {
+    if (creditsGenerated <= 0) {
       this.alerts.enableError('O número de créditos deve ser maior que 0.');
+      return;
+    }
+
+    if (creditsGenerated > 25000) {
+      this.alerts.enableError('O número máximo de créditos permitidos é 25.000.');
       return;
     }
 
@@ -130,11 +135,11 @@ export class ProjectManagerDetailsAdminComponent {
 
     this.http.post(url, {}, { headers }).subscribe({
       next: () => {
-        this.alerts.enableSuccess(this.additionalCredits + ' Créditos gerados com sucesso!');
+        this.alerts.enableSuccess(creditsGenerated + ' Créditos gerados com sucesso!');
         this.fetchProjectDetails(this.route.snapshot.params['id']);
       },
-      error: (e) => {
-        this.alerts.enableError('Ocorreu um erro ao aprovar o projeto. Tente novamente mais tarde.');
+      error: () => {
+        this.alerts.enableError('Ocorreu um erro ao adicionar os créditos. Tente novamente mais tarde.');
       }
     });
   }
@@ -398,7 +403,7 @@ export class ProjectManagerDetailsAdminComponent {
 
     try {
       await this.http.put(`${this.apiURL}/${this.project.id}`, updatedProject).toPromise();
-      alert('Projeto atualizado com sucesso!');
+      this.alerts.enableSuccess('Projeto atualizado com sucesso!');
     } catch (error) {
       console.error('Erro ao atualizar o projeto:', error);
     }

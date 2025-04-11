@@ -94,7 +94,7 @@ export class SupportChatComponent {
    */
   sendMessage() {
     if (!this.messageContent.trim()) {
-      alert('A mensagem não pode estar vazia!');
+      this.alerts.enableError('A mensagem não pode estar vazia!');
       return;
     }
 
